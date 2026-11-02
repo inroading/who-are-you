@@ -4,7 +4,7 @@
 // once, when every sniffer it needs is in, so its text doesn't reflow piece by piece. Strings: window.L1MS.
 import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO } from "./sniffers.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
 
 (function () {
@@ -313,7 +313,14 @@ import { TZ_CC } from "./tz.mjs";
     // a software renderer means the browser isn't using the card at all (remote desktop, a virtual machine, no driver,
     // hardware acceleration off): say so rather than pass it off as one
     R.gpuRaw = ren; R.gpuSoft = isSoftGpu(ren); R.gpu = R.gpuSoft ? null : gpuName(ren);
-    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : R.gpu || ren || "–", { why: [ven, ren].filter(Boolean).join(" · ") });
+    // pages draw on a laptop's integrated card; asked for high performance, the browser may use the discrete one
+    try {
+      const hg = document.createElement("canvas").getContext("webgl", { powerPreference: "high-performance" }), he = hg && hg.getExtension("WEBGL_debug_renderer_info");
+      R.gpuHiRaw = he ? hg.getParameter(he.UNMASKED_RENDERER_WEBGL) : null; R.gpuHi = gpuName(R.gpuHiRaw);
+    } catch (e) { R.gpuHi = null; }
+    const dg = discreteGpu(R.gpu, R.gpuHi, null);
+    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
+      { why: [ven, ren, R.gpuHiRaw && R.gpuHiRaw !== ren ? R.gpuHiRaw : ""].filter(Boolean).join(" · ") });
     const gl2 = !!document.createElement("canvas").getContext("webgl2");
     txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }));
     // everything WebGL reports about the card and driver, for the WebGL fingerprint
@@ -602,9 +609,11 @@ import { TZ_CC } from "./tz.mjs";
 
   async function webgpu() {
     if (!navigator.gpu) return na("webgpu");
-    const ad = await within(navigator.gpu.requestAdapter(), 2000, null);
+    // the high-performance adapter: the discrete card where there is one (its maker and architecture, at least)
+    const ad = await within(navigator.gpu.requestAdapter({ powerPreference: "high-performance" }), 2000, null);
     if (!ad) return na("webgpu", "v_empty");
     const i = ad.info || (ad.requestAdapterInfo ? await within(ad.requestAdapterInfo(), 1000, {}) : {});
+    R.wgpu = { vendor: i.vendor, architecture: i.architecture, description: i.description };
     const s = [i.vendor, i.architecture, i.device, i.description].filter(Boolean).join(" · ");
     if (s) txt("webgpu", s); else na("webgpu", "v_empty");
   }
@@ -686,6 +695,8 @@ import { TZ_CC } from "./tz.mjs";
   const allExits = () => R.exDone && R.stack && R.srv
     ? [["ip", R.srv.ip], ...EXITS.map(([id]) => [id, R.ex[id]]), ...R.stack.map(ip => ["stack", ip])].filter(([, ip]) => ip)
     : null;
+  // an app's own browser (X, WeChat…), named when it names itself, "wv" for an Android web view that doesn't
+  const inApp = () => R.br && /^(X|WeChat|Weibo|QQ|Instagram|Facebook|LINE|TikTok|Telegram)$/.test(R.br.name) ? R.br.name : /; wv\)/.test(navigator.userAgent) ? "wv" : null;
   function jobsOf() {
     const out = [...fontHints(R.fonts || [], R.dev && R.dev.os), ...(R.ext || []).filter(([k]) => k)];
     return out.filter(([k], i) => out.findIndex(([x]) => x === k) === i);
@@ -696,9 +707,9 @@ import { TZ_CC } from "./tz.mjs";
     const ex = allExits(), split = ex && splitOf(ex);
     return { v: 1, nat: nat ? nat.cc : null, natFrom: nat ? nat.from : null, cc: c.country || null, city: c.city || null, langs: R.langs || [],
       tz: R.tz || null, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, browser: R.browser || null,
-      screen: R.screen || null, gpu: R.gpu || null, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
+      screen: R.screen || null, gpu: discreteGpu(R.gpu, R.gpuHi, R.wgpu) || R.gpu || null, gi: discreteGpu(R.gpu, R.gpuHi, R.wgpu) ? R.gpu : undefined, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
       nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
-      dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, fz: !!R.noise || undefined, hz: R.hz || null,
+      dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, app: inApp() || undefined, fz: !!R.noise || undefined, hz: R.hz || null,
       x: { split, fullOrg: [c.asn ? "AS" + c.asn : "", c.asOrganization].filter(Boolean).join(" · "), dnsOrg: R.dnsOrg || "", fpHex: R.fpHex } };
   }
 
@@ -776,14 +787,14 @@ import { TZ_CC } from "./tz.mjs";
     blank("device", esc(!P.os ? t("dv_unknown") : (P.kind === "phone" || P.kind === "tablet") && P.model ? t("dv_model", { model: P.model, os: P.os }) : t("dv_" + (P.kind || "pc"), { os: P.os })));
     blank("browser", P.browser ? esc(P.browser) : U);
     blank("screen", P.screen ? esc(P.screen + (P.hz ? " · " + P.hz + " Hz" : "")) : U);
-    blank("gpu", esc(P.gs ? t("gpu_soft") : P.gpu || t("gpu_unknown")));
+    blank("gpu", esc(P.gs ? t("gpu_soft") : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")));
     blank("isp", P.org ? (!shared && asnOf(P.asn) ? `<a href="${esc(asnOf(P.asn))}" target="_blank" rel="noopener" title="${esc(t("go_asn"))}">${esc(P.org)}</a>` : esc(P.org)) : shared ? esc(t("masked")) : U, BLANKS.isp, X.fullOrg || (shared && !P.org ? t("masked_why") : ""));
     blank("dns", P.dns ? flagged(P.dns, country(P.dns)) : U, BLANKS.dns, X.dnsOrg || "");
     const sp = X.split;
     blank("nettype", esc(P.nt === "split" ? t("nt_split", { n: P.nx }) : P.nt ? t("nt_" + P.nt) : t("v_unknown")),
       BLANKS.nettype, sp ? exitName(sp.a) + ": " + sp.ipA + "\n" + exitName(sp.b) + ": " + sp.ipB : "");
     blank("age", esc(t("age_v")), [], t("age_why"));
-    blank("theme", esc(t(P.dark ? "pt_dark" : "pt_light")));
+    blank("theme", esc(P.app ? t("pt_app", { m: t(P.dark ? "pt_dark" : "pt_light"), app: P.app === "wv" ? t("pt_app_any") : P.app }) : t(P.dark ? "pt_dark" : "pt_light")));
     blank("adblock", esc(t(P.ab ? "pt_ab" : "pt_noab")));
     blank("job", esc(P.jobs.length ? list(P.jobs.map(([k]) => t("jb_" + k))) : t("jb_none")), BLANKS.job, P.jobs.length ? t("from", { list: P.jobs.map(([, f]) => f).join(", ") }) : "");
     $("#story").classList.remove("wait"); $("#storySk").hidden = true;
@@ -796,11 +807,14 @@ import { TZ_CC } from "./tz.mjs";
   function readings(P, ck) {
     const lv = id => ck[id] && ck[id][0];
     const away = [lv("tz") === "bad" && "tz", lv("dns") === "bad" && "dns", lv("lang") === "warn" && "lang"].filter(Boolean);
+    // (only the time zone or the DNS says a proxy; a language that isn't the country's is someone who lives there)
+    const strong = away.some(k => k !== "lang");
     const ipc = P.cc && country(P.cc), home = P.nat && P.nat !== P.cc ? country(P.nat) : P.dns && P.dns !== P.cc ? country(P.dns) : null;
     // (the network's blank already says "a proxy" for a data center or a split: then just the mismatch)
-    blank("read", esc(away.length && ipc && home ? t(P.nt === "dc" || P.nt === "split" ? "rd_off" : "rd_proxy", { ipc, home, list: list(away.map(k => t("gs_i_" + k))) })
-      : P.nt === "split" ? t("rd_split") : P.nt === "dc" ? t("rd_dc") : ipc ? t("rd_home", { ipc }) : t("rd_none")));
-    const g = P.gpu || "", hi = /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);
+    blank("read", esc(strong && ipc && home ? t(P.nt === "dc" || P.nt === "split" ? "rd_off" : "rd_proxy", { ipc, home, list: list(away.map(k => t("gs_i_" + k))) })
+      : P.nt === "split" ? t("rd_split") : P.nt === "dc" ? t("rd_dc") : away.length && ipc && home ? t("rd_abroad", { ipc, home }) : ipc ? t("rd_home", { ipc }) : t("rd_none")));
+    // (a discrete card beside the integrated one counts as a high-end machine)
+    const g = P.gpu || "", hi = !!P.gi || /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);
     const low = /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g), pc = P.kind === "pc" || P.kind === "mac";
     blank("rig", esc(t(P.gs ? "rg_soft" : pc && hi && P.hz >= 120 ? "rg_game" : pc && hi ? "rg_power" : pc && low ? "rg_basic" : "rg_none")));
     blank("track", esc(t(P.rand ? "tk_rand" : P.fz ? "tk_site" : "tk_same")));

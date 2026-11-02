@@ -200,13 +200,15 @@ export function checks(x) {
   // leaks once that family's address is known to differ, and until then may be the IPv6 a VPN lets through.
   if (x.rtc === undefined || !x.ip) out.webrtc = null;
   else if (x.rtc === false) out.webrtc = ["ok", "c_rtc_off", {}];
+  // iCloud Private Relay gives each connection an exit of its own: the page's and WebRTC's both relay exits is no leak
+  else if (isRelayIp(x.ip) && x.rtc.length && x.rtc.every(isRelayIp)) out.webrtc = ["ok", "c_rtc_relay", {}];
   else {
     const st = (x.exits || []).filter(([id]) => id === "stack").map(([, ip]) => ip), site = [x.ip, ...(st.includes(x.ip) ? st : [])];
     const other = x.rtc.filter(ip => !site.includes(ip)), known = f => site.some(ip => fam(ip) === f), leak = other.filter(ip => known(fam(ip)));
     out.webrtc = leak.length ? ["bad", "c_rtc_bad", { ip: leak[0] }] : other.length ? ["warn", "c_rtc_warn", { ip: other[0] }] : ["ok", x.rtc.length ? "c_rtc_ok" : "c_rtc_none", {}];
   }
   // the network
-  out.dc = x.asn == null ? null : isDataCenter(x.asn, x.org) ? ["warn", "c_dc_warn", { org: x.org || "AS" + x.asn }] : ["ok", "c_dc_ok", { org: x.org || "AS" + x.asn }];
+  out.dc = x.asn == null ? null : isRelayIp(x.ip) ? ["warn", "c_dc_relay", {}] : isDataCenter(x.asn, x.org) ? ["warn", "c_dc_warn", { org: x.org || "AS" + x.asn }] : ["ok", "c_dc_ok", { org: x.org || "AS" + x.asn }];
   // the system the user agent claims against the one the browser's other parts give away
   if (!x.uaOS) out.ua = x.real ? ["info", "c_ua_info", {}] : null;
   else {
@@ -331,3 +333,23 @@ export const isSoftGpu = r => /Basic Render Driver|SwiftShader|llvmpipe|softpipe
 // Some networks are registered under a street address rather than a name ("7F, World Peace Centre, 55 Wo Tong Tsui St")
 // (a number with an address word, or a number in a list of three or more parts; "Level 3 Parent, LLC" is a name)
 export const looksLikeAddress = o => { const s = String(o || ""); return /\d/.test(s) && ((s.match(/,/g) || []).length >= 2 || /\b\d+\s*\/?\s*F\b|\b(floor|street|st|road|rd|avenue|ave|building|bldg|suite|room)\b/i.test(s)); };
+
+// A graphics card built into the processor (the one a laptop draws pages on by default)
+export const isIntegratedGpu = g => /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g || "");
+// WebGPU's name for the discrete card, when the default WebGL one is integrated and from another maker
+// (browsers give the maker and the architecture only: "nvidia", "ada-lovelace" → "NVIDIA Ada Lovelace")
+const MAKERS = { nvidia: "NVIDIA", amd: "AMD", intel: "Intel", apple: "Apple", qualcomm: "Qualcomm", arm: "Arm" };
+export function discreteGpu(gl, hiGl, wgpu) {
+  if (!gl || !isIntegratedGpu(gl)) return null;
+  if (hiGl && hiGl !== gl && !isIntegratedGpu(hiGl)) return hiGl;
+  const v = wgpu && MAKERS[String(wgpu.vendor || "").toLowerCase()];
+  if (!v || gl.toLowerCase().includes(v.toLowerCase())) return null;
+  const arch = String(wgpu.architecture || "").split("-").filter(Boolean).map(w => /^\w/.test(w) ? w[0].toUpperCase() + w.slice(1) : w).join(" ");
+  return wgpu.description ? gpuName(wgpu.description) || wgpu.description : [v, arch].filter(Boolean).join(" ");
+}
+
+
+// iCloud Private Relay's exits, from Apple's published list (mask-api.icloud.com/egress-ip-ranges.csv): Cloudflare,
+// Akamai and Fastly. Cloudflare's also carries WARP.
+const RELAY4 = [[104, 28], [172, 224], [172, 225], [172, 226], [146, 75], [140, 248]], RELAY6 = /^(2606:54c0|2a02:26f7|2a04:4e41):/i;
+export const isRelayIp = ip => { const s = String(ip || ""); if (s.includes(":")) return RELAY6.test(s); const [a, b] = s.split(".").map(Number); return RELAY4.some(([x, y]) => x === a && y === b); };

@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress } from "../src/infer.mjs";
+import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp } from "../src/infer.mjs";
 
 const WIN = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36";
 const MAC_SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15";
@@ -130,6 +130,18 @@ test("disguise checks", () => {
   // Brave: the same drawing twice on one page, noise in what the page reads back
   assert.deepEqual(checks({ ...base, rand: false, noise: true }).fp, ["ok", "c_fp_site", {}]);
   assert.equal(gpuName("Brave"), null);
+  // iCloud Private Relay: the page's and WebRTC's exits differ, both are relay exits, nothing leaks
+  const relay = { ...base, ip: "104.28.10.1", exits: [["ip", "104.28.10.1"]], rtc: ["104.28.77.9"] };
+  assert.equal(checks(relay).webrtc[1], "c_rtc_relay");
+  assert.equal(checks({ ...relay, rtc: ["104.28.77.9", "114.254.1.2"] }).webrtc[0], "bad");   // a real address beside it still leaks
+  assert.equal(checks({ ...relay, asn: 13335 }).dc[1], "c_dc_relay");
+  assert.equal(isRelayIp("2a02:26f7:1::1"), true);
+  assert.equal(isRelayIp("8.8.8.8"), false);
+  // a laptop with two cards: the high-performance WebGL context or WebGPU names the discrete one
+  assert.equal(discreteGpu("Intel(R) UHD Graphics 630", "NVIDIA GeForce RTX 4060 Laptop GPU", null), "NVIDIA GeForce RTX 4060 Laptop GPU");
+  assert.equal(discreteGpu("Intel(R) Iris(R) Xe Graphics", "Intel(R) Iris(R) Xe Graphics", { vendor: "nvidia", architecture: "ada-lovelace" }), "NVIDIA Ada Lovelace");
+  assert.equal(discreteGpu("Intel(R) Iris(R) Xe Graphics", null, { vendor: "intel", architecture: "xe" }), null);
+  assert.equal(discreteGpu("NVIDIA GeForce RTX 4080 SUPER", null, { vendor: "nvidia", architecture: "ada-lovelace" }), null);
   // through a VPN in Japan
   const v = checks({ ...base, ipTzOff: "+09:00", ipcc: "JP", asn: 16509, org: "Amazon.com, Inc.", rtc: ["1.2.3.4", "5.6.7.8"], ip: "5.6.7.8" });
   assert.equal(v.tz[0], "bad"); assert.equal(v.lang[0], "warn"); assert.equal(v.dc[0], "warn"); assert.equal(v.webrtc[0], "bad");
