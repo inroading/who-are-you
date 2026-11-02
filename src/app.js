@@ -1039,7 +1039,7 @@ import { TZ_CC } from "./tz.mjs";
     delete P.x; delete P.fp;
     if (!show) { P.city = null; P.org = null; }
     delete P.asn;
-    P.l = LANG;
+    P.l = LANG; P.t = Date.now();
     P.ck = Object.fromEntries(Object.entries(R.ck || {}).filter(([, v]) => v).map(([id, [lv, key, vars]]) =>
       [id, [lv, key, Object.fromEntries(Object.entries(vars).map(([k, x]) => [k, k === "ip" ? maskIp(String(x)) : k === "org" && !show ? t("masked") : k === "za" && !show ? null : x]))]]));
     return P;
@@ -1057,9 +1057,27 @@ import { TZ_CC } from "./tz.mjs";
       return [(k === "city" || k === "isp") && !show ? t("masked") : n.textContent, k !== "age"];
     }));
     const res = R.ck || {}, n = CHECKS.filter(id => res[id] && (res[id][0] === "bad" || res[id][0] === "warn")).length;
+    const gr = grade(res, CHECKS.filter(id => res[id])), GC = /^A|^B/.test(gr.grade) ? LV.ok : gr.grade === "C" ? LV.warn : LV.bad;
     c.textBaseline = "alphabetic"; c.textAlign = "left";
-    let y = kit.top + 20;
-    c.font = `800 52px ${F}`; c.fillStyle = FG; if (paint) c.fillText(t("card_me"), P, y); y += 40;
+    // first, large: the count, the verdict and the grade (a link preview shrinks the whole card into 1200×630)
+    let y = kit.top + 116;
+    c.font = `800 132px ${F}`; c.fillStyle = n ? (CHECKS.some(id => res[id] && res[id][0] === "bad") ? LV.bad : LV.warn) : LV.ok;
+    if (paint) c.fillText(String(n), P, y);
+    const nw = c.measureText(String(n)).width, gt = t("grade_v", { g: gr.grade });
+    c.font = `800 46px ${F}`; const gw = c.measureText(gt).width + 52;
+    if (paint) {
+      c.fillStyle = GC; c.beginPath(); c.roundRect ? c.roundRect(W - P - gw, y - 96, gw, 76, 38) : c.rect(W - P - gw, y - 96, gw, 76); c.fill();
+      c.fillStyle = "#fff"; c.textAlign = "center"; c.fillText(gt, W - P - gw / 2, y - 41); c.textAlign = "left";
+    }
+    // the verdict between the two, as large as the room allows
+    const head = n ? t("v_found", { n }) : t("v_clean"), room = W - 2 * P - nw - 30 - gw - 24;
+    let hs = 52; c.font = `800 ${hs}px ${F}`;
+    while (hs > 30 && c.measureText(head).width > room) { hs -= 2; c.font = `800 ${hs}px ${F}`; }
+    c.fillStyle = FG; if (paint) c.fillText(head, P + nw + 30, y - 40);
+    y += 44;
+    if (paint) { c.fillStyle = LINE; c.fillRect(P, y, W - 2 * P, 2); }
+    y += 24;
+    c.font = `700 34px ${F}`; c.fillStyle = FG; if (paint) c.fillText(t("card_me"), P, y + 34); y += 44;
     // wrapped word by word (character by character for CJK)
     const size = 28, lh = 48;
     for (const segs of lines) {
@@ -1079,13 +1097,6 @@ import { TZ_CC } from "./tz.mjs";
       y += 10;
     }
     y += 40;
-    if (paint) { c.fillStyle = LINE; c.fillRect(P, y, W - 2 * P, 2); }
-    y += 70;
-    c.font = `800 72px ${F}`; c.fillStyle = n ? (CHECKS.some(id => res[id] && res[id][0] === "bad") ? LV.bad : LV.warn) : LV.ok;
-    if (paint) c.fillText(String(n), P, y);
-    const nw = c.measureText(String(n)).width;
-    c.font = `700 30px ${F}`; c.fillStyle = FG; if (paint) c.fillText(n ? t("v_found", { n }) : t("v_clean"), P + nw + 24, y - 14);
-    y += 30;
     const colW = (W - 2 * P) / 2;
     if (paint) CHECKS.forEach((id, i) => {
       const r = res[id], cx = P + (i % 2) * colW, cy = y + 52 * Math.floor(i / 2) + 30;
@@ -1096,7 +1107,7 @@ import { TZ_CC } from "./tz.mjs";
   }
 
   $("#share").onclick = async () => {
-    const { share } = await import("/assets/share/share.js");
+    const { share } = await import("/assets/share/share.js?v=3");
     const link = show => location.origin + linkPath(LANG, encode(sharedPortrait(show)));
     share({
       lang: LANG, name: t("app_name"), file: "who-1ms-dog", show: ["city", "isp"], never: ["ip"], ts: Date.now(),
@@ -1114,15 +1125,14 @@ import { TZ_CC } from "./tz.mjs";
     if (!P) return false;
     P.langs = P.langs || []; P.jobs = P.jobs || []; P.x = {};
     document.documentElement.classList.add("shared");
-    $(".eyebrow").lastChild.textContent = t("sh_eyebrow");
     $("#mine").hidden = false; $("#share").hidden = true; $("#rerun").hidden = true; $("#copyTxt").hidden = true;
-    $("#mine").classList.add("primary"); $("#cta").hidden = false;
     $("#mine").onclick = () => { location.href = D.paths[LANG] || "/"; };
     $("#progTxt").textContent = " ";
     paint(P, true);
     for (const id of CHECKS) if (!(P.ck || {})[id]) { CK[id].hidden = true; const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.hidden = true; }
     paintChecks(P.ck || {}, P.cc, true);
     readings(P, P.ck || {});
+    import("/assets/share/share.js?v=3").then(({ received }) => received({ lang: LANG, ts: P.t || undefined, at: $(".hero"), test: () => { location.href = D.paths[LANG] || "/"; } })).catch(() => {});
     return true;
   }
   const sharedCode = (parsePath(location.pathname) || {}).code || (/^#p=/.test(location.hash) ? location.hash.slice(3) : null);

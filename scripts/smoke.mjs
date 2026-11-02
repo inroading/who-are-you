@@ -94,16 +94,17 @@ for (const [lang, slug] of LANGS) {
     }
     const s = await open(link);
     await s.page.waitForSelector("html.shared", { timeout: 5000 }).catch(() => fail("share", "shared view not shown"));
+    await s.page.waitForSelector(".ms-recv", { timeout: 5000 }).catch(() => {});   // the banner comes with the component
     const v = await s.page.evaluate(() => ({ waiting: document.querySelectorAll(".bl.wait").length, city: document.querySelector('.bl[data-b="city"]').textContent, fp: document.querySelector("#fpId").textContent,
       story: document.querySelector("#story").textContent, mine: !document.querySelector("#mine").hidden,
-      cta: !document.querySelector("#cta").hidden }));
+      banner: !!document.querySelector(".ms-recv .ms-recv-b") }));
     for (const e of s.errors) fail("share", "script error: " + e);
     if (v.waiting) fail("share", `${v.waiting} blanks still waiting`);
     if (v.city !== "•••") fail("share", `city shows "${v.city}"`);
     if (v.fp !== "•••") fail("share", `fingerprint shows "${v.fp}"`);
     if (/\{\w+\}|undefined|null|NaN/.test(v.story)) fail("share", "portrait has a leftover");
     if (!v.mine) fail("share", "no \"check mine\" button");
-    if (!v.cta) fail("share", "no call to action in place of the fingerprint");
+    if (!v.banner) fail("share", "no banner from the share component above the shared portrait");
     await s.page.close();
   }
   await page.close();
