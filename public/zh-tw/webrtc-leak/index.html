@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="WebRTC 會不會暴露你的真實 IP？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"WebRTC 洩漏檢測 · 1ms.dog","url":"https://who.1ms.dog/zh-tw/webrtc-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免費 WebRTC 洩漏檢測：列出 WebRTC 交給任何網站的公網 IPv4、IPv6 和區域網路位址，與 VPN 或代理顯示的 IP 比對。對不上，就是 WebRTC 洩漏了真實 IP。附 Chrome、Firefox、Brave 和代理用戶端的修復方法。","inLanguage":"zh-TW","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"什麼是 WebRTC 洩漏？","acceptedAnswer":{"@type":"Answer","text":"為了建立通話，WebRTC 會收集所有能聯絡到你的位址：網卡上的區域網路位址，以及 STUN 伺服器看到的公網位址。網頁幾行程式就能讀到，不需要任何權限。如果 VPN 或代理只轉送網頁請求，STUN 請求就會走你自己的線路，網頁就能拿到 VPN 背後的真實 IP。"}},{"@type":"Question","name":"這個檢測怎麼做的？","acceptedAnswer":{"@type":"Answer","text":"頁面向 Cloudflare 和 Google 的 STUN 伺服器發起 WebRTC 連線，列出它們回報的位址（srflx 候選），再與本站、你的其他出口以及 IPv6 測試看到的位址比較。哪個都對不上的位址，就是洩漏。區域網路位址來自 host 候選。所有資料不儲存、不上傳。"}},{"@type":"Question","name":"WebRTC 洩漏怎麼修？","acceptedAnswer":{"@type":"Answer","text":"代理用戶端（Clash、V2Ray 等）：開啟 TUN 模式，讓 UDP 也走代理。Chrome 和 Edge：安裝 WebRTC Network Limiter 擴充功能，或在 uBlock Origin 勾選「防止 WebRTC 洩漏本機 IP 位址」。Brave：設定 → 隱私 → WebRTC IP 處理政策 → 停用非代理 UDP。Firefox：在 about:config 把 media.peerconnection.ice.default_address_only 設為 true，或把 media.peerconnection.enabled 設為 false 完全關閉。改完再測一次。"}},{"@type":"Question","name":"區域網路位址或 .local 名稱算洩漏嗎？","acceptedAnswer":{"@type":"Answer","text":"以 .local 結尾的名稱是瀏覽器把區域網路位址藏起來了（mDNS），這正是你要的。真實的區域網路位址（例如 192.168.1.5）不會暴露你在哪，但會讓你的指紋更獨特。與 IPv4 出口不同的 IPv6 位址，只有不是你的 IPv6 出口時才算洩漏：檢測會拿它和網站看到的 IPv6 位址比對。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.f9b19e45db.css">
+<link rel="stylesheet" href="/assets/app.f36196fc46.css">
 </head>
 <body>
 <div class="app">
@@ -109,7 +109,7 @@
     </section>
 
     <section class="target card" id="target">
-      <div class="tg-h"><h2 data-i="tg_h">想裝成在哪裡上網？</h2><label class="tg-sel"><span class="sr" data-i="tg_label">目標地區</span><select id="tgSel"></select></label><p class="tg-sum" id="tgSum">&nbsp;</p></div>
+      <div class="tg-h"><h2 data-i="tg_h">想裝成在哪裡上網？</h2><div class="tg-sel"><label class="sr" for="tgIn" data-i="tg_label">目標地區</label><input id="tgIn" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tgOpts" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><ul id="tgOpts" role="listbox" hidden></ul></div><p class="tg-sum" id="tgSum">&nbsp;</p></div>
       <ul class="tg-list" id="tgList"><li data-t="ip"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="tz"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="lang"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="dns"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="rtc"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li></ul>
     </section>
 
@@ -140,7 +140,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-TW","paths":{"en":"/webrtc-leak/","zh-CN":"/zh-cn/webrtc-leak/","zh-TW":"/zh-tw/webrtc-leak/","ja":"/ja/webrtc-leak/","ko":"/ko/webrtc-leak/","es":"/es/webrtc-leak/","fr":"/fr/webrtc-leak/","de":"/de/webrtc-leak/","pt":"/pt/webrtc-leak/","ru":"/ru/webrtc-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"webrtc-leak","rows":["webrtc","lan","ip","stack"],"check":"webrtc","go":"egress"}}</script>
-<script src="/assets/l.zh-tw.18b5813263.js"></script>
-<script src="/assets/app.fd24fa5152.js"></script>
+<script src="/assets/l.zh-tw.d8456ef88c.js"></script>
+<script src="/assets/app.88c9faf942.js"></script>
 </body>
 </html>

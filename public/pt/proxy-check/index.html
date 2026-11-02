@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Os sites percebem um proxy no meio?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Teste de proxy · 1ms.dog","url":"https://who.1ms.dog/pt/proxy-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Teste de proxy gratuito: a ida e volta que seu navegador mede contra a que o Cloudflare vê na conexão dele, se seu IP é de data center, seus endereços de DNS e WebRTC. Um proxy acrescenta um trecho mensurável, mesmo com IP residencial limpo.","inLanguage":"pt","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Como funciona a verificação de latência?","acceptedAnswer":{"@type":"Answer","text":"A página pede algumas vezes uma resposta mínima ao servidor de borda deste site e fica com a mais rápida, do envio ao primeiro byte. O Cloudflare informa a ida e volta medida na conexão TCP que te atendeu. Sem proxy, ficam próximas; com proxy, o Cloudflare só vê a parte do proxy."}},{"@type":"Question","name":"Um IP residencial também é pego?","acceptedAnswer":{"@type":"Answer","text":"Sim. Ele passa na verificação de data center, mas a ida e volta a mais, um DNS em outro país, um fuso que não bate e os endereços do WebRTC o entregam do mesmo jeito."}},{"@type":"Question","name":"Por que às vezes aparece \"não deu para ler\"?","acceptedAnswer":{"@type":"Answer","text":"No HTTP/3 não há conexão TCP, então o Cloudflare não tem ida e volta para informar, e algumas redes bloqueiam as requisições de medição."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.f9b19e45db.css">
+<link rel="stylesheet" href="/assets/app.f36196fc46.css">
 </head>
 <body>
 <div class="app">
@@ -109,7 +109,7 @@
     </section>
 
     <section class="target card" id="target">
-      <div class="tg-h"><h2 data-i="tg_h">Onde você quer parecer estar?</h2><label class="tg-sel"><span class="sr" data-i="tg_label">Região alvo</span><select id="tgSel"></select></label><p class="tg-sum" id="tgSum">&nbsp;</p></div>
+      <div class="tg-h"><h2 data-i="tg_h">Onde você quer parecer estar?</h2><div class="tg-sel"><label class="sr" for="tgIn" data-i="tg_label">Região alvo</label><input id="tgIn" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tgOpts" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><ul id="tgOpts" role="listbox" hidden></ul></div><p class="tg-sum" id="tgSum">&nbsp;</p></div>
       <ul class="tg-list" id="tgList"><li data-t="ip"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="tz"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="lang"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="dns"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="rtc"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li></ul>
     </section>
 
@@ -140,7 +140,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"pt","paths":{"en":"/proxy-check/","zh-CN":"/zh-cn/proxy-check/","zh-TW":"/zh-tw/proxy-check/","ja":"/ja/proxy-check/","ko":"/ko/proxy-check/","es":"/es/proxy-check/","fr":"/fr/proxy-check/","de":"/de/proxy-check/","pt":"/pt/proxy-check/","ru":"/ru/proxy-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"proxy-check","rows":["edge","ip","isp","dns","webrtc"],"check":"rtt","go":"egress"}}</script>
-<script src="/assets/l.pt.34d84b4b4d.js"></script>
-<script src="/assets/app.fd24fa5152.js"></script>
+<script src="/assets/l.pt.35442f8c53.js"></script>
+<script src="/assets/app.88c9faf942.js"></script>
 </body>
 </html>

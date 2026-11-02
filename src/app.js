@@ -919,13 +919,47 @@ import { TZ_CC } from "./tz.mjs";
   /* ---------- a country to pass for ---------- */
   // By default the one the address is in; pick another to see what still gives you away: the address, the system's
   // time zone, the browser's language, the DNS resolver, WebRTC
-  const TG = $("#tgSel");
   const CCS = [...new Set(Object.values(TZ_CC))].map(cc => [cc, country(cc)]).filter(([cc, n]) => n && n !== cc).sort((a, b) => a[1].localeCompare(b[1], LANG));
-  TG.innerHTML = `<option value="">${esc(t("tg_auto"))}</option>` + CCS.map(([cc, n]) => `<option value="${cc}">${esc(n)}</option>`).join("");
-  TG.value = (!EMBED && store.get(K.target)) || "";
-  TG.onchange = () => { if (!EMBED) store.set(K.target, TG.value); paintTarget(); };
+  // typed into, not scrolled: the name in the page's language or in English, or the code, narrows the list
+  // ("jp", "japan", "日本"); names starting with what's typed come first
+  const tgIn = $("#tgIn"), tgOpts = $("#tgOpts");
+  const fold = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  let EN = null; try { EN = new Intl.DisplayNames(["en"], { type: "region" }); } catch (e) {}
+  const OPTS = [{ cc: "", n: t("tg_auto"), k: [fold(t("tg_auto"))] }, ...CCS.map(([cc, n]) => ({ cc, n, k: [fold(n), fold(EN && EN.of(cc)), cc.toLowerCase()] }))];
+  let tgVal = (!EMBED && store.get(K.target)) || "", tgHit = OPTS, tgAt = 0;
+  if (!OPTS.some(o => o.cc === tgVal)) tgVal = "";
+  const tgName = () => (OPTS.find(o => o.cc === tgVal) || OPTS[0]).n;
+  tgIn.value = tgName(); tgIn.placeholder = t("tg_find");
+  function tgShow(q) {
+    const f = fold(q).trim(), rank = o => o.k.some(k => k.startsWith(f)) ? 0 : 1;
+    tgHit = f ? OPTS.filter(o => o.k.some(k => k.includes(f))).sort((a, b) => rank(a) - rank(b)) : OPTS;
+    tgAt = f ? 0 : Math.max(0, tgHit.findIndex(o => o.cc === tgVal));
+    tgOpts.innerHTML = tgHit.length ? tgHit.map((o, i) => `<li role="option" id="tgO${i}" data-n="${i}" aria-selected="${o.cc === tgVal}">${o.cc ? flag(o.cc) : '<span class="flag-x"></span>'}<span>${esc(o.n)}</span></li>`).join("")
+      : `<li class="none">${esc(t("tg_none"))}</li>`;
+    tgOpts.hidden = false; tgIn.setAttribute("aria-expanded", "true"); tgMark();
+  }
+  function tgMark() {
+    [...tgOpts.children].forEach((li, i) => li.classList.toggle("on", i === tgAt));
+    const on = tgOpts.children[tgAt];
+    if (on && on.id) { tgIn.setAttribute("aria-activedescendant", on.id); on.scrollIntoView({ block: "nearest" }); } else tgIn.removeAttribute("aria-activedescendant");
+  }
+  function tgClose() { tgOpts.hidden = true; tgIn.setAttribute("aria-expanded", "false"); tgIn.removeAttribute("aria-activedescendant"); tgIn.value = tgName(); }
+  function tgPick(o) { tgVal = o.cc; if (!EMBED) store.set(K.target, tgVal); tgClose(); tgIn.blur(); paintTarget(); }
+  tgIn.onfocus = () => { tgShow(""); tgIn.select(); };
+  tgIn.oninput = () => tgShow(tgIn.value);
+  tgIn.onblur = tgClose;
+  tgIn.onkeydown = e => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (tgOpts.hidden) return tgShow("");
+      if (tgHit.length) { tgAt = (tgAt + (e.key === "ArrowDown" ? 1 : -1) + tgHit.length) % tgHit.length; tgMark(); }
+    } else if (e.key === "Enter") { e.preventDefault(); if (!tgOpts.hidden && tgHit[tgAt]) tgPick(tgHit[tgAt]); }
+    else if (e.key === "Escape") { tgClose(); tgIn.blur(); }
+  };
+  tgOpts.onpointerdown = e => e.preventDefault();   // the box keeps the focus until the pick
+  tgOpts.onclick = e => { const li = e.target.closest("li[data-n]"); if (li) tgPick(tgHit[+li.dataset.n]); };
   function paintTarget() {
-    const c = (R.srv && R.srv.cf) || {}, T = TG.value || c.country;
+    const c = (R.srv && R.srv.cf) || {}, T = tgVal || c.country;
     if (!T || !R.ck) return;
     const name = country(T), wr = R.ck.webrtc && R.ck.webrtc[0];
     const items = [["ip", c.country ? c.country === T : null], ["tz", R.tz ? tzCC(R.tz) === T : null], ["lang", R.langs && R.langs.length ? langCC(R.langs[0]) === T : null],

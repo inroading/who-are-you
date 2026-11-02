@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Seu DNS escapa da VPN?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Teste de vazamento de DNS · 1ms.dog","url":"https://who.1ms.dog/pt/dns-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Teste gratuito de vazamento de DNS: encontre o resolvedor de DNS que de fato consulta os sites para você, seu país e sua rede, e compare com o IP que os sites veem. Se não batem, sua VPN ou proxy vaza DNS. Com como corrigir no Clash, V2Ray e no navegador.","inLanguage":"pt","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"O que é vazamento de DNS?","acceptedAnswer":{"@type":"Answer","text":"Antes de o navegador se conectar a um site, um resolvedor de DNS transforma o nome em endereço. Se essa consulta escapa da VPN ou do proxy, ela vai para o resolvedor do seu provedor: ele vê cada site que você visita, e sites que comparam o resolvedor com o seu IP percebem a VPN e onde você realmente está."}},{"@type":"Question","name":"Como o teste encontra meu resolvedor?","acceptedAnswer":{"@type":"Answer","text":"A página consulta um nome aleatório em edns.ip-api.com que ninguém pediu antes, então nenhum cache responde: seu resolvedor precisa perguntar ao servidor de nomes da ip-api, que informa o endereço e a rede do resolvedor, e a sub-rede do cliente se o resolvedor a repassar (ECS). O teste compara o país do resolvedor com o do seu IP."}},{"@type":"Question","name":"Como corrijo um vazamento de DNS?","acceptedAnswer":{"@type":"Answer","text":"Clash / Mihomo: ligue o DNS com enhanced-mode fake-ip ou use o modo TUN para que todas as consultas passem por ele. Clientes V2Ray / Xray: mande o DNS pelo proxy (ou configure um servidor DoH que passe por ele). No navegador, o DNS seguro (DoH) também afasta as consultas do provedor. Depois, teste de novo."}},{"@type":"Question","name":"Meu resolvedor é Cloudflare ou Google em outra cidade. É vazamento?","acceptedAnswer":{"@type":"Answer","text":"Normalmente não. Resolvedores públicos como 1.1.1.1 e 8.8.8.8 respondem do data center mais próximo da consulta, então a cidade pode não bater com a saída da VPN. O que entrega você é um resolvedor do seu provedor, ou um no seu país enquanto seu IP está no exterior."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.f9b19e45db.css">
+<link rel="stylesheet" href="/assets/app.f36196fc46.css">
 </head>
 <body>
 <div class="app">
@@ -109,7 +109,7 @@
     </section>
 
     <section class="target card" id="target">
-      <div class="tg-h"><h2 data-i="tg_h">Onde você quer parecer estar?</h2><label class="tg-sel"><span class="sr" data-i="tg_label">Região alvo</span><select id="tgSel"></select></label><p class="tg-sum" id="tgSum">&nbsp;</p></div>
+      <div class="tg-h"><h2 data-i="tg_h">Onde você quer parecer estar?</h2><div class="tg-sel"><label class="sr" for="tgIn" data-i="tg_label">Região alvo</label><input id="tgIn" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tgOpts" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><ul id="tgOpts" role="listbox" hidden></ul></div><p class="tg-sum" id="tgSum">&nbsp;</p></div>
       <ul class="tg-list" id="tgList"><li data-t="ip"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="tz"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="lang"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="dns"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="rtc"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li></ul>
     </section>
 
@@ -140,7 +140,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"pt","paths":{"en":"/dns-leak/","zh-CN":"/zh-cn/dns-leak/","zh-TW":"/zh-tw/dns-leak/","ja":"/ja/dns-leak/","ko":"/ko/dns-leak/","es":"/es/dns-leak/","fr":"/fr/dns-leak/","de":"/de/dns-leak/","pt":"/pt/dns-leak/","ru":"/ru/dns-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"dns-leak","rows":["dns","ip","ex_cn","ex_intl","stack"],"check":"dns","go":"dns"}}</script>
-<script src="/assets/l.pt.34d84b4b4d.js"></script>
-<script src="/assets/app.fd24fa5152.js"></script>
+<script src="/assets/l.pt.35442f8c53.js"></script>
+<script src="/assets/app.88c9faf942.js"></script>
 </body>
 </html>

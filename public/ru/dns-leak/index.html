@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Обходит ли ваш DNS VPN?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Проверка утечки DNS · 1ms.dog","url":"https://who.1ms.dog/ru/dns-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Бесплатная проверка утечки DNS: найдите DNS-резолвер, который на самом деле разрешает для вас сайты, его страну и сеть, и сравните с IP, который видят сайты. Если не совпадает, ваш VPN или прокси пропускает DNS. С инструкциями для Clash, V2Ray и браузера.","inLanguage":"ru","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Что такое утечка DNS?","acceptedAnswer":{"@type":"Answer","text":"Прежде чем браузер откроет сайт, DNS-резолвер превращает имя в адрес. Если этот запрос идёт мимо VPN или прокси, он попадает к резолверу вашего провайдера: провайдер видит каждый сайт, а сайты, сравнивающие резолвер с IP, понимают, что вы через VPN, и где вы на самом деле."}},{"@type":"Question","name":"Как тест находит мой резолвер?","acceptedAnswer":{"@type":"Answer","text":"Страница запрашивает случайное имя в зоне edns.ip-api.com, которое никто раньше не запрашивал, поэтому ответить из кэша нельзя: ваш резолвер вынужден спросить сервер имён ip-api, а тот сообщает адрес и сеть резолвера и подсеть клиента, если резолвер её передаёт (ECS). Тест сравнивает страну резолвера со страной вашего IP."}},{"@type":"Question","name":"Как устранить утечку DNS?","acceptedAnswer":{"@type":"Answer","text":"Clash / Mihomo: включите DNS с enhanced-mode fake-ip или режим TUN, чтобы все запросы шли через него. Клиенты V2Ray / Xray: пустите DNS через прокси (или настройте DoH-сервер, идущий через него). В браузере безопасный DNS (DoH) тоже уводит запросы от провайдера. Потом проверьте снова."}},{"@type":"Question","name":"Резолвер — Cloudflare или Google в другом городе. Это утечка?","acceptedAnswer":{"@type":"Answer","text":"Обычно нет. Публичные резолверы вроде 1.1.1.1 и 8.8.8.8 отвечают из ближайшего к запросу дата-центра, так что город может не совпадать с выходом VPN. Выдаёт вас резолвер вашего провайдера или резолвер в вашей стране, когда IP за границей."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.f9b19e45db.css">
+<link rel="stylesheet" href="/assets/app.f36196fc46.css">
 </head>
 <body>
 <div class="app">
@@ -109,7 +109,7 @@
     </section>
 
     <section class="target card" id="target">
-      <div class="tg-h"><h2 data-i="tg_h">Где вы хотите казаться?</h2><label class="tg-sel"><span class="sr" data-i="tg_label">Целевой регион</span><select id="tgSel"></select></label><p class="tg-sum" id="tgSum">&nbsp;</p></div>
+      <div class="tg-h"><h2 data-i="tg_h">Где вы хотите казаться?</h2><div class="tg-sel"><label class="sr" for="tgIn" data-i="tg_label">Целевой регион</label><input id="tgIn" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tgOpts" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><ul id="tgOpts" role="listbox" hidden></ul></div><p class="tg-sum" id="tgSum">&nbsp;</p></div>
       <ul class="tg-list" id="tgList"><li data-t="ip"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="tz"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="lang"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="dns"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="rtc"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li></ul>
     </section>
 
@@ -140,7 +140,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ru","paths":{"en":"/dns-leak/","zh-CN":"/zh-cn/dns-leak/","zh-TW":"/zh-tw/dns-leak/","ja":"/ja/dns-leak/","ko":"/ko/dns-leak/","es":"/es/dns-leak/","fr":"/fr/dns-leak/","de":"/de/dns-leak/","pt":"/pt/dns-leak/","ru":"/ru/dns-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"dns-leak","rows":["dns","ip","ex_cn","ex_intl","stack"],"check":"dns","go":"dns"}}</script>
-<script src="/assets/l.ru.6f98e1e561.js"></script>
-<script src="/assets/app.fd24fa5152.js"></script>
+<script src="/assets/l.ru.635019cbc9.js"></script>
+<script src="/assets/app.88c9faf942.js"></script>
 </body>
 </html>

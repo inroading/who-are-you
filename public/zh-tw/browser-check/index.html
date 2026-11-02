@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="你的瀏覽器前後說得一致嗎？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"瀏覽器環境檢測 · 1ms.dog","url":"https://who.1ms.dog/zh-tw/browser-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免費瀏覽器環境檢測，適合指紋瀏覽器和多帳號環境：UA、JS 引擎、語言、時區、字型和指紋是否一致，擴充功能有沒有竄改網站讀到的資訊，並給出 A 到 F 的環境評分。","inLanguage":"zh-TW","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"這個檢測看哪些地方？","acceptedAnswer":{"@type":"Answer","text":"網站讀的屬性（UA、平台、語言、螢幕）是不是被重新定義過，指紋用到的繪圖和音訊函式有沒有被替換，JS 引擎和 UA 對不對得上，請求標頭裡的語言和 JS 裡的是否一致，Date 和 Intl 給出的時區是否相同。頁面上其他檢測項也都計入評分。"}},{"@type":"Question","name":"為什麼改 UA 的擴充功能會被識破？","acceptedAnswer":{"@type":"Answer","text":"它們只改了 JS 讀到的那一份，瀏覽器送出的請求標頭、底層引擎、被它們包起來的函式都還是原樣。每一處對不上，網站都比得出來。想偽裝成在別處，要在系統層面改：系統語言和時區。"}},{"@type":"Question","name":"會儲存什麼嗎？","acceptedAnswer":{"@type":"Answer","text":"不會。檢測都在你的瀏覽器裡進行；伺服器只回答它從這次請求本來就看得到的東西，什麼都不存。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.f9b19e45db.css">
+<link rel="stylesheet" href="/assets/app.f36196fc46.css">
 </head>
 <body>
 <div class="app">
@@ -109,7 +109,7 @@
     </section>
 
     <section class="target card" id="target">
-      <div class="tg-h"><h2 data-i="tg_h">想裝成在哪裡上網？</h2><label class="tg-sel"><span class="sr" data-i="tg_label">目標地區</span><select id="tgSel"></select></label><p class="tg-sum" id="tgSum">&nbsp;</p></div>
+      <div class="tg-h"><h2 data-i="tg_h">想裝成在哪裡上網？</h2><div class="tg-sel"><label class="sr" for="tgIn" data-i="tg_label">目標地區</label><input id="tgIn" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tgOpts" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><ul id="tgOpts" role="listbox" hidden></ul></div><p class="tg-sum" id="tgSum">&nbsp;</p></div>
       <ul class="tg-list" id="tgList"><li data-t="ip"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="tz"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="lang"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="dns"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="rtc"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li></ul>
     </section>
 
@@ -140,7 +140,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-TW","paths":{"en":"/browser-check/","zh-CN":"/zh-cn/browser-check/","zh-TW":"/zh-tw/browser-check/","ja":"/ja/browser-check/","ko":"/ko/browser-check/","es":"/es/browser-check/","fr":"/fr/browser-check/","de":"/de/browser-check/","pt":"/pt/browser-check/","ru":"/ru/browser-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"browser-check","rows":["engine","browser","h_ua","h_lang","langs","tz","fonts"],"check":"tamper"}}</script>
-<script src="/assets/l.zh-tw.18b5813263.js"></script>
-<script src="/assets/app.fd24fa5152.js"></script>
+<script src="/assets/l.zh-tw.d8456ef88c.js"></script>
+<script src="/assets/app.88c9faf942.js"></script>
 </body>
 </html>

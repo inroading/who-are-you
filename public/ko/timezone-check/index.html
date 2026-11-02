@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="시계와 IP가 맞나요?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"시간대 검사 · 1ms.dog","url":"https://who.1ms.dog/ko/timezone-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"무료 시간대 검사: 시스템 시간대와 시계 형식을 IP 위치의 시간대와 비교합니다. 둘이 다르면 사이트가 VPN·프록시를 알아보는 첫 단서가 됩니다. Windows, macOS, 휴대폰에서 고치는 법 포함.","inLanguage":"ko","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"사이트는 내 시간대를 어떻게 아나요?","acceptedAnswer":{"@type":"Answer","text":"JavaScript의 Intl과 Date로, 어떤 페이지든 권한 없이 씁니다. IP의 시간대는 IP를 도시까지 찾는 것과 같은 위치 데이터베이스에서 나와요."}},{"@type":"Question","name":"어긋나면 어떻게 고치나요?","acceptedAnswer":{"@type":"Answer","text":"시스템 시간대를 IP가 있는 나라의 것으로 바꾸세요. Windows는 설정 → 시간 및 언어, macOS는 시스템 설정 → 일반 → 날짜 및 시간, 휴대폰은 날짜 및 시간 설정. JS 시간대만 바꾸는 확장 프로그램은 쉽게 들켜요(브라우저 환경 검사 참고)."}},{"@type":"Question","name":"같은 나라의 다른 시간대는 왜 노란색인가요?","acceptedAnswer":{"@type":"Answer","text":"큰 나라는 시간대가 여럿이고, IP는 나라는 맞아도 도시가 틀리는 일이 흔해요. 다른 나라의 시간대는 분명한 모순, 같은 나라는 힌트일 뿐입니다."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.f9b19e45db.css">
+<link rel="stylesheet" href="/assets/app.f36196fc46.css">
 </head>
 <body>
 <div class="app">
@@ -109,7 +109,7 @@
     </section>
 
     <section class="target card" id="target">
-      <div class="tg-h"><h2 data-i="tg_h">어디에 있는 것처럼 보이고 싶나요?</h2><label class="tg-sel"><span class="sr" data-i="tg_label">목표 지역</span><select id="tgSel"></select></label><p class="tg-sum" id="tgSum">&nbsp;</p></div>
+      <div class="tg-h"><h2 data-i="tg_h">어디에 있는 것처럼 보이고 싶나요?</h2><div class="tg-sel"><label class="sr" for="tgIn" data-i="tg_label">목표 지역</label><input id="tgIn" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tgOpts" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><ul id="tgOpts" role="listbox" hidden></ul></div><p class="tg-sum" id="tgSum">&nbsp;</p></div>
       <ul class="tg-list" id="tgList"><li data-t="ip"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="tz"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="lang"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="dns"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="rtc"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li></ul>
     </section>
 
@@ -140,7 +140,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ko","paths":{"en":"/timezone-check/","zh-CN":"/zh-cn/timezone-check/","zh-TW":"/zh-tw/timezone-check/","ja":"/ja/timezone-check/","ko":"/ko/timezone-check/","es":"/es/timezone-check/","fr":"/fr/timezone-check/","de":"/de/timezone-check/","pt":"/pt/timezone-check/","ru":"/ru/timezone-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"timezone-check","rows":["tz","tzip","hour","geo","clock"],"check":"tz"}}</script>
-<script src="/assets/l.ko.48d567a4e4.js"></script>
-<script src="/assets/app.fd24fa5152.js"></script>
+<script src="/assets/l.ko.1e312b8bca.js"></script>
+<script src="/assets/app.88c9faf942.js"></script>
 </body>
 </html>

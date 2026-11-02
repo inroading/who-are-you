@@ -281,7 +281,20 @@ html.shared .idc, html.shared #copyTxt, html.shared #mine { display: none; }
 .target { padding: 16px 22px 18px; }
 .tg-h { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
 .tg-h h2 { font-size: 16px; letter-spacing: -.01em; }
-.tg-sel select { font: inherit; font-size: 13.5px; padding: 5px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); max-width: 14em; }
+/* the country box: type to narrow, the list drops under it */
+.tg-sel { position: relative; }
+.tg-sel::after { content: ""; position: absolute; right: 12px; top: 50%; width: 6px; height: 6px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+.tg-sel input { font: inherit; font-size: 13.5px; width: 14em; max-width: 100%; padding: 5px 30px 5px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); text-overflow: ellipsis; }
+.tg-sel input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px var(--ink-soft); }
+.tg-sel input::placeholder { color: var(--muted); }
+#tgOpts { position: absolute; z-index: 20; top: calc(100% + 4px); left: 0; width: max(100%, 16em); max-height: 300px; overflow: auto; overscroll-behavior: contain;
+  margin: 0; padding: 4px; list-style: none; background: var(--panel); border: 1px solid var(--line); border-radius: 11px; box-shadow: 0 12px 32px rgba(0, 0, 0, .16); }
+#tgOpts li { display: flex; align-items: center; padding: 6px 9px; border-radius: 7px; font-size: 13.5px; line-height: 1.35; cursor: pointer; }
+#tgOpts li.on { background: var(--ink-soft); }
+#tgOpts li[aria-selected="true"] { font-weight: 600; color: var(--ink); }
+#tgOpts li.none { color: var(--muted); cursor: default; }
+#tgOpts .flag-x { width: 18px; flex: none; margin-right: 5px; }
+@media (max-width: 640px) { .tg-sel input { font-size: 16px; } }   /* (under 16px, iOS zooms in on focus) */
 .tg-sum { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--muted); }
 .tg-sum.ok { color: var(--t1); } .tg-sum.bad { color: var(--t5); }
 .tg-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }

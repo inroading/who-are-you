@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="你的時鐘和 IP 對得上嗎？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"時區檢測 · 1ms.dog","url":"https://who.1ms.dog/zh-tw/timezone-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免費時區檢測：比對你的系統時區、時鐘格式和 IP 所在地的時區。兩者不一致，是網站辨識 VPN 和代理最先看的破綻之一。附 Windows、macOS 和手機上的改法。","inLanguage":"zh-TW","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"網站怎麼知道我的時區？","acceptedAnswer":{"@type":"Answer","text":"透過 JavaScript 的 Intl 和 Date，任何網頁都能用，不會跳出授權。IP 的時區則來自把 IP 定位到城市的那類地理資料庫。"}},{"@type":"Question","name":"時區對不上怎麼改？","acceptedAnswer":{"@type":"Answer","text":"把系統時區改成 IP 所在國家的：Windows 在「設定 → 時間與語言」，macOS 在「系統設定 → 一般 → 日期與時間」，手機在日期和時間設定裡。只改 JS 時區的擴充功能很容易被識破，原因見瀏覽器環境檢測。"}},{"@type":"Question","name":"同一個國家的不同時區為什麼只算黃色？","acceptedAnswer":{"@type":"Answer","text":"大國有好幾個時區，IP 也常常只定位準了國家、城市不對。別國的時區是明顯矛盾，同一個國家的只是提示。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.f9b19e45db.css">
+<link rel="stylesheet" href="/assets/app.f36196fc46.css">
 </head>
 <body>
 <div class="app">
@@ -109,7 +109,7 @@
     </section>
 
     <section class="target card" id="target">
-      <div class="tg-h"><h2 data-i="tg_h">想裝成在哪裡上網？</h2><label class="tg-sel"><span class="sr" data-i="tg_label">目標地區</span><select id="tgSel"></select></label><p class="tg-sum" id="tgSum">&nbsp;</p></div>
+      <div class="tg-h"><h2 data-i="tg_h">想裝成在哪裡上網？</h2><div class="tg-sel"><label class="sr" for="tgIn" data-i="tg_label">目標地區</label><input id="tgIn" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tgOpts" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><ul id="tgOpts" role="listbox" hidden></ul></div><p class="tg-sum" id="tgSum">&nbsp;</p></div>
       <ul class="tg-list" id="tgList"><li data-t="ip"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="tz"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="lang"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="dns"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="rtc"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li></ul>
     </section>
 
@@ -140,7 +140,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-TW","paths":{"en":"/timezone-check/","zh-CN":"/zh-cn/timezone-check/","zh-TW":"/zh-tw/timezone-check/","ja":"/ja/timezone-check/","ko":"/ko/timezone-check/","es":"/es/timezone-check/","fr":"/fr/timezone-check/","de":"/de/timezone-check/","pt":"/pt/timezone-check/","ru":"/ru/timezone-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"timezone-check","rows":["tz","tzip","hour","geo","clock"],"check":"tz"}}</script>
-<script src="/assets/l.zh-tw.18b5813263.js"></script>
-<script src="/assets/app.fd24fa5152.js"></script>
+<script src="/assets/l.zh-tw.d8456ef88c.js"></script>
+<script src="/assets/app.88c9faf942.js"></script>
 </body>
 </html>
