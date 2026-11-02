@@ -4,7 +4,7 @@
 // once, when every sniffer it needs is in, so its text doesn't reflow piece by piece. Strings: window.L1MS.
 import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO } from "./sniffers.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
 
 (function () {
@@ -319,7 +319,7 @@ import { TZ_CC } from "./tz.mjs";
       R.gpuHiRaw = he ? hg.getParameter(he.UNMASKED_RENDERER_WEBGL) : null; R.gpuHi = gpuName(R.gpuHiRaw);
     } catch (e) { R.gpuHi = null; }
     const dg = discreteGpu(R.gpu, R.gpuHi, null);
-    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
+    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : ren === "Mozilla" ? "Mozilla · " + t("gpu_rfp") : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
       { why: [ven, ren, R.gpuHiRaw && R.gpuHiRaw !== ren ? R.gpuHiRaw : ""].filter(Boolean).join(" · ") });
     const gl2 = !!document.createElement("canvas").getContext("webgl2");
     txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }));
@@ -697,16 +697,18 @@ import { TZ_CC } from "./tz.mjs";
     : null;
   // an app's own browser (X, WeChat…), named when it names itself, "wv" for an Android web view that doesn't
   const inApp = () => R.br && /^(X|WeChat|Weibo|QQ|Instagram|Facebook|LINE|TikTok|Telegram)$/.test(R.br.name) ? R.br.name : /; wv\)/.test(navigator.userAgent) ? "wv" : null;
+  // Firefox's resistFingerprinting: the clock and the graphics card are stand-ins
+  const rfp = () => rfpClock(/Firefox\//.test(navigator.userAgent), R.tz, R.gpuRaw);
   function jobsOf() {
     const out = [...fontHints(R.fonts || [], R.dev && R.dev.os), ...(R.ext || []).filter(([k]) => k)];
     return out.filter(([k], i) => out.findIndex(([x]) => x === k) === i);
   }
   function portrait() {
     const c = (R.srv && R.srv.cf) || {}, d = R.dev || {};
-    const nat = nationality({ langs: R.langs, tz: R.tz, ipcc: c.country, sys: sysOf() || undefined, ios: !!(R.dev && /^(iOS|iPadOS)/.test(R.dev.os || "")) });
+    const nat = nationality({ langs: R.langs, tz: rfp() ? null : R.tz, ipcc: c.country, sys: sysOf() || undefined, ios: !!(R.dev && /^(iOS|iPadOS)/.test(R.dev.os || "")) });
     const ex = allExits(), split = ex && splitOf(ex);
     return { v: 1, nat: nat ? nat.cc : null, natFrom: nat ? nat.from : null, cc: c.country || null, city: c.city || null, langs: R.langs || [],
-      tz: R.tz || null, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, browser: R.browser || null,
+      tz: R.tz || null, rf: rfp() || undefined, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, browser: R.browser || null,
       screen: R.screen || null, gpu: discreteGpu(R.gpu, R.gpuHi, R.wgpu) || R.gpu || null, gi: discreteGpu(R.gpu, R.gpuHi, R.wgpu) ? R.gpu : undefined, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
       nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
       dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, app: inApp() || undefined, fz: !!R.noise || undefined, hz: R.hz || null,
@@ -782,12 +784,12 @@ import { TZ_CC } from "./tz.mjs";
     BL.city.classList.toggle("hid", shared && !P.city);
     BL.isp.classList.toggle("hid", shared && !P.org);
     blank("lang", P.langs.length ? esc(language(P.langs[0])) : U, BLANKS.lang, P.langs.map(language).join(", "));
-    blank("tz", P.tz ? esc(tzLabel(P.tz)) : U, BLANKS.tz, P.tz || "");
+    blank("tz", P.rf ? esc(t("pt_tz_rfp")) : P.tz ? esc(tzLabel(P.tz)) : U, BLANKS.tz, P.tz || "");
     blank("clock", esc(t(P.h12 ? "ck_12" : "ck_24")));
     blank("device", esc(!P.os ? t("dv_unknown") : (P.kind === "phone" || P.kind === "tablet") && P.model ? t("dv_model", { model: P.model, os: P.os }) : t("dv_" + (P.kind || "pc"), { os: P.os })));
     blank("browser", P.browser ? esc(P.browser) : U);
     blank("screen", P.screen ? esc(P.screen + (P.hz ? " · " + P.hz + " Hz" : "")) : U);
-    blank("gpu", esc(P.gs ? t("gpu_soft") : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")));
+    blank("gpu", esc(P.gs ? t("gpu_soft") : P.rf && !P.gpu ? t("gpu_rfp") : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")));
     blank("isp", P.org ? (!shared && asnOf(P.asn) ? `<a href="${esc(asnOf(P.asn))}" target="_blank" rel="noopener" title="${esc(t("go_asn"))}">${esc(P.org)}</a>` : esc(P.org)) : shared ? esc(t("masked")) : U, BLANKS.isp, X.fullOrg || (shared && !P.org ? t("masked_why") : ""));
     blank("dns", P.dns ? flagged(P.dns, country(P.dns)) : U, BLANKS.dns, X.dnsOrg || "");
     const sp = X.split;
@@ -1037,7 +1039,7 @@ import { TZ_CC } from "./tz.mjs";
   function judge(final) {
     const c = (R.srv && R.srv.cf) || {};
     const res = checks({
-      tz: R.tz, tzOff: R.tzOff == null ? null : offTxt(R.tzOff), ipTzOff: c.timezone ? offTxt(tzOffset(c.timezone)) : null, ipTz: c.timezone || null, ipcc: c.country,
+      tz: R.tz, rfp: rfp(), tzOff: R.tzOff == null ? null : offTxt(R.tzOff), ipTzOff: c.timezone ? offTxt(tzOffset(c.timezone)) : null, ipTz: c.timezone || null, ipcc: c.country,
       langs: R.langs, dnsCC: R.dnsCC, exits: allExits(), rtc: R.rtc, ip: R.srv && R.srv.ip, asn: c.asn, org: orgName(c.asOrganization, c.asn),
       uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, noise: R.noise, webdriver: R.webdriver,
       rttB: R.latDone ? R.rttB : null, rttCf: c.clientTcpRtt || null, sys: final || R.voices ? sysOf() : undefined, tamper: R.dev && R.srv ? tampered() : null,

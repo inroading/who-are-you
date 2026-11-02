@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp } from "../src/infer.mjs";
+import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock } from "../src/infer.mjs";
 
 const WIN = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36";
 const MAC_SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15";
@@ -138,6 +138,14 @@ test("disguise checks", () => {
   // Brave: the same drawing twice on one page, noise in what the page reads back
   assert.deepEqual(checks({ ...base, rand: false, noise: true }).fp, ["ok", "c_fp_site", {}]);
   assert.equal(gpuName("Brave"), null);
+  // Firefox's resistFingerprinting: Reykjavik's clock and "Mozilla" for the card are stand-ins, not Iceland
+  assert.equal(gpuName("Mozilla"), null);
+  assert.equal(rfpClock(true, "Atlantic/Reykjavik", "Mozilla"), true);
+  assert.equal(rfpClock(true, "Atlantic/Reykjavik", "ANGLE (Intel, Intel(R) UHD Graphics 620 Direct3D11 vs_5_0 ps_5_0, D3D11)"), false);
+  assert.equal(rfpClock(false, "Atlantic/Reykjavik", null), false);
+  const rf = { tz: "Atlantic/Reykjavik", tzOff: "+00:00", ipTzOff: "+01:00", ipcc: "ES", langs: ["en-GB"] };
+  assert.equal(checks(rf).tz[0], "bad");
+  assert.deepEqual(checks({ ...rf, rfp: true }).tz, ["warn", "c_tz_rfp", { a: "+01:00" }]);
   // iCloud Private Relay: the page's and WebRTC's exits differ, both are relay exits, nothing leaks
   const relay = { ...base, ip: "104.28.10.1", exits: [["ip", "104.28.10.1"]], rtc: ["104.28.77.9"] };
   assert.equal(checks(relay).webrtc[1], "c_rtc_relay");

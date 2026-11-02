@@ -111,7 +111,7 @@ export function browser(ua = "", brands = []) {
 
 // "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 (0x00002786) Direct3D11 vs_5_0 ps_5_0, D3D11)" → "NVIDIA GeForce RTX 4070"
 export function gpuName(r) {
-  if (!r || /^Brave$/i.test(r)) return null;   // Brave's stand-in for the card's name
+  if (!r || /^(Brave|Mozilla)$/i.test(r)) return null;   // Brave's and Firefox's (resistFingerprinting) stand-ins for the card's name
   let s = String(r);
   const m = s.match(/^ANGLE \((?:[^,]*), (.*?)(?:, [^,]*)?\)$/);
   if (m) s = m[1].replace(/^ANGLE Metal Renderer: /, "");
@@ -193,6 +193,8 @@ export function checks(x) {
   // an address is often placed in the right country but the wrong city; another country's is a contradiction
   if (x.tz == null || !x.ipcc) out.tz = null;
   else if (x.tzOff === x.ipTzOff) out.tz = ["ok", "c_tz_ok", { a: x.tzOff }];
+  // (Firefox's resistFingerprinting gives every site the same stand-in clock: it hides the zone, and shows the setting)
+  else if (x.rfp) out.tz = ["warn", "c_tz_rfp", { a: x.ipTzOff }];
   else out.tz = [tzCC(x.tz) === x.ipcc ? "warn" : "bad", tzCC(x.tz) === x.ipcc ? "c_tz_near" : "c_tz_off", { a: x.ipTzOff, b: x.tzOff, za: x.ipTz || null, zb: x.tz }];
   // the browser language against the address's country
   // (any language on the list that points to the address's country, or is widely spoken there, will do: en-IN or
@@ -371,3 +373,7 @@ export function discreteGpu(gl, hiGl, wgpu) {
 // Akamai and Fastly. Cloudflare's also carries WARP.
 const RELAY4 = [[104, 28], [172, 224], [172, 225], [172, 226], [146, 75], [140, 248]], RELAY6 = /^(2606:54c0|2a02:26f7|2a04:4e41):/i;
 export const isRelayIp = ip => { const s = String(ip || ""); if (s.includes(":")) return RELAY6.test(s); const [a, b] = s.split(".").map(Number); return RELAY4.some(([x, y]) => x === a && y === b); };
+
+// Firefox with resistFingerprinting (Tor and Mullvad Browser too): Reykjavik's clock for every site (UTC in older
+// versions), and "Mozilla" for the graphics card unless WebGL is off
+export const rfpClock = (firefox, tz, gpuRaw) => !!firefox && /^(Atlantic\/Reykjavik|UTC|Etc\/UTC)$/.test(tz || "") && (gpuRaw == null || gpuRaw === "Mozilla");
