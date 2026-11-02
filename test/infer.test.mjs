@@ -23,6 +23,12 @@ test("nationality: the language first, plain English defers to the time zone", (
   assert.deepEqual(nationality({ langs: ["en-US"], tz: "Europe/Berlin", ipcc: "US" }), { cc: "DE", from: ["tz"] });
   assert.deepEqual(nationality({ langs: ["ko"], tz: "America/Los_Angeles" }), { cc: "KR", from: ["langs"] });
   assert.deepEqual(nationality({ langs: ["en"], tz: "Etc/UTC", ipcc: "GB" }), { cc: "GB", from: ["geo"] });
+  // an American on holiday in Portugal, on an iPad: its time zone followed it, its Region setting didn't
+  assert.deepEqual(nationality({ langs: ["en-US"], tz: "Europe/Lisbon", ipcc: "PT", ios: true }), { cc: "US", from: ["langs"] });
+  assert.deepEqual(nationality({ langs: ["en-CN"], tz: "Asia/Shanghai", ipcc: "CN", ios: true }), { cc: "CN", from: ["langs", "tz"] });
+  // elsewhere en-US alone still says nothing; a language further down the list does
+  assert.deepEqual(nationality({ langs: ["en-US"], tz: "Asia/Shanghai", ipcc: "JP" }), { cc: "CN", from: ["tz"] });
+  assert.deepEqual(nationality({ langs: ["en-US", "en", "zh-CN"], tz: "Asia/Tokyo", ipcc: "JP" }), { cc: "CN", from: ["langs"] });
 });
 
 test("system and kind of device", () => {
@@ -32,6 +38,11 @@ test("system and kind of device", () => {
   assert.deepEqual(device(MAC_SAFARI), { os: "macOS", osv: "10.15", kind: "mac", model: "" });
   assert.equal(device(MAC_SAFARI, { platform: "macOS", platformVersion: "15.1.0" }).osv, "15.1");
   assert.deepEqual(device(IPHONE), { os: "iOS", osv: "18.1", kind: "phone", model: "iPhone" });
+  // browsers inside apps
+  assert.deepEqual(browser("Mozilla/5.0 (iPad; CPU OS 27_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/24B119 Twitter for iPhone/12.39"), { name: "X", v: "12" });
+  assert.equal(browser("Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.50(0x1800323c) NetType/WIFI Language/zh_CN").name, "WeChat");
+  assert.equal(browser("Mozilla/5.0 (Linux; Android 14; K) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/126.0 Mobile Safari/537.36 Instagram 340.0.0.22.109 Android", [{ brand: "Android WebView", version: "126" }]).name, "Instagram");
+  assert.equal(browser(IPHONE).name, "Safari");
   assert.equal(device(MAC_SAFARI, {}, 5).os, "iPadOS");   // iPads ask for the desktop site
   // HarmonyOS: ArkWeb names it even where the user agent claims Windows or Android
   const HM = "Mozilla/5.0 (Phone; OpenHarmony 5.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 ArkWeb/4.1.6.1 Mobile HuaweiBrowser/5.0.4.300";

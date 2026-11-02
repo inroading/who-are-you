@@ -684,7 +684,7 @@ import { TZ_CC } from "./tz.mjs";
   }
   function portrait() {
     const c = (R.srv && R.srv.cf) || {}, d = R.dev || {};
-    const nat = nationality({ langs: R.langs, tz: R.tz, ipcc: c.country, sys: sysOf() || undefined });
+    const nat = nationality({ langs: R.langs, tz: R.tz, ipcc: c.country, sys: sysOf() || undefined, ios: !!(R.dev && /^(iOS|iPadOS)/.test(R.dev.os || "")) });
     const ex = allExits(), split = ex && splitOf(ex);
     return { v: 1, nat: nat ? nat.cc : null, natFrom: nat ? nat.from : null, cc: c.country || null, city: c.city || null, langs: R.langs || [],
       tz: R.tz || null, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, browser: R.browser || null,
