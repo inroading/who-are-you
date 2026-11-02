@@ -29,6 +29,14 @@ test("nationality: the language first, plain English defers to the time zone", (
   // elsewhere en-US alone still says nothing; a language further down the list does
   assert.deepEqual(nationality({ langs: ["en-US"], tz: "Asia/Shanghai", ipcc: "JP" }), { cc: "CN", from: ["tz"] });
   assert.deepEqual(nationality({ langs: ["en-US", "en", "zh-CN"], tz: "Asia/Tokyo", ipcc: "JP" }), { cc: "CN", from: ["langs"] });
+  // British spelling is no British passport: en-GB, en-IN and Tamil in India, on India's time zone
+  const IN = ["en-GB", "en-IN", "en-US", "en", "ta"];
+  assert.deepEqual(nationality({ langs: IN, tz: "Asia/Calcutta", ipcc: "IN" }), { cc: "IN", from: ["langs", "tz"] });
+  assert.deepEqual(nationality({ langs: ["en-GB"], tz: "Asia/Singapore", ipcc: "SG" }), { cc: "SG", from: ["tz"] });
+  assert.deepEqual(nationality({ langs: ["en-GB"], tz: "Europe/London", ipcc: "GB" }), { cc: "GB", from: ["tz"] });
+  assert.equal(checks({ langs: IN, ipcc: "IN" }).lang[0], "ok");
+  assert.equal(checks({ langs: ["en-GB"], ipcc: "IN" }).lang[0], "info");
+  assert.equal(checks({ langs: ["zh-CN"], ipcc: "JP" }).lang[0], "warn");
 });
 
 test("system and kind of device", () => {

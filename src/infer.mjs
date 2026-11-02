@@ -21,14 +21,15 @@ export const tzCC = tz => TZ_CC[tz] || null;
 
 // nationality: the browser language says most about it, unless it is plain (US) English, which is every device's
 // default; then the system time zone (where the device was set up), then the address.
-// (ios: on iPhone and iPad the language's region comes from the Region setting, so en-US is someone who set the US,
-// while elsewhere en-US is the default English half the world leaves on; the time zone of a phone follows where it is)
+// English in any variant says little: en-US is the default half the world leaves on, en-GB the English of India,
+// Singapore or Australia as much as of Britain. (ios: on iPhone and iPad the language's region comes from the Region
+// setting, so there en-GB or en-US is someone who set that country; the time zone of a phone follows where it is.)
 export function nationality({ langs = [], tz, ipcc, sys, ios }) {
   const first = langs[0] || "", lcc = langCC(first), tcc = tzCC(tz);
-  const plainEn = ios ? /^en$/i.test(first) : /^en(-US)?$/i.test(first);
+  const english = l => /^en\b/i.test(l || ""), plainEn = ios ? /^en$/i.test(first) : english(first);
   if (lcc && !plainEn) return { cc: lcc, from: tcc === lcc ? ["langs", "tz"] : ["langs"] };
   // plain English first, another language further down the list: that one says more
-  const other = langs.slice(1).map(langCC).find((c, i) => c && !/^en\b/i.test(langs[i + 1]));
+  const other = langs.slice(1).filter(l => !english(l)).map(langCC).find(Boolean);
   if (other) return { cc: other, from: tcc === other ? ["langs", "tz"] : ["langs"] };
   // a browser left in plain English on a system that installed one other language (its fonts, voices, keyboard)
   if (sys && sys.cc.length === 1) return { cc: sys.cc[0], from: tcc === sys.cc[0] ? [...sys.from, "tz"] : sys.from };
@@ -176,10 +177,12 @@ export function checks(x) {
   else if (x.tzOff === x.ipTzOff) out.tz = ["ok", "c_tz_ok", { a: x.tzOff }];
   else out.tz = [tzCC(x.tz) === x.ipcc ? "warn" : "bad", tzCC(x.tz) === x.ipcc ? "c_tz_near" : "c_tz_off", { a: x.ipTzOff, b: x.tzOff, za: x.ipTz || null, zb: x.tz }];
   // the browser language against the address's country
+  // (any language on the list that points to the address's country will do: en-IN, or Tamil, for an address in
+  // India; English first otherwise says little, whatever its variant)
   const lcc = langCC((x.langs || [])[0]);
   if (!x.ipcc || !x.langs) out.lang = null;
-  else if (!lcc || /^en(-US)?$/i.test(x.langs[0])) out.lang = ["info", "c_lang_info", {}];
-  else if (lcc === x.ipcc) out.lang = ["ok", "c_lang_ok", {}];
+  else if (x.langs.some(l => langCC(l) === x.ipcc)) out.lang = ["ok", "c_lang_ok", {}];
+  else if (!lcc || /^en\b/i.test(x.langs[0])) out.lang = ["info", "c_lang_info", {}];
   else out.lang = ["warn", "c_lang_warn", { cc: lcc }];
   // the DNS resolver that looked the page's test name up, against the address's country: a VPN that leaves DNS
   // outside the tunnel shows the visitor's own provider here
