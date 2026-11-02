@@ -814,6 +814,25 @@ import { TZ_CC } from "./tz.mjs";
     el.hidden = false;
   }
 
+  /* ---------- reporting a problem (the host's dialog) ---------- */
+  // When the host provides the dialog (msOpenReport), two entries sit beside the results, each starting the text
+  // box. The dialog asks this page for what the visitor saw: the portrait as a shared link carries it (no address,
+  // no fingerprint, city and network masked), with the raw readings people most often say were read wrong: the
+  // graphics card's renderer, the screen in CSS pixels and its ratio, the client hints, the engine, the keyboard.
+  if (typeof window.msOpenReport === "function" && !EMBED) {
+    for (const [id, k] of [["#rpRead", "rp_read_pre"], ["#rpCheck", "rp_check_pre"]]) { $(id).setAttribute("data-ms-report", t(k)); $(id).hidden = false; }
+    window.msReport = () => {
+      if (!R || !R.ck || $("#rerun").disabled) return null;
+      const c = (R.srv && R.srv.cf) || {}, gr = grade(R.ck, CHECKS.filter(id => R.ck[id])), hi = R.hi || {};
+      const summary = [$("#vHead").textContent, t("grade_v", { g: gr.grade }), R.osTxt, R.browser, R.screen, R.gpuSoft ? R.gpuRaw : R.gpu].filter(Boolean).join(" · ").slice(0, 300);
+      const data = { portrait: sharedPortrait(false), raw: {
+        gpu: R.gpuRaw || null, screen: [screen.width, screen.height, devicePixelRatio], hints: { platform: hi.platform, platformVersion: hi.platformVersion, model: hi.model, mobile: hi.mobile },
+        engine: R.engine || null, kbd: R.kbd || null, sysFonts: R.sysFonts || [], voices: [...new Set((R.voices || []).map(v => v.split(/[-_]/)[0]))],
+        tz: R.tz, langs: R.langs, rtt: [R.rttB == null ? null : Math.round(R.rttB), c.clientTcpRtt || null], http: c.httpProtocol || null } };
+      return { summary, data };
+    };
+  }
+
   /* ---------- the last runs, as a line ---------- */
   // Kept in this browser only, ten at most: the count of each run, oldest on the left, each point's time on hover
   function history() {

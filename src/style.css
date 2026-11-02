@@ -118,6 +118,10 @@ h2 { font-size: 15px; font-weight: 700; }
 .m-grade[hidden] { display: none; }
 .m-grade.g-A, .m-grade.g-Ap { background: var(--t1); } .m-grade.g-B { background: color-mix(in srgb, var(--t1) 60%, var(--t3)); }
 .m-grade.g-C { background: var(--t3); } .m-grade.g-D { background: color-mix(in srgb, var(--t3) 50%, var(--t5)); } .m-grade.g-F { background: var(--t5); }
+/* entries to the host's report dialog, beside the results */
+.rp-btn { margin-left: auto; border: 0; background: none; padding: 0; font: 500 12px var(--f-ui); color: var(--muted); cursor: pointer; text-transform: none; letter-spacing: 0; }
+.rp-btn:hover { color: var(--ink); text-decoration: underline; }
+.rp-btn[hidden] { display: none; }
 /* this run against the last one */
 .v-cmp { font-size: 12.5px; line-height: 1.5; margin-top: 4px; color: var(--muted); }
 .v-cmp.ok { color: var(--t1); } .v-cmp.bad { color: var(--t5); }
