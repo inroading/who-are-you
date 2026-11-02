@@ -66,7 +66,7 @@ for (const [lang, slug] of LANGS) {
   const r = await page.evaluate(() => ({
     rows: [...document.querySelectorAll(".pr[data-s]")].map(x => [x.dataset.s, x.querySelector(".pa").textContent]),
     waiting: document.querySelectorAll(".bl.wait").length, blanks: document.querySelectorAll(".bl[data-b]").length,
-    story: document.querySelector("#story").textContent, checks: [...document.querySelectorAll(".ckr")].map(x => [x.dataset.c, x.className]),
+    story: document.querySelector("#story").textContent, guess: document.querySelector("#guessT").textContent, checks: [...document.querySelectorAll(".ckr")].map(x => [x.dataset.c, x.className]),
     num: document.querySelector("#mNum").textContent, fp: document.querySelector("#fpId").textContent, ret: document.querySelector("#fpRet").textContent,
   }));
   for (const e of errors) fail(lang, "script error: " + e);
@@ -75,6 +75,7 @@ for (const [lang, slug] of LANGS) {
   if (r.blanks !== Object.keys(BLANKS).length) fail(lang, `${r.blanks} blanks, expected ${Object.keys(BLANKS).length}`);
   if (r.waiting) fail(lang, `${r.waiting} blanks still waiting`);
   if (/\{\w+\}|undefined|null|NaN/.test(r.story)) fail(lang, "portrait has a leftover: " + r.story.match(/.{0,20}(\{\w+\}|undefined|null|NaN).{0,20}/)[0]);
+  if (!r.guess.trim() || /\{\w+\}|undefined|null|NaN/.test(r.guess)) fail(lang, "the paragraph in a site's words: " + r.guess);
   for (const [id, cls] of r.checks) if (!/st-/.test(cls)) fail(lang, `check ${id} not judged`);
   if (r.checks.length !== CHECKS.length + PROTO.length) fail(lang, `${r.checks.length} checks, expected ${CHECKS.length + PROTO.length}`);
   if (!/^\d+$/.test(r.num)) fail(lang, `count "${r.num}"`);
@@ -95,13 +96,16 @@ for (const [lang, slug] of LANGS) {
     const s = await open(link);
     await s.page.waitForSelector("html.shared", { timeout: 5000 }).catch(() => fail("share", "shared view not shown"));
     const v = await s.page.evaluate(() => ({ waiting: document.querySelectorAll(".bl.wait").length, city: document.querySelector('.bl[data-b="city"]').textContent, fp: document.querySelector("#fpId").textContent,
-      story: document.querySelector("#story").textContent, mine: !document.querySelector("#mine").hidden }));
+      story: document.querySelector("#story").textContent, mine: !document.querySelector("#mine").hidden,
+      guess: document.querySelector("#guessT").textContent, cta: !document.querySelector("#cta").hidden }));
     for (const e of s.errors) fail("share", "script error: " + e);
     if (v.waiting) fail("share", `${v.waiting} blanks still waiting`);
     if (v.city !== "•••") fail("share", `city shows "${v.city}"`);
     if (v.fp !== "•••") fail("share", `fingerprint shows "${v.fp}"`);
     if (/\{\w+\}|undefined|null|NaN/.test(v.story)) fail("share", "portrait has a leftover");
     if (!v.mine) fail("share", "no \"check mine\" button");
+    if (!v.cta) fail("share", "no call to action in place of the fingerprint");
+    if (!v.guess.trim() || /\{\w+\}|undefined|null|NaN/.test(v.guess)) fail("share", "the paragraph in a site's words: " + v.guess);
     await s.page.close();
   }
   await page.close();

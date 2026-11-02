@@ -4,13 +4,14 @@
 
 Who do websites think you are? [Who Are You](https://who.1ms.dog) runs the sniffers any site can run the moment you open it, without a single permission prompt, and writes down the result as a paragraph with the blanks filled in: your likely nationality, the city you're in, your language and time zone, your device, browser, screen and graphics card, your network, your preferences, what your fonts say about your work, and your browser fingerprint.
 
-It then checks those readings against each other the way a site would to spot a disguise, and lists all 71 sniffers with how each one reads and what it read.
+It then checks those readings against each other the way a site would to spot a disguise, and lists all 79 sniffers with how each one reads and what it read.
 
 **Live:** https://who.1ms.dog · topic pages: [browser fingerprint test](https://who.1ms.dog/fingerprint/), [DNS leak test](https://who.1ms.dog/dns-leak/), [WebRTC leak test](https://who.1ms.dog/webrtc-leak/) (same tool, that result first; text in `src/pages.mjs`)
 
 ## What it shows
 
 - **The portrait.** One paragraph, every blank filled from the sniffers. Hover a blank to see which sniffers it came from (their rows light up). Age is the one blank it leaves open: nothing in a browser says it, and the page says so instead of guessing.
+- **What a site makes of it**: the portrait's last paragraph, said the way a person would: the hour where you are (left out of a shared portrait), whether everything lines up (if not, a site will likely guess a proxy), what the machine looks like it's for, whether clearing cookies helps, whether ad tracking gets through.
 - **The disguise check**, nine rows that matter when you want to hide:
   - system time zone vs. the IP's time zone
   - browser language vs. the IP's country
@@ -30,14 +31,15 @@ It then checks those readings against each other the way a site would to spot a 
   - WARP and Gateway: shown, not judged
 - **The fingerprint ID card**, with your previous visit: kept in your browser only, it shows when you were last here and whether the fingerprint was the same, which is how a site that never set a cookie still recognizes you.
 - **Sharing.** 1ms.dog's shared share dialog (`public/assets/share/`, copied verbatim from 1ms-shell) with an image card drawn in the browser and a link, `/<lang>/r/<version>.<code>` (no folder for English; older `/r/<code>` links still open), that opens the same portrait in the viewer's language and previews with the result in its title and image (the Worker writes them; format and version: `src/share.mjs`). Neither carries your address or fingerprint; city and network only if you tick the box. Shortened when the host announces a shortener (`<meta name="shortener">`).
+  Someone opening a shared portrait gets a "Check mine" card where the fingerprint would be, and a filled button at the bottom.
 - **Every sniffer**, grouped:
   - *What the server sees*: IP, Cloudflare geolocation (city, coordinates, ASN, time zone), reverse DNS, nearest edge and TCP RTT, HTTP/TLS version and cipher, post-quantum key exchange and ECH, Cloudflare WARP, a TLS ClientHello fingerprint, your clock's offset, the DNS resolver (edns.ip-api.com), WebRTC public and local addresses
   - *Exits*: the address each kind of destination sees, plus your IPv4 and IPv6 exits (Cloudflare Radar)
   - *Request headers*: User-Agent, Accept-Language, Sec-CH-UA, platform, encodings, DNT/GPC, referrer
   - *Language and region*: `navigator.languages`, locale, time zone, 12/24-hour clock, first day of the week, number and date format, keyboard layout, speech voices
-  - *Device*: OS and version, browser, architecture, screen, refresh rate, number of screens, GPU (WebGL and WebGPU), CPU threads, memory, touch, battery, connection, cameras and microphones (counted, never opened), video codecs, DRM systems, storage quota
-  - *Browser settings*: color scheme, reduced motion, color gamut and HDR, DNT/GPC, cookies, permissions already granted or blocked, PDF viewer, webdriver, ad blocker, extensions that leave a mark (crypto wallets, developer tools, Grammarly, Dark Reader, Immersive Translate), tab history, installed fonts
-  - *Fingerprints*: canvas, WebGL, audio, font list, the combined fingerprint, and whether the browser randomizes them
+  - *Device*: OS and version, browser, architecture, screen, refresh rate, number of screens, GPU (WebGL and WebGPU), CPU threads, memory, touch, battery, connection, cameras and microphones (counted, never opened), video codecs, DRM systems, storage quota; new: window and system bar, WebGL capabilities, audio hardware (sample rate, channels), biometrics (whether Windows Hello / Touch ID is available, asked, never used), Bluetooth adapter
+  - *Browser settings*: color scheme, reduced motion, color gamut and HDR, DNT/GPC, cookies, permissions already granted or blocked, PDF viewer, webdriver, ad blocker, extensions that leave a mark (crypto wallets, developer tools, Grammarly, Dark Reader, Immersive Translate), tab history, installed fonts; new: accessibility preferences (high contrast, forced colors, reduced transparency, inverted colors), how the page was opened (tab, installed app, full screen)
+  - *Fingerprints*: canvas, WebGL, audio, font list, the combined fingerprint, and whether the browser randomizes them; new: the JavaScript engine (V8, SpiderMonkey or JavaScriptCore, from the wording of an error, which changing the user agent doesn't change)
 
 Rows are drawn before anything is read and filled the moment each sniffer answers; the paragraph is filled once, when every blank is in, so the page doesn't jump. A button blurs the address and location for screenshots.
 

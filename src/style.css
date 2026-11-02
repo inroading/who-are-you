@@ -235,11 +235,27 @@ h2 { font-size: 15px; font-weight: 700; }
   .bar .btn { padding: 0 10px; }
 }
 
+/* the portrait's last paragraph: what a site makes of it all, filled once the checks are in */
+.guess-t { min-height: 5.5em; }
+.guess-t .skl { display: block; height: 13px; margin: 12px 0 0; } .guess-t .skl:last-child { width: 60%; }
+
+/* a shared portrait asks the visitor to try it: a card where the fingerprint would be, and a filled button */
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--bg); font-weight: 600; }
+.btn.primary:hover { filter: brightness(1.08); }
+.cta { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 18px 18px 20px; border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--ink) 45%, transparent); background: var(--ink-soft); }
+.cta[hidden] { display: none; }
+.cta-h { font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
+.cta-d { color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+.cta-b { text-decoration: none; margin-top: 10px; height: 44px; padding: 0 22px; font-size: 15px; border-radius: 12px; }
+.cta-b svg { width: 17px; height: 17px; }
+html.shared .idc { display: none; }
+
 /* Embedded in Connection Checkup: the run and its result only, compact, as wide as the frame */
 html[data-who-embed] { overflow-x: hidden; scrollbar-gutter: auto; }
 html[data-who-embed] .app { max-width: none; padding: 8px; gap: 12px; }
 html[data-who-embed] .top, html[data-who-embed] .topics, html[data-who-embed] [data-ms-more], html[data-who-embed] .probes,
-html[data-who-embed] .eyebrow, html[data-who-embed] .acts, html[data-who-embed] #forget, html[data-who-embed] .idc-r, html[data-who-embed] #help { display: none !important; }
+html[data-who-embed] .eyebrow, html[data-who-embed] #guessT, html[data-who-embed] .acts, html[data-who-embed] #forget, html[data-who-embed] .idc-r, html[data-who-embed] #help { display: none !important; }
 html[data-who-embed] .hero { padding: 16px 16px 0; gap: 14px; }
 html[data-who-embed] .hero h1 { font-size: 22px; margin-bottom: 8px; }
 html[data-who-embed] .bar { margin: 0 -16px; padding: 10px 16px 12px; }

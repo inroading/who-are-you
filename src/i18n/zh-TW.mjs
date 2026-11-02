@@ -3,11 +3,11 @@ export default {
   name: "繁體中文",
   app_name: "你是誰",
   seo_title: "網站眼中的你是誰？瀏覽器指紋、IP 位置與隱私檢測 · 你是誰",
-  seo_desc: "不用授權，任何網站都能知道你的哪些資訊：可能的國籍、所在城市、語言、裝置、顯示卡、網路、字型和瀏覽器指紋，填進一段話裡給你看，並列出全部 71 個嗅探器和它們讀到的結果。還會檢查會暴露 VPN、代理和偽裝瀏覽器的矛盾之處。不儲存任何資料。",
+  seo_desc: "不用授權，任何網站都能知道你的哪些資訊：可能的國籍、所在城市、語言、裝置、顯示卡、網路、字型和瀏覽器指紋，填進一段話裡給你看，並列出全部 79 個嗅探器和它們讀到的結果。還會檢查會暴露 VPN、代理和偽裝瀏覽器的矛盾之處。不儲存任何資料。",
   seo_kw: "瀏覽器指紋, 隱私檢測, 網站知道我什麼, WebRTC 洩漏, Canvas 指紋, VPN 偵測, IP 定位, User-Agent",
   og_sub: "不用授權，每個網站都能知道的你",
   h1: "網站眼中的你",
-  story: "你可能是{nat}人，現在在{city}。你說{lang}，時區是{tz}，用{clock}時鐘。\n你在{device}上用{browser}，螢幕{screen}，顯示卡是{gpu}。\n你透過{isp}上網，{nettype}；DNS 解析器在{dns}。\n你喜歡{theme}，{adblock}。從字型看：{job}。年齡：{age}。",
+  story: "你多半是{nat}人，眼下人在{city}。你平常說{lang}，電腦的時區是{tz}，時鐘用{clock}。\n你手上這台是{device}，開的是{browser}，螢幕{screen}，顯示卡是{gpu}。\n你經{isp}上網，{nettype}；幫你查網址的 DNS 在{dns}。\n你習慣用{theme}，{adblock}。裝的字型透露出：{job}。至於年齡，{age}。",
 
   lang_label: "語言", faq_h: "說明", th_system: "主題：跟隨系統", th_light: "主題：淺色", th_dark: "主題：深色",
   a_theme: "主題", a_close: "關閉", a_prev: "上一則", a_next: "下一則",
@@ -144,7 +144,7 @@ export default {
   og_r1: "有幾處會暴露我",
   og_r2: "好多地方會暴露我",
 
-  em_blocked: "檢測請求全部失敗，可能被廣告攔截擴充功能擋下了", h_proto: "連線協定", c_h3: "HTTP/3", c_ech: "ECH", c_pq: "後量子加密", c_warp: "WARP", c_h3_ok: "可用：UDP 443 能通", c_h3_wait: "這次沒用上；UDP 能通，瀏覽器可能還沒切換", c_h3_udp: "沒用上，UDP 也出不去：被防火牆擋了，或代理不轉發 UDP", c_h3_unk: "WebRTC 關了，判斷不了", c_ech_ok: "已開啟：網路上的旁觀者看不到你造訪的網站名稱", c_ech_dns: "未生效：DNS 沒回傳 HTTPS 記錄（常見於代理的 fake-ip）", c_ech_ff: "未生效：Firefox 要開 DNS over HTTPS 才用 ECH", c_ech_safari: "未生效：Safari 還不支援 ECH", c_pq_ok: "已啟用（{kex}）", c_pq_mitm: "{b} 本該用後量子，這次卻是 {kex}：中間可能有東西自己建了 TLS（公司代理、防毒軟體的 HTTPS 掃描）", c_pq_old: "沒用上（{kex}）：這個瀏覽器版本還不支援", c_warp_on: "經 Cloudflare WARP（{w}）", c_warp_gw: "經 Cloudflare Gateway", c_warp_off: "沒用", tip_h3: "讓代理轉發 UDP（Clash / Mihomo：TUN 模式，udp: true）\n防火牆放行 UDP 443\n確認瀏覽器沒關掉 QUIC", tip_ech: "瀏覽器開「安全 DNS」（DNS over HTTPS）\n代理：關掉 fake-ip，或讓它的 DNS 回傳 HTTPS 記錄\n用支援 ECH 的瀏覽器：Chrome、Edge、Firefox", tip_pq: "更新瀏覽器\n關掉防毒軟體的 HTTPS 掃描，或問問公司代理是否解密流量", tip_warp: "Cloudflare WARP：在 1.1.1.1 應用程式裡開關", go_check: "做一次完整體檢", go_asn: "ASN 查詢", go_ipv6: "IPv6 測試",
+  em_blocked: "檢測請求全部失敗，可能被廣告攔截擴充功能擋下了", h_proto: "連線協定", c_h3: "HTTP/3", c_ech: "ECH", c_pq: "後量子加密", c_warp: "WARP", c_h3_ok: "可用：UDP 443 能通", c_h3_wait: "這次沒用上；UDP 能通，瀏覽器可能還沒切換", c_h3_udp: "沒用上，UDP 也出不去：被防火牆擋了，或代理不轉發 UDP", c_h3_unk: "WebRTC 關了，判斷不了", c_ech_ok: "已開啟：網路上的旁觀者看不到你造訪的網站名稱", c_ech_dns: "未生效：DNS 沒回傳 HTTPS 記錄（常見於代理的 fake-ip）", c_ech_ff: "未生效：Firefox 要開 DNS over HTTPS 才用 ECH", c_ech_safari: "未生效：Safari 還不支援 ECH", c_pq_ok: "已啟用（{kex}）", c_pq_mitm: "{b} 本該用後量子，這次卻是 {kex}：中間可能有東西自己建了 TLS（公司代理、防毒軟體的 HTTPS 掃描）", c_pq_old: "沒用上（{kex}）：這個瀏覽器版本還不支援", c_warp_on: "經 Cloudflare WARP（{w}）", c_warp_gw: "經 Cloudflare Gateway", c_warp_off: "沒用", tip_h3: "讓代理轉發 UDP（Clash / Mihomo：TUN 模式，udp: true）\n防火牆放行 UDP 443\n確認瀏覽器沒關掉 QUIC", tip_ech: "瀏覽器開「安全 DNS」（DNS over HTTPS）\n代理：關掉 fake-ip，或讓它的 DNS 回傳 HTTPS 記錄\n用支援 ECH 的瀏覽器：Chrome、Edge、Firefox", tip_pq: "更新瀏覽器\n關掉防毒軟體的 HTTPS 掃描，或問問公司代理是否解密流量", tip_warp: "Cloudflare WARP：在 1.1.1.1 應用程式裡開關", s_win: "視窗", s_a11y: "協助工具", s_display: "開啟方式", s_audiohw: "音訊硬體", s_bio: "生物辨識", s_bt: "藍牙", s_glx: "WebGL 能力", s_engine: "JS 引擎", win_v: "{w}×{h} · 系統列佔 {tb} px", a11y_none: "沒有特別設定", a11y_contrast: "高對比", a11y_forced: "強制色彩", a11y_transp: "減少透明度", a11y_invert: "反轉色彩", dm_app: "已安裝的應用程式", dm_tab: "瀏覽器分頁", dm_full: "全螢幕", aud_v: "{r} kHz · {c} 聲道", glx_v: "{v} · 最大紋理 {tex} · {n} 個擴充", gs_time: "你那邊現在是{p} {time}。", gs_time_late: "你那邊已經{p} {time} 了，還在上網。", gs_p_dawn: "凌晨", gs_p_morn: "上午", gs_p_noon: "中午", gs_p_aft: "下午", gs_p_eve: "晚上", gs_p_late: "深夜", gs_proxy: "IP 說你在{ipc}，可你的{list}還留在{home}，網站多半會猜你在用代理。", gs_dc: "你的 IP 來自機房，網站多半會把你當成代理或 VPN 使用者。", gs_split: "不同網站看到的出口不一樣，一看就是按規則分流的代理。", gs_home: "各處說法都對得上，網站會相信你就在{ipc}。", gs_i_tz: "時區", gs_i_dns: "DNS", gs_i_lang: "瀏覽器語言", gs_rig_game: "{gpu} 配 {hz} Hz 的螢幕，這台機器八成是拿來打遊戲的。", gs_rig_power: "{gpu}，這是台高配機器，像是寫程式、剪影片或打遊戲用的。", gs_rig_basic: "內建顯示卡，像是一台日常辦公的電腦。", gs_fp: "清掉 Cookie、開無痕都沒用，你的瀏覽器指紋不變，網站下次還認得你。", gs_fp_rand: "你的瀏覽器在隨機化指紋，想一直跟著你沒那麼容易。", gs_ads: "有廣告攔截擋著，不少追蹤腳本到不了你這兒。", gs_noads: "沒有廣告攔截擋著，廣告商的追蹤腳本一路暢通。", cta_h: "這是別人的畫像。", cta_d: "網站眼中的你又是什麼樣子？打開就測，不跳授權，什麼都不存。", go_check: "做一次完整體檢", go_asn: "ASN 查詢", go_ipv6: "IPv6 測試",
 
   docs: [
     ["這個頁面做什麼？", "它執行的嗅探器，任何網站在你打開的那一刻都能執行。然後把結果寫成一段話：你可能來自哪裡、現在在哪、用什麼、喜歡什麼。\n把滑鼠移到話裡的空格上，會顯示它來自哪些嗅探器。下面的清單列出每個嗅探器、讀取方式（右側那一欄的 API 或請求標頭）和讀到的內容。它們都不會跳出授權提示。"],

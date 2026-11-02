@@ -56,14 +56,19 @@ export const GROUPS = [
     { id: "screen", m: "screen · devicePixelRatio" },
     { id: "hz", m: "requestAnimationFrame" },
     { id: "screens", m: "screen.isExtended · screenX" },
+    { id: "win", m: "innerWidth · availHeight" },
     { id: "gpu", m: "WebGL RENDERER" },
     { id: "webgpu", m: "navigator.gpu adapter.info" },
+    { id: "glx", m: "WebGL2 · MAX_TEXTURE_SIZE" },
     { id: "cpu", m: "hardwareConcurrency" },
     { id: "mem", m: "navigator.deviceMemory" },
     { id: "touch", m: "maxTouchPoints · pointer" },
     { id: "battery", m: "navigator.getBattery" },
     { id: "conn", m: "navigator.connection" },
     { id: "media", m: "enumerateDevices" },
+    { id: "audiohw", m: "AudioContext.sampleRate" },
+    { id: "bio", m: "PublicKeyCredential" },
+    { id: "bt", m: "bluetooth.getAvailability" },
     { id: "codecs", m: "MediaSource.isTypeSupported" },
     { id: "drm", m: "requestMediaKeySystemAccess" },
     { id: "storage", m: "storage.estimate" },
@@ -72,6 +77,8 @@ export const GROUPS = [
     { id: "scheme", m: "prefers-color-scheme" },
     { id: "motion", m: "prefers-reduced-motion" },
     { id: "gamut", m: "color-gamut · dynamic-range" },
+    { id: "a11y", m: "prefers-contrast · forced-colors" },
+    { id: "display", m: "display-mode" },
     { id: "dnt", m: "doNotTrack · GPC" },
     { id: "cookies", m: "navigator.cookieEnabled" },
     { id: "perms", m: "permissions.query" },
@@ -83,6 +90,7 @@ export const GROUPS = [
     { id: "fonts", m: "canvas measureText" },
   ]],
   ["fp", [
+    { id: "engine", m: "Error.message" },
     { id: "canvas", m: "canvas.toDataURL" },
     { id: "webgl", m: "WebGL getParameter" },
     { id: "audio", m: "OfflineAudioContext" },
@@ -92,7 +100,7 @@ export const GROUPS = [
   ]],
 ];
 // the two columns of the sniffers card
-export const COLUMNS = [["net", "exit", "hdr", "loc"], ["dev", "brw", "fp"]];
+export const COLUMNS = [["net", "exit", "hdr", "loc", "fp"], ["dev", "brw"]];
 export const SNIFFERS = GROUPS.flatMap(([, l]) => l);
 
 // the blanks of the portrait, in the order the sentence template uses them; each names the rows it comes from

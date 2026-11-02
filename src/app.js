@@ -294,16 +294,48 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
   function gpu() {
     const cv = document.createElement("canvas");
     const gl = cv.getContext("webgl") || cv.getContext("experimental-webgl");
-    if (!gl) { R.gpuRaw = null; na("gpu"); na("webgl"); return null; }
+    if (!gl) { R.gpuRaw = null; na("gpu"); na("webgl"); na("glx"); return null; }
     const ext = gl.getExtension("WEBGL_debug_renderer_info");
     const ren = ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
     const ven = ext ? gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR);
     R.gpuRaw = ren; R.gpu = gpuName(ren);
     txt("gpu", R.gpu || ren || "–", { why: [ven, ren].filter(Boolean).join(" · ") });
+    const gl2 = !!document.createElement("canvas").getContext("webgl2");
+    txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }));
     // everything WebGL reports about the card and driver, for the WebGL fingerprint
     const P = ["MAX_TEXTURE_SIZE", "MAX_RENDERBUFFER_SIZE", "MAX_VIEWPORT_DIMS", "MAX_VERTEX_ATTRIBS", "MAX_VERTEX_UNIFORM_VECTORS", "MAX_FRAGMENT_UNIFORM_VECTORS",
       "MAX_VARYING_VECTORS", "MAX_COMBINED_TEXTURE_IMAGE_UNITS", "ALIASED_LINE_WIDTH_RANGE", "ALIASED_POINT_SIZE_RANGE", "SHADING_LANGUAGE_VERSION", "VERSION"];
     return [ven, ren, ...P.map(p => String(gl.getParameter(gl[p]))), (gl.getSupportedExtensions() || []).join(",")].join("|");
+  }
+
+  // the sound card's rate and channels (an AudioContext that never plays, closed at once)
+  async function audioHw() {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return na("audiohw");
+    const ac = new AC();
+    try { txt("audiohw", t("aud_v", { r: +(ac.sampleRate / 1000).toFixed(1), c: ac.destination.maxChannelCount })); } finally { ac.close().catch(() => {}); }
+  }
+  // Windows Hello, Touch ID or a fingerprint reader the browser can use for passkeys: asked, never used
+  async function biometric() {
+    const PK = window.PublicKeyCredential;
+    if (!PK || !PK.isUserVerifyingPlatformAuthenticatorAvailable) return na("bio");
+    const ok = await within(PK.isUserVerifyingPlatformAuthenticatorAvailable(), 1500, null);
+    if (ok == null) return na("bio");
+    txt("bio", t(ok ? "v_yes" : "v_no"));
+  }
+  // whether there is a Bluetooth adapter (Chromium answers without asking)
+  async function bluetooth() {
+    if (!navigator.bluetooth || !navigator.bluetooth.getAvailability) return na("bt");
+    const ok = await within(navigator.bluetooth.getAvailability(), 1500, null);
+    if (ok == null) return na("bt");
+    txt("bt", t(ok ? "v_yes" : "v_no"));
+  }
+  // the JavaScript engine, from the wording of an error: it can't be changed the way a user agent can
+  function engine() {
+    let m = "";
+    try { JSON.parse("null").x; } catch (e) { m = String(e.message); }
+    const e = /Cannot read prop/.test(m) ? "V8" : /is null|has no properties/.test(m) ? "SpiderMonkey" : /not an object/.test(m) ? "JavaScriptCore" : null;
+    txt("engine", e ? e + " · " + ({ V8: "Chromium", SpiderMonkey: "Firefox", JavaScriptCore: "WebKit" })[e] : t("v_unknown"), { why: m });
   }
 
   async function battery() {
@@ -344,6 +376,13 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     if (navigator.pdfViewerEnabled != null) txt("pdf", t(navigator.pdfViewerEnabled ? "v_yes" : "v_no")); else na("pdf");
     R.webdriver = !!navigator.webdriver;
     txt("webdriver", t(R.webdriver ? "wd_yes" : "wd_no"));
+    // the window, and what the system's bar (taskbar, Dock) takes off the screen
+    txt("win", t("win_v", { w: innerWidth, h: innerHeight, tb: Math.max(0, screen.height - screen.availHeight) }));
+    const a11y = [["(prefers-contrast: more)", "a11y_contrast"], ["(forced-colors: active)", "a11y_forced"], ["(prefers-reduced-transparency: reduce)", "a11y_transp"], ["(inverted-colors: inverted)", "a11y_invert"]]
+      .filter(([q]) => mq(q)).map(([, k]) => t(k));
+    txt("a11y", a11y.length ? list(a11y) : t("a11y_none"));
+    const dm = ["fullscreen", "standalone", "minimal-ui"].find(m => mq(`(display-mode: ${m})`));
+    txt("display", t(dm === "fullscreen" ? "dm_full" : dm ? "dm_app" : "dm_tab"));
   }
 
   // an element with the class names ad blockers hide: if it has no height, something hid it
@@ -550,7 +589,8 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     if (!ts) return na("hz");
     const d = ts.slice(1).map((x, i) => x - ts[i]).sort((x, y) => x - y), hz = 1000 / d[d.length >> 1];
     const near = [24, 30, 48, 50, 60, 72, 75, 90, 100, 120, 144, 165, 180, 240, 360].reduce((b, x) => Math.abs(x - hz) < Math.abs(b - hz) ? x : b);
-    txt("hz", t("hz_v", { n: Math.abs(near - hz) < 4 ? near : Math.round(hz) }));
+    R.hz = Math.abs(near - hz) < 4 ? near : Math.round(hz);
+    txt("hz", t("hz_v", { n: R.hz }));
   }
 
   function screens() {
@@ -625,7 +665,7 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
       tz: R.tz || null, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, browser: R.browser || null,
       screen: R.screen || null, gpu: R.gpu || null, org: c.asOrganization ? shortOrg(c.asOrganization) : c.asn ? "AS" + c.asn : null, asn: c.asn ?? null,
       nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
-      dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand,
+      dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, hz: R.hz || null,
       x: { split, fullOrg: [c.asn ? "AS" + c.asn : "", c.asOrganization].filter(Boolean).join(" · "), dnsOrg: R.dnsOrg || "", fpHex: R.fpHex } };
   }
 
@@ -709,6 +749,35 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     blank("job", esc(P.jobs.length ? list(P.jobs.map(([k]) => t("jb_" + k))) : t("jb_none")), BLANKS.job, P.jobs.length ? t("from", { list: P.jobs.map(([, f]) => f).join(", ") }) : "");
     $("#story").classList.remove("wait"); $("#storySk").hidden = true;
     idCard(P, shared);
+  }
+
+  /* ---------- the paragraph in a site's own words ---------- */
+  // What a site would make of it all, said the way a person would: the hour where you are (not in a shared
+  // portrait), where it thinks you are and why, what the machine is for, whether it can follow you around.
+  function guess(P, ck, shared) {
+    const out = [], lv = id => ck[id] && ck[id][0];
+    if (!shared) {
+      const d = new Date(), h = d.getHours(), p = h < 5 ? "dawn" : h < 11 ? "morn" : h < 13 ? "noon" : h < 18 ? "aft" : h < 23 ? "eve" : "late";
+      let time = "";
+      try { time = new Intl.DateTimeFormat(LANG, { hour: "numeric", minute: "2-digit", hour12: true }).formatToParts(d).filter(x => x.type !== "dayPeriod").map(x => x.value).join("").trim(); } catch (e) {}
+      out.push(t(p === "dawn" || p === "late" ? "gs_time_late" : "gs_time", { p: t("gs_p_" + p), time }));
+    }
+    const away = [lv("tz") === "bad" && "tz", lv("dns") === "bad" && "dns", lv("lang") === "warn" && "lang"].filter(Boolean);
+    const ipc = P.cc && country(P.cc), home = P.nat && P.nat !== P.cc ? country(P.nat) : P.dns && P.dns !== P.cc ? country(P.dns) : null;
+    if (away.length && ipc && home) out.push(t("gs_proxy", { ipc, home, list: list(away.map(k => t("gs_i_" + k))) }));
+    else if (P.nt === "split") out.push(t("gs_split"));
+    else if (P.nt === "dc") out.push(t("gs_dc"));
+    else if (ipc) out.push(t("gs_home", { ipc }));
+    const g = P.gpu || "", hi = /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);
+    const low = /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g);
+    if (P.kind === "pc" || P.kind === "mac") {
+      if (hi && P.hz >= 120) out.push(t("gs_rig_game", { gpu: g, hz: P.hz }));
+      else if (hi) out.push(t("gs_rig_power", { gpu: g }));
+      else if (low) out.push(t("gs_rig_basic"));
+    }
+    if (P.rand) out.push(t("gs_fp_rand")); else if (ck.fp && ck.fp[1] === "c_fp_same") out.push(t("gs_fp"));
+    out.push(t(P.ab ? "gs_ads" : "gs_noads"));
+    $("#guessT").textContent = out.join(/^(zh|ja)/.test(LANG) ? "" : " ");
   }
 
   /* ---------- the disguise checks ---------- */
@@ -867,10 +936,12 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     document.documentElement.classList.add("shared");
     $(".eyebrow").lastChild.textContent = t("sh_eyebrow");
     $("#mine").hidden = false; $("#share").hidden = true; $("#rerun").hidden = true;
+    $("#mine").classList.add("primary"); $("#cta").hidden = false;
     $("#mine").onclick = () => { location.href = D.paths[LANG] || "/"; };
     $("#progTxt").textContent = " ";
     paint(P, true);
     paintChecks(P.ck || {}, P.cc, true);
+    guess(P, P.ck || {}, true);
     return true;
   }
   const sharedCode = (parsePath(location.pathname) || {}).code || (/^#p=/.test(location.hash) ? location.hash.slice(3) : null);
@@ -894,8 +965,9 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     $("#mNum").textContent = "–"; $("#mNum").className = "m-num"; $$("#segs i").forEach(i => { i.className = ""; });
     $("#fpId").innerHTML = '<i class="skl"></i>'; $("#fpArt").innerHTML = ""; $("#fpNote").textContent = t("id_note"); $("#vText").innerHTML = "&nbsp;";
     $("#rerun").disabled = true; $("#share").disabled = true; progress();
+    $("#guessT").innerHTML = '<i class="skl"></i><i class="skl"></i><i class="skl"></i>';
 
-    referrer(); locale(); prefs();
+    referrer(); locale(); prefs(); engine();
     const glInfo = gpu();
     fonts();
     const rtc = webrtc().then(() => g === gen && judge(false));
@@ -911,7 +983,7 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     }
     await Promise.all([
       srv, guard("kbd", keyboard), guard("voices", voices), guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
-      guard("battery", battery), guard("media", media), guard("storage", storage), guard("adblock", adblock), guard("ext", extensions),
+      guard("battery", battery), guard("media", media), guard("audiohw", audioHw), guard("bio", biometric), guard("bt", bluetooth), guard("storage", storage), guard("adblock", adblock), guard("ext", extensions),
       guard(["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)),
       ...probes, guard(["kex", "warp"], trace),
       guard("webgpu", webgpu), guard("hz", refresh), guard("screens", screens), guard("codecs", codecs), guard("drm", drm), guard("perms", perms),
@@ -922,6 +994,7 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     if (g !== gen) return;
     for (const id of Object.keys(PR)) if (!done.has(id)) na(id);   // anything a sniffer couldn't reach
     judge(true);
+    guess(portrait(), R.ck, false);
     $("#rerun").disabled = false; $("#share").disabled = false;
     if (EMBED && !failed) post(embedResult());
   }
