@@ -241,7 +241,8 @@ export function checks(x) {
     out.ua = off ? ["bad", "c_ua_bad", { a: x.uaOS, b: off }] : ["ok", "c_ua_ok", { a: x.uaOS }];
   }
   // (a browser that adds noise per site, like Brave, draws the same twice on one page, but differently on the next site)
-  out.fp = x.rand == null ? null : x.rand ? ["ok", "c_fp_rand", {}] : x.noise ? ["ok", "c_fp_site", {}] : ["warn", "c_fp_same", {}];
+  // (on iOS the canvas is WebKit's in every browser, the same on every iPhone of a model and iOS version: steady, but shared)
+  out.fp = x.rand == null ? null : x.rand ? ["ok", "c_fp_rand", {}] : x.noise ? ["ok", "c_fp_site", {}] : /^(iOS|iPadOS)/.test(x.uaOS || "") ? ["info", "c_fp_ios", {}] : ["warn", "c_fp_same", {}];
   out.bot = x.webdriver == null ? null : x.webdriver ? ["bad", "c_bot_bad", {}] : ["ok", "c_bot_ok", {}];
   // The round trip the browser measures to this site against the one Cloudflare measures on its connection: through a
   // proxy, Cloudflare only sees the proxy's leg, so the browser's is much longer. Over QUIC there is no TCP figure.

@@ -140,6 +140,9 @@ test("disguise checks", () => {
   assert.equal(gpuName("Brave"), null);
   // Firefox's resistFingerprinting: Reykjavik's clock and "Mozilla" for the card are stand-ins, not Iceland
   assert.equal(gpuName("Mozilla"), null);
+  // iOS: a steady canvas is WebKit's, shared by every iPhone of a model and version; elsewhere it's a warning
+  assert.equal(checks({ ...base, uaOS: "iOS", rand: false, noise: false }).fp[1], "c_fp_ios");
+  assert.equal(checks({ ...base, uaOS: "Windows", rand: false, noise: false }).fp[0], "warn");
   assert.equal(rfpClock(true, "Atlantic/Reykjavik", "Mozilla"), true);
   assert.equal(rfpClock(true, "Atlantic/Reykjavik", "ANGLE (Intel, Intel(R) UHD Graphics 620 Direct3D11 vs_5_0 ps_5_0, D3D11)"), false);
   assert.equal(rfpClock(false, "Atlantic/Reykjavik", null), false);
