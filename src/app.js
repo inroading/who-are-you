@@ -143,6 +143,8 @@ import { TZ_CC } from "./tz.mjs";
   // inside it)
   const CHECK = META("check");
   if (CHECK && !EMBED) { const a = $("#checkGo"); a.href = inLang(CHECK); a.innerHTML = esc(t("go_check")) + EXT; a.hidden = false; }
+  // the row under the bar takes its place from the start when it will hold something, so nothing moves later
+  if (!EMBED && (store.get("who:prev") || store.get("who:hist"))) $("#vMeta").hidden = false;
   let gen = 0, done = new Set();
   // fill a row: html is trusted markup built here, everything read from the browser or the server goes through esc()
   function row(id, html, opt = {}) {
@@ -809,9 +811,10 @@ import { TZ_CC } from "./tz.mjs";
     const out = [t(prev.n === n ? "cmp_same" : "cmp_v", { ago: ago(prev.at), a: prev.n, b: n })];
     if (fixed.length) out.push(t("cmp_fixed", { list: list(fixed.map(id => t("c_" + id))) }));
     if (worse.length) out.push(t("cmp_new", { list: list(worse.map(id => t("c_" + id))) }));
-    el.textContent = out.join(/^(zh|ja)/.test(LANG) ? "" : " ");
+    el.textContent = t(n < prev.n ? "cmp_down" : n > prev.n ? "cmp_up" : "cmp_eq", { d: Math.abs(n - prev.n) });
+    el.title = out.join(/^(zh|ja)/.test(LANG) ? "" : " ");
     el.className = "v-cmp" + (n < prev.n ? " ok" : n > prev.n ? " bad" : "");
-    el.hidden = false;
+    el.hidden = false; $("#vMeta").hidden = false;
   }
 
   /* ---------- reporting a problem (the host's dialog) ---------- */
@@ -846,8 +849,8 @@ import { TZ_CC } from "./tz.mjs";
     const W = 120, H = 26, top = Math.max(1, ...h.map(x => x.n)), x = i => (i * W / (h.length - 1)).toFixed(1), y = v => (H - 3 - v / top * (H - 6)).toFixed(1);
     const pts = h.map((p, i) => x(i) + "," + y(p.n)).join(" ");
     el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t("hist_v", { n: h.length }))}"><polyline points="${pts}"/>` +
-      h.map((p, i) => `<circle cx="${x(i)}" cy="${y(p.n)}" r="2.6"><title>${esc(t("hist_pt", { ago: ago(p.at), n: p.n }))}</title></circle>`).join("") + `</svg><span>${esc(t("hist_v", { n: h.length }))}</span>`;
-    el.hidden = false;
+      h.map((p, i) => `<circle cx="${x(i)}" cy="${y(p.n)}" r="2.6"><title>${esc(t("hist_pt", { ago: ago(p.at), n: p.n }))}</title></circle>`).join("") + "</svg>";
+    el.hidden = false; $("#vMeta").hidden = false;
   }
 
   /* ---------- the portrait as text, to paste into a post ---------- */
