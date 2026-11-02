@@ -4,7 +4,8 @@
 // once, when every sniffer it needs is in, so its text doesn't reflow piece by piece. Strings: window.L1MS.
 import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO } from "./sniffers.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC } from "./infer.mjs";
+import { TZ_CC } from "./tz.mjs";
 
 (function () {
   "use strict";
@@ -14,7 +15,7 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
   const t = (k, v) => { let s = L[k] ?? k; if (v) for (const x in v) s = s.split("{" + x + "}").join(v[x]); return s; };
   const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
-  const K = { theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last" };
+  const K = { theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last", prev: "who:prev", target: "who:target" };
   const dn = type => { try { return new Intl.DisplayNames([LANG], { type }); } catch (e) { return null; } };
   const REG = dn("region"), LNG = dn("language");
   const country = cc => { try { return REG ? REG.of(cc) : cc; } catch (e) { return cc; } };
@@ -451,6 +452,8 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     const all = [ch, gh, ah, fh, screen.width + "x" + screen.height + "x" + screen.colorDepth, devicePixelRatio, R.tz, (R.langs || []).join(), navigator.hardwareConcurrency,
       navigator.deviceMemory, navigator.platform, navigator.maxTouchPoints].join("|");
     R.fpHex = await sha(all); R.fp = short(R.fpHex);
+    R.fpParts = { canvas: ch && ch.slice(0, 8), webgl: gh && gh.slice(0, 8), audio: ah && ah.slice(0, 8), fontfp: fh.slice(0, 8),
+      screen: screen.width + "x" + screen.height, tz: R.tz, langs: (R.langs || []).join() };
     txt("fpid", R.fp);
   }
 
@@ -643,6 +646,13 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     if (b.hasAttribute("data-gr-ext-installed") || b.hasAttribute("data-new-gr-c-s-check-loaded")) found.push(["", "Grammarly"]);
     if (d.hasAttribute("data-darkreader-mode") || d.hasAttribute("data-darkreader-scheme") || q('meta[name="darkreader"]')) found.push(["", "Dark Reader"]);
     if (q('[id*="immersive-translate"],[class*="immersive-translate"]') || d.hasAttribute("imt-state")) found.push(["", "Immersive Translate"]);
+    if (w.keplr) found.push(["crypto", "Keplr"]);
+    if (w.bitkeep) found.push(["crypto", "Bitget Wallet"]);
+    if (w.coinbaseWalletExtension && !found.some(([, n]) => n === "Coinbase Wallet")) found.push(["crypto", "Coinbase Wallet"]);
+    if (q("#loom-companion-mv3")) found.push(["", "Loom"]);
+    // antivirus web protection adds its own script to every page (and often reads HTTPS on the way)
+    if (q('script[src*="kaspersky-labs"],link[href*="kaspersky-labs"]')) found.push(["", "Kaspersky"]);
+    if (d.classList.contains("translated-ltr") || d.classList.contains("translated-rtl")) found.push(["", "Google Translate"]);
     R.ext = found;
     if (found.length) txt("ext", found.map(([, n]) => n).join(" · ")); else txt("ext", t("ext_none"), { na: true });
   }
@@ -695,13 +705,19 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     let last = null;
     try { last = JSON.parse(store.get(K.last) || "null"); } catch (e) {}
     const where = P.city || (P.cc ? country(P.cc) : "");
-    store.set(K.last, JSON.stringify({ at: Date.now(), fp: P.rand ? null : P.fp, where }));
+    const parts = R.fpParts || {};
+    store.set(K.last, JSON.stringify({ at: Date.now(), fp: P.rand ? null : P.fp, where, br: R.browser || "", parts }));
     $("#forget").hidden = false;
     if (P.rand) return t("rv_rand");
     if (!last || !last.at) return t("rv_first");
-    return t(last.fp === P.fp ? "rv_same" : "rv_diff", { ago: ago(last.at), where: last.where || "?" });
+    const said = t(last.fp === P.fp ? "rv_same" : "rv_diff", { ago: ago(last.at), where: last.where || "?" });
+    if (last.fp === P.fp || !last.parts) return said;
+    // a browser update changes the drawing and the version at once; otherwise name the parts that moved
+    const moved = Object.keys(parts).filter(k => last.parts[k] !== parts[k]);
+    const why = last.br && R.browser && last.br !== R.browser ? t("rv_why_br", { a: last.br, b: R.browser }) : moved.length ? t("rv_why", { list: list(moved.map(rowName)) }) : "";
+    return said + (why ? (/^(zh|ja)/.test(LANG) ? "" : " ") + why : "");
   }
-  $("#forget").onclick = () => { try { localStorage.removeItem(K.last); } catch (e) {} $("#fpRet").textContent = t("rv_forgot"); $("#forget").hidden = true; };
+  $("#forget").onclick = () => { try { localStorage.removeItem(K.last); localStorage.removeItem(K.prev); } catch (e) {} $("#fpRet").textContent = t("rv_forgot"); $("#forget").hidden = true; };
   function idCard(P, shared) {
     $("#fpId").textContent = P.rand ? t("fp_rand") : P.fp || t("masked");
     $("#fpNote").textContent = t(shared ? "sh_fp" : P.rand ? "id_note_rand" : "id_note");
@@ -736,7 +752,7 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     blank("clock", esc(t(P.h12 ? "ck_12" : "ck_24")));
     blank("device", esc(!P.os ? t("dv_unknown") : (P.kind === "phone" || P.kind === "tablet") && P.model ? t("dv_model", { model: P.model, os: P.os }) : t("dv_" + (P.kind || "pc"), { os: P.os })));
     blank("browser", P.browser ? esc(P.browser) : U);
-    blank("screen", P.screen ? esc(P.screen) : U);
+    blank("screen", P.screen ? esc(P.screen + (P.hz ? " · " + P.hz + " Hz" : "")) : U);
     blank("gpu", esc(P.gpu || t("gpu_unknown")));
     blank("isp", P.org ? (!shared && asnOf(P.asn) ? `<a href="${esc(asnOf(P.asn))}" target="_blank" rel="noopener" title="${esc(t("go_asn"))}">${esc(P.org)}</a>` : esc(P.org)) : shared ? esc(t("masked")) : U, BLANKS.isp, X.fullOrg || (shared && !P.org ? t("masked_why") : ""));
     blank("dns", P.dns ? flagged(P.dns, country(P.dns)) : U, BLANKS.dns, X.dnsOrg || "");
@@ -751,33 +767,66 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     idCard(P, shared);
   }
 
-  /* ---------- the paragraph in a site's own words ---------- */
-  // What a site would make of it all, said the way a person would: the hour where you are (not in a shared
-  // portrait), where it thinks you are and why, what the machine is for, whether it can follow you around.
-  function guess(P, ck, shared) {
-    const out = [], lv = id => ck[id] && ck[id][0];
-    if (!shared) {
-      const d = new Date(), h = d.getHours(), p = h < 5 ? "dawn" : h < 11 ? "morn" : h < 13 ? "noon" : h < 18 ? "aft" : h < 23 ? "eve" : "late";
-      let time = "";
-      try { time = new Intl.DateTimeFormat(LANG, { hour: "numeric", minute: "2-digit", hour12: true }).formatToParts(d).filter(x => x.type !== "dayPeriod").map(x => x.value).join("").trim(); } catch (e) {}
-      out.push(t(p === "dawn" || p === "late" ? "gs_time_late" : "gs_time", { p: t("gs_p_" + p), time }));
-    }
+  /* ---------- the portrait's conclusions ---------- */
+  // Three blanks are what a site makes of the readings rather than readings: what the machine is for, whether the
+  // place adds up (or a site will guess a proxy), and whether clearing cookies would shake a site off.
+  function readings(P, ck) {
+    const lv = id => ck[id] && ck[id][0];
     const away = [lv("tz") === "bad" && "tz", lv("dns") === "bad" && "dns", lv("lang") === "warn" && "lang"].filter(Boolean);
     const ipc = P.cc && country(P.cc), home = P.nat && P.nat !== P.cc ? country(P.nat) : P.dns && P.dns !== P.cc ? country(P.dns) : null;
-    if (away.length && ipc && home) out.push(t("gs_proxy", { ipc, home, list: list(away.map(k => t("gs_i_" + k))) }));
-    else if (P.nt === "split") out.push(t("gs_split"));
-    else if (P.nt === "dc") out.push(t("gs_dc"));
-    else if (ipc) out.push(t("gs_home", { ipc }));
+    // (the network's blank already says "a proxy" for a data center or a split: then just the mismatch)
+    blank("read", esc(away.length && ipc && home ? t(P.nt === "dc" || P.nt === "split" ? "rd_off" : "rd_proxy", { ipc, home, list: list(away.map(k => t("gs_i_" + k))) })
+      : P.nt === "split" ? t("rd_split") : P.nt === "dc" ? t("rd_dc") : ipc ? t("rd_home", { ipc }) : t("rd_none")));
     const g = P.gpu || "", hi = /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);
-    const low = /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g);
-    if (P.kind === "pc" || P.kind === "mac") {
-      if (hi && P.hz >= 120) out.push(t("gs_rig_game", { gpu: g, hz: P.hz }));
-      else if (hi) out.push(t("gs_rig_power", { gpu: g }));
-      else if (low) out.push(t("gs_rig_basic"));
+    const low = /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g), pc = P.kind === "pc" || P.kind === "mac";
+    blank("rig", esc(t(pc && hi && P.hz >= 120 ? "rg_game" : pc && hi ? "rg_power" : pc && low ? "rg_basic" : "rg_none")));
+    blank("track", esc(t(P.rand ? "tk_rand" : "tk_same")));
+  }
+
+  /* ---------- this run against the last one ---------- */
+  // Kept in this browser only: how many things gave you away last time and which, so a change of settings shows
+  // what it fixed ("rerun" after switching DNS, say)
+  function compare() {
+    let prev = null;
+    try { prev = JSON.parse(store.get(K.prev) || "null"); } catch (e) {}
+    const bad = l => l === "bad" || l === "warn", lvl = Object.fromEntries(CHECKS.map(id => [id, R.ck[id] ? R.ck[id][0] : null]));
+    const n = CHECKS.filter(id => bad(lvl[id])).length;
+    store.set(K.prev, JSON.stringify({ at: Date.now(), n, ck: lvl }));
+    const el = $("#vCmp");
+    if (!prev || !prev.ck) { el.hidden = true; return; }
+    const fixed = CHECKS.filter(id => bad(prev.ck[id]) && lvl[id] === "ok"), worse = CHECKS.filter(id => prev.ck[id] === "ok" && bad(lvl[id]));
+    const out = [t(prev.n === n ? "cmp_same" : "cmp_v", { ago: ago(prev.at), a: prev.n, b: n })];
+    if (fixed.length) out.push(t("cmp_fixed", { list: list(fixed.map(id => t("c_" + id))) }));
+    if (worse.length) out.push(t("cmp_new", { list: list(worse.map(id => t("c_" + id))) }));
+    el.textContent = out.join(/^(zh|ja)/.test(LANG) ? "" : " ");
+    el.className = "v-cmp" + (n < prev.n ? " ok" : n > prev.n ? " bad" : "");
+    el.hidden = false;
+  }
+
+  /* ---------- a country to pass for ---------- */
+  // By default the one the address is in; pick another to see what still gives you away: the address, the system's
+  // time zone, the browser's language, the DNS resolver, WebRTC
+  const TG = $("#tgSel");
+  const CCS = [...new Set(Object.values(TZ_CC))].map(cc => [cc, country(cc)]).filter(([cc, n]) => n && n !== cc).sort((a, b) => a[1].localeCompare(b[1], LANG));
+  TG.innerHTML = `<option value="">${esc(t("tg_auto"))}</option>` + CCS.map(([cc, n]) => `<option value="${cc}">${esc(n)}</option>`).join("");
+  TG.value = (!EMBED && store.get(K.target)) || "";
+  TG.onchange = () => { if (!EMBED) store.set(K.target, TG.value); paintTarget(); };
+  function paintTarget() {
+    const c = (R.srv && R.srv.cf) || {}, T = TG.value || c.country;
+    if (!T || !R.ck) return;
+    const name = country(T), wr = R.ck.webrtc && R.ck.webrtc[0];
+    const items = [["ip", c.country ? c.country === T : null], ["tz", R.tz ? tzCC(R.tz) === T : null], ["lang", R.langs && R.langs.length ? langCC(R.langs[0]) === T : null],
+      ["dns", R.dnsCC ? R.dnsCC === T : null], ["rtc", wr ? wr !== "bad" : null]];
+    for (const [id, ok] of items) {
+      const li = $(`#tgList [data-t="${id}"]`);
+      li.className = ok == null ? "na" : ok ? "ok" : "bad";
+      li.querySelector(".tg-i").textContent = ok == null ? "–" : ok ? "✓" : "✗";
+      li.querySelector(".tg-l").textContent = t("tg_" + id, { c: name });
+      li.querySelector(".tg-x").textContent = ok === false ? t("tg_" + id + "_fix", { c: name }) : "";
     }
-    if (P.rand) out.push(t("gs_fp_rand")); else if (ck.fp && ck.fp[1] === "c_fp_same") out.push(t("gs_fp"));
-    out.push(t(P.ab ? "gs_ads" : "gs_noads"));
-    $("#guessT").textContent = out.join(/^(zh|ja)/.test(LANG) ? "" : " ");
+    const left = items.filter(([, ok]) => ok === false).length;
+    $("#tgSum").textContent = left ? t("tg_left", { n: left, c: name }) : t("tg_all", { c: name });
+    $("#tgSum").className = "tg-sum " + (left ? "bad" : "ok");
   }
 
   /* ---------- the disguise checks ---------- */
@@ -941,7 +990,7 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     $("#progTxt").textContent = " ";
     paint(P, true);
     paintChecks(P.ck || {}, P.cc, true);
-    guess(P, P.ck || {}, true);
+    readings(P, P.ck || {});
     return true;
   }
   const sharedCode = (parsePath(location.pathname) || {}).code || (/^#p=/.test(location.hash) ? location.hash.slice(3) : null);
@@ -965,7 +1014,6 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
     $("#mNum").textContent = "–"; $("#mNum").className = "m-num"; $$("#segs i").forEach(i => { i.className = ""; });
     $("#fpId").innerHTML = '<i class="skl"></i>'; $("#fpArt").innerHTML = ""; $("#fpNote").textContent = t("id_note"); $("#vText").innerHTML = "&nbsp;";
     $("#rerun").disabled = true; $("#share").disabled = true; progress();
-    $("#guessT").innerHTML = '<i class="skl"></i><i class="skl"></i><i class="skl"></i>';
 
     referrer(); locale(); prefs(); engine();
     const glInfo = gpu();
@@ -989,12 +1037,14 @@ import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, 
       guard("webgpu", webgpu), guard("hz", refresh), guard("screens", screens), guard("codecs", codecs), guard("drm", drm), guard("perms", perms),
     ]);
     if (g !== gen) return;
-    paint(portrait(), false); judge(false);
+    judge(false); paint(portrait(), false); readings(portrait(), R.ck);
     await rtc; await h3;
     if (g !== gen) return;
     for (const id of Object.keys(PR)) if (!done.has(id)) na(id);   // anything a sniffer couldn't reach
     judge(true);
-    guess(portrait(), R.ck, false);
+    readings(portrait(), R.ck);
+    paintTarget();
+    if (!EMBED) compare();
     $("#rerun").disabled = false; $("#share").disabled = false;
     if (EMBED && !failed) post(embedResult());
   }

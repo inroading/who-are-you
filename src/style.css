@@ -113,6 +113,10 @@ h2 { font-size: 15px; font-weight: 700; }
 .v-go { display: inline-flex; align-items: center; gap: 3px; margin-top: 4px; font: 600 12.5px var(--f-ui); color: var(--ink); text-decoration: none; }
 .v-go:hover { text-decoration: underline; }
 .v-go[hidden] { display: none; }
+/* this run against the last one */
+.v-cmp { font-size: 12.5px; line-height: 1.5; margin-top: 4px; color: var(--muted); }
+.v-cmp.ok { color: var(--t1); } .v-cmp.bad { color: var(--t5); }
+.v-cmp[hidden] { display: none; }
 .ck { list-style: none; margin: 0; padding: 0; }
 .ckr { display: grid; grid-template-columns: 18px minmax(0, 9fr) minmax(0, 13fr); gap: 0 10px; align-items: center; min-height: 44px; padding: 4px 0; border-top: 1px solid var(--line); font-size: 13px; }
 .ck-l { font-weight: 600; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
@@ -235,10 +239,6 @@ h2 { font-size: 15px; font-weight: 700; }
   .bar .btn { padding: 0 10px; }
 }
 
-/* the portrait's last paragraph: what a site makes of it all, filled once the checks are in */
-.guess-t { min-height: 5.5em; }
-.guess-t .skl { display: block; height: 13px; margin: 12px 0 0; } .guess-t .skl:last-child { width: 60%; }
-
 /* a shared portrait asks the visitor to try it: a card where the fingerprint would be, and a filled button */
 .btn.primary { background: var(--ink); border-color: var(--ink); color: var(--bg); font-weight: 600; }
 .btn.primary:hover { filter: brightness(1.08); }
@@ -251,11 +251,30 @@ h2 { font-size: 15px; font-weight: 700; }
 .cta-b svg { width: 17px; height: 17px; }
 html.shared .idc { display: none; }
 
+/* a country to pass for, and what still gives you away */
+.target { padding: 16px 22px 18px; }
+.tg-h { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
+.tg-h h2 { font-size: 16px; letter-spacing: -.01em; }
+.tg-sel select { font: inherit; font-size: 13.5px; padding: 5px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); max-width: 14em; }
+.tg-sum { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--muted); }
+.tg-sum.ok { color: var(--t1); } .tg-sum.bad { color: var(--t5); }
+.tg-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+.tg-list li { display: flex; gap: 8px; align-items: flex-start; padding: 9px 11px; border-radius: 11px; border: 1px solid var(--line); font-size: 13px; line-height: 1.45; min-height: 56px; }
+.tg-i { flex: none; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; background: var(--line); margin-top: 1px; }
+.tg-list .ok .tg-i { background: var(--t1); } .tg-list .bad .tg-i { background: var(--t5); }
+.tg-list .bad { border-color: color-mix(in srgb, var(--t5) 40%, var(--line)); }
+.tg-b { display: flex; flex-direction: column; min-width: 0; }
+.tg-l { font-weight: 600; } .tg-l .skl { width: 8em; height: 11px; }
+.tg-x { color: var(--muted); font-size: 12px; }
+.tg-x:empty { display: none; }
+html.shared .target, html[data-who-embed] .target { display: none; }
+@media (max-width: 720px) { .target { padding: 14px 16px 16px; } .tg-sum { margin-left: 0; width: 100%; } }
+
 /* Embedded in Connection Checkup: the run and its result only, compact, as wide as the frame */
 html[data-who-embed] { overflow-x: hidden; scrollbar-gutter: auto; }
 html[data-who-embed] .app { max-width: none; padding: 8px; gap: 12px; }
 html[data-who-embed] .top, html[data-who-embed] .topics, html[data-who-embed] [data-ms-more], html[data-who-embed] .probes,
-html[data-who-embed] .eyebrow, html[data-who-embed] #guessT, html[data-who-embed] .acts, html[data-who-embed] #forget, html[data-who-embed] .idc-r, html[data-who-embed] #help { display: none !important; }
+html[data-who-embed] .eyebrow, html[data-who-embed] .acts, html[data-who-embed] #forget, html[data-who-embed] .idc-r, html[data-who-embed] #help { display: none !important; }
 html[data-who-embed] .hero { padding: 16px 16px 0; gap: 14px; }
 html[data-who-embed] .hero h1 { font-size: 22px; margin-bottom: 8px; }
 html[data-who-embed] .bar { margin: 0 -16px; padding: 10px 16px 12px; }

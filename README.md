@@ -11,7 +11,9 @@ It then checks those readings against each other the way a site would to spot a 
 ## What it shows
 
 - **The portrait.** One paragraph, every blank filled from the sniffers. Hover a blank to see which sniffers it came from (their rows light up). Age is the one blank it leaves open: nothing in a browser says it, and the page says so instead of guessing.
-- **What a site makes of it**: the portrait's last paragraph, said the way a person would: the hour where you are (left out of a shared portrait), whether everything lines up (if not, a site will likely guess a proxy), what the machine looks like it's for, whether clearing cookies helps, whether ad tracking gets through.
+- **What a site makes of it**: three blanks of the portrait are conclusions rather than readings: what the machine looks like it's for (graphics card, refresh rate), whether everything lines up (if not, a site will likely guess a proxy), whether clearing cookies helps (a stable fingerprint).
+- **Against last time**: kept in your browser only; rerun after changing settings and it shows "last time 8, this time 7, fixed: …". When the fingerprint changes, it says whether the browser was updated or which parts moved.
+- **Where to seem to be**: pick a target region (by default the one the IP is in) and see, item by item, whether the IP, the system time zone, the browser language, the DNS resolver and WebRTC match it, and how to fix what doesn't.
 - **The disguise check**, nine rows that matter when you want to hide:
   - system time zone vs. the IP's time zone
   - browser language vs. the IP's country
