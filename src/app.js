@@ -408,11 +408,18 @@ import { TZ_CC } from "./tz.mjs";
   }
 
   // an element with the class names ad blockers hide: if it has no height, something hid it
+  // Two baits: an element named like an ad (blockers that hide them), and a request for Google's ad script (blockers
+  // that only block requests, like uBlock Origin Lite). The request counts only when google.com itself answers: a
+  // network that can't reach Google at all says nothing
   async function adblock() {
     await new Promise(r => setTimeout(r, 120));
     const el = $("#ad-slot"), cs = el && getComputedStyle(el);
-    R.adblock = !el || el.offsetHeight === 0 || cs.display === "none" || cs.visibility === "hidden";
-    txt("adblock", t(R.adblock ? "ab_on" : "ab_off"));
+    const hid = !el || el.offsetHeight === 0 || cs.display === "none" || cs.visibility === "hidden";
+    const reach = u => within(fetch(u, { method: "HEAD", mode: "no-cors", cache: "no-store", credentials: "omit" }).then(() => true, () => false), 3000, null);
+    const [ad, g] = hid ? [true, true] : await Promise.all([reach("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"), reach("https://www.google.com/generate_204")]);
+    const net = !hid && ad === false && g === true;
+    R.adblock = hid || net;
+    txt("adblock", t(hid ? "ab_on" : net ? "ab_on_net" : "ab_off"));
   }
 
   // Fonts: a word set in a font is measured against the generic fallbacks; a different width means the font is there.

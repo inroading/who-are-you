@@ -51,7 +51,8 @@ export function nationality({ langs = [], tz, ipcc, sys, ios }) {
   const tag = langs.slice(1).find(l => !english(l) && langCC(l)), other = tag && langCC(tag);
   if (other) return tcc && tcc !== other && spokenIn(tag).includes(tcc) ? { cc: tcc, from: ["langs", "tz"] } : { cc: other, from: tcc === other ? ["langs", "tz"] : ["langs"] };
   // a browser left in plain English on a system that installed one other language (its fonts, voices, keyboard)
-  if (sys && sys.cc.length === 1) return { cc: sys.cc[0], from: tcc === sys.cc[0] ? [...sys.from, "tz"] : sys.from };
+  // (two sources, or one the clock agrees with: fonts alone may have come with Office)
+  if (sys && sys.cc.length === 1 && (sys.from.length > 1 || sys.cc[0] === tcc)) return { cc: sys.cc[0], from: tcc === sys.cc[0] ? [...sys.from, "tz"] : sys.from };
   if (tcc) return { cc: tcc, from: ["tz"] };
   if (lcc) return { cc: lcc, from: ["langs"] };
   return ipcc ? { cc: ipcc, from: ["geo"] } : null;
@@ -257,7 +258,8 @@ export function checks(x) {
   else if (x.sys === false) out.syslang = ["info", "c_sys_na", {}];
   else if (!x.sys.cc.length) out.syslang = ["ok", "c_sys_none", {}];
   else if (x.sys.cc.includes(x.ipcc)) out.syslang = ["ok", "c_sys_ok", { cc: x.ipcc }];
-  else out.syslang = ["warn", "c_sys_warn", { cc: x.sys.cc[0], from: x.sys.from.join(",") }];
+  // (one source alone says little: Office and Windows' optional features bring East Asian fonts, a voice is one download)
+  else out.syslang = [x.sys.from.length > 1 ? "warn" : "info", x.sys.from.length > 1 ? "c_sys_warn" : "c_sys_one", { cc: x.sys.cc[0], from: x.sys.from.join(",") }];
   // an environment something rewrote: properties redefined, functions replaced, parts that should agree but don't
   if (!x.tamper) out.tamper = null;
   else out.tamper = x.tamper.length ? ["bad", "c_tamper_bad", { list: x.tamper.join(",") }] : ["ok", "c_tamper_ok", {}];

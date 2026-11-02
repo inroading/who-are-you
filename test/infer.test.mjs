@@ -265,7 +265,11 @@ test("the system's languages and the grade", () => {
   // other systems bring every language's fonts and voices
   assert.equal(sysLangs({ os: "macOS", fonts: ["PingFang SC", "Hiragino Sans"] }), false);
   // plain English in the browser, Chinese in the system
-  assert.deepEqual(nationality({ langs: ["en-US"], tz: "Asia/Tokyo", ipcc: "JP", sys: { cc: ["CN"], from: ["fonts"] } }), { cc: "CN", from: ["fonts"] });
+  assert.deepEqual(nationality({ langs: ["en-US"], tz: "Asia/Tokyo", ipcc: "JP", sys: { cc: ["CN"], from: ["fonts", "voices"] } }), { cc: "CN", from: ["fonts", "voices"] });
+  // one source alone doesn't say the country (1ms-shell#25: Japanese fonts in Slovakia; #29: a Spanish voice in the US)
+  assert.deepEqual(nationality({ langs: ["en-US"], tz: "Europe/Budapest", ipcc: "SK", sys: { cc: ["JP"], from: ["fonts"] } }), { cc: "HU", from: ["tz"] });
+  assert.deepEqual(nationality({ langs: ["en-US"], tz: "America/Chicago", ipcc: "US", sys: { cc: ["ES"], from: ["voices"] } }), { cc: "US", from: ["tz"] });
+  assert.deepEqual(checks({ tz: "Europe/Budapest", tzOff: "+01:00", ipTzOff: "+01:00", ipcc: "SK", langs: ["en-US"], sys: { cc: ["JP"], from: ["fonts"] } }).syslang, ["info", "c_sys_one", { cc: "JP", from: "fonts" }]);
   const ok = id => ["ok", "x", {}], ids = ["a", "b", "c"];
   assert.deepEqual(grade({ a: ok(), b: ok(), c: ok() }, ids), { score: 100, grade: "A+" });
   assert.deepEqual(grade({ a: ["warn"], b: ok(), c: ok() }, ids), { score: 92, grade: "A" });
