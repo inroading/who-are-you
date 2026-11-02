@@ -355,7 +355,8 @@ export const isSoftGpu = r => /Basic Render Driver|SwiftShader|llvmpipe|softpipe
 export const looksLikeAddress = o => { const s = String(o || ""); return /\d/.test(s) && ((s.match(/,/g) || []).length >= 2 || /\b\d+\s*\/?\s*F\b|\b(floor|street|st|road|rd|avenue|ave|building|bldg|suite|room)\b/i.test(s)); };
 
 // A graphics card built into the processor (the one a laptop draws pages on by default)
-export const isIntegratedGpu = g => /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g || "");
+// (AMD's numbered ones too: "Radeon 610M", "Radeon 780M", where discrete ones say "RX"; Intel's "Arc Graphics" in Core Ultra)
+export const isIntegratedGpu = g => /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics|Radeon(\(TM\))? \d{3}M\b|Intel(\(R\))? Arc(\(TM\))? Graphics/i.test(g || "");
 // WebGPU's name for the discrete card, when the default WebGL one is integrated and from another maker
 // (browsers give the maker and the architecture only: "nvidia", "ada-lovelace" → "NVIDIA Ada Lovelace")
 const MAKERS = { nvidia: "NVIDIA", amd: "AMD", intel: "Intel", apple: "Apple", qualcomm: "Qualcomm", arm: "Arm" };

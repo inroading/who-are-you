@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock } from "../src/infer.mjs";
+import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu } from "../src/infer.mjs";
 
 const WIN = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36";
 const MAC_SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15";
@@ -157,6 +157,11 @@ test("disguise checks", () => {
   assert.equal(discreteGpu("Intel(R) UHD Graphics 630", "NVIDIA GeForce RTX 4060 Laptop GPU", null), "NVIDIA GeForce RTX 4060 Laptop GPU");
   assert.equal(discreteGpu("Intel(R) Iris(R) Xe Graphics", "Intel(R) Iris(R) Xe Graphics", { vendor: "nvidia", architecture: "ada-lovelace" }), "NVIDIA Ada Lovelace");
   assert.equal(discreteGpu("Intel(R) Iris(R) Xe Graphics", null, { vendor: "intel", architecture: "xe" }), null);
+  // AMD's numbered integrated cards and Intel's Arc Graphics are integrated; an RX or an Arc A-series isn't
+  assert.equal(discreteGpu("AMD Radeon 610M", "NVIDIA GeForce RTX 4070 Laptop GPU", null), "NVIDIA GeForce RTX 4070 Laptop GPU");
+  assert.equal(isIntegratedGpu("Intel(R) Arc(TM) Graphics"), true);
+  assert.equal(isIntegratedGpu("AMD Radeon RX 7600M XT"), false);
+  assert.equal(isIntegratedGpu("Intel(R) Arc(TM) A770 Graphics"), false);
   assert.equal(discreteGpu("NVIDIA GeForce RTX 4080 SUPER", null, { vendor: "nvidia", architecture: "ada-lovelace" }), null);
   // through a VPN in Japan
   const v = checks({ ...base, ipTzOff: "+09:00", ipcc: "JP", asn: 16509, org: "Amazon.com, Inc.", rtc: ["1.2.3.4", "5.6.7.8"], ip: "5.6.7.8" });
