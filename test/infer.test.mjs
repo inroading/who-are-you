@@ -163,6 +163,18 @@ test("disguise checks", () => {
   // AMD's numbered integrated cards and Intel's Arc Graphics are integrated; an RX or an Arc A-series isn't
   assert.equal(discreteGpu("AMD Radeon 610M", "NVIDIA GeForce RTX 4070 Laptop GPU", null), "NVIDIA GeForce RTX 4070 Laptop GPU");
   assert.equal(isIntegratedGpu("Intel(R) Arc(TM) Graphics"), true);
+  // an AMD integrated card beside an AMD discrete one: the two adapters answer differently
+  assert.equal(discreteGpu("AMD Radeon 610M", null, { vendor: "amd", architecture: "rdna-3" }, { vendor: "amd", architecture: "rdna-2" }), "AMD RDNA 3");
+  assert.equal(discreteGpu("AMD Radeon 610M", null, { vendor: "amd", architecture: "rdna-2" }, { vendor: "amd", architecture: "rdna-2" }), null);
+  // Firefox's stand-in: a card of the same class
+  assert.equal(gpuName("ANGLE (AMD, Radeon R9 200 Series Direct3D11 vs_5_0 ps_5_0), or similar"), gpuName("ANGLE (AMD, Radeon R9 200 Series Direct3D11 vs_5_0 ps_5_0)"));
+  assert.ok(!/ANGLE/.test(gpuName("ANGLE (AMD, Radeon R9 200 Series Direct3D11 vs_5_0 ps_5_0), or similar")));
+  // iOS: Chrome there connects with Apple's TLS, classical before iOS 26
+  assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 18 }).pq[0], "info");
+  assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 26 }).pq[0], "warn");
+  assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519" }).pq[0], "warn");
+  // Chinese down an English list on Singapore's clock
+  assert.deepEqual(nationality({ langs: ["en", "zh", "en-GB"], tz: "Asia/Singapore", ipcc: "JP" }), { cc: "SG", from: ["langs", "tz"] });
   assert.equal(isIntegratedGpu("AMD Radeon RX 7600M XT"), false);
   assert.equal(isIntegratedGpu("Intel(R) Arc(TM) A770 Graphics"), false);
   assert.equal(discreteGpu("NVIDIA GeForce RTX 4080 SUPER", null, { vendor: "nvidia", architecture: "ada-lovelace" }), null);

@@ -47,8 +47,9 @@ export function nationality({ langs = [], tz, ipcc, sys, ios }) {
   // (a language widely spoken in the time zone's country too says that country: Chinese on Kuala Lumpur's clock)
   if (lcc && !plainEn) return tcc && tcc !== lcc && spokenIn(first).includes(tcc) ? { cc: tcc, from: ["langs", "tz"] } : { cc: lcc, from: tcc === lcc ? ["langs", "tz"] : ["langs"] };
   // plain English first, another language further down the list: that one says more
-  const other = langs.slice(1).filter(l => !english(l)).map(langCC).find(Boolean);
-  if (other) return { cc: other, from: tcc === other ? ["langs", "tz"] : ["langs"] };
+  // (Chinese down the list on Singapore's clock: Singapore, as for the first language)
+  const tag = langs.slice(1).find(l => !english(l) && langCC(l)), other = tag && langCC(tag);
+  if (other) return tcc && tcc !== other && spokenIn(tag).includes(tcc) ? { cc: tcc, from: ["langs", "tz"] } : { cc: other, from: tcc === other ? ["langs", "tz"] : ["langs"] };
   // a browser left in plain English on a system that installed one other language (its fonts, voices, keyboard)
   if (sys && sys.cc.length === 1) return { cc: sys.cc[0], from: tcc === sys.cc[0] ? [...sys.from, "tz"] : sys.from };
   if (tcc) return { cc: tcc, from: ["tz"] };
@@ -112,7 +113,7 @@ export function browser(ua = "", brands = []) {
 // "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 (0x00002786) Direct3D11 vs_5_0 ps_5_0, D3D11)" → "NVIDIA GeForce RTX 4070"
 export function gpuName(r) {
   if (!r || /^(Brave|Mozilla)$/i.test(r)) return null;   // Brave's and Firefox's (resistFingerprinting) stand-ins for the card's name
-  let s = String(r);
+  let s = String(r).replace(/,? or similar$/, "");   // Firefox names a card of the same class, not the card
   const m = s.match(/^ANGLE \((?:[^,]*), (.*?)(?:, [^,]*)?\)$/);
   if (m) s = m[1].replace(/^ANGLE Metal Renderer: /, "");
   // the driver's API after the name: "… Direct3D11 vs_5_0 ps_5_0", "… OpenGL 4.6"
@@ -273,7 +274,8 @@ export const offTxt = m => (m < 0 ? "−" : "+") + String(Math.floor(Math.abs(m)
 //   rtc    the public addresses STUN servers saw over UDP ([] none, false WebRTC off, undefined not yet)
 //   br     { name, v } the browser; sni, kex, warp, gateway: the trace's fields
 export function protocols(x) {
-  const out = {}, v = +(x.br && x.br.v) || 0, name = (x.br && x.br.name) || "";
+  // (on iOS every browser connects with Apple's TLS: what it offers goes by the iOS version, as Safari's does)
+  const out = {}, v = x.ios || +(x.br && x.br.v) || 0, name = x.ios ? "Safari" : (x.br && x.br.name) || "";
   // HTTP/3 needs UDP 443. Seen once, it works; not seen, the browser may simply not have switched yet (it learns
   // that a site speaks HTTP/3 from a first answer over TCP), unless UDP gets out nowhere at all: then it's blocked
   // or the proxy doesn't carry it. Without WebRTC there's no telling.
@@ -292,7 +294,7 @@ export function protocols(x) {
   else if (/MLKEM|Kyber/i.test(x.kex)) out.pq = ["ok", "c_pq_ok", { kex: x.kex }];
   else {
     const chromium = /^(Chrome|Edge|Opera|Brave|Vivaldi|Yandex)$/.test(name), want = chromium ? 124 : name === "Firefox" ? 132 : name === "Safari" ? 26 : 0;
-    out.pq = want && v >= want ? ["warn", "c_pq_mitm", { kex: x.kex, b: name + " " + v }] : ["info", "c_pq_old", { kex: x.kex }];
+    out.pq = want && v >= want ? ["warn", "c_pq_mitm", { kex: x.kex, b: x.ios ? "iOS " + v : name + " " + v }] : ["info", "c_pq_old", { kex: x.kex }];
   }
   // WARP and Gateway: Cloudflare's own tunnel and filter, neither good nor bad
   if (!x.warp) out.warp = null;
@@ -361,12 +363,15 @@ export const isIntegratedGpu = g => /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|
 // WebGPU's name for the discrete card, when the default WebGL one is integrated and from another maker
 // (browsers give the maker and the architecture only: "nvidia", "ada-lovelace" → "NVIDIA Ada Lovelace")
 const MAKERS = { nvidia: "NVIDIA", amd: "AMD", intel: "Intel", apple: "Apple", qualcomm: "Qualcomm", arm: "Arm" };
-export function discreteGpu(gl, hiGl, wgpu) {
+// (lo: the low-power adapter's; a high-performance one that answers differently is another card, whoever makes it)
+export function discreteGpu(gl, hiGl, wgpu, lo) {
   if (!gl || !isIntegratedGpu(gl)) return null;
   if (hiGl && hiGl !== gl && !isIntegratedGpu(hiGl)) return hiGl;
   const v = wgpu && MAKERS[String(wgpu.vendor || "").toLowerCase()];
-  if (!v || gl.toLowerCase().includes(v.toLowerCase())) return null;
-  const arch = String(wgpu.architecture || "").split("-").filter(Boolean).map(w => /^\w/.test(w) ? w[0].toUpperCase() + w.slice(1) : w).join(" ");
+  const other = lo && wgpu && ["vendor", "architecture", "device", "description"].some(k => (lo[k] || "") !== (wgpu[k] || ""));
+  if (!v || (!other && gl.toLowerCase().includes(v.toLowerCase()))) return null;
+  if (wgpu.description && isIntegratedGpu(wgpu.description)) return null;
+  const arch = String(wgpu.architecture || "").split("-").filter(Boolean).map(w => /^(rdna|cdna|gcn|xe\d?)$/i.test(w) ? w.toUpperCase() : /^\w/.test(w) ? w[0].toUpperCase() + w.slice(1) : w).join(" ");
   return wgpu.description ? gpuName(wgpu.description) || wgpu.description : [v, arch].filter(Boolean).join(" ");
 }
 

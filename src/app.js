@@ -319,7 +319,7 @@ import { TZ_CC } from "./tz.mjs";
       R.gpuHiRaw = he ? hg.getParameter(he.UNMASKED_RENDERER_WEBGL) : null; R.gpuHi = gpuName(R.gpuHiRaw);
     } catch (e) { R.gpuHi = null; }
     const dg = discreteGpu(R.gpu, R.gpuHi, null);
-    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : ren === "Mozilla" ? "Mozilla · " + t("gpu_rfp") : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
+    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : ren === "Mozilla" ? "Mozilla · " + t("gpu_rfp") : /or similar$/.test(ren || "") && R.gpu ? t("gpu_like", { g: R.gpu }) : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
       { why: [ven, ren, R.gpuHiRaw && R.gpuHiRaw !== ren ? R.gpuHiRaw : ""].filter(Boolean).join(" · ") });
     const gl2 = !!document.createElement("canvas").getContext("webgl2");
     txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }));
@@ -609,11 +609,16 @@ import { TZ_CC } from "./tz.mjs";
 
   async function webgpu() {
     if (!navigator.gpu) return na("webgpu");
-    // the high-performance adapter: the discrete card where there is one (its maker and architecture, at least)
+    // the high-performance adapter (the discrete card where there is one) and the low-power one: two answers, two cards
+    const info = async ad => {
+      if (!ad) return null;
+      const i = ad.info || (ad.requestAdapterInfo ? await within(ad.requestAdapterInfo(), 1000, {}) : {});
+      return { vendor: i.vendor, architecture: i.architecture, device: i.device, description: i.description };
+    };
     const ad = await within(navigator.gpu.requestAdapter({ powerPreference: "high-performance" }), 2000, null);
     if (!ad) return na("webgpu", "v_empty");
-    const i = ad.info || (ad.requestAdapterInfo ? await within(ad.requestAdapterInfo(), 1000, {}) : {});
-    R.wgpu = { vendor: i.vendor, architecture: i.architecture, description: i.description };
+    const i = await info(ad);
+    R.wgpu = i; R.wgpuLo = await info(await within(navigator.gpu.requestAdapter({ powerPreference: "low-power" }), 2000, null));
     const s = [i.vendor, i.architecture, i.device, i.description].filter(Boolean).join(" · ");
     if (s) txt("webgpu", s); else na("webgpu", "v_empty");
   }
@@ -709,7 +714,7 @@ import { TZ_CC } from "./tz.mjs";
     const ex = allExits(), split = ex && splitOf(ex);
     return { v: 1, nat: nat ? nat.cc : null, natFrom: nat ? nat.from : null, cc: c.country || null, city: c.city || null, langs: R.langs || [],
       tz: R.tz || null, rf: rfp() || undefined, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, browser: R.browser || null,
-      screen: R.screen || null, gpu: discreteGpu(R.gpu, R.gpuHi, R.wgpu) || R.gpu || null, gi: discreteGpu(R.gpu, R.gpuHi, R.wgpu) ? R.gpu : undefined, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
+      screen: R.screen || null, gpu: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) || R.gpu || null, gi: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) ? R.gpu : undefined, gl: /or similar$/.test(R.gpuRaw || "") || undefined, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
       nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
       dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, app: inApp() || undefined, fz: !!R.noise || undefined, hz: R.hz || null,
       x: { split, fullOrg: [c.asn ? "AS" + c.asn : "", c.asOrganization].filter(Boolean).join(" · "), dnsOrg: R.dnsOrg || "", fpHex: R.fpHex } };
@@ -789,7 +794,7 @@ import { TZ_CC } from "./tz.mjs";
     blank("device", esc(!P.os ? t("dv_unknown") : (P.kind === "phone" || P.kind === "tablet") && P.model ? t("dv_model", { model: P.model, os: P.os }) : t("dv_" + (P.kind || "pc"), { os: P.os })));
     blank("browser", P.browser ? esc(P.browser) : U);
     blank("screen", P.screen ? esc(P.screen + (P.hz ? " · " + P.hz + " Hz" : "")) : U);
-    blank("gpu", esc(P.gs ? t("gpu_soft") : P.rf && !P.gpu ? t("gpu_rfp") : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")));
+    blank("gpu", esc(P.gs ? t("gpu_soft") : P.rf && !P.gpu ? t("gpu_rfp") : P.gl && P.gpu ? t("gpu_like", { g: P.gpu }) : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")));
     blank("isp", P.org ? (!shared && asnOf(P.asn) ? `<a href="${esc(asnOf(P.asn))}" target="_blank" rel="noopener" title="${esc(t("go_asn"))}">${esc(P.org)}</a>` : esc(P.org)) : shared ? esc(t("masked")) : U, BLANKS.isp, X.fullOrg || (shared && !P.org ? t("masked_why") : ""));
     blank("dns", P.dns ? flagged(P.dns, country(P.dns)) : U, BLANKS.dns, X.dnsOrg || "");
     const sp = X.split;
@@ -811,7 +816,10 @@ import { TZ_CC } from "./tz.mjs";
     const away = [lv("tz") === "bad" && "tz", lv("dns") === "bad" && "dns", lv("lang") === "warn" && "lang"].filter(Boolean);
     // (only the time zone or the DNS says a proxy; a language that isn't the country's is someone who lives there)
     const strong = away.some(k => k !== "lang");
-    const ipc = P.cc && country(P.cc), home = P.nat && P.nat !== P.cc ? country(P.nat) : P.dns && P.dns !== P.cc ? country(P.dns) : null;
+    // (the country the giveaways point to, when they agree: the clock's, not the guessed nationality's)
+    const at = [...new Set(away.map(k => k === "tz" ? tzCC(P.tz) : k === "dns" ? P.dns : langCC((P.langs || [])[0])))];
+    const ipc = P.cc && country(P.cc), home = strong && at.length === 1 && at[0] && at[0] !== P.cc ? country(at[0])
+      : P.nat && P.nat !== P.cc ? country(P.nat) : P.dns && P.dns !== P.cc ? country(P.dns) : null;
     // (the network's blank already says "a proxy" for a data center or a split: then just the mismatch)
     blank("read", esc(strong && ipc && home ? t(P.nt === "dc" || P.nt === "split" ? "rd_off" : "rd_proxy", { ipc, home, list: list(away.map(k => t("gs_i_" + k))) })
       : P.nt === "split" ? t("rd_split") : P.nt === "dc" ? t("rd_dc") : away.length && ipc && home ? t("rd_abroad", { ipc, home }) : ipc ? t("rd_home", { ipc }) : t("rd_none")));
@@ -856,7 +864,7 @@ import { TZ_CC } from "./tz.mjs";
       // the screen as it is now, in physical pixels with the CSS size and ratio (the most reported reading)
       const sc = screen.width ? physicalScreen(screen.width, screen.height, devicePixelRatio || 1).join("×") + " (" + screen.width + "×" + screen.height + " @" + (devicePixelRatio || 1) + "x)" : R.screen;
       const summary = [$("#vHead").textContent, t("grade_v", { g: gr.grade }), R.osTxt, R.browser, sc, R.gpuSoft ? R.gpuRaw : R.gpu].filter(Boolean).join(" · ").slice(0, 300);
-      const data = { portrait: sharedPortrait(false), raw: {
+      const data = { portrait: sharedPortrait(false), raw: { wgpu: R.wgpu ? [R.wgpuLo, R.wgpu] : null,
         gpu: R.gpuRaw || null, screen: [screen.width, screen.height, devicePixelRatio], hints: { platform: hi.platform, platformVersion: hi.platformVersion, model: hi.model, mobile: hi.mobile },
         engine: R.engine || null, kbd: R.kbd || null, sysFonts: R.sysFonts || [], voices: [...new Set((R.voices || []).map(v => v.split(/[-_]/)[0]))],
         tz: R.tz, langs: R.langs, rtt: [R.rttB == null ? null : Math.round(R.rttB), c.clientTcpRtt || null], http: c.httpProtocol || null } };
@@ -1081,7 +1089,7 @@ import { TZ_CC } from "./tz.mjs";
     if (res.dc === null && R.srv && !c.asn) res.dc = ["info", "c_na", {}];
     const tr = R.tr || {};
     Object.assign(res, protocols({ http: R.http && R.h3done ? [c.httpProtocol, ...R.http].filter(Boolean) : null, rtc: R.rtc, br: R.br,
-      sni: tr.sni, kex: tr.kex, warp: tr.warp, gateway: tr.gateway }));
+      sni: tr.sni, kex: tr.kex, warp: tr.warp, gateway: tr.gateway, ios: +((/^(iOS|iPadOS) (d+)/.exec((R.dev && R.dev.os) || "") || [])[2]) || 0 }));
     // at the end, a protocol nothing could be read for (no trace: blocked, or not behind Cloudflare) says so
     if (final) for (const id of [...CHECKS, ...PROTO]) if (!res[id]) res[id] = ["info", "c_na", {}];
     R.ck = res;
