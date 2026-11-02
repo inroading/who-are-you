@@ -9,6 +9,23 @@ const LANG_CC = { ja: "JP", ko: "KR", de: "DE", fr: "FR", it: "IT", ru: "RU", uk
   th: "TH", id: "ID", ms: "MY", he: "IL", fa: "IR", el: "GR", cs: "CZ", sk: "SK", hu: "HU", ro: "RO", bg: "BG", sv: "SE", da: "DK",
   nb: "NO", no: "NO", fi: "FI", et: "EE", lv: "LV", lt: "LT", sl: "SI", hr: "HR", sr: "RS", ka: "GE", hy: "AM", kk: "KZ", uz: "UZ",
   bn: "BD", hi: "IN", ta: "IN", te: "IN", mr: "IN", ur: "PK", km: "KH", lo: "LA", my: "MM", mn: "MN", ne: "NP", si: "LK", fil: "PH", tl: "PH" };
+// Where each language is widely spoken, beyond its first country (official, or by a large share of people). zh is
+// Simplified (zh-CN is how Singapore and Malaysia write it too); zh-Hant is Traditional.
+const SPOKEN = {
+  zh: ["CN", "SG", "MY"], "zh-Hant": ["TW", "HK", "MO"], es: ["ES", "MX", "AR", "CO", "CL", "PE", "VE", "EC", "GT", "CU", "BO", "DO", "HN", "PY", "SV", "NI", "CR", "PA", "UY", "PR", "US", "GQ"],
+  pt: ["PT", "BR", "AO", "MZ", "CV", "GW", "ST", "TL"], fr: ["FR", "BE", "CH", "CA", "LU", "MC", "SN", "CI", "CM", "CD", "MA", "DZ", "TN", "HT", "MG", "ML", "BF", "NE", "BJ", "TG", "GA", "CG"],
+  de: ["DE", "AT", "CH", "LI", "LU", "BE"], it: ["IT", "CH", "SM", "VA"], nl: ["NL", "BE", "SR"], sv: ["SE", "FI"], ru: ["RU", "BY", "KZ", "KG", "UA", "MD"],
+  ar: ["SA", "AE", "EG", "MA", "DZ", "TN", "IQ", "JO", "LB", "SY", "KW", "QA", "BH", "OM", "YE", "LY", "SD", "PS", "MR"], ms: ["MY", "BN", "SG", "ID"],
+  ta: ["IN", "LK", "SG", "MY"], tr: ["TR", "CY"], el: ["GR", "CY"], ro: ["RO", "MD"], sr: ["RS", "BA", "ME"], hr: ["HR", "BA"], fa: ["IR", "AF", "TJ"],
+  ur: ["PK", "IN"], bn: ["BD", "IN"], ko: ["KR", "KP"], he: ["IL"], uk: ["UA"], hi: ["IN"], sw: ["KE", "TZ", "UG"],
+};
+// the countries where a language tag's language is widely spoken (its own region among them)
+export function spokenIn(tag) {
+  if (!tag) return [];
+  const base = String(tag).split(/[-_]/)[0].toLowerCase(), key = base === "zh" && /hant|-(tw|hk|mo)\b/i.test(tag) ? "zh-Hant" : base;
+  const own = langCC(tag);
+  return [...new Set([...(own ? [own] : []), ...(SPOKEN[key] || [])])];
+}
 export function langCC(tag) {
   if (!tag) return null;
   const p = String(tag).split(/[-_]/), base = p[0].toLowerCase();
@@ -27,7 +44,8 @@ export const tzCC = tz => TZ_CC[tz] || null;
 export function nationality({ langs = [], tz, ipcc, sys, ios }) {
   const first = langs[0] || "", lcc = langCC(first), tcc = tzCC(tz);
   const english = l => /^en\b/i.test(l || ""), plainEn = ios ? /^en$/i.test(first) : english(first);
-  if (lcc && !plainEn) return { cc: lcc, from: tcc === lcc ? ["langs", "tz"] : ["langs"] };
+  // (a language widely spoken in the time zone's country too says that country: Chinese on Kuala Lumpur's clock)
+  if (lcc && !plainEn) return tcc && tcc !== lcc && spokenIn(first).includes(tcc) ? { cc: tcc, from: ["langs", "tz"] } : { cc: lcc, from: tcc === lcc ? ["langs", "tz"] : ["langs"] };
   // plain English first, another language further down the list: that one says more
   const other = langs.slice(1).filter(l => !english(l)).map(langCC).find(Boolean);
   if (other) return { cc: other, from: tcc === other ? ["langs", "tz"] : ["langs"] };
@@ -177,11 +195,11 @@ export function checks(x) {
   else if (x.tzOff === x.ipTzOff) out.tz = ["ok", "c_tz_ok", { a: x.tzOff }];
   else out.tz = [tzCC(x.tz) === x.ipcc ? "warn" : "bad", tzCC(x.tz) === x.ipcc ? "c_tz_near" : "c_tz_off", { a: x.ipTzOff, b: x.tzOff, za: x.ipTz || null, zb: x.tz }];
   // the browser language against the address's country
-  // (any language on the list that points to the address's country will do: en-IN, or Tamil, for an address in
-  // India; English first otherwise says little, whatever its variant)
+  // (any language on the list that points to the address's country, or is widely spoken there, will do: en-IN or
+  // Tamil in India, Chinese in Singapore, Spanish in Mexico; English first otherwise says little, whatever its variant)
   const lcc = langCC((x.langs || [])[0]);
   if (!x.ipcc || !x.langs) out.lang = null;
-  else if (x.langs.some(l => langCC(l) === x.ipcc)) out.lang = ["ok", "c_lang_ok", {}];
+  else if (x.langs.some(l => langCC(l) === x.ipcc || (!/^en\b/i.test(l) && spokenIn(l).includes(x.ipcc)))) out.lang = ["ok", "c_lang_ok", {}];
   else if (!lcc || /^en\b/i.test(x.langs[0])) out.lang = ["info", "c_lang_info", {}];
   else out.lang = ["warn", "c_lang_warn", { cc: lcc }];
   // the DNS resolver that looked the page's test name up, against the address's country: a VPN that leaves DNS

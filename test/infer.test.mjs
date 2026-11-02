@@ -37,6 +37,14 @@ test("nationality: the language first, plain English defers to the time zone", (
   assert.equal(checks({ langs: IN, ipcc: "IN" }).lang[0], "ok");
   assert.equal(checks({ langs: ["en-GB"], ipcc: "IN" }).lang[0], "info");
   assert.equal(checks({ langs: ["zh-CN"], ipcc: "JP" }).lang[0], "warn");
+  // a language spoken in more than one country: Chinese in Singapore and Malaysia, Spanish in Mexico, German in Austria
+  assert.equal(checks({ langs: ["zh-CN", "en-US"], ipcc: "SG" }).lang[0], "ok");
+  assert.equal(checks({ langs: ["zh-CN"], ipcc: "MY" }).lang[0], "ok");
+  assert.equal(checks({ langs: ["es-ES"], ipcc: "MX" }).lang[0], "ok");
+  assert.equal(checks({ langs: ["de-DE"], ipcc: "AT" }).lang[0], "ok");
+  assert.equal(checks({ langs: ["zh-TW"], ipcc: "SG" }).lang[0], "warn");   // Traditional Chinese points to Taiwan, Hong Kong
+  assert.deepEqual(nationality({ langs: ["zh-CN", "en-US"], tz: "Asia/Kuala_Lumpur", ipcc: "SG" }), { cc: "MY", from: ["langs", "tz"] });
+  assert.deepEqual(nationality({ langs: ["zh-CN"], tz: "Asia/Tokyo", ipcc: "JP" }), { cc: "CN", from: ["langs"] });
 });
 
 test("system and kind of device", () => {
