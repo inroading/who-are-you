@@ -33,6 +33,14 @@ test("system and kind of device", () => {
   assert.equal(device(MAC_SAFARI, { platform: "macOS", platformVersion: "15.1.0" }).osv, "15.1");
   assert.deepEqual(device(IPHONE), { os: "iOS", osv: "18.1", kind: "phone", model: "iPhone" });
   assert.equal(device(MAC_SAFARI, {}, 5).os, "iPadOS");   // iPads ask for the desktop site
+  // HarmonyOS: ArkWeb names it even where the user agent claims Windows or Android
+  const HM = "Mozilla/5.0 (Phone; OpenHarmony 5.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 ArkWeb/4.1.6.1 Mobile HuaweiBrowser/5.0.4.300";
+  assert.deepEqual(device(HM), { os: "HarmonyOS", osv: "5.0", kind: "phone", model: "" });
+  assert.equal(device("Mozilla/5.0 (PC; OpenHarmony 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 ArkWeb/5.1.0.1").kind, "pc");
+  assert.equal(device("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 ArkWeb/5.1.0.1 HuaweiBrowser/5.1").os, "HarmonyOS");
+  assert.deepEqual(device("Mozilla/5.0 (Linux; Android 12; HarmonyOS; ALN-AL00; HMSCore 6.13.0.302) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 HuaweiBrowser/15.0.4.312 Mobile Safari/537.36"),
+    { os: "HarmonyOS", osv: "", kind: "phone", model: "ALN-AL00" });
+  assert.equal(device(WIN, { platform: "HarmonyOS", platformVersion: "5.1.0" }).os, "HarmonyOS");
   assert.deepEqual(device(ANDROID, { platform: "Android", platformVersion: "15.0.0", model: "Pixel 8", mobile: true }), { os: "Android", osv: "15", kind: "phone", model: "Pixel 8" });
   assert.equal(device(FIREFOX).os, "Linux");
 });
@@ -95,6 +103,9 @@ test("disguise checks", () => {
   assert.equal(checks({ ...base, sys: false }).syslang[1], "c_sys_na");
   assert.equal(checks({ ...base, sys: { cc: [], from: [] } }).syslang[1], "c_sys_none");
   assert.deepEqual(checks({ ...base, tamper: ["tp_engine", "tp_hdr"] }).tamper, ["bad", "c_tamper_bad", { list: "tp_engine,tp_hdr" }]);
+  // a HarmonyOS phone on a Mali or Maleoon GPU is no contradiction
+  assert.equal(checks({ ...base, uaOS: "HarmonyOS", hintOS: "HarmonyOS", gpuOS: "Android" }).ua[0], "ok");
+  assert.equal(gpuOS("Maleoon 910"), "Android");
   // through a VPN in Japan
   const v = checks({ ...base, ipTzOff: "+09:00", ipcc: "JP", asn: 16509, org: "Amazon.com, Inc.", rtc: ["1.2.3.4", "5.6.7.8"], ip: "5.6.7.8" });
   assert.equal(v.tz[0], "bad"); assert.equal(v.lang[0], "warn"); assert.equal(v.dc[0], "warn"); assert.equal(v.webrtc[0], "bad");

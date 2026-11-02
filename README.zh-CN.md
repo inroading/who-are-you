@@ -6,13 +6,17 @@
 
 接着它像网站识别伪装那样，把这些信息互相对比；并列出全部 79 个嗅探器、每个的读取方式和读到的结果。
 
-**在线使用：** https://who.1ms.dog · 专题页：[浏览器指纹检测](https://who.1ms.dog/zh-cn/fingerprint/)、[DNS 泄露检测](https://who.1ms.dog/zh-cn/dns-leak/)、[浏览器环境检测](https://who.1ms.dog/zh-cn/browser-check/)、[时区检测](https://who.1ms.dog/zh-cn/timezone-check/)、[代理检测](https://who.1ms.dog/zh-cn/proxy-check/)、[WebRTC 泄漏检测](https://who.1ms.dog/zh-cn/webrtc-leak/)（同一个工具，把那一项结果放在最前面；文案在 `src/pages.mjs`）
+**在线使用：** https://who.1ms.dog · 专题页：[浏览器指纹检测](https://who.1ms.dog/zh-cn/fingerprint/)、[DNS 泄露检测](https://who.1ms.dog/zh-cn/dns-leak/)、[浏览器环境检测](https://who.1ms.dog/zh-cn/browser-check/)、[时区检测](https://who.1ms.dog/zh-cn/timezone-check/)、[代理检测](https://who.1ms.dog/zh-cn/proxy-check/)、[浏览器语言检测](https://who.1ms.dog/zh-cn/language-check/)、[Canvas 指纹检测](https://who.1ms.dog/zh-cn/canvas-fingerprint/)、[UA 检测](https://who.1ms.dog/zh-cn/user-agent/)、[浏览器扩展检测](https://who.1ms.dog/zh-cn/extensions/)、[WebRTC 泄漏检测](https://who.1ms.dog/zh-cn/webrtc-leak/)（同一个工具，把那一项结果放在最前面；文案在 `src/pages.mjs`）
 
 ## 能看到什么
 
 - **画像**：一段话，每个空都由嗅探器填上。鼠标放在空格上，会显示它来自哪些嗅探器（对应的行会高亮）。只有年龄是留空的：浏览器里没有任何地方透露年龄，页面会直接说明，而不是瞎猜。
 - **网站会怎么想**：画像里有三个空不是读数而是结论：这台机器像是干什么用的（显卡和刷新率）、各处说法对不对得上（对不上就说网站多半会猜你在用代理）、清 Cookie 有没有用（指纹稳不稳）。
 - **和上次比**：只记在你的浏览器里，改完设置再测，会显示「上次 8 处，这次 7 处，修好了：…」。指纹变了时，会说是浏览器升级了，还是哪几项变了。
+- **最近几次**：最近 10 次的暴露数画成一条小折线，鼠标放在点上看是什么时候测的。同样只存在你的浏览器里。
+- **复制文字**：把画像、12 项检测和连接协议复制成一段文字，城市、网络和 IP 自动打码，末尾带本站链接，方便贴到论坛。
+- **按系统给修法**：DNS 泄露和 WebRTC 的「怎么修」按你的系统写：Windows、macOS、iPhone、安卓各有对应的客户端和设置。
+- **系统识别**：鸿蒙的浏览器（ArkWeb）为了兼容会在 UA 里写 Windows 或 Android，按 OpenHarmony、HarmonyOS、ArkWeb 标记识别成鸿蒙。
 - **想装成在哪儿上网**：选一个目标地区（默认是 IP 所在地），逐项看 IP、系统时区、浏览器语言、DNS、WebRTC 还差什么，以及怎么改。
 - **伪装检测**：想隐藏自己时最要紧的 12 项，并按结果给出 A 到 F 的环境评分：
   - 系统时区和 IP 所在时区

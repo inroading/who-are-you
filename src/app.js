@@ -15,7 +15,7 @@ import { TZ_CC } from "./tz.mjs";
   const t = (k, v) => { let s = L[k] ?? k; if (v) for (const x in v) s = s.split("{" + x + "}").join(v[x]); return s; };
   const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
-  const K = { theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last", prev: "who:prev", target: "who:target" };
+  const K = { theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last", prev: "who:prev", target: "who:target", hist: "who:hist" };
   const dn = type => { try { return new Intl.DisplayNames([LANG], { type }); } catch (e) { return null; } };
   const REG = dn("region"), LNG = dn("language");
   const country = cc => { try { return REG ? REG.of(cc) : cc; } catch (e) { return cc; } };
@@ -728,7 +728,7 @@ import { TZ_CC } from "./tz.mjs";
     const why = last.br && R.browser && last.br !== R.browser ? t("rv_why_br", { a: last.br, b: R.browser }) : moved.length ? t("rv_why", { list: list(moved.map(rowName)) }) : "";
     return said + (why ? (/^(zh|ja)/.test(LANG) ? "" : " ") + why : "");
   }
-  $("#forget").onclick = () => { try { localStorage.removeItem(K.last); localStorage.removeItem(K.prev); } catch (e) {} $("#fpRet").textContent = t("rv_forgot"); $("#forget").hidden = true; };
+  $("#forget").onclick = () => { try { localStorage.removeItem(K.last); localStorage.removeItem(K.prev); localStorage.removeItem(K.hist); } catch (e) {} $("#vHist").hidden = true; $("#fpRet").textContent = t("rv_forgot"); $("#forget").hidden = true; };
   function idCard(P, shared) {
     $("#fpId").textContent = P.rand ? t("fp_rand") : P.fp || t("masked");
     $("#fpNote").textContent = t(shared ? "sh_fp" : P.rand ? "id_note_rand" : "id_note");
@@ -812,6 +812,58 @@ import { TZ_CC } from "./tz.mjs";
     el.textContent = out.join(/^(zh|ja)/.test(LANG) ? "" : " ");
     el.className = "v-cmp" + (n < prev.n ? " ok" : n > prev.n ? " bad" : "");
     el.hidden = false;
+  }
+
+  /* ---------- the last runs, as a line ---------- */
+  // Kept in this browser only, ten at most: the count of each run, oldest on the left, each point's time on hover
+  function history() {
+    let h = [];
+    try { h = JSON.parse(store.get(K.hist) || "[]"); } catch (e) {}
+    const n = CHECKS.filter(id => R.ck[id] && (R.ck[id][0] === "bad" || R.ck[id][0] === "warn")).length;
+    h = [...(Array.isArray(h) ? h : []), { at: Date.now(), n }].slice(-10);
+    store.set(K.hist, JSON.stringify(h));
+    const el = $("#vHist");
+    if (h.length < 2) { el.hidden = true; return; }
+    const W = 120, H = 26, top = Math.max(1, ...h.map(x => x.n)), x = i => (i * W / (h.length - 1)).toFixed(1), y = v => (H - 3 - v / top * (H - 6)).toFixed(1);
+    const pts = h.map((p, i) => x(i) + "," + y(p.n)).join(" ");
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t("hist_v", { n: h.length }))}"><polyline points="${pts}"/>` +
+      h.map((p, i) => `<circle cx="${x(i)}" cy="${y(p.n)}" r="2.6"><title>${esc(t("hist_pt", { ago: ago(p.at), n: p.n }))}</title></circle>`).join("") + `</svg><span>${esc(t("hist_v", { n: h.length }))}</span>`;
+    el.hidden = false;
+  }
+
+  /* ---------- the portrait as text, to paste into a post ---------- */
+  // The paragraph with the city and the network masked, every check with addresses cut to their network (as in a
+  // shared link), the grade, and the page's own address to try it (the text is the result; a result link is long)
+  function asText() {
+    const P = sharedPortrait(false), c = (R.srv && R.srv.cf) || {}, colon = /^(zh|ja)/.test(LANG) ? "：" : ": ";
+    const story = $$("#story p").map(p => [...p.childNodes].map(n => {
+      if (n.nodeType === 3) return n.textContent;
+      const k = n.dataset && n.dataset.b;
+      return k === "city" || k === "isp" ? t("masked") : n.textContent;
+    }).join("").trim()).filter(Boolean).join("\n\n");
+    const mark = { ok: "✓", warn: "!", bad: "✗", info: "·" };
+    const rows = ids => ids.filter(id => P.ck[id]).map(id => mark[P.ck[id][0]] + " " + t("c_" + id) + colon + ckText(id, P.ck[id], c.country));
+    const gr = grade(P.ck, CHECKS.filter(id => P.ck[id]));
+    return [t("card_me") + " · " + location.host, "", story, "", $("#vHead").textContent + " · " + t("grade_v", { g: gr.grade }), ...rows(CHECKS), "",
+      t("h_proto"), ...rows(PROTO), "", t("card_cta") + colon + location.origin + (D.paths[LANG] || "/")].join("\n");
+  }
+  $("#copyTxt").onclick = async () => {
+    const s = asText();
+    let ok = false;
+    try { await navigator.clipboard.writeText(s); ok = true; } catch (e) {
+      const ta = document.createElement("textarea"); ta.value = s; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select(); try { ok = document.execCommand("copy"); } catch (x) {} ta.remove();
+    }
+    $("#copyT").textContent = t(ok ? "copied_txt" : "copy_fail");
+    setTimeout(() => { $("#copyT").textContent = t("copy_txt"); }, 2000);
+  };
+
+  /* ---------- fixes for the visitor's own system ---------- */
+  // The DNS and WebRTC fixes name the clients and settings of the system the visitor is on, when there are any
+  function osTips() {
+    const os = (R.dev && R.dev.os) || "", plat = /^Windows/.test(os) ? "win" : /^macOS/.test(os) ? "mac" : /^(iOS|iPadOS)/.test(os) ? "ios" : /^Android/.test(os) ? "and" : /Linux|Chrome OS/.test(os) ? "linux" : "";
+    const keys = { dns: plat && plat !== "linux" ? "tip_dns_" + plat : "", webrtc: plat === "ios" ? "tip_webrtc_ios" : plat === "and" ? "tip_webrtc_and" : plat ? "tip_webrtc_desk" : "" };
+    for (const [id, k] of Object.entries(keys)) if (k && L[k]) CK[id].querySelector(".ck-tip").innerHTML = t(k).split("\n").map(l => `<li>${esc(l)}</li>`).join("");
   }
 
   /* ---------- a country to pass for ---------- */
@@ -1037,7 +1089,7 @@ import { TZ_CC } from "./tz.mjs";
     P.langs = P.langs || []; P.jobs = P.jobs || []; P.x = {};
     document.documentElement.classList.add("shared");
     $(".eyebrow").lastChild.textContent = t("sh_eyebrow");
-    $("#mine").hidden = false; $("#share").hidden = true; $("#rerun").hidden = true;
+    $("#mine").hidden = false; $("#share").hidden = true; $("#rerun").hidden = true; $("#copyTxt").hidden = true;
     $("#mine").classList.add("primary"); $("#cta").hidden = false;
     $("#mine").onclick = () => { location.href = D.paths[LANG] || "/"; };
     $("#progTxt").textContent = " ";
@@ -1067,7 +1119,7 @@ import { TZ_CC } from "./tz.mjs";
     $("#vHead").textContent = t("checking"); $("#vHead").className = "v-h";
     $("#mNum").textContent = "–"; $("#mNum").className = "m-num"; $$("#segs i").forEach(i => { i.className = ""; });
     $("#fpId").innerHTML = '<i class="skl"></i>'; $("#fpArt").innerHTML = ""; $("#fpNote").textContent = t("id_note"); $("#vText").innerHTML = "&nbsp;";
-    $("#rerun").disabled = true; $("#share").disabled = true; progress();
+    $("#rerun").disabled = true; $("#share").disabled = true; $("#copyTxt").disabled = true; progress();
 
     referrer(); locale(); prefs(); engine();
     const glInfo = gpu();
@@ -1099,9 +1151,9 @@ import { TZ_CC } from "./tz.mjs";
     for (const id of Object.keys(PR)) if (!done.has(id)) na(id);   // anything a sniffer couldn't reach
     judge(true);
     readings(portrait(), R.ck);
-    paintTarget();
-    if (!EMBED) compare();
-    $("#rerun").disabled = false; $("#share").disabled = false;
+    paintTarget(); osTips();
+    if (!EMBED) { compare(); history(); }
+    $("#rerun").disabled = false; $("#share").disabled = false; $("#copyTxt").disabled = false;
     if (EMBED && !failed) post(embedResult());
   }
 

@@ -11,6 +11,10 @@ export const PAGES = {
   "browser-check": { rows: ["engine", "browser", "h_ua", "h_lang", "langs", "tz", "fonts"], check: "tamper" },
   "timezone-check": { rows: ["tz", "tzip", "hour", "geo", "clock"], check: "tz" },
   "proxy-check": { rows: ["edge", "ip", "isp", "dns", "webrtc"], check: "rtt", go: "egress" },
+  "language-check": { rows: ["langs", "h_lang", "locale", "kbd", "voices", "fonts"], check: "lang" },
+  "canvas-fingerprint": { rows: ["canvas", "webgl", "audio", "rand", "fpid"], check: "fp" },
+  "user-agent": { rows: ["h_ua", "os", "browser", "h_chua", "h_plat", "engine"], check: "ua" },
+  "extensions": { rows: ["ext", "adblock", "engine", "h_ua"], check: "tamper" },
 };
 
 // per page, per language: seo_title, seo_desc, seo_kw, h1, og_sub, intro (the body text above the result),
@@ -1264,6 +1268,934 @@ export const TEXT = {
         [
           "Почему иногда «не удалось прочитать»?",
           "По HTTP/3 нет TCP-соединения, и Cloudflare не может сообщить время отклика; некоторые сети блокируют измерительные запросы."
+        ]
+      ]
+    }
+  },
+  "language-check": {
+    "en": {
+      "seo_title": "Browser Language Check: what language do sites think you speak? · Who Are You",
+      "seo_desc": "Free browser language check: the languages your browser sends in its Accept-Language header and exposes in JavaScript, your locale, keyboard layout, voices and fonts, and whether they match the country of your IP.",
+      "seo_kw": "browser language check, Accept-Language check, what is my browser language, navigator.languages, language IP mismatch, locale test",
+      "h1": "Browser language check",
+      "og_sub": "What language do sites think you speak?",
+      "intro": "Every request your browser sends says which languages you read, and every page can read the same list in JavaScript, along with your locale, keyboard layout and the voices and fonts your system has. Sites compare them with where your IP is. Here is what yours say.",
+      "focus_h": "Your language against your IP",
+      "docs": [
+        [
+          "Where do sites get my language from?",
+          "From the Accept-Language header on every request, from navigator.languages in JavaScript, and indirectly from the locale, the keyboard layout, the speech voices and the fonts your system installed."
+        ],
+        [
+          "How do I change it?",
+          "In the browser's language settings: put the language you want first. Changing only one place, like an extension that edits navigator.languages, leaves the header as it was, and the two disagree."
+        ],
+        [
+          "Why is English only \"info\"?",
+          "English is used everywhere, so it says little about where you are. Other languages point to a country, and a mismatch with the IP is a hint."
+        ]
+      ]
+    },
+    "zh-CN": {
+      "seo_title": "浏览器语言检测：网站以为你说什么语言 · 你是谁",
+      "seo_desc": "免费浏览器语言检测：查看浏览器在 Accept-Language 请求头里发出、在 JavaScript 里暴露的语言，以及区域设置、键盘布局、语音和字体，看它们和 IP 所在国家对不对得上。",
+      "seo_kw": "浏览器语言检测, Accept-Language 检测, 浏览器语言, navigator.languages, 语言与 IP 不一致, 区域设置检测",
+      "h1": "浏览器语言检测",
+      "og_sub": "网站以为你说什么语言？",
+      "intro": "浏览器发出的每个请求都会说明你读哪些语言，任何网页也能在 JavaScript 里读到同一份列表，再加上区域设置、键盘布局，以及系统装了哪些语音和字体。网站会拿它们和 IP 所在地对照。下面是你的。",
+      "focus_h": "你的语言和 IP",
+      "docs": [
+        [
+          "网站从哪里知道我的语言？",
+          "每个请求里的 Accept-Language 请求头、JavaScript 里的 navigator.languages，还有区域设置、键盘布局、语音朗读和系统装的字体，都会间接透露。"
+        ],
+        [
+          "怎么改？",
+          "在浏览器的语言设置里，把想要的语言放到第一位。只改一处（比如插件改了 navigator.languages）会让请求头还是原样，两边对不上反而更显眼。"
+        ],
+        [
+          "为什么英文只算「提示」？",
+          "英文全世界都在用，说明不了你在哪。其他语言会指向某个国家，和 IP 对不上时才算破绽。"
+        ]
+      ]
+    },
+    "zh-TW": {
+      "seo_title": "瀏覽器語言檢測：網站以為你說什麼語言 · 你是誰",
+      "seo_desc": "免費瀏覽器語言檢測：查看瀏覽器在 Accept-Language 請求標頭送出、在 JavaScript 裡暴露的語言，以及地區設定、鍵盤配置、語音和字型，看它們和 IP 所在國家對不對得上。",
+      "seo_kw": "瀏覽器語言檢測, Accept-Language 檢測, 瀏覽器語言, navigator.languages, 語言與 IP 不一致",
+      "h1": "瀏覽器語言檢測",
+      "og_sub": "網站以為你說什麼語言？",
+      "intro": "瀏覽器送出的每個請求都會說明你讀哪些語言，任何網頁也能在 JavaScript 裡讀到同一份清單，再加上地區設定、鍵盤配置，以及系統裝了哪些語音和字型。網站會拿它們和 IP 所在地對照。下面是你的。",
+      "focus_h": "你的語言和 IP",
+      "docs": [
+        [
+          "網站從哪裡知道我的語言？",
+          "每個請求裡的 Accept-Language 請求標頭、JavaScript 裡的 navigator.languages，還有地區設定、鍵盤配置、語音朗讀和系統裝的字型，都會間接透露。"
+        ],
+        [
+          "怎麼改？",
+          "在瀏覽器的語言設定裡，把想要的語言放到第一位。只改一處（例如擴充功能改了 navigator.languages）會讓請求標頭還是原樣，兩邊對不上反而更顯眼。"
+        ],
+        [
+          "為什麼英文只算「提示」？",
+          "英文全世界都在用，說明不了你在哪。其他語言會指向某個國家，和 IP 對不上時才算破綻。"
+        ]
+      ]
+    },
+    "ja": {
+      "seo_title": "ブラウザ言語チェック：サイトはあなたを何語の人だと思う？ · あなたは誰",
+      "seo_desc": "無料ブラウザ言語チェック：Accept-Language ヘッダーと JavaScript に出る言語、ロケール、キーボード配列、音声、フォントを調べ、IP の国と合うかを確認します。",
+      "seo_kw": "ブラウザ 言語 チェック, Accept-Language, navigator.languages, 言語 IP 不一致, ロケール",
+      "h1": "ブラウザ言語チェック",
+      "og_sub": "サイトはあなたを何語の人だと思う？",
+      "intro": "ブラウザが送るリクエストには読める言語が書かれ、どのページも JavaScript で同じ一覧やロケール、キーボード配列、システムの音声とフォントを読めます。サイトはそれを IP の場所と照らし合わせます。あなたの場合はこうです。",
+      "focus_h": "言語と IP",
+      "docs": [
+        [
+          "サイトはどこから言語を知る？",
+          "毎回のリクエストの Accept-Language ヘッダー、JavaScript の navigator.languages、さらにロケール、キーボード配列、音声、インストール済みフォントからも間接的に分かります。"
+        ],
+        [
+          "どう変える？",
+          "ブラウザの言語設定で、使いたい言語を一番上に。拡張機能で navigator.languages だけ変えるとヘッダーはそのままで、食い違いがかえって目立ちます。"
+        ],
+        [
+          "英語はなぜ「情報」だけ？",
+          "英語は世界中で使われ、居場所の手がかりになりません。他の言語は国を指すので、IP と合わなければヒントになります。"
+        ]
+      ]
+    },
+    "ko": {
+      "seo_title": "브라우저 언어 검사: 사이트는 당신이 무슨 말을 한다고 볼까요? · 당신은 누구",
+      "seo_desc": "무료 브라우저 언어 검사: Accept-Language 헤더와 JavaScript에 드러나는 언어, 로캘, 키보드 배열, 음성, 글꼴을 보고 IP 국가와 맞는지 확인합니다.",
+      "seo_kw": "브라우저 언어 검사, Accept-Language, navigator.languages, 언어 IP 불일치, 로캘",
+      "h1": "브라우저 언어 검사",
+      "og_sub": "사이트는 당신이 무슨 말을 한다고 볼까요?",
+      "intro": "브라우저가 보내는 모든 요청에는 읽는 언어가 적혀 있고, 어떤 페이지든 JavaScript로 같은 목록과 로캘, 키보드 배열, 시스템의 음성과 글꼴을 읽을 수 있어요. 사이트는 이것을 IP 위치와 비교합니다. 당신의 결과예요.",
+      "focus_h": "언어와 IP",
+      "docs": [
+        [
+          "사이트는 내 언어를 어디서 알까요?",
+          "모든 요청의 Accept-Language 헤더, JavaScript의 navigator.languages, 그리고 로캘, 키보드 배열, 음성, 설치된 글꼴에서도 간접적으로 드러나요."
+        ],
+        [
+          "어떻게 바꾸나요?",
+          "브라우저 언어 설정에서 원하는 언어를 맨 위로. 확장 프로그램으로 navigator.languages만 바꾸면 헤더는 그대로라 어긋남이 오히려 눈에 띄어요."
+        ],
+        [
+          "영어는 왜 '정보'일 뿐인가요?",
+          "영어는 어디서나 쓰여 위치를 말해 주지 않아요. 다른 언어는 나라를 가리키니 IP와 안 맞으면 단서가 됩니다."
+        ]
+      ]
+    },
+    "de": {
+      "seo_title": "Browsersprache prüfen: Welche Sprache sprechen Sie laut Websites? · Wer sind Sie?",
+      "seo_desc": "Kostenloser Test der Browsersprache: die Sprachen im Accept-Language-Header und in JavaScript, Gebietsschema, Tastaturlayout, Stimmen und Schriften, und ob sie zum Land Ihrer IP passen.",
+      "seo_kw": "Browsersprache prüfen, Accept-Language Test, navigator.languages, Sprache IP Abweichung, Gebietsschema",
+      "h1": "Browsersprache prüfen",
+      "og_sub": "Welche Sprache sprechen Sie laut Websites?",
+      "intro": "Jede Anfrage Ihres Browsers nennt die Sprachen, die Sie lesen, und jede Seite kann dieselbe Liste in JavaScript lesen – dazu Gebietsschema, Tastaturlayout und die Stimmen und Schriften Ihres Systems. Websites vergleichen das mit dem Standort Ihrer IP. Hier ist Ihres.",
+      "focus_h": "Ihre Sprache und Ihre IP",
+      "docs": [
+        [
+          "Woher kennen Websites meine Sprache?",
+          "Aus dem Accept-Language-Header jeder Anfrage, aus navigator.languages in JavaScript und indirekt aus Gebietsschema, Tastaturlayout, Sprachausgabe-Stimmen und installierten Schriften."
+        ],
+        [
+          "Wie ändere ich sie?",
+          "In den Spracheinstellungen des Browsers die gewünschte Sprache nach oben setzen. Ändert man nur eine Stelle, etwa per Erweiterung navigator.languages, bleibt der Header wie er war – und die Abweichung fällt erst recht auf."
+        ],
+        [
+          "Warum ist Englisch nur „Info“?",
+          "Englisch wird überall genutzt und sagt wenig über Ihren Standort. Andere Sprachen deuten auf ein Land; passt es nicht zur IP, ist das ein Hinweis."
+        ]
+      ]
+    },
+    "fr": {
+      "seo_title": "Test de langue du navigateur : quelle langue les sites vous prêtent-ils ? · Qui êtes-vous ?",
+      "seo_desc": "Test gratuit de langue du navigateur : les langues de l’en-tête Accept-Language et de JavaScript, les paramètres régionaux, la disposition du clavier, les voix et les polices, et leur accord avec le pays de votre IP.",
+      "seo_kw": "test langue navigateur, Accept-Language, navigator.languages, langue IP différente, paramètres régionaux",
+      "h1": "Test de langue du navigateur",
+      "og_sub": "Quelle langue les sites vous prêtent-ils ?",
+      "intro": "Chaque requête de votre navigateur indique les langues que vous lisez, et toute page peut lire la même liste en JavaScript, avec vos paramètres régionaux, votre clavier et les voix et polices de votre système. Les sites les comparent à l’emplacement de votre IP. Voici les vôtres.",
+      "focus_h": "Votre langue face à votre IP",
+      "docs": [
+        [
+          "D’où les sites tiennent-ils ma langue ?",
+          "De l’en-tête Accept-Language de chaque requête, de navigator.languages en JavaScript, et indirectement des paramètres régionaux, de la disposition du clavier, des voix de synthèse et des polices installées."
+        ],
+        [
+          "Comment la changer ?",
+          "Dans les réglages de langue du navigateur, placez la langue voulue en premier. Ne changer qu’un endroit, comme navigator.languages par une extension, laisse l’en-tête intact, et l’écart se voit d’autant plus."
+        ],
+        [
+          "Pourquoi l’anglais n’est-il qu’une « info » ?",
+          "L’anglais est utilisé partout et dit peu de votre position. Les autres langues désignent un pays ; un écart avec l’IP est un indice."
+        ]
+      ]
+    },
+    "es": {
+      "seo_title": "Test de idioma del navegador: ¿qué idioma creen los sitios que hablas? · Quién eres",
+      "seo_desc": "Test gratuito de idioma del navegador: los idiomas de la cabecera Accept-Language y de JavaScript, la configuración regional, el teclado, las voces y las fuentes, y si cuadran con el país de tu IP.",
+      "seo_kw": "test idioma navegador, Accept-Language, navigator.languages, idioma IP distinto, configuración regional",
+      "h1": "Test de idioma del navegador",
+      "og_sub": "¿Qué idioma creen los sitios que hablas?",
+      "intro": "Cada petición de tu navegador dice qué idiomas lees, y cualquier página puede leer la misma lista en JavaScript, junto con tu configuración regional, tu teclado y las voces y fuentes de tu sistema. Los sitios lo comparan con dónde está tu IP. Esto es lo tuyo.",
+      "focus_h": "Tu idioma frente a tu IP",
+      "docs": [
+        [
+          "¿De dónde sacan los sitios mi idioma?",
+          "De la cabecera Accept-Language de cada petición, de navigator.languages en JavaScript, e indirectamente de la configuración regional, el teclado, las voces y las fuentes instaladas."
+        ],
+        [
+          "¿Cómo lo cambio?",
+          "En los ajustes de idioma del navegador, pon primero el que quieras. Cambiar solo un sitio, como navigator.languages con una extensión, deja la cabecera igual y la diferencia se nota más."
+        ],
+        [
+          "¿Por qué el inglés es solo «info»?",
+          "El inglés se usa en todas partes y dice poco de dónde estás. Los demás idiomas apuntan a un país; si no cuadra con la IP, es una pista."
+        ]
+      ]
+    },
+    "pt": {
+      "seo_title": "Teste de idioma do navegador: que idioma os sites acham que você fala? · Quem é você",
+      "seo_desc": "Teste gratuito de idioma do navegador: os idiomas do cabeçalho Accept-Language e do JavaScript, a localidade, o teclado, as vozes e as fontes, e se batem com o país do seu IP.",
+      "seo_kw": "teste idioma navegador, Accept-Language, navigator.languages, idioma IP diferente, localidade",
+      "h1": "Teste de idioma do navegador",
+      "og_sub": "Que idioma os sites acham que você fala?",
+      "intro": "Cada requisição do navegador diz quais idiomas você lê, e qualquer página lê a mesma lista no JavaScript, junto com sua localidade, seu teclado e as vozes e fontes do sistema. Os sites comparam isso com onde está seu IP. Aqui está o seu.",
+      "focus_h": "Seu idioma contra seu IP",
+      "docs": [
+        [
+          "De onde os sites tiram meu idioma?",
+          "Do cabeçalho Accept-Language de cada requisição, do navigator.languages no JavaScript e, indiretamente, da localidade, do teclado, das vozes e das fontes instaladas."
+        ],
+        [
+          "Como mudo?",
+          "Nas configurações de idioma do navegador, coloque o que quiser em primeiro. Mudar só um lugar, como o navigator.languages por extensão, deixa o cabeçalho igual, e a diferença chama mais atenção."
+        ],
+        [
+          "Por que o inglês é só «info»?",
+          "O inglês é usado em todo lugar e diz pouco sobre onde você está. Os outros idiomas apontam um país; se não bate com o IP, é uma pista."
+        ]
+      ]
+    },
+    "ru": {
+      "seo_title": "Проверка языка браузера: на каком языке вы говорите для сайтов? · Кто вы",
+      "seo_desc": "Бесплатная проверка языка браузера: языки в заголовке Accept-Language и в JavaScript, локаль, раскладка, голоса и шрифты, и совпадают ли они со страной вашего IP.",
+      "seo_kw": "проверка языка браузера, Accept-Language, navigator.languages, язык и IP не совпадают, локаль",
+      "h1": "Проверка языка браузера",
+      "og_sub": "На каком языке вы говорите для сайтов?",
+      "intro": "Каждый запрос браузера сообщает, на каких языках вы читаете, а любая страница видит тот же список в JavaScript, вместе с локалью, раскладкой и голосами и шрифтами системы. Сайты сравнивают это с местом вашего IP. Вот ваши.",
+      "focus_h": "Ваш язык и IP",
+      "docs": [
+        [
+          "Откуда сайты знают мой язык?",
+          "Из заголовка Accept-Language каждого запроса, из navigator.languages в JavaScript и косвенно — из локали, раскладки, голосов синтеза речи и установленных шрифтов."
+        ],
+        [
+          "Как его изменить?",
+          "В языковых настройках браузера поставьте нужный язык первым. Если менять только одно место, например navigator.languages расширением, заголовок останется прежним, и расхождение станет заметнее."
+        ],
+        [
+          "Почему английский — лишь «информация»?",
+          "Английский используют везде, о месте он почти ничего не говорит. Другие языки указывают на страну, и расхождение с IP — подсказка."
+        ]
+      ]
+    }
+  },
+  "canvas-fingerprint": {
+    "en": {
+      "seo_title": "Canvas Fingerprint Test: what your canvas, WebGL and audio fingerprints are · Who Are You",
+      "seo_desc": "Free canvas fingerprint test: the hashes of how your system draws a canvas, renders WebGL and processes audio, whether your browser adds noise to them, and the combined fingerprint ID sites use to recognize you without cookies.",
+      "seo_kw": "canvas fingerprint test, canvas fingerprinting, WebGL fingerprint, audio fingerprint, canvas noise, anti canvas fingerprint",
+      "h1": "Canvas fingerprint test",
+      "og_sub": "How your computer draws gives it away",
+      "intro": "Ask two computers to draw the same text and shapes, and the pixels come out slightly different: the graphics card, the driver, the fonts and the anti-aliasing all leave a mark. Sites hash that drawing into a fingerprint. Here are yours, and whether your browser scrambles them.",
+      "focus_h": "Your canvas fingerprint",
+      "docs": [
+        [
+          "What is a canvas fingerprint?",
+          "A page draws text and shapes on an invisible canvas, reads the pixels back and hashes them. The result is the same every time on your machine and differs between machines, so it works like an ID."
+        ],
+        [
+          "How do I stop it?",
+          "Use a browser that adds random noise to canvas, WebGL and audio, like Brave by default or Firefox with resistFingerprinting. The \"fingerprint protection\" row shows whether two drawings came out different."
+        ],
+        [
+          "Do privacy extensions help?",
+          "Some do, by wrapping the drawing functions. That can itself be noticed: the browser environment check flags replaced functions."
+        ]
+      ]
+    },
+    "zh-CN": {
+      "seo_title": "Canvas 指纹检测：你的 Canvas、WebGL 和音频指纹 · 你是谁",
+      "seo_desc": "免费 Canvas 指纹检测：查看你的系统画 Canvas、渲染 WebGL、处理音频得出的哈希，浏览器有没有给它们加干扰，以及网站不用 Cookie 就能认出你的综合指纹 ID。",
+      "seo_kw": "Canvas 指纹检测, Canvas 指纹, WebGL 指纹, 音频指纹, Canvas 防指纹, Canvas 噪声, 指纹识别",
+      "h1": "Canvas 指纹检测",
+      "og_sub": "电脑怎么画图，就会暴露它是谁",
+      "intro": "让两台电脑画同样的文字和图形，像素会有细微差别：显卡、驱动、字体、抗锯齿都会留下痕迹。网站把这张图算成哈希，就是指纹。下面是你的，以及浏览器有没有打乱它们。",
+      "focus_h": "你的 Canvas 指纹",
+      "docs": [
+        [
+          "Canvas 指纹是什么？",
+          "网页在看不见的画布上画文字和图形，再把像素读回来算哈希。同一台机器每次都一样，不同机器各不相同，所以能当 ID 用。"
+        ],
+        [
+          "怎么防？",
+          "用会给 Canvas、WebGL 和音频加随机干扰的浏览器，比如默认就开的 Brave，或开了 resistFingerprinting 的 Firefox。「防指纹」那一行会显示两次画出来的结果是否不同。"
+        ],
+        [
+          "隐私插件有用吗？",
+          "有些有用，它们把画图函数包了一层。但这本身也可能被发现：浏览器环境检测会把被替换的函数标出来。"
+        ]
+      ]
+    },
+    "zh-TW": {
+      "seo_title": "Canvas 指紋檢測：你的 Canvas、WebGL 和音訊指紋 · 你是誰",
+      "seo_desc": "免費 Canvas 指紋檢測：查看你的系統畫 Canvas、轉譯 WebGL、處理音訊得出的雜湊，瀏覽器有沒有替它們加干擾，以及網站不用 Cookie 就能認出你的綜合指紋 ID。",
+      "seo_kw": "Canvas 指紋檢測, Canvas 指紋, WebGL 指紋, 音訊指紋, Canvas 防指紋",
+      "h1": "Canvas 指紋檢測",
+      "og_sub": "電腦怎麼畫圖，就會暴露它是誰",
+      "intro": "讓兩台電腦畫同樣的文字和圖形，像素會有細微差異：顯示卡、驅動、字型、反鋸齒都會留下痕跡。網站把這張圖算成雜湊，就是指紋。下面是你的，以及瀏覽器有沒有打亂它們。",
+      "focus_h": "你的 Canvas 指紋",
+      "docs": [
+        [
+          "Canvas 指紋是什麼？",
+          "網頁在看不見的畫布上畫文字和圖形，再把像素讀回來算雜湊。同一台機器每次都一樣，不同機器各不相同，所以能當 ID 用。"
+        ],
+        [
+          "怎麼防？",
+          "用會替 Canvas、WebGL 和音訊加隨機干擾的瀏覽器，例如預設就開的 Brave，或開了 resistFingerprinting 的 Firefox。「防指紋」那一列會顯示兩次畫出來的結果是否不同。"
+        ],
+        [
+          "隱私擴充功能有用嗎？",
+          "有些有用，它們把繪圖函式包了一層。但這本身也可能被發現：瀏覽器環境檢測會把被替換的函式標出來。"
+        ]
+      ]
+    },
+    "ja": {
+      "seo_title": "Canvas フィンガープリント検査：Canvas・WebGL・音声の指紋 · あなたは誰",
+      "seo_desc": "無料 Canvas フィンガープリント検査：Canvas の描画、WebGL、音声処理から得られるハッシュ、ブラウザがノイズを加えているか、Cookie なしで識別に使われる総合 ID を表示します。",
+      "seo_kw": "Canvas フィンガープリント, Canvas 指紋 検査, WebGL フィンガープリント, 音声 指紋, Canvas ノイズ",
+      "h1": "Canvas フィンガープリント検査",
+      "og_sub": "描き方でコンピュータがばれる",
+      "intro": "二台のコンピュータに同じ文字と図形を描かせると、ピクセルがわずかに違います。GPU、ドライバ、フォント、アンチエイリアスが跡を残すからです。サイトはその絵をハッシュにして指紋にします。あなたの指紋と、ブラウザがそれを乱しているかを示します。",
+      "focus_h": "Canvas の指紋",
+      "docs": [
+        [
+          "Canvas フィンガープリントとは？",
+          "ページが見えないキャンバスに文字と図形を描き、ピクセルを読み戻してハッシュにします。同じマシンなら毎回同じ、マシンが違えば違うので ID になります。"
+        ],
+        [
+          "防ぐには？",
+          "Canvas・WebGL・音声にランダムなノイズを入れるブラウザを使う：標準で有効な Brave や、resistFingerprinting を有効にした Firefox。「フィンガープリント保護」の行で二回の描画が違ったか分かります。"
+        ],
+        [
+          "プライバシー拡張機能は効く？",
+          "描画関数を包むことで効くものもあります。ただしそれ自体が見つかることもあり、ブラウザ環境チェックは差し替えられた関数を示します。"
+        ]
+      ]
+    },
+    "ko": {
+      "seo_title": "Canvas 지문 검사: Canvas·WebGL·오디오 지문 · 당신은 누구",
+      "seo_desc": "무료 Canvas 지문 검사: 시스템이 Canvas를 그리고 WebGL을 렌더링하고 오디오를 처리한 해시, 브라우저가 노이즈를 넣는지, 쿠키 없이 당신을 알아보는 종합 지문 ID를 보여 줍니다.",
+      "seo_kw": "Canvas 지문 검사, Canvas 핑거프린팅, WebGL 지문, 오디오 지문, Canvas 노이즈",
+      "h1": "Canvas 지문 검사",
+      "og_sub": "그리는 방식이 컴퓨터를 드러내요",
+      "intro": "두 컴퓨터에 같은 글자와 도형을 그리게 하면 픽셀이 조금씩 달라요. 그래픽 카드, 드라이버, 글꼴, 안티앨리어싱이 흔적을 남기거든요. 사이트는 그 그림을 해시로 만들어 지문으로 씁니다. 당신의 지문과, 브라우저가 그걸 흐트러뜨리는지 보여 줍니다.",
+      "focus_h": "Canvas 지문",
+      "docs": [
+        [
+          "Canvas 지문이란?",
+          "페이지가 보이지 않는 캔버스에 글자와 도형을 그리고 픽셀을 다시 읽어 해시를 만들어요. 같은 기계면 매번 같고 기계마다 달라서 ID처럼 쓰입니다."
+        ],
+        [
+          "어떻게 막나요?",
+          "Canvas·WebGL·오디오에 무작위 노이즈를 넣는 브라우저를 쓰세요. 기본으로 켜진 Brave나 resistFingerprinting을 켠 Firefox. '지문 보호' 행에서 두 번 그린 결과가 달랐는지 볼 수 있어요."
+        ],
+        [
+          "개인정보 확장 프로그램은 도움이 되나요?",
+          "그리기 함수를 감싸서 효과가 있는 것도 있어요. 다만 그 자체가 드러날 수 있어서, 브라우저 환경 검사가 바뀐 함수를 표시합니다."
+        ]
+      ]
+    },
+    "de": {
+      "seo_title": "Canvas-Fingerabdruck-Test: Ihre Canvas-, WebGL- und Audio-Fingerabdrücke · Wer sind Sie?",
+      "seo_desc": "Kostenloser Canvas-Fingerabdruck-Test: die Hashes dessen, wie Ihr System ein Canvas zeichnet, WebGL rendert und Audio verarbeitet, ob Ihr Browser Rauschen hinzufügt, und die Gesamt-ID, an der Websites Sie ohne Cookies erkennen.",
+      "seo_kw": "Canvas Fingerprint Test, Canvas Fingerprinting, WebGL Fingerabdruck, Audio Fingerabdruck, Canvas Rauschen",
+      "h1": "Canvas-Fingerabdruck-Test",
+      "og_sub": "Wie Ihr Rechner zeichnet, verrät ihn",
+      "intro": "Lässt man zwei Rechner denselben Text und dieselben Formen zeichnen, unterscheiden sich die Pixel ein wenig: Grafikkarte, Treiber, Schriften und Kantenglättung hinterlassen Spuren. Websites machen aus dieser Zeichnung einen Hash, den Fingerabdruck. Hier sind Ihre – und ob Ihr Browser sie verwürfelt.",
+      "focus_h": "Ihr Canvas-Fingerabdruck",
+      "docs": [
+        [
+          "Was ist ein Canvas-Fingerabdruck?",
+          "Eine Seite zeichnet Text und Formen auf ein unsichtbares Canvas, liest die Pixel zurück und bildet einen Hash. Auf Ihrem Rechner kommt jedes Mal dasselbe heraus, auf anderen etwas anderes – wie eine ID."
+        ],
+        [
+          "Wie verhindere ich das?",
+          "Mit einem Browser, der Canvas, WebGL und Audio zufällig verrauscht: Brave von Haus aus oder Firefox mit resistFingerprinting. Die Zeile „Fingerabdruck-Schutz“ zeigt, ob zwei Zeichnungen verschieden ausfielen."
+        ],
+        [
+          "Helfen Datenschutz-Erweiterungen?",
+          "Manche, indem sie die Zeichenfunktionen umhüllen. Das kann selbst auffallen: Der Browser-Umgebungstest markiert ersetzte Funktionen."
+        ]
+      ]
+    },
+    "fr": {
+      "seo_title": "Test d’empreinte Canvas : vos empreintes Canvas, WebGL et audio · Qui êtes-vous ?",
+      "seo_desc": "Test gratuit d’empreinte Canvas : les hachages de la façon dont votre système dessine un canvas, rend du WebGL et traite l’audio, si votre navigateur y ajoute du bruit, et l’identifiant combiné qui permet aux sites de vous reconnaître sans cookies.",
+      "seo_kw": "test empreinte canvas, canvas fingerprinting, empreinte WebGL, empreinte audio, bruit canvas",
+      "h1": "Test d’empreinte Canvas",
+      "og_sub": "La façon dont votre ordinateur dessine le trahit",
+      "intro": "Demandez à deux ordinateurs de dessiner le même texte et les mêmes formes : les pixels diffèrent un peu. Carte graphique, pilote, polices et anticrénelage laissent leur marque. Les sites transforment ce dessin en hachage : une empreinte. Voici les vôtres, et si votre navigateur les brouille.",
+      "focus_h": "Votre empreinte Canvas",
+      "docs": [
+        [
+          "Qu’est-ce qu’une empreinte Canvas ?",
+          "Une page dessine du texte et des formes sur un canvas invisible, relit les pixels et en calcule un hachage. Le résultat est toujours le même sur votre machine et diffère d’une machine à l’autre : il sert d’identifiant."
+        ],
+        [
+          "Comment l’empêcher ?",
+          "Avec un navigateur qui ajoute un bruit aléatoire au Canvas, au WebGL et à l’audio : Brave par défaut, ou Firefox avec resistFingerprinting. La ligne « protection d’empreinte » montre si deux dessins ont différé."
+        ],
+        [
+          "Les extensions de confidentialité aident-elles ?",
+          "Certaines, en enveloppant les fonctions de dessin. Cela peut se remarquer : le test d’environnement du navigateur signale les fonctions remplacées."
+        ]
+      ]
+    },
+    "es": {
+      "seo_title": "Test de huella Canvas: tus huellas Canvas, WebGL y de audio · Quién eres",
+      "seo_desc": "Test gratuito de huella Canvas: los hashes de cómo tu sistema dibuja un canvas, renderiza WebGL y procesa audio, si tu navegador les añade ruido, y el ID combinado con que los sitios te reconocen sin cookies.",
+      "seo_kw": "test huella canvas, canvas fingerprinting, huella WebGL, huella de audio, ruido canvas",
+      "h1": "Test de huella Canvas",
+      "og_sub": "Cómo dibuja tu ordenador lo delata",
+      "intro": "Pide a dos ordenadores que dibujen el mismo texto y las mismas formas y los píxeles saldrán algo distintos: la gráfica, el driver, las fuentes y el suavizado dejan marca. Los sitios convierten ese dibujo en un hash: una huella. Aquí están las tuyas, y si tu navegador las altera.",
+      "focus_h": "Tu huella Canvas",
+      "docs": [
+        [
+          "¿Qué es una huella Canvas?",
+          "Una página dibuja texto y formas en un canvas invisible, lee los píxeles y calcula un hash. En tu máquina sale siempre igual y en otras sale distinto, así que sirve de ID."
+        ],
+        [
+          "¿Cómo lo evito?",
+          "Con un navegador que añade ruido aleatorio a Canvas, WebGL y audio: Brave de serie o Firefox con resistFingerprinting. La fila «protección de huella» muestra si dos dibujos salieron distintos."
+        ],
+        [
+          "¿Sirven las extensiones de privacidad?",
+          "Algunas, envolviendo las funciones de dibujo. Eso también se puede notar: el test de entorno del navegador marca las funciones reemplazadas."
+        ]
+      ]
+    },
+    "pt": {
+      "seo_title": "Teste de impressão digital Canvas: suas impressões Canvas, WebGL e de áudio · Quem é você",
+      "seo_desc": "Teste gratuito de impressão digital Canvas: os hashes de como seu sistema desenha um canvas, renderiza WebGL e processa áudio, se o navegador adiciona ruído, e o ID combinado com que os sites te reconhecem sem cookies.",
+      "seo_kw": "teste impressão digital canvas, canvas fingerprinting, impressão WebGL, impressão de áudio, ruído canvas",
+      "h1": "Teste de impressão digital Canvas",
+      "og_sub": "O jeito que seu computador desenha o entrega",
+      "intro": "Peça a dois computadores para desenhar o mesmo texto e as mesmas formas e os pixels saem um pouco diferentes: placa de vídeo, driver, fontes e suavização deixam marca. Os sites transformam esse desenho num hash: uma impressão digital. Aqui estão as suas, e se o navegador as embaralha.",
+      "focus_h": "Sua impressão Canvas",
+      "docs": [
+        [
+          "O que é uma impressão digital Canvas?",
+          "Uma página desenha texto e formas num canvas invisível, lê os pixels de volta e calcula um hash. Na sua máquina sai sempre igual e em outras sai diferente, então serve de ID."
+        ],
+        [
+          "Como evitar?",
+          "Com um navegador que adiciona ruído aleatório a Canvas, WebGL e áudio: o Brave por padrão ou o Firefox com resistFingerprinting. A linha «proteção de impressão» mostra se dois desenhos saíram diferentes."
+        ],
+        [
+          "Extensões de privacidade ajudam?",
+          "Algumas, envolvendo as funções de desenho. Isso também pode ser notado: o teste de ambiente do navegador marca funções substituídas."
+        ]
+      ]
+    },
+    "ru": {
+      "seo_title": "Проверка отпечатка Canvas: ваши отпечатки Canvas, WebGL и аудио · Кто вы",
+      "seo_desc": "Бесплатная проверка отпечатка Canvas: хэши того, как ваша система рисует canvas, рендерит WebGL и обрабатывает звук, добавляет ли браузер шум, и общий ID, по которому сайты узнают вас без cookie.",
+      "seo_kw": "проверка отпечатка canvas, canvas fingerprinting, отпечаток WebGL, аудио отпечаток, шум canvas",
+      "h1": "Проверка отпечатка Canvas",
+      "og_sub": "То, как компьютер рисует, его выдаёт",
+      "intro": "Попросите два компьютера нарисовать одинаковый текст и фигуры — пиксели будут чуть разными: видеокарта, драйвер, шрифты и сглаживание оставляют след. Сайты превращают этот рисунок в хэш — отпечаток. Вот ваши и то, перемешивает ли их браузер.",
+      "focus_h": "Ваш отпечаток Canvas",
+      "docs": [
+        [
+          "Что такое отпечаток Canvas?",
+          "Страница рисует текст и фигуры на невидимом холсте, считывает пиксели и считает хэш. На вашей машине он всегда одинаков, на другой — иной, поэтому работает как ID."
+        ],
+        [
+          "Как от него защититься?",
+          "Браузером, который добавляет случайный шум в Canvas, WebGL и звук: Brave по умолчанию или Firefox с resistFingerprinting. Строка «защита отпечатка» показывает, различались ли два рисунка."
+        ],
+        [
+          "Помогают ли расширения приватности?",
+          "Некоторые — оборачивая функции рисования. Но это само может быть замечено: проверка окружения браузера отмечает подменённые функции."
+        ]
+      ]
+    }
+  },
+  "user-agent": {
+    "en": {
+      "seo_title": "User Agent Check: what browser and system do sites think you use? · Who Are You",
+      "seo_desc": "Free user agent check: your User-Agent string, client hints (Sec-CH-UA, platform), the system and browser they claim, and whether the JavaScript engine, graphics card and hints agree with them.",
+      "seo_kw": "user agent check, what is my user agent, user agent string, client hints, Sec-CH-UA, user agent spoofing check",
+      "h1": "User agent check",
+      "og_sub": "What browser and system do sites think you use?",
+      "intro": "Every request names your browser and system, once in the User-Agent string and again, in Chromium browsers, in client hints. Pages can cross-check that against the JavaScript engine and the graphics card. Here is what yours claims, and whether the rest agrees.",
+      "focus_h": "Your user agent against your system",
+      "docs": [
+        [
+          "What is a user agent?",
+          "A line of text your browser sends with every request, naming the browser, its version and your system. Chromium browsers also send client hints, a newer, structured version of the same information."
+        ],
+        [
+          "Why does it say Windows 10 on Windows 11?",
+          "Browsers froze the user agent at Windows 10 (and macOS at 10.15) for privacy. The real version comes from client hints, which is what this page shows."
+        ],
+        [
+          "Can I fake it?",
+          "You can change the string, but the JavaScript engine, the graphics card and client hints usually tell a different story; the checks on this page show where."
+        ]
+      ]
+    },
+    "zh-CN": {
+      "seo_title": "UA 检测：网站以为你用什么浏览器和系统 · 你是谁",
+      "seo_desc": "免费 User-Agent 检测：查看你的 UA 字符串、Client Hints（Sec-CH-UA、平台），它们声称的系统和浏览器，以及 JS 引擎、显卡和 Client Hints 跟它们对不对得上。",
+      "seo_kw": "UA 检测, User-Agent 检测, 我的 UA, UA 查询, Client Hints, Sec-CH-UA, UA 伪装检测, 浏览器 UA",
+      "h1": "UA 检测",
+      "og_sub": "网站以为你用什么浏览器和系统？",
+      "intro": "每个请求都会说明你的浏览器和系统：一次在 User-Agent 字符串里，在 Chromium 系浏览器里还会在 Client Hints 里再说一次。网页可以拿它们和 JS 引擎、显卡交叉核对。下面是你的 UA 声称的，以及其他信息认不认。",
+      "focus_h": "你的 UA 和真实系统",
+      "docs": [
+        [
+          "UA 是什么？",
+          "浏览器每个请求都会带上的一行文字，写着浏览器、版本和系统。Chromium 系浏览器还会发 Client Hints，是同一份信息的新版、结构化写法。"
+        ],
+        [
+          "为什么 Windows 11 显示成 Windows 10？",
+          "出于隐私，浏览器把 UA 里的版本冻结在 Windows 10（macOS 冻结在 10.15）。真实版本来自 Client Hints，本页显示的就是它。"
+        ],
+        [
+          "能伪装吗？",
+          "字符串可以改，但 JS 引擎、显卡和 Client Hints 往往会说出另一个版本；本页的检测会指出哪里对不上。"
+        ]
+      ]
+    },
+    "zh-TW": {
+      "seo_title": "UA 檢測：網站以為你用什麼瀏覽器和系統 · 你是誰",
+      "seo_desc": "免費 User-Agent 檢測：查看你的 UA 字串、Client Hints（Sec-CH-UA、平台），它們聲稱的系統和瀏覽器，以及 JS 引擎、顯示卡和 Client Hints 跟它們對不對得上。",
+      "seo_kw": "UA 檢測, User-Agent 檢測, 我的 UA, Client Hints, Sec-CH-UA, UA 偽裝檢測",
+      "h1": "UA 檢測",
+      "og_sub": "網站以為你用什麼瀏覽器和系統？",
+      "intro": "每個請求都會說明你的瀏覽器和系統：一次在 User-Agent 字串裡，在 Chromium 系瀏覽器裡還會在 Client Hints 裡再說一次。網頁可以拿它們和 JS 引擎、顯示卡交叉核對。下面是你的 UA 聲稱的，以及其他資訊認不認。",
+      "focus_h": "你的 UA 和真實系統",
+      "docs": [
+        [
+          "UA 是什麼？",
+          "瀏覽器每個請求都會帶上的一行文字，寫著瀏覽器、版本和系統。Chromium 系瀏覽器還會送 Client Hints，是同一份資訊的新版、結構化寫法。"
+        ],
+        [
+          "為什麼 Windows 11 顯示成 Windows 10？",
+          "基於隱私，瀏覽器把 UA 裡的版本凍結在 Windows 10（macOS 凍結在 10.15）。真實版本來自 Client Hints，本頁顯示的就是它。"
+        ],
+        [
+          "能偽裝嗎？",
+          "字串可以改，但 JS 引擎、顯示卡和 Client Hints 往往會說出另一個版本；本頁的檢測會指出哪裡對不上。"
+        ]
+      ]
+    },
+    "ja": {
+      "seo_title": "ユーザーエージェント確認：サイトから見たブラウザとシステム · あなたは誰",
+      "seo_desc": "無料ユーザーエージェント確認：User-Agent 文字列とクライアントヒント（Sec-CH-UA、プラットフォーム）、それが名乗るシステムとブラウザ、JS エンジン・GPU・ヒントが一致するかを表示します。",
+      "seo_kw": "ユーザーエージェント 確認, UA 確認, User-Agent, クライアントヒント, Sec-CH-UA, UA 偽装",
+      "h1": "ユーザーエージェント確認",
+      "og_sub": "サイトから見たブラウザとシステム",
+      "intro": "リクエストのたびにブラウザとシステムが名乗られます。User-Agent 文字列で一度、Chromium 系ではクライアントヒントでもう一度。ページはそれを JS エンジンや GPU と突き合わせられます。あなたの UA が名乗る内容と、他が認めるかを示します。",
+      "focus_h": "UA と実際のシステム",
+      "docs": [
+        [
+          "ユーザーエージェントとは？",
+          "毎回のリクエストに付くテキスト一行で、ブラウザ・バージョン・システムを示します。Chromium 系は同じ情報を構造化したクライアントヒントも送ります。"
+        ],
+        [
+          "Windows 11 なのに Windows 10 と出るのはなぜ？",
+          "プライバシーのため、ブラウザは UA を Windows 10（macOS は 10.15）で固定しています。実際の版はクライアントヒントから取れ、このページはそれを表示します。"
+        ],
+        [
+          "偽装できる？",
+          "文字列は変えられますが、JS エンジンや GPU、クライアントヒントが別の話をすることが多く、このページの検査がどこが合わないか示します。"
+        ]
+      ]
+    },
+    "ko": {
+      "seo_title": "사용자 에이전트 확인: 사이트가 보는 브라우저와 시스템 · 당신은 누구",
+      "seo_desc": "무료 사용자 에이전트 확인: User-Agent 문자열과 클라이언트 힌트(Sec-CH-UA, 플랫폼), 그것이 말하는 시스템과 브라우저, JS 엔진·그래픽 카드·힌트가 일치하는지 보여 줍니다.",
+      "seo_kw": "사용자 에이전트 확인, UA 확인, User-Agent, 클라이언트 힌트, Sec-CH-UA, UA 위장",
+      "h1": "사용자 에이전트 확인",
+      "og_sub": "사이트가 보는 브라우저와 시스템",
+      "intro": "모든 요청은 브라우저와 시스템을 밝혀요. User-Agent 문자열로 한 번, Chromium 계열은 클라이언트 힌트로 한 번 더. 페이지는 이를 JS 엔진과 그래픽 카드와 대조할 수 있어요. 당신의 UA가 주장하는 것과 나머지가 인정하는지 보여 줍니다.",
+      "focus_h": "UA와 실제 시스템",
+      "docs": [
+        [
+          "사용자 에이전트란?",
+          "모든 요청에 붙는 한 줄의 텍스트로 브라우저, 버전, 시스템을 알려요. Chromium 계열은 같은 정보를 구조화한 클라이언트 힌트도 보냅니다."
+        ],
+        [
+          "Windows 11인데 왜 Windows 10으로 나오나요?",
+          "개인정보 보호를 위해 브라우저가 UA를 Windows 10(macOS는 10.15)으로 고정했어요. 실제 버전은 클라이언트 힌트에서 나오며, 이 페이지는 그걸 보여 줍니다."
+        ],
+        [
+          "위장할 수 있나요?",
+          "문자열은 바꿀 수 있지만 JS 엔진, 그래픽 카드, 클라이언트 힌트가 다른 말을 하는 경우가 많아요. 이 페이지의 검사가 어디가 안 맞는지 보여 줍니다."
+        ]
+      ]
+    },
+    "de": {
+      "seo_title": "User-Agent prüfen: Welchen Browser und welches System sehen Websites? · Wer sind Sie?",
+      "seo_desc": "Kostenloser User-Agent-Test: Ihr User-Agent-String, die Client Hints (Sec-CH-UA, Plattform), das System und der Browser, die sie angeben, und ob JS-Engine, Grafikkarte und Hints dazu passen.",
+      "seo_kw": "User-Agent prüfen, mein User-Agent, User-Agent String, Client Hints, Sec-CH-UA, User-Agent Spoofing",
+      "h1": "User-Agent prüfen",
+      "og_sub": "Welchen Browser und welches System sehen Websites?",
+      "intro": "Jede Anfrage nennt Ihren Browser und Ihr System, einmal im User-Agent-String und in Chromium-Browsern noch einmal in den Client Hints. Seiten können das mit JS-Engine und Grafikkarte abgleichen. Hier steht, was Ihrer behauptet – und ob der Rest zustimmt.",
+      "focus_h": "Ihr User-Agent und Ihr System",
+      "docs": [
+        [
+          "Was ist ein User-Agent?",
+          "Eine Textzeile, die Ihr Browser mit jeder Anfrage sendet: Browser, Version und System. Chromium-Browser senden zusätzlich Client Hints, eine neuere, strukturierte Fassung derselben Angaben."
+        ],
+        [
+          "Warum steht bei Windows 11 Windows 10?",
+          "Browser haben den User-Agent aus Datenschutzgründen bei Windows 10 (macOS bei 10.15) eingefroren. Die echte Version kommt aus den Client Hints, und die zeigt diese Seite."
+        ],
+        [
+          "Kann ich ihn fälschen?",
+          "Den String schon, aber JS-Engine, Grafikkarte und Client Hints erzählen oft etwas anderes; die Prüfungen auf dieser Seite zeigen, wo."
+        ]
+      ]
+    },
+    "fr": {
+      "seo_title": "Vérification du user agent : quel navigateur et quel système voient les sites ? · Qui êtes-vous ?",
+      "seo_desc": "Vérification gratuite du user agent : votre chaîne User-Agent, les client hints (Sec-CH-UA, plateforme), le système et le navigateur qu’ils annoncent, et l’accord du moteur JS, de la carte graphique et des hints.",
+      "seo_kw": "vérifier user agent, mon user agent, chaîne user agent, client hints, Sec-CH-UA, usurpation user agent",
+      "h1": "Vérification du user agent",
+      "og_sub": "Quel navigateur et quel système voient les sites ?",
+      "intro": "Chaque requête nomme votre navigateur et votre système, une fois dans la chaîne User-Agent et, dans les navigateurs Chromium, une seconde fois dans les client hints. Les pages peuvent recouper avec le moteur JS et la carte graphique. Voici ce que dit le vôtre, et si le reste confirme.",
+      "focus_h": "Votre user agent face à votre système",
+      "docs": [
+        [
+          "Qu’est-ce qu’un user agent ?",
+          "Une ligne de texte envoyée avec chaque requête : navigateur, version et système. Les navigateurs Chromium envoient aussi des client hints, une version plus récente et structurée des mêmes informations."
+        ],
+        [
+          "Pourquoi Windows 10 s’affiche-t-il sous Windows 11 ?",
+          "Par souci de confidentialité, les navigateurs ont figé le user agent à Windows 10 (et macOS à 10.15). La vraie version vient des client hints, que cette page affiche."
+        ],
+        [
+          "Puis-je le falsifier ?",
+          "La chaîne, oui, mais le moteur JS, la carte graphique et les client hints racontent souvent autre chose ; les contrôles de cette page montrent où."
+        ]
+      ]
+    },
+    "es": {
+      "seo_title": "Comprobación del user agent: ¿qué navegador y sistema ven los sitios? · Quién eres",
+      "seo_desc": "Comprobación gratuita del user agent: tu cadena User-Agent, los client hints (Sec-CH-UA, plataforma), el sistema y navegador que dicen, y si el motor JS, la gráfica y los hints coinciden.",
+      "seo_kw": "comprobar user agent, mi user agent, cadena user agent, client hints, Sec-CH-UA, falsificar user agent",
+      "h1": "Comprobación del user agent",
+      "og_sub": "¿Qué navegador y sistema ven los sitios?",
+      "intro": "Cada petición nombra tu navegador y tu sistema, una vez en la cadena User-Agent y, en navegadores Chromium, otra en los client hints. Las páginas pueden cruzarlo con el motor JS y la gráfica. Esto es lo que dice el tuyo, y si el resto lo confirma.",
+      "focus_h": "Tu user agent frente a tu sistema",
+      "docs": [
+        [
+          "¿Qué es el user agent?",
+          "Una línea de texto que el navegador envía con cada petición: navegador, versión y sistema. Los navegadores Chromium envían además client hints, una versión más nueva y estructurada de lo mismo."
+        ],
+        [
+          "¿Por qué sale Windows 10 en Windows 11?",
+          "Por privacidad, los navegadores congelaron el user agent en Windows 10 (y macOS en 10.15). La versión real sale de los client hints, que es lo que muestra esta página."
+        ],
+        [
+          "¿Puedo falsificarlo?",
+          "La cadena sí, pero el motor JS, la gráfica y los client hints suelen contar otra cosa; las comprobaciones de esta página muestran dónde."
+        ]
+      ]
+    },
+    "pt": {
+      "seo_title": "Verificação do user agent: que navegador e sistema os sites veem? · Quem é você",
+      "seo_desc": "Verificação gratuita do user agent: sua string User-Agent, os client hints (Sec-CH-UA, plataforma), o sistema e o navegador que eles dizem, e se o motor JS, a placa de vídeo e os hints concordam.",
+      "seo_kw": "verificar user agent, meu user agent, string user agent, client hints, Sec-CH-UA, falsificar user agent",
+      "h1": "Verificação do user agent",
+      "og_sub": "Que navegador e sistema os sites veem?",
+      "intro": "Cada requisição diz seu navegador e sistema, uma vez na string User-Agent e, em navegadores Chromium, de novo nos client hints. As páginas cruzam isso com o motor JS e a placa de vídeo. Aqui está o que o seu diz, e se o resto confirma.",
+      "focus_h": "Seu user agent contra seu sistema",
+      "docs": [
+        [
+          "O que é o user agent?",
+          "Uma linha de texto que o navegador manda em toda requisição: navegador, versão e sistema. Navegadores Chromium mandam também client hints, uma versão mais nova e estruturada da mesma informação."
+        ],
+        [
+          "Por que aparece Windows 10 no Windows 11?",
+          "Por privacidade, os navegadores congelaram o user agent no Windows 10 (e o macOS no 10.15). A versão real vem dos client hints, que é o que esta página mostra."
+        ],
+        [
+          "Dá para falsificar?",
+          "A string sim, mas o motor JS, a placa de vídeo e os client hints costumam contar outra história; as verificações desta página mostram onde."
+        ]
+      ]
+    },
+    "ru": {
+      "seo_title": "Проверка User-Agent: какой браузер и систему видят сайты? · Кто вы",
+      "seo_desc": "Бесплатная проверка User-Agent: ваша строка User-Agent, клиентские подсказки (Sec-CH-UA, платформа), заявленные система и браузер и совпадают ли с ними движок JS, видеокарта и подсказки.",
+      "seo_kw": "проверка user agent, мой user agent, строка user agent, client hints, Sec-CH-UA, подмена user agent",
+      "h1": "Проверка User-Agent",
+      "og_sub": "Какой браузер и систему видят сайты?",
+      "intro": "Каждый запрос называет ваш браузер и систему: один раз в строке User-Agent и, в браузерах на Chromium, ещё раз в клиентских подсказках. Страницы могут сверить это с движком JS и видеокартой. Вот что заявляет ваш, и согласно ли с ним остальное.",
+      "focus_h": "Ваш User-Agent и система",
+      "docs": [
+        [
+          "Что такое User-Agent?",
+          "Строка текста, которую браузер отправляет с каждым запросом: браузер, версия и система. Браузеры на Chromium отправляют также клиентские подсказки — более новую структурированную версию тех же данных."
+        ],
+        [
+          "Почему на Windows 11 написано Windows 10?",
+          "Ради приватности браузеры заморозили User-Agent на Windows 10 (macOS — на 10.15). Настоящая версия берётся из клиентских подсказок, их и показывает эта страница."
+        ],
+        [
+          "Можно ли подделать?",
+          "Строку можно, но движок JS, видеокарта и подсказки часто говорят другое; проверки на этой странице покажут где."
+        ]
+      ]
+    }
+  },
+  "extensions": {
+    "en": {
+      "seo_title": "Browser Extension Check: which of your extensions can sites see? · Who Are You",
+      "seo_desc": "Free browser extension check: the extensions that leave a mark any site can read (crypto wallets, developer tools, Grammarly, Dark Reader, translators, antivirus web protection), your ad blocker, and whether something rewrote what sites read.",
+      "seo_kw": "browser extension check, detect browser extensions, which extensions can websites see, extension fingerprinting, ad blocker detection, crypto wallet detection",
+      "h1": "Browser extension check",
+      "og_sub": "Which of your extensions can sites see?",
+      "intro": "Many extensions change the page to do their job: a wallet adds an object, a dark mode adds attributes, a translator adds elements, antivirus web protection adds its own script. Any site can read those marks, and they say a lot about you. Here are the ones this page found.",
+      "focus_h": "Extensions that rewrite the page",
+      "docs": [
+        [
+          "How can a site see my extensions?",
+          "It can't list them, but it can see what they leave behind: objects like window.ethereum, attributes on the page, elements they insert, scripts they add. Some extensions leave nothing and stay invisible."
+        ],
+        [
+          "Why does it matter?",
+          "Extensions narrow you down: a crypto wallet, developer tools or a particular translator says something about who you are, and adds to your fingerprint."
+        ],
+        [
+          "What does the tamper check have to do with it?",
+          "Extensions that change your user agent, language or time zone, or wrap the drawing functions fingerprints use, rewrite what sites read. That's what the check in front looks for."
+        ]
+      ]
+    },
+    "zh-CN": {
+      "seo_title": "浏览器扩展检测：网站能看到你装了哪些插件 · 你是谁",
+      "seo_desc": "免费浏览器扩展检测：查看哪些插件会留下任何网站都能读到的痕迹（加密钱包、开发者工具、Grammarly、Dark Reader、翻译插件、杀毒软件的网页防护），有没有装广告拦截，以及有没有东西改写网站读到的信息。",
+      "seo_kw": "浏览器扩展检测, 插件检测, 网站能看到我的插件吗, 扩展指纹, 广告拦截检测, 钱包插件检测, 沉浸式翻译检测",
+      "h1": "浏览器扩展检测",
+      "og_sub": "网站能看到你装了哪些插件？",
+      "intro": "很多插件要改动网页才能干活：钱包往页面里加对象，深色模式加属性，翻译插件插元素，杀毒软件的网页防护加自己的脚本。这些痕迹任何网站都读得到，而且很能说明你是谁。下面是本页找到的。",
+      "focus_h": "改写网页的插件",
+      "docs": [
+        [
+          "网站怎么看到我的插件？",
+          "网站没法列出你装了什么，但能看到插件留下的东西：window.ethereum 这样的对象、页面上的属性、插进来的元素、加进来的脚本。有些插件什么都不留，就看不到。"
+        ],
+        [
+          "这有什么关系？",
+          "插件会缩小范围：装了加密钱包、开发者工具或某个翻译插件，都在说明你是什么人，也让你的指纹更独特。"
+        ],
+        [
+          "和「环境被篡改」有什么关系？",
+          "改 UA、语言、时区，或者包住指纹用的画图函数的插件，会改写网站读到的信息。最上面那项检测查的就是这个。"
+        ]
+      ]
+    },
+    "zh-TW": {
+      "seo_title": "瀏覽器擴充功能檢測：網站看得到你裝了哪些擴充功能 · 你是誰",
+      "seo_desc": "免費瀏覽器擴充功能檢測：查看哪些擴充功能會留下任何網站都讀得到的痕跡（加密錢包、開發者工具、Grammarly、Dark Reader、翻譯工具、防毒軟體的網頁防護），有沒有裝廣告攔截，以及有沒有東西改寫網站讀到的資訊。",
+      "seo_kw": "瀏覽器擴充功能檢測, 外掛檢測, 網站看得到我的擴充功能嗎, 擴充功能指紋, 廣告攔截檢測, 錢包擴充功能檢測",
+      "h1": "瀏覽器擴充功能檢測",
+      "og_sub": "網站看得到你裝了哪些擴充功能？",
+      "intro": "很多擴充功能要改動網頁才能運作：錢包往頁面裡加物件，深色模式加屬性，翻譯工具插元素，防毒軟體的網頁防護加自己的腳本。這些痕跡任何網站都讀得到，而且很能說明你是誰。下面是本頁找到的。",
+      "focus_h": "改寫網頁的擴充功能",
+      "docs": [
+        [
+          "網站怎麼看到我的擴充功能？",
+          "網站沒辦法列出你裝了什麼，但看得到擴充功能留下的東西：window.ethereum 這樣的物件、頁面上的屬性、插進來的元素、加進來的腳本。有些擴充功能什麼都不留，就看不到。"
+        ],
+        [
+          "這有什麼關係？",
+          "擴充功能會縮小範圍：裝了加密錢包、開發者工具或某個翻譯工具，都在說明你是什麼人，也讓你的指紋更獨特。"
+        ],
+        [
+          "和「環境被竄改」有什麼關係？",
+          "改 UA、語言、時區，或包住指紋用的繪圖函式的擴充功能，會改寫網站讀到的資訊。最上面那項檢測查的就是這個。"
+        ]
+      ]
+    },
+    "ja": {
+      "seo_title": "ブラウザ拡張機能チェック：サイトから見える拡張機能は？ · あなたは誰",
+      "seo_desc": "無料ブラウザ拡張機能チェック：どのサイトでも読める跡を残す拡張機能（暗号資産ウォレット、開発者ツール、Grammarly、Dark Reader、翻訳、ウイルス対策のウェブ保護）、広告ブロッカー、サイトが読む値の書き換えを調べます。",
+      "seo_kw": "ブラウザ 拡張機能 チェック, 拡張機能 検出, サイト 拡張機能 見える, 拡張機能 フィンガープリント, 広告ブロッカー 検出",
+      "h1": "ブラウザ拡張機能チェック",
+      "og_sub": "サイトから見える拡張機能は？",
+      "intro": "多くの拡張機能は動くためにページを変えます。ウォレットはオブジェクトを、ダークモードは属性を、翻訳は要素を、ウイルス対策のウェブ保護は自前のスクリプトを足します。その跡はどのサイトでも読め、あなたについて多くを語ります。このページが見つけたものです。",
+      "focus_h": "ページを書き換える拡張機能",
+      "docs": [
+        [
+          "サイトはどうやって拡張機能を見る？",
+          "一覧はできませんが、残した跡は見えます：window.ethereum のようなオブジェクト、ページの属性、挿入された要素、追加されたスクリプト。何も残さない拡張機能は見えません。"
+        ],
+        [
+          "それが何に関係する？",
+          "拡張機能はあなたを絞り込みます。暗号資産ウォレットや開発者ツール、特定の翻訳ツールは、あなたがどんな人かを語り、指紋も独自にします。"
+        ],
+        [
+          "改ざんチェックとの関係は？",
+          "UA・言語・タイムゾーンを変えたり、指紋に使う描画関数を包んだりする拡張機能は、サイトが読む値を書き換えます。上の検査はそれを見ています。"
+        ]
+      ]
+    },
+    "ko": {
+      "seo_title": "브라우저 확장 프로그램 검사: 사이트가 볼 수 있는 확장 프로그램은? · 당신은 누구",
+      "seo_desc": "무료 브라우저 확장 프로그램 검사: 어떤 사이트든 읽을 수 있는 흔적을 남기는 확장 프로그램(암호화폐 지갑, 개발자 도구, Grammarly, Dark Reader, 번역, 백신의 웹 보호), 광고 차단, 사이트가 읽는 값의 변조를 확인합니다.",
+      "seo_kw": "브라우저 확장 프로그램 검사, 확장 프로그램 탐지, 사이트가 보는 확장 프로그램, 확장 프로그램 지문, 광고 차단 탐지",
+      "h1": "브라우저 확장 프로그램 검사",
+      "og_sub": "사이트가 볼 수 있는 확장 프로그램은?",
+      "intro": "많은 확장 프로그램은 일하려고 페이지를 바꿔요. 지갑은 객체를, 다크 모드는 속성을, 번역은 요소를, 백신의 웹 보호는 자체 스크립트를 더합니다. 그 흔적은 어떤 사이트든 읽을 수 있고, 당신에 대해 많은 걸 말해요. 이 페이지가 찾은 것들입니다.",
+      "focus_h": "페이지를 바꾸는 확장 프로그램",
+      "docs": [
+        [
+          "사이트는 어떻게 내 확장 프로그램을 보나요?",
+          "목록을 볼 수는 없지만 남긴 흔적은 보여요. window.ethereum 같은 객체, 페이지 속성, 삽입된 요소, 추가된 스크립트. 아무것도 남기지 않는 확장 프로그램은 보이지 않아요."
+        ],
+        [
+          "그게 왜 중요한가요?",
+          "확장 프로그램은 범위를 좁혀요. 암호화폐 지갑, 개발자 도구, 특정 번역 도구는 당신이 어떤 사람인지 말해 주고 지문도 더 독특하게 만들어요."
+        ],
+        [
+          "변조 검사와는 무슨 관계인가요?",
+          "UA·언어·시간대를 바꾸거나 지문에 쓰는 그리기 함수를 감싸는 확장 프로그램은 사이트가 읽는 값을 바꿔요. 맨 위 검사가 그걸 봅니다."
+        ]
+      ]
+    },
+    "de": {
+      "seo_title": "Browser-Erweiterungen prüfen: Welche Ihrer Erweiterungen sehen Websites? · Wer sind Sie?",
+      "seo_desc": "Kostenloser Test der Browser-Erweiterungen: welche Erweiterungen Spuren hinterlassen, die jede Website lesen kann (Krypto-Wallets, Entwicklerwerkzeuge, Grammarly, Dark Reader, Übersetzer, Web-Schutz von Virenscannern), Ihr Werbeblocker und ob etwas umschreibt, was Websites lesen.",
+      "seo_kw": "Browser Erweiterungen prüfen, Erweiterungen erkennen, welche Erweiterungen sehen Websites, Erweiterungs-Fingerprinting, Werbeblocker erkennen",
+      "h1": "Browser-Erweiterungen prüfen",
+      "og_sub": "Welche Ihrer Erweiterungen sehen Websites?",
+      "intro": "Viele Erweiterungen verändern die Seite, um zu arbeiten: Eine Wallet fügt ein Objekt hinzu, ein Dunkelmodus Attribute, ein Übersetzer Elemente, der Web-Schutz eines Virenscanners ein eigenes Skript. Diese Spuren kann jede Website lesen, und sie sagen viel über Sie. Hier sind die, die diese Seite gefunden hat.",
+      "focus_h": "Erweiterungen, die die Seite umschreiben",
+      "docs": [
+        [
+          "Wie sieht eine Website meine Erweiterungen?",
+          "Auflisten kann sie sie nicht, aber sie sieht, was sie hinterlassen: Objekte wie window.ethereum, Attribute auf der Seite, eingefügte Elemente, hinzugefügte Skripte. Erweiterungen ohne Spuren bleiben unsichtbar."
+        ],
+        [
+          "Warum ist das wichtig?",
+          "Erweiterungen grenzen Sie ein: Eine Krypto-Wallet, Entwicklerwerkzeuge oder ein bestimmter Übersetzer sagen etwas über Sie und machen Ihren Fingerabdruck einzigartiger."
+        ],
+        [
+          "Was hat die Manipulationsprüfung damit zu tun?",
+          "Erweiterungen, die User-Agent, Sprache oder Zeitzone ändern oder die Zeichenfunktionen der Fingerabdrücke umhüllen, schreiben um, was Websites lesen. Danach sucht die Prüfung oben."
+        ]
+      ]
+    },
+    "fr": {
+      "seo_title": "Test des extensions du navigateur : lesquelles les sites voient-ils ? · Qui êtes-vous ?",
+      "seo_desc": "Test gratuit des extensions du navigateur : celles qui laissent une trace lisible par tout site (portefeuilles crypto, outils de développement, Grammarly, Dark Reader, traducteurs, protection web d’antivirus), votre bloqueur de pubs, et si quelque chose réécrit ce que lisent les sites.",
+      "seo_kw": "test extensions navigateur, détecter extensions, quelles extensions les sites voient, empreinte d’extensions, détection bloqueur de pubs",
+      "h1": "Test des extensions du navigateur",
+      "og_sub": "Quelles extensions les sites voient-ils ?",
+      "intro": "Beaucoup d’extensions modifient la page pour fonctionner : un portefeuille ajoute un objet, un mode sombre des attributs, un traducteur des éléments, la protection web d’un antivirus son propre script. Tout site peut lire ces traces, et elles en disent long sur vous. Voici celles que cette page a trouvées.",
+      "focus_h": "Extensions qui réécrivent la page",
+      "docs": [
+        [
+          "Comment un site voit-il mes extensions ?",
+          "Il ne peut pas les lister, mais il voit ce qu’elles laissent : des objets comme window.ethereum, des attributs sur la page, des éléments insérés, des scripts ajoutés. Une extension qui ne laisse rien reste invisible."
+        ],
+        [
+          "Pourquoi est-ce important ?",
+          "Les extensions vous distinguent : un portefeuille crypto, des outils de développement ou un traducteur précis disent quelque chose de vous et rendent votre empreinte plus unique."
+        ],
+        [
+          "Quel rapport avec le contrôle des modifications ?",
+          "Les extensions qui changent user agent, langue ou fuseau, ou enveloppent les fonctions de dessin des empreintes, réécrivent ce que lisent les sites. C’est ce que cherche le contrôle en tête."
+        ]
+      ]
+    },
+    "es": {
+      "seo_title": "Test de extensiones del navegador: ¿cuáles ven los sitios? · Quién eres",
+      "seo_desc": "Test gratuito de extensiones del navegador: las que dejan una marca que cualquier sitio puede leer (carteras cripto, herramientas de desarrollo, Grammarly, Dark Reader, traductores, protección web de antivirus), tu bloqueador de anuncios y si algo reescribe lo que leen los sitios.",
+      "seo_kw": "test extensiones navegador, detectar extensiones, qué extensiones ven los sitios, huella de extensiones, detectar bloqueador de anuncios",
+      "h1": "Test de extensiones del navegador",
+      "og_sub": "¿Qué extensiones tuyas ven los sitios?",
+      "intro": "Muchas extensiones cambian la página para hacer su trabajo: una cartera añade un objeto, un modo oscuro atributos, un traductor elementos, la protección web de un antivirus su propio script. Cualquier sitio puede leer esas marcas, y dicen mucho de ti. Estas son las que encontró esta página.",
+      "focus_h": "Extensiones que reescriben la página",
+      "docs": [
+        [
+          "¿Cómo ve un sitio mis extensiones?",
+          "No puede listarlas, pero ve lo que dejan: objetos como window.ethereum, atributos en la página, elementos insertados, scripts añadidos. Las que no dejan nada son invisibles."
+        ],
+        [
+          "¿Por qué importa?",
+          "Las extensiones te acotan: una cartera cripto, herramientas de desarrollo o un traductor concreto dicen algo de ti y hacen tu huella más única."
+        ],
+        [
+          "¿Qué tiene que ver con la comprobación de alteraciones?",
+          "Las extensiones que cambian user agent, idioma o zona horaria, o envuelven las funciones de dibujo de las huellas, reescriben lo que leen los sitios. Eso es lo que busca la comprobación de arriba."
+        ]
+      ]
+    },
+    "pt": {
+      "seo_title": "Teste de extensões do navegador: quais os sites conseguem ver? · Quem é você",
+      "seo_desc": "Teste gratuito de extensões do navegador: as que deixam marca que qualquer site lê (carteiras cripto, ferramentas de desenvolvedor, Grammarly, Dark Reader, tradutores, proteção web de antivírus), seu bloqueador de anúncios e se algo reescreve o que os sites leem.",
+      "seo_kw": "teste extensões navegador, detectar extensões, quais extensões os sites veem, impressão de extensões, detectar bloqueador de anúncios",
+      "h1": "Teste de extensões do navegador",
+      "og_sub": "Quais extensões suas os sites veem?",
+      "intro": "Muitas extensões mudam a página para funcionar: uma carteira adiciona um objeto, um modo escuro atributos, um tradutor elementos, a proteção web de um antivírus o próprio script. Qualquer site lê essas marcas, e elas dizem muito sobre você. Aqui estão as que esta página encontrou.",
+      "focus_h": "Extensões que reescrevem a página",
+      "docs": [
+        [
+          "Como um site vê minhas extensões?",
+          "Ele não consegue listá-las, mas vê o que deixam: objetos como window.ethereum, atributos na página, elementos inseridos, scripts adicionados. As que não deixam nada ficam invisíveis."
+        ],
+        [
+          "Por que isso importa?",
+          "Extensões te delimitam: uma carteira cripto, ferramentas de desenvolvedor ou um tradutor específico dizem algo sobre você e deixam sua impressão digital mais única."
+        ],
+        [
+          "O que a verificação de adulteração tem a ver?",
+          "Extensões que mudam user agent, idioma ou fuso, ou envolvem as funções de desenho das impressões digitais, reescrevem o que os sites leem. É isso que a verificação no topo procura."
+        ]
+      ]
+    },
+    "ru": {
+      "seo_title": "Проверка расширений браузера: какие из них видят сайты? · Кто вы",
+      "seo_desc": "Бесплатная проверка расширений браузера: какие оставляют след, видимый любому сайту (криптокошельки, инструменты разработчика, Grammarly, Dark Reader, переводчики, веб-защита антивируса), ваш блокировщик рекламы и не переписывает ли что-то данные, которые читают сайты.",
+      "seo_kw": "проверка расширений браузера, обнаружение расширений, какие расширения видят сайты, отпечаток расширений, обнаружение блокировщика рекламы",
+      "h1": "Проверка расширений браузера",
+      "og_sub": "Какие ваши расширения видят сайты?",
+      "intro": "Многие расширения меняют страницу, чтобы работать: кошелёк добавляет объект, тёмная тема — атрибуты, переводчик — элементы, веб-защита антивируса — свой скрипт. Эти следы видит любой сайт, и они многое о вас говорят. Вот что нашла эта страница.",
+      "focus_h": "Расширения, которые переписывают страницу",
+      "docs": [
+        [
+          "Как сайт видит мои расширения?",
+          "Перечислить их он не может, но видит следы: объекты вроде window.ethereum, атрибуты на странице, вставленные элементы, добавленные скрипты. Расширения без следов остаются невидимыми."
+        ],
+        [
+          "Почему это важно?",
+          "Расширения сужают круг: криптокошелёк, инструменты разработчика или определённый переводчик говорят о вас и делают отпечаток уникальнее."
+        ],
+        [
+          "При чём здесь проверка подмены?",
+          "Расширения, меняющие User-Agent, язык или часовой пояс либо оборачивающие функции рисования для отпечатков, переписывают то, что читают сайты. Именно это ищет проверка вверху."
         ]
       ]
     }

@@ -980,4 +980,564 @@
     <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
   </url>
+  <url>
+    <loc>https://who.1ms.dog/language-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/language-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-cn/language-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/language-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-tw/language-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/language-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ja/language-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/language-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ko/language-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/language-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/es/language-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/language-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/fr/language-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/language-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/de/language-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/language-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/pt/language-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/language-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ru/language-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/language-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/language-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/canvas-fingerprint/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/canvas-fingerprint/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-cn/canvas-fingerprint/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/canvas-fingerprint/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-tw/canvas-fingerprint/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/canvas-fingerprint/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ja/canvas-fingerprint/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/canvas-fingerprint/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ko/canvas-fingerprint/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/canvas-fingerprint/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/es/canvas-fingerprint/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/canvas-fingerprint/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/fr/canvas-fingerprint/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/canvas-fingerprint/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/de/canvas-fingerprint/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/canvas-fingerprint/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/pt/canvas-fingerprint/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/canvas-fingerprint/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ru/canvas-fingerprint/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/canvas-fingerprint/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/canvas-fingerprint/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/user-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/user-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-cn/user-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/user-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-tw/user-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/user-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ja/user-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/user-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ko/user-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/user-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/es/user-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/user-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/fr/user-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/user-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/de/user-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/user-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/pt/user-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/user-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ru/user-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/user-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/user-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/extensions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/extensions/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-cn/extensions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/extensions/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-tw/extensions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/extensions/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ja/extensions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/extensions/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ko/extensions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/extensions/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/es/extensions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/extensions/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/fr/extensions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/extensions/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/de/extensions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/extensions/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/pt/extensions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/extensions/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ru/extensions/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/extensions/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/extensions/"/>
+  </url>
 </urlset>

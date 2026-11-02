@@ -37,7 +37,15 @@ export function nationality({ langs = [], tz, ipcc, sys }) {
 export function device(ua = "", hi = {}, touch = 0) {
   let os = null, osv = "", kind = "pc", model = hi.model || "";
   const plat = hi.platform || "", pv = hi.platformVersion || "";
-  if (plat === "Windows" || /Windows NT/.test(ua)) {
+  // HarmonyOS first: its browsers claim Windows or Android in the user agent to get the right pages, and name
+  // themselves with OpenHarmony / HarmonyOS / ArkWeb ("(Phone; OpenHarmony 5.0)", "(PC; OpenHarmony 5.1)")
+  if (/^(HarmonyOS|OpenHarmony)$/i.test(plat) || /OpenHarmony|HarmonyOS|ArkWeb/.test(ua)) {
+    os = "HarmonyOS";
+    const v = ua.match(/(?:OpenHarmony|HarmonyOS)[ /]?(\d+(?:\.\d+)?)/);
+    osv = pv ? pv.split(".").slice(0, 2).join(".").replace(/\.0$/, "") : v ? v[1] : "";
+    kind = /\(Phone;/.test(ua) ? "phone" : /\(Tablet;/.test(ua) ? "tablet" : /\(PC;/.test(ua) ? "pc" : /Mobile/.test(ua) || hi.mobile ? "phone" : touch > 1 ? "tablet" : "pc";
+    if (!model) { const m = ua.match(/HarmonyOS; ([^;)]+?)[;)]/); if (m) model = m[1].trim(); }
+  } else if (plat === "Windows" || /Windows NT/.test(ua)) {
     os = "Windows";
     if (pv) osv = parseInt(pv, 10) >= 13 ? "11" : parseInt(pv, 10) > 0 ? "10" : "";
     else { const m = ua.match(/Windows NT ([\d.]+)/); osv = m ? ({ "10.0": "10/11", "6.3": "8.1", "6.2": "8", "6.1": "7" })[m[1]] || m[1] : ""; }
@@ -88,7 +96,7 @@ export function gpuOS(r) {
   if (!r) return null;
   if (/Direct3D|D3D1\d/.test(r)) return "Windows";
   if (/Apple (M\d|GPU)|Metal/.test(r)) return "Apple";
-  if (/Adreno|Mali|PowerVR|Xclipse/.test(r)) return "Android";
+  if (/Adreno|Mali|PowerVR|Xclipse|Maleoon/.test(r)) return "Android";
   return null;
 }
 
@@ -190,8 +198,9 @@ export function checks(x) {
   if (!x.uaOS) out.ua = x.real ? ["info", "c_ua_info", {}] : null;
   else {
     const claim = x.uaOS === "macOS" || x.uaOS === "iOS" || x.uaOS === "iPadOS" ? "Apple" : x.uaOS;
-    const tells = [x.hintOS && (x.hintOS === "macOS" ? "Apple" : x.hintOS), x.gpuOS].filter(Boolean);
-    const off = tells.find(t => t !== claim && !(t === "Android" && claim === "Linux"));
+    const tells = [x.hintOS && (x.hintOS === "macOS" ? "Apple" : /Harmony/i.test(x.hintOS) ? "HarmonyOS" : x.hintOS), x.gpuOS].filter(Boolean);
+    // (a HarmonyOS phone draws on the same GPUs as Android ones, and Linux runs on them too)
+    const off = tells.find(t => t !== claim && !(t === "Android" && (claim === "Linux" || claim === "HarmonyOS")));
     out.ua = off ? ["bad", "c_ua_bad", { a: x.uaOS, b: off }] : ["ok", "c_ua_ok", { a: x.uaOS }];
   }
   out.fp = x.rand == null ? null : x.rand ? ["ok", "c_fp_rand", {}] : ["warn", "c_fp_same", {}];
