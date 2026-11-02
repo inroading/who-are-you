@@ -287,6 +287,8 @@ import { TZ_CC } from "./tz.mjs";
     if (hi.architecture) txt("arch", t("arch_v", { a: hi.architecture, b: hi.bitness || "?" }) + (dv.model ? " · " + dv.model : ""));
     else if (navigator.platform) txt("arch", navigator.platform);
     else na("arch");
+    // a page loaded out of sight (a background pane, a prerender) can read a 0-wide screen for a moment
+    if (!screen.width) await within(new Promise(r => { const f = () => screen.width ? r() : setTimeout(f, 200); f(); }), 3000, null);
     const s = screen, dpr = Math.round((devicePixelRatio || 1) * 100) / 100;
     // in physical pixels: screen.width is after the system's scaling (a 4K monitor at 150% reports 2560×1440)
     const [pw, ph] = s.width ? physicalScreen(s.width, s.height, devicePixelRatio || 1) : [0, 0];
@@ -827,7 +829,9 @@ import { TZ_CC } from "./tz.mjs";
     window.msReport = () => {
       if (!R || !R.ck || $("#rerun").disabled) return null;
       const c = (R.srv && R.srv.cf) || {}, gr = grade(R.ck, CHECKS.filter(id => R.ck[id])), hi = R.hi || {};
-      const summary = [$("#vHead").textContent, t("grade_v", { g: gr.grade }), R.osTxt, R.browser, R.screen, R.gpuSoft ? R.gpuRaw : R.gpu].filter(Boolean).join(" · ").slice(0, 300);
+      // the screen as it is now, in physical pixels with the CSS size and ratio (the most reported reading)
+      const sc = screen.width ? physicalScreen(screen.width, screen.height, devicePixelRatio || 1).join("×") + " (" + screen.width + "×" + screen.height + " @" + (devicePixelRatio || 1) + "x)" : R.screen;
+      const summary = [$("#vHead").textContent, t("grade_v", { g: gr.grade }), R.osTxt, R.browser, sc, R.gpuSoft ? R.gpuRaw : R.gpu].filter(Boolean).join(" · ").slice(0, 300);
       const data = { portrait: sharedPortrait(false), raw: {
         gpu: R.gpuRaw || null, screen: [screen.width, screen.height, devicePixelRatio], hints: { platform: hi.platform, platformVersion: hi.platformVersion, model: hi.model, mobile: hi.mobile },
         engine: R.engine || null, kbd: R.kbd || null, sysFonts: R.sysFonts || [], voices: [...new Set((R.voices || []).map(v => v.split(/[-_]/)[0]))],
