@@ -462,6 +462,14 @@ import { TZ_CC } from "./tz.mjs";
     txt("fontfp", short(fh));
     // a browser that adds noise to protect the visitor draws the same picture differently each time
     R.rand = !!(c1 && c2 && c1 !== c2);
+    // A solid square read back pixel for pixel: exact everywhere, unless the browser adds noise to what pages read
+    // (Brave per site and session, Firefox's resistFingerprinting): then the fingerprint changes from site to site
+    try {
+      const cv = document.createElement("canvas"); cv.width = cv.height = 16;
+      const x = cv.getContext("2d"); x.fillStyle = "rgb(100,150,200)"; x.fillRect(0, 0, 16, 16);
+      const px = x.getImageData(0, 0, 16, 16).data;
+      R.noise = px.some((v, i) => v !== [100, 150, 200, 255][i % 4]);
+    } catch (e) { R.noise = false; }
     txt("rand", t(R.rand ? "rand_yes" : "rand_no"));
     // everything that stays put on this device and browser; the address is left out, so it survives a VPN
     const all = [ch, gh, ah, fh, screen.width + "x" + screen.height + "x" + screen.colorDepth, devicePixelRatio, R.tz, (R.langs || []).join(), navigator.hardwareConcurrency,
@@ -690,7 +698,7 @@ import { TZ_CC } from "./tz.mjs";
       tz: R.tz || null, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, browser: R.browser || null,
       screen: R.screen || null, gpu: R.gpu || null, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
       nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
-      dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, hz: R.hz || null,
+      dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, fz: !!R.noise || undefined, hz: R.hz || null,
       x: { split, fullOrg: [c.asn ? "AS" + c.asn : "", c.asOrganization].filter(Boolean).join(" · "), dnsOrg: R.dnsOrg || "", fpHex: R.fpHex } };
   }
 
@@ -735,7 +743,7 @@ import { TZ_CC } from "./tz.mjs";
   $("#forget").onclick = () => { try { localStorage.removeItem(K.last); localStorage.removeItem(K.prev); localStorage.removeItem(K.hist); } catch (e) {} $("#vHist").hidden = true; $("#fpRet").textContent = t("rv_forgot"); $("#forget").hidden = true; };
   function idCard(P, shared) {
     $("#fpId").textContent = P.rand ? t("fp_rand") : P.fp || t("masked");
-    $("#fpNote").textContent = t(shared ? "sh_fp" : P.rand ? "id_note_rand" : "id_note");
+    $("#fpNote").textContent = t(shared ? "sh_fp" : P.rand ? "id_note_rand" : P.fz ? "id_note_site" : "id_note");
     $("#fpArt").innerHTML = P.rand || !P.x.fpHex ? "" : fpArt(P.x.fpHex);
     $("#idc").classList.toggle("rand", !!P.rand);
     $("#fpRet").textContent = shared ? " " : returnVisit(P);
@@ -795,7 +803,7 @@ import { TZ_CC } from "./tz.mjs";
     const g = P.gpu || "", hi = /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);
     const low = /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g), pc = P.kind === "pc" || P.kind === "mac";
     blank("rig", esc(t(P.gs ? "rg_soft" : pc && hi && P.hz >= 120 ? "rg_game" : pc && hi ? "rg_power" : pc && low ? "rg_basic" : "rg_none")));
-    blank("track", esc(t(P.rand ? "tk_rand" : "tk_same")));
+    blank("track", esc(t(P.rand ? "tk_rand" : P.fz ? "tk_site" : "tk_same")));
   }
 
   /* ---------- this run against the last one ---------- */
@@ -1017,7 +1025,7 @@ import { TZ_CC } from "./tz.mjs";
     const res = checks({
       tz: R.tz, tzOff: R.tzOff == null ? null : offTxt(R.tzOff), ipTzOff: c.timezone ? offTxt(tzOffset(c.timezone)) : null, ipTz: c.timezone || null, ipcc: c.country,
       langs: R.langs, dnsCC: R.dnsCC, exits: allExits(), rtc: R.rtc, ip: R.srv && R.srv.ip, asn: c.asn, org: orgName(c.asOrganization, c.asn),
-      uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, webdriver: R.webdriver,
+      uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, noise: R.noise, webdriver: R.webdriver,
       rttB: R.latDone ? R.rttB : null, rttCf: c.clientTcpRtt || null, sys: final || R.voices ? sysOf() : undefined, tamper: R.dev && R.srv ? tampered() : null,
     });
     if (res.dc === null && R.srv && !c.asn) res.dc = ["info", "c_na", {}];

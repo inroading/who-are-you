@@ -93,7 +93,7 @@ export function browser(ua = "", brands = []) {
 
 // "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 (0x00002786) Direct3D11 vs_5_0 ps_5_0, D3D11)" → "NVIDIA GeForce RTX 4070"
 export function gpuName(r) {
-  if (!r) return null;
+  if (!r || /^Brave$/i.test(r)) return null;   // Brave's stand-in for the card's name
   let s = String(r);
   const m = s.match(/^ANGLE \((?:[^,]*), (.*?)(?:, [^,]*)?\)$/);
   if (m) s = m[1].replace(/^ANGLE Metal Renderer: /, "");
@@ -210,13 +210,16 @@ export function checks(x) {
   // the system the user agent claims against the one the browser's other parts give away
   if (!x.uaOS) out.ua = x.real ? ["info", "c_ua_info", {}] : null;
   else {
-    const claim = x.uaOS === "macOS" || x.uaOS === "iOS" || x.uaOS === "iPadOS" ? "Apple" : x.uaOS;
-    const tells = [x.hintOS && (x.hintOS === "macOS" ? "Apple" : /Harmony/i.test(x.hintOS) ? "HarmonyOS" : x.hintOS), x.gpuOS].filter(Boolean);
+    // (one name per system, whichever source names it: client hints say "Chrome OS", the user agent's reading "ChromeOS")
+    const fam = o => /^(macOS|iOS|iPadOS)$/.test(o) ? "Apple" : /Harmony/i.test(o) ? "HarmonyOS" : /^Chrome ?OS$/i.test(o) ? "ChromeOS" : o;
+    const claim = fam(x.uaOS);
+    const tells = [x.hintOS && fam(x.hintOS), x.gpuOS].filter(Boolean);
     // (a HarmonyOS phone draws on the same GPUs as Android ones, and Linux runs on them too)
     const off = tells.find(t => t !== claim && !(t === "Android" && (claim === "Linux" || claim === "HarmonyOS")));
     out.ua = off ? ["bad", "c_ua_bad", { a: x.uaOS, b: off }] : ["ok", "c_ua_ok", { a: x.uaOS }];
   }
-  out.fp = x.rand == null ? null : x.rand ? ["ok", "c_fp_rand", {}] : ["warn", "c_fp_same", {}];
+  // (a browser that adds noise per site, like Brave, draws the same twice on one page, but differently on the next site)
+  out.fp = x.rand == null ? null : x.rand ? ["ok", "c_fp_rand", {}] : x.noise ? ["ok", "c_fp_site", {}] : ["warn", "c_fp_same", {}];
   out.bot = x.webdriver == null ? null : x.webdriver ? ["bad", "c_bot_bad", {}] : ["ok", "c_bot_ok", {}];
   // The round trip the browser measures to this site against the one Cloudflare measures on its connection: through a
   // proxy, Cloudflare only sees the proxy's leg, so the browser's is much longer. Over QUIC there is no TCP figure.

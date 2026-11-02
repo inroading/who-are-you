@@ -125,6 +125,11 @@ test("disguise checks", () => {
   // a HarmonyOS phone on a Mali or Maleoon GPU is no contradiction
   assert.equal(checks({ ...base, uaOS: "HarmonyOS", hintOS: "HarmonyOS", gpuOS: "Android" }).ua[0], "ok");
   assert.equal(gpuOS("Maleoon 910"), "Android");
+  // client hints say "Chrome OS", the user agent's reading says "ChromeOS": the same system
+  assert.equal(checks({ ...base, uaOS: "ChromeOS", hintOS: "Chrome OS", gpuOS: null }).ua[0], "ok");
+  // Brave: the same drawing twice on one page, noise in what the page reads back
+  assert.deepEqual(checks({ ...base, rand: false, noise: true }).fp, ["ok", "c_fp_site", {}]);
+  assert.equal(gpuName("Brave"), null);
   // through a VPN in Japan
   const v = checks({ ...base, ipTzOff: "+09:00", ipcc: "JP", asn: 16509, org: "Amazon.com, Inc.", rtc: ["1.2.3.4", "5.6.7.8"], ip: "5.6.7.8" });
   assert.equal(v.tz[0], "bad"); assert.equal(v.lang[0], "warn"); assert.equal(v.dc[0], "warn"); assert.equal(v.webrtc[0], "bad");
