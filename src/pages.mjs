@@ -8,6 +8,9 @@ export const PAGES = {
   fingerprint: { rows: ["fpid", "canvas", "webgl", "audio", "fontfp", "rand"], check: "fp" },
   "dns-leak": { rows: ["dns", "ip", "ex_cn", "ex_intl", "stack"], check: "dns", go: "dns" },
   "webrtc-leak": { rows: ["webrtc", "lan", "ip", "stack"], check: "webrtc", go: "egress" },
+  "browser-check": { rows: ["engine", "browser", "h_ua", "h_lang", "langs", "tz", "fonts"], check: "tamper" },
+  "timezone-check": { rows: ["tz", "tzip", "hour", "geo", "clock"], check: "tz" },
+  "proxy-check": { rows: ["edge", "ip", "isp", "dns", "webrtc"], check: "rtt", go: "egress" },
 };
 
 // per page, per language: seo_title, seo_desc, seo_kw, h1, og_sub, intro (the body text above the result),
@@ -565,6 +568,702 @@ export const TEXT = {
         [
           "Локальный адрес или имя .local — это утечка?",
           "Имя на .local означает, что браузер прячет ваш локальный адрес (mDNS), — так и должно быть. Настоящий локальный адрес вроде 192.168.1.5 не выдаёт, где вы, но делает отпечаток уникальнее. IPv6-адрес, отличный от вашего IPv4-выхода, — утечка, только если это не ваш IPv6-выход: проверка сравнивает его с IPv6-адресом, который видят сайты."
+        ]
+      ]
+    }
+  },
+  "browser-check": {
+    "en": {
+      "seo_title": "Browser Environment Check: is your browser consistent, or does it give itself away? · Who Are You",
+      "seo_desc": "Free browser environment check for anti-detect browsers and multi-account setups: whether the user agent, JavaScript engine, languages, time zone, fonts and fingerprint agree, whether extensions rewrote what sites read, and an A–F grade.",
+      "seo_kw": "browser environment check, anti-detect browser test, browser consistency check, fingerprint browser check, user agent spoofing detection, multi-account browser check",
+      "h1": "Browser environment check",
+      "og_sub": "Does your browser agree with itself?",
+      "intro": "Sites that fight fraud don't just read your IP: they check that everything your browser says fits together. A user agent that says Safari on a Chromium engine, a language set only in JavaScript, a time zone that two APIs disagree on: each is a giveaway. Here is what this browser says, and where it contradicts itself.",
+      "focus_h": "Tampering check",
+      "docs": [
+        [
+          "What does this check look at?",
+          "Whether properties sites read (user agent, platform, languages, screen) were redefined instead of coming from the browser, whether the drawing and audio functions fingerprints use were replaced, whether the JavaScript engine matches the user agent, whether the request header's language matches the one in JavaScript, and whether Date and Intl agree on the time zone. Every other check on the page counts toward the grade too."
+        ],
+        [
+          "Why do extensions that change the user agent get caught?",
+          "They change what JavaScript reads, but not the request headers the browser sends, the engine underneath, or the functions they wrap. Each mismatch is something a site can compare. To seem to be elsewhere, change the system itself: its language and time zone."
+        ],
+        [
+          "Is anything stored?",
+          "No. The checks run in your browser; the server only answers with what it sees of this request, and keeps nothing."
+        ]
+      ]
+    },
+    "zh-CN": {
+      "seo_title": "浏览器环境检测：指纹浏览器、多开环境前后一致吗 · 你是谁",
+      "seo_desc": "免费浏览器环境检测，适合指纹浏览器和多账号环境：UA、JS 引擎、语言、时区、字体和指纹是否一致，插件有没有篡改网站读到的信息，并给出 A 到 F 的环境评分。",
+      "seo_kw": "浏览器环境检测, 指纹浏览器检测, 浏览器指纹检测, 多开环境检测, UA 伪装检测, 环境一致性检测, AdsPower 检测, 跨境电商环境检测",
+      "h1": "浏览器环境检测",
+      "og_sub": "你的浏览器前后说得一致吗？",
+      "intro": "做风控的网站不只看 IP，还会核对浏览器说的每件事能不能对上：UA 说是 Safari，引擎却是 Chromium 的；语言只在 JS 里改了；两个接口给出的时区不一样……每一处都是破绽。下面是这个浏览器的说法，以及它自相矛盾的地方。",
+      "focus_h": "篡改检测",
+      "docs": [
+        [
+          "这个检测看哪些地方？",
+          "网站读的属性（UA、平台、语言、屏幕）是不是被重新定义过，指纹用到的画图和音频函数有没有被替换，JS 引擎和 UA 对不对得上，请求头里的语言和 JS 里的是否一致，Date 和 Intl 给出的时区是否相同。页面上其他检测项也都计入评分。"
+        ],
+        [
+          "为什么改 UA 的插件会被识破？",
+          "它们只改了 JS 读到的那一份，浏览器发出的请求头、底层引擎、被它们包起来的函数都还是原样。每一处对不上，网站都能比出来。想伪装成在别处，要在系统层面改：系统语言和时区。"
+        ],
+        [
+          "会保存什么吗？",
+          "不会。检测都在你的浏览器里进行；服务器只回答它从这次请求里本来就能看到的东西，什么都不存。"
+        ]
+      ]
+    },
+    "zh-TW": {
+      "seo_title": "瀏覽器環境檢測：指紋瀏覽器、多開環境前後一致嗎 · 你是誰",
+      "seo_desc": "免費瀏覽器環境檢測，適合指紋瀏覽器和多帳號環境：UA、JS 引擎、語言、時區、字型和指紋是否一致，擴充功能有沒有竄改網站讀到的資訊，並給出 A 到 F 的環境評分。",
+      "seo_kw": "瀏覽器環境檢測, 指紋瀏覽器檢測, 瀏覽器指紋檢測, 多開環境檢測, UA 偽裝檢測, 環境一致性檢測",
+      "h1": "瀏覽器環境檢測",
+      "og_sub": "你的瀏覽器前後說得一致嗎？",
+      "intro": "做風控的網站不只看 IP，還會核對瀏覽器說的每件事能不能對上：UA 說是 Safari，引擎卻是 Chromium 的；語言只在 JS 裡改了；兩個介面給出的時區不一樣……每一處都是破綻。下面是這個瀏覽器的說法，以及它自相矛盾的地方。",
+      "focus_h": "竄改檢測",
+      "docs": [
+        [
+          "這個檢測看哪些地方？",
+          "網站讀的屬性（UA、平台、語言、螢幕）是不是被重新定義過，指紋用到的繪圖和音訊函式有沒有被替換，JS 引擎和 UA 對不對得上，請求標頭裡的語言和 JS 裡的是否一致，Date 和 Intl 給出的時區是否相同。頁面上其他檢測項也都計入評分。"
+        ],
+        [
+          "為什麼改 UA 的擴充功能會被識破？",
+          "它們只改了 JS 讀到的那一份，瀏覽器送出的請求標頭、底層引擎、被它們包起來的函式都還是原樣。每一處對不上，網站都比得出來。想偽裝成在別處，要在系統層面改：系統語言和時區。"
+        ],
+        [
+          "會儲存什麼嗎？",
+          "不會。檢測都在你的瀏覽器裡進行；伺服器只回答它從這次請求本來就看得到的東西，什麼都不存。"
+        ]
+      ]
+    },
+    "ja": {
+      "seo_title": "ブラウザ環境チェック：アンチディテクトブラウザの整合性を確認 · あなたは誰",
+      "seo_desc": "アンチディテクトブラウザや複数アカウント運用向けの無料ブラウザ環境チェック：UA、JS エンジン、言語、タイムゾーン、フォント、指紋が一致しているか、拡張機能がサイトの読む値を書き換えていないか、A〜F の評価付き。",
+      "seo_kw": "ブラウザ環境チェック, アンチディテクトブラウザ, ブラウザ指紋チェック, UA 偽装 検出, 複数アカウント 環境",
+      "h1": "ブラウザ環境チェック",
+      "og_sub": "あなたのブラウザは辻褄が合っている？",
+      "intro": "不正対策をするサイトは IP だけでなく、ブラウザの言うことがすべて噛み合うかを確かめます。UA は Safari なのにエンジンは Chromium、言語は JS の中だけ変更、二つの API でタイムゾーンが違う――どれも手がかりです。このブラウザの言い分と、矛盾している所を示します。",
+      "focus_h": "改ざんチェック",
+      "docs": [
+        [
+          "何を調べますか？",
+          "サイトが読むプロパティ（UA、プラットフォーム、言語、画面）が再定義されていないか、指紋に使う描画や音声の関数が差し替えられていないか、JS エンジンが UA と合うか、リクエストヘッダーの言語が JS の言語と同じか、Date と Intl のタイムゾーンが一致するか。ページの他の検査も評価に入ります。"
+        ],
+        [
+          "UA を変える拡張機能はなぜ見破られる？",
+          "JS が読む値だけを変え、ブラウザが送るヘッダーや下のエンジン、包んだ関数はそのままだからです。食い違いはどれもサイトが比べられます。別の場所にいるように見せるなら、システムの言語とタイムゾーンを変えてください。"
+        ],
+        [
+          "何か保存されますか？",
+          "いいえ。検査はブラウザの中で行い、サーバーはこのリクエストから見える情報を返すだけで何も残しません。"
+        ]
+      ]
+    },
+    "ko": {
+      "seo_title": "브라우저 환경 검사: 안티디텍트 브라우저가 앞뒤가 맞나요? · 당신은 누구",
+      "seo_desc": "안티디텍트 브라우저와 다계정 환경을 위한 무료 브라우저 환경 검사: UA, JS 엔진, 언어, 시간대, 글꼴, 지문이 일치하는지, 확장 프로그램이 사이트가 읽는 값을 바꿨는지, A~F 등급까지.",
+      "seo_kw": "브라우저 환경 검사, 안티디텍트 브라우저, 브라우저 지문 검사, UA 위장 탐지, 다계정 환경",
+      "h1": "브라우저 환경 검사",
+      "og_sub": "브라우저가 앞뒤가 맞나요?",
+      "intro": "부정 사용을 막는 사이트는 IP만 보지 않고, 브라우저가 말하는 모든 것이 맞아떨어지는지 확인합니다. UA는 Safari인데 엔진은 Chromium, 언어는 JS에서만 바뀜, 두 API의 시간대가 다름… 모두 단서예요. 이 브라우저가 말하는 것과 스스로 모순되는 곳을 보여 줍니다.",
+      "focus_h": "변조 검사",
+      "docs": [
+        [
+          "무엇을 보나요?",
+          "사이트가 읽는 속성(UA, 플랫폼, 언어, 화면)이 다시 정의됐는지, 지문에 쓰는 그리기·오디오 함수가 바뀌었는지, JS 엔진이 UA와 맞는지, 요청 헤더의 언어가 JS의 언어와 같은지, Date와 Intl의 시간대가 같은지 봅니다. 페이지의 다른 검사도 등급에 들어가요."
+        ],
+        [
+          "UA를 바꾸는 확장 프로그램은 왜 들키나요?",
+          "JS가 읽는 값만 바꾸고, 브라우저가 보내는 헤더나 아래 엔진, 감싼 함수는 그대로이기 때문이에요. 어긋남은 모두 사이트가 비교할 수 있습니다. 다른 곳에 있는 것처럼 보이려면 시스템 언어와 시간대를 바꾸세요."
+        ],
+        [
+          "무언가 저장되나요?",
+          "아니요. 검사는 브라우저 안에서 하고, 서버는 이 요청에서 보이는 것만 답하며 아무것도 남기지 않아요."
+        ]
+      ]
+    },
+    "de": {
+      "seo_title": "Browser-Umgebungstest: Passt Ihr Browser zu sich selbst? · Wer sind Sie?",
+      "seo_desc": "Kostenloser Browser-Umgebungstest für Anti-Detect-Browser und Mehrkonten-Setups: ob User-Agent, JS-Engine, Sprachen, Zeitzone, Schriften und Fingerabdruck zusammenpassen, ob Erweiterungen umschreiben, was Websites lesen, mit Note von A bis F.",
+      "seo_kw": "Browser Umgebungstest, Anti-Detect-Browser Test, Browser Konsistenz, User-Agent Spoofing erkennen, Browser Fingerabdruck Test",
+      "h1": "Browser-Umgebungstest",
+      "og_sub": "Passt Ihr Browser zu sich selbst?",
+      "intro": "Websites, die Betrug bekämpfen, lesen nicht nur Ihre IP: Sie prüfen, ob alles zusammenpasst, was Ihr Browser sagt. Ein User-Agent, der Safari sagt, auf einer Chromium-Engine; eine Sprache, die nur in JavaScript gesetzt ist; eine Zeitzone, über die zwei Schnittstellen uneins sind – jedes davon verrät Sie. Hier steht, was dieser Browser sagt und wo er sich widerspricht.",
+      "focus_h": "Manipulationsprüfung",
+      "docs": [
+        [
+          "Was wird geprüft?",
+          "Ob Eigenschaften, die Websites lesen (User-Agent, Plattform, Sprachen, Bildschirm), neu definiert wurden, ob die Zeichen- und Audiofunktionen der Fingerabdrücke ersetzt wurden, ob die JS-Engine zum User-Agent passt, ob die Sprache im Request-Header der in JavaScript entspricht und ob Date und Intl dieselbe Zeitzone nennen. Alle übrigen Prüfungen zählen ebenfalls zur Note."
+        ],
+        [
+          "Warum fallen Erweiterungen auf, die den User-Agent ändern?",
+          "Sie ändern nur, was JavaScript liest – nicht die Header, die der Browser sendet, nicht die Engine darunter und nicht die Funktionen, die sie umhüllen. Jede Abweichung kann eine Website vergleichen. Wer anderswo wirken will, stellt das System selbst um: Sprache und Zeitzone."
+        ],
+        [
+          "Wird etwas gespeichert?",
+          "Nein. Die Prüfungen laufen in Ihrem Browser; der Server antwortet nur mit dem, was er von dieser Anfrage sieht, und behält nichts."
+        ]
+      ]
+    },
+    "fr": {
+      "seo_title": "Test d’environnement du navigateur : votre navigateur est-il cohérent ? · Qui êtes-vous ?",
+      "seo_desc": "Test gratuit d’environnement du navigateur pour navigateurs anti-détection et multi-comptes : cohérence du user agent, du moteur JS, des langues, du fuseau, des polices et de l’empreinte, réécritures par des extensions, et une note de A à F.",
+      "seo_kw": "test environnement navigateur, navigateur anti-détection test, cohérence navigateur, détection usurpation user agent, test empreinte navigateur",
+      "h1": "Test d’environnement du navigateur",
+      "og_sub": "Votre navigateur est-il cohérent avec lui-même ?",
+      "intro": "Les sites qui luttent contre la fraude ne lisent pas que votre IP : ils vérifient que tout ce que dit votre navigateur concorde. Un user agent Safari sur un moteur Chromium, une langue changée seulement en JavaScript, deux interfaces en désaccord sur le fuseau : chacun vous trahit. Voici ce que dit ce navigateur, et où il se contredit.",
+      "focus_h": "Contrôle des modifications",
+      "docs": [
+        [
+          "Qu’est-ce qui est vérifié ?",
+          "Si les propriétés que lisent les sites (user agent, plateforme, langues, écran) ont été redéfinies, si les fonctions de dessin et d’audio utilisées par les empreintes ont été remplacées, si le moteur JS correspond au user agent, si la langue de l’en-tête correspond à celle de JavaScript, et si Date et Intl s’accordent sur le fuseau. Les autres contrôles de la page comptent aussi dans la note."
+        ],
+        [
+          "Pourquoi les extensions qui changent le user agent se font-elles prendre ?",
+          "Elles changent ce que lit JavaScript, mais pas les en-têtes envoyés par le navigateur, ni le moteur en dessous, ni les fonctions qu’elles enveloppent. Chaque écart peut être comparé. Pour paraître ailleurs, changez le système lui-même : sa langue et son fuseau."
+        ],
+        [
+          "Quelque chose est-il enregistré ?",
+          "Non. Les contrôles se font dans votre navigateur ; le serveur ne répond qu’avec ce qu’il voit de cette requête et ne garde rien."
+        ]
+      ]
+    },
+    "es": {
+      "seo_title": "Test de entorno del navegador: ¿tu navegador es coherente consigo mismo? · Quién eres",
+      "seo_desc": "Test gratuito de entorno del navegador para navegadores antidetección y multicuenta: si coinciden user agent, motor JS, idiomas, zona horaria, fuentes y huella, si las extensiones reescriben lo que leen los sitios, y una nota de la A a la F.",
+      "seo_kw": "test entorno navegador, navegador antidetección test, coherencia navegador, detección de user agent falso, test huella navegador",
+      "h1": "Test de entorno del navegador",
+      "og_sub": "¿Tu navegador es coherente consigo mismo?",
+      "intro": "Los sitios que combaten el fraude no solo leen tu IP: comprueban que todo lo que dice tu navegador encaje. Un user agent de Safari sobre un motor Chromium, un idioma cambiado solo en JavaScript, dos interfaces que no coinciden en la zona horaria: cada uno te delata. Esto es lo que dice este navegador y dónde se contradice.",
+      "focus_h": "Comprobación de alteraciones",
+      "docs": [
+        [
+          "¿Qué se comprueba?",
+          "Si las propiedades que leen los sitios (user agent, plataforma, idiomas, pantalla) se redefinieron, si se reemplazaron las funciones de dibujo y audio que usan las huellas, si el motor JS cuadra con el user agent, si el idioma de la cabecera coincide con el de JavaScript, y si Date e Intl coinciden en la zona horaria. El resto de comprobaciones de la página también cuenta para la nota."
+        ],
+        [
+          "¿Por qué pillan a las extensiones que cambian el user agent?",
+          "Solo cambian lo que lee JavaScript, no las cabeceras que envía el navegador, ni el motor de debajo, ni las funciones que envuelven. Cada diferencia se puede comparar. Para parecer de otro sitio, cambia el propio sistema: su idioma y zona horaria."
+        ],
+        [
+          "¿Se guarda algo?",
+          "No. Las comprobaciones se hacen en tu navegador; el servidor solo responde con lo que ve de esta petición y no guarda nada."
+        ]
+      ]
+    },
+    "pt": {
+      "seo_title": "Teste de ambiente do navegador: seu navegador é coerente? · Quem é você",
+      "seo_desc": "Teste gratuito de ambiente do navegador para navegadores antidetecção e multicontas: se user agent, motor JS, idiomas, fuso, fontes e impressão digital batem, se extensões reescrevem o que os sites leem, e uma nota de A a F.",
+      "seo_kw": "teste ambiente navegador, navegador antidetecção teste, coerência do navegador, detecção de user agent falso, teste impressão digital navegador",
+      "h1": "Teste de ambiente do navegador",
+      "og_sub": "Seu navegador é coerente consigo mesmo?",
+      "intro": "Sites que combatem fraude não leem só o seu IP: conferem se tudo o que o navegador diz se encaixa. Um user agent de Safari num motor Chromium, um idioma mudado só no JavaScript, duas interfaces discordando do fuso: cada um te entrega. Aqui está o que este navegador diz, e onde ele se contradiz.",
+      "focus_h": "Verificação de adulteração",
+      "docs": [
+        [
+          "O que é verificado?",
+          "Se as propriedades que os sites leem (user agent, plataforma, idiomas, tela) foram redefinidas, se as funções de desenho e áudio usadas pelas impressões digitais foram trocadas, se o motor JS bate com o user agent, se o idioma do cabeçalho é o mesmo do JavaScript, e se Date e Intl concordam no fuso. As demais verificações da página também contam para a nota."
+        ],
+        [
+          "Por que extensões que mudam o user agent são pegas?",
+          "Elas mudam só o que o JavaScript lê, não os cabeçalhos que o navegador envia, nem o motor por baixo, nem as funções que envolvem. Cada diferença pode ser comparada. Para parecer estar em outro lugar, mude o próprio sistema: idioma e fuso."
+        ],
+        [
+          "Algo é salvo?",
+          "Não. As verificações rodam no seu navegador; o servidor só responde com o que vê desta requisição e não guarda nada."
+        ]
+      ]
+    },
+    "ru": {
+      "seo_title": "Проверка окружения браузера: согласован ли ваш браузер? · Кто вы",
+      "seo_desc": "Бесплатная проверка окружения браузера для антидетект-браузеров и мультиаккаунтов: совпадают ли User-Agent, движок JS, языки, часовой пояс, шрифты и отпечаток, не переписали ли расширения то, что читают сайты, и оценка от A до F.",
+      "seo_kw": "проверка окружения браузера, антидетект браузер проверка, согласованность браузера, обнаружение подмены User-Agent, проверка отпечатка браузера",
+      "h1": "Проверка окружения браузера",
+      "og_sub": "Согласован ли ваш браузер сам с собой?",
+      "intro": "Сайты, которые борются с мошенничеством, смотрят не только на IP: они проверяют, сходится ли всё, что говорит браузер. User-Agent Safari на движке Chromium, язык, изменённый только в JavaScript, два интерфейса с разным часовым поясом — каждое выдаёт вас. Вот что говорит этот браузер и где он себе противоречит.",
+      "focus_h": "Проверка подмены",
+      "docs": [
+        [
+          "Что проверяется?",
+          "Не переопределены ли свойства, которые читают сайты (User-Agent, платформа, языки, экран), не подменены ли функции рисования и звука, которые используют отпечатки, совпадает ли движок JS с User-Agent, совпадает ли язык в заголовке запроса с языком в JavaScript и согласны ли Date и Intl в часовом поясе. Остальные проверки на странице тоже входят в оценку."
+        ],
+        [
+          "Почему расширения, меняющие User-Agent, попадаются?",
+          "Они меняют только то, что читает JavaScript, но не заголовки, которые отправляет браузер, не движок под ними и не функции, которые оборачивают. Любое расхождение сайт может сравнить. Чтобы казаться в другом месте, меняйте саму систему: язык и часовой пояс."
+        ],
+        [
+          "Что-нибудь сохраняется?",
+          "Нет. Проверки идут в вашем браузере; сервер отвечает лишь тем, что видит в этом запросе, и ничего не хранит."
+        ]
+      ]
+    }
+  },
+  "timezone-check": {
+    "en": {
+      "seo_title": "Time Zone Check: does your time zone match your IP? · Who Are You",
+      "seo_desc": "Free time zone check: your system time zone and clock format against the time zone of your IP address. A mismatch is one of the first things sites use to spot a VPN or proxy. With how to fix it on Windows, macOS and phones.",
+      "seo_kw": "time zone check, timezone IP mismatch, browser time zone, VPN time zone, what is my time zone, time zone detection",
+      "h1": "Time zone check",
+      "og_sub": "Does your clock match your IP?",
+      "intro": "Every page can read your system's time zone without asking, and every site knows roughly where your IP is. When the two disagree, say an IP in Japan and a clock on China Standard Time, it's one of the first signs sites use to spot a VPN or proxy. Here are both, side by side.",
+      "focus_h": "Your time zone against your IP",
+      "docs": [
+        [
+          "How do sites know my time zone?",
+          "Through JavaScript's Intl and Date, available to every page without a permission prompt. The IP's time zone comes from the same kind of location database that places your IP in a city."
+        ],
+        [
+          "How do I fix a mismatch?",
+          "Set the system time zone to one in the country your IP is in: on Windows in Settings → Time & language, on macOS in System Settings → General → Date & Time, on phones in the date and time settings. A browser extension that only changes JavaScript's time zone is easy to catch: the browser environment check shows why."
+        ],
+        [
+          "Why is a different zone in the same country only a warning?",
+          "Large countries have several time zones, and an IP is often placed in the right country but the wrong city. A zone of another country is a clear contradiction; a zone of the same country is only a hint."
+        ]
+      ]
+    },
+    "zh-CN": {
+      "seo_title": "时区检测：系统时区和 IP 对得上吗 · 你是谁",
+      "seo_desc": "免费时区检测：对比你的系统时区、时钟格式和 IP 所在地的时区。两者不一致，是网站识别 VPN 和代理最先看的破绽之一。附 Windows、macOS 和手机上的改法。",
+      "seo_kw": "时区检测, 时区与 IP 不一致, 浏览器时区, VPN 时区, 我的时区, 系统时区检测, 时区泄露",
+      "h1": "时区检测",
+      "og_sub": "你的时钟和 IP 对得上吗？",
+      "intro": "任何网页都能不经授权读到你系统的时区，任何网站也大致知道你的 IP 在哪儿。两者对不上，比如 IP 在日本、时钟却是中国标准时间，就是网站识别 VPN 和代理时最先看的破绽之一。下面把两者并排放着。",
+      "focus_h": "你的时区和 IP",
+      "docs": [
+        [
+          "网站怎么知道我的时区？",
+          "通过 JavaScript 的 Intl 和 Date，任何网页都能用，不会弹授权。IP 的时区则来自把 IP 定位到城市的那类地理数据库。"
+        ],
+        [
+          "时区对不上怎么改？",
+          "把系统时区改成 IP 所在国家的：Windows 在「设置 → 时间和语言」，macOS 在「系统设置 → 通用 → 日期与时间」，手机在日期和时间设置里。只改 JS 时区的浏览器插件很容易被识破，原因见浏览器环境检测。"
+        ],
+        [
+          "同一个国家的不同时区为什么只算黄色？",
+          "大国有好几个时区，IP 也常常只定位准了国家、城市不对。别国的时区是明显矛盾，同一个国家的只是提示。"
+        ]
+      ]
+    },
+    "zh-TW": {
+      "seo_title": "時區檢測：系統時區和 IP 對得上嗎 · 你是誰",
+      "seo_desc": "免費時區檢測：比對你的系統時區、時鐘格式和 IP 所在地的時區。兩者不一致，是網站辨識 VPN 和代理最先看的破綻之一。附 Windows、macOS 和手機上的改法。",
+      "seo_kw": "時區檢測, 時區與 IP 不一致, 瀏覽器時區, VPN 時區, 我的時區, 系統時區檢測",
+      "h1": "時區檢測",
+      "og_sub": "你的時鐘和 IP 對得上嗎？",
+      "intro": "任何網頁都能不經授權讀到你系統的時區，任何網站也大致知道你的 IP 在哪裡。兩者對不上，例如 IP 在日本、時鐘卻是中國標準時間，就是網站辨識 VPN 和代理時最先看的破綻之一。下面把兩者並排放著。",
+      "focus_h": "你的時區和 IP",
+      "docs": [
+        [
+          "網站怎麼知道我的時區？",
+          "透過 JavaScript 的 Intl 和 Date，任何網頁都能用，不會跳出授權。IP 的時區則來自把 IP 定位到城市的那類地理資料庫。"
+        ],
+        [
+          "時區對不上怎麼改？",
+          "把系統時區改成 IP 所在國家的：Windows 在「設定 → 時間與語言」，macOS 在「系統設定 → 一般 → 日期與時間」，手機在日期和時間設定裡。只改 JS 時區的擴充功能很容易被識破，原因見瀏覽器環境檢測。"
+        ],
+        [
+          "同一個國家的不同時區為什麼只算黃色？",
+          "大國有好幾個時區，IP 也常常只定位準了國家、城市不對。別國的時區是明顯矛盾，同一個國家的只是提示。"
+        ]
+      ]
+    },
+    "ja": {
+      "seo_title": "タイムゾーンチェック：システムの時刻と IP は一致している？ · あなたは誰",
+      "seo_desc": "無料タイムゾーンチェック：システムのタイムゾーンと時計の形式を、IP のある場所のタイムゾーンと比べます。食い違いは、サイトが VPN やプロキシを見抜く最初の手がかりの一つ。Windows・macOS・スマホでの直し方付き。",
+      "seo_kw": "タイムゾーン チェック, タイムゾーン IP 不一致, ブラウザ タイムゾーン, VPN タイムゾーン, 時刻 検出",
+      "h1": "タイムゾーンチェック",
+      "og_sub": "時計と IP は合っている？",
+      "intro": "どのページも許可なしにシステムのタイムゾーンを読めますし、どのサイトも IP のおおよその場所を知っています。二つが食い違う――IP は日本なのに時計は中国標準時――のは、サイトが VPN やプロキシを見抜く最初の手がかりの一つです。両方を並べて示します。",
+      "focus_h": "タイムゾーンと IP",
+      "docs": [
+        [
+          "サイトはどうやってタイムゾーンを知る？",
+          "JavaScript の Intl と Date からで、どのページでも許可なしに使えます。IP のタイムゾーンは、IP を都市まで特定するのと同じ種類の位置データベースから来ます。"
+        ],
+        [
+          "食い違いはどう直す？",
+          "システムのタイムゾーンを IP の国のものにします：Windows は「設定 → 時刻と言語」、macOS は「システム設定 → 一般 → 日付と時刻」、スマホは日付と時刻の設定。JS のタイムゾーンだけを変える拡張機能はすぐ見破られます（ブラウザ環境チェック参照）。"
+        ],
+        [
+          "同じ国の別のタイムゾーンはなぜ黄色だけ？",
+          "大きな国には複数のタイムゾーンがあり、IP は国は合っていても都市がずれることがよくあります。他国のタイムゾーンははっきりした矛盾、同じ国ならヒントにとどめます。"
+        ]
+      ]
+    },
+    "ko": {
+      "seo_title": "시간대 검사: 시스템 시간대와 IP가 맞나요? · 당신은 누구",
+      "seo_desc": "무료 시간대 검사: 시스템 시간대와 시계 형식을 IP 위치의 시간대와 비교합니다. 둘이 다르면 사이트가 VPN·프록시를 알아보는 첫 단서가 됩니다. Windows, macOS, 휴대폰에서 고치는 법 포함.",
+      "seo_kw": "시간대 검사, 시간대 IP 불일치, 브라우저 시간대, VPN 시간대, 내 시간대",
+      "h1": "시간대 검사",
+      "og_sub": "시계와 IP가 맞나요?",
+      "intro": "어떤 페이지든 권한 없이 시스템 시간대를 읽을 수 있고, 어떤 사이트든 IP가 대략 어디인지 압니다. 둘이 어긋나면(IP는 일본인데 시계는 중국 표준시) 사이트가 VPN·프록시를 알아보는 첫 단서가 됩니다. 둘을 나란히 보여 줍니다.",
+      "focus_h": "시간대와 IP",
+      "docs": [
+        [
+          "사이트는 내 시간대를 어떻게 아나요?",
+          "JavaScript의 Intl과 Date로, 어떤 페이지든 권한 없이 씁니다. IP의 시간대는 IP를 도시까지 찾는 것과 같은 위치 데이터베이스에서 나와요."
+        ],
+        [
+          "어긋나면 어떻게 고치나요?",
+          "시스템 시간대를 IP가 있는 나라의 것으로 바꾸세요. Windows는 설정 → 시간 및 언어, macOS는 시스템 설정 → 일반 → 날짜 및 시간, 휴대폰은 날짜 및 시간 설정. JS 시간대만 바꾸는 확장 프로그램은 쉽게 들켜요(브라우저 환경 검사 참고)."
+        ],
+        [
+          "같은 나라의 다른 시간대는 왜 노란색인가요?",
+          "큰 나라는 시간대가 여럿이고, IP는 나라는 맞아도 도시가 틀리는 일이 흔해요. 다른 나라의 시간대는 분명한 모순, 같은 나라는 힌트일 뿐입니다."
+        ]
+      ]
+    },
+    "de": {
+      "seo_title": "Zeitzonen-Test: Passt Ihre Zeitzone zu Ihrer IP? · Wer sind Sie?",
+      "seo_desc": "Kostenloser Zeitzonen-Test: Ihre Systemzeitzone und Ihr Uhrzeitformat gegen die Zeitzone Ihrer IP. Eine Abweichung gehört zu den ersten Hinweisen, an denen Websites VPN und Proxy erkennen. Mit Anleitung für Windows, macOS und Handys.",
+      "seo_kw": "Zeitzone Test, Zeitzone IP Abweichung, Browser Zeitzone, VPN Zeitzone, meine Zeitzone",
+      "h1": "Zeitzonen-Test",
+      "og_sub": "Passt Ihre Uhr zu Ihrer IP?",
+      "intro": "Jede Seite kann ohne Nachfrage die Zeitzone Ihres Systems lesen, und jede Website weiß ungefähr, wo Ihre IP ist. Passen beide nicht zusammen – etwa eine IP in Japan und eine Uhr auf chinesischer Zeit –, ist das einer der ersten Hinweise auf VPN oder Proxy. Hier stehen beide nebeneinander.",
+      "focus_h": "Ihre Zeitzone und Ihre IP",
+      "docs": [
+        [
+          "Woher kennen Websites meine Zeitzone?",
+          "Über Intl und Date in JavaScript, für jede Seite ohne Nachfrage verfügbar. Die Zeitzone der IP stammt aus derselben Art Standortdatenbank, die Ihre IP einer Stadt zuordnet."
+        ],
+        [
+          "Wie behebe ich eine Abweichung?",
+          "Stellen Sie die Systemzeitzone auf eine im Land Ihrer IP: unter Windows in Einstellungen → Zeit und Sprache, unter macOS in Systemeinstellungen → Allgemein → Datum & Uhrzeit, am Handy in den Datums- und Zeiteinstellungen. Eine Erweiterung, die nur die Zeitzone in JavaScript ändert, fällt leicht auf; warum, zeigt der Browser-Umgebungstest."
+        ],
+        [
+          "Warum ist eine andere Zone im selben Land nur eine Warnung?",
+          "Große Länder haben mehrere Zeitzonen, und eine IP wird oft dem richtigen Land, aber der falschen Stadt zugeordnet. Die Zone eines anderen Landes ist ein klarer Widerspruch, eine im selben Land nur ein Hinweis."
+        ]
+      ]
+    },
+    "fr": {
+      "seo_title": "Test de fuseau horaire : votre fuseau correspond-il à votre IP ? · Qui êtes-vous ?",
+      "seo_desc": "Test gratuit de fuseau horaire : le fuseau et le format d’heure de votre système face au fuseau de votre IP. Un écart est l’un des premiers indices utilisés pour repérer un VPN ou un proxy. Avec la correction sous Windows, macOS et téléphone.",
+      "seo_kw": "test fuseau horaire, fuseau horaire IP, fuseau navigateur, fuseau VPN, mon fuseau horaire",
+      "h1": "Test de fuseau horaire",
+      "og_sub": "Votre horloge correspond-elle à votre IP ?",
+      "intro": "Toute page peut lire le fuseau de votre système sans rien demander, et tout site sait à peu près où se trouve votre IP. Quand les deux divergent – une IP au Japon, une horloge à l’heure de Chine –, c’est l’un des premiers indices d’un VPN ou d’un proxy. Les voici côte à côte.",
+      "focus_h": "Votre fuseau face à votre IP",
+      "docs": [
+        [
+          "Comment les sites connaissent-ils mon fuseau ?",
+          "Par Intl et Date en JavaScript, accessibles à toute page sans autorisation. Le fuseau de l’IP vient du même genre de base de localisation qui place votre IP dans une ville."
+        ],
+        [
+          "Comment corriger un écart ?",
+          "Réglez le fuseau du système sur un fuseau du pays de votre IP : sous Windows dans Paramètres → Heure et langue, sous macOS dans Réglages Système → Général → Date et heure, sur téléphone dans les réglages de date et heure. Une extension qui ne change que le fuseau de JavaScript se repère facilement ; le test d’environnement du navigateur explique pourquoi."
+        ],
+        [
+          "Pourquoi un autre fuseau du même pays n’est-il qu’un avertissement ?",
+          "Les grands pays ont plusieurs fuseaux, et une IP est souvent placée dans le bon pays mais la mauvaise ville. Un fuseau d’un autre pays est une contradiction nette ; un fuseau du même pays, seulement un indice."
+        ]
+      ]
+    },
+    "es": {
+      "seo_title": "Test de zona horaria: ¿tu zona horaria coincide con tu IP? · Quién eres",
+      "seo_desc": "Test gratuito de zona horaria: la zona y el formato de hora de tu sistema frente a la zona horaria de tu IP. Un desajuste es una de las primeras pistas que usan los sitios para detectar una VPN o un proxy. Con cómo arreglarlo en Windows, macOS y móvil.",
+      "seo_kw": "test zona horaria, zona horaria IP, zona horaria navegador, zona horaria VPN, mi zona horaria",
+      "h1": "Test de zona horaria",
+      "og_sub": "¿Tu reloj coincide con tu IP?",
+      "intro": "Cualquier página puede leer la zona horaria de tu sistema sin pedir permiso, y cualquier sitio sabe más o menos dónde está tu IP. Cuando no coinciden –una IP en Japón y un reloj en hora de China–, es una de las primeras pistas de una VPN o un proxy. Aquí están las dos, una junto a otra.",
+      "focus_h": "Tu zona horaria frente a tu IP",
+      "docs": [
+        [
+          "¿Cómo saben los sitios mi zona horaria?",
+          "Con Intl y Date de JavaScript, disponibles para cualquier página sin permiso. La zona de la IP sale del mismo tipo de base de datos que sitúa tu IP en una ciudad."
+        ],
+        [
+          "¿Cómo arreglo un desajuste?",
+          "Pon en el sistema una zona horaria del país de tu IP: en Windows en Configuración → Hora e idioma, en macOS en Ajustes del Sistema → General → Fecha y hora, en el móvil en los ajustes de fecha y hora. Una extensión que solo cambia la zona de JavaScript se detecta fácilmente; el test de entorno del navegador explica por qué."
+        ],
+        [
+          "¿Por qué otra zona del mismo país es solo un aviso?",
+          "Los países grandes tienen varias zonas horarias, y una IP a menudo se sitúa en el país correcto pero en otra ciudad. Una zona de otro país es una contradicción clara; una del mismo país, solo una pista."
+        ]
+      ]
+    },
+    "pt": {
+      "seo_title": "Teste de fuso horário: seu fuso bate com seu IP? · Quem é você",
+      "seo_desc": "Teste gratuito de fuso horário: o fuso e o formato de hora do seu sistema contra o fuso do seu IP. Uma diferença é uma das primeiras pistas que os sites usam para pegar VPN ou proxy. Com como corrigir no Windows, macOS e celular.",
+      "seo_kw": "teste fuso horário, fuso horário IP, fuso do navegador, fuso VPN, meu fuso horário",
+      "h1": "Teste de fuso horário",
+      "og_sub": "Seu relógio bate com seu IP?",
+      "intro": "Qualquer página lê o fuso do seu sistema sem pedir permissão, e qualquer site sabe mais ou menos onde está seu IP. Quando os dois não batem – um IP no Japão e um relógio no horário da China –, é uma das primeiras pistas de VPN ou proxy. Aqui estão os dois, lado a lado.",
+      "focus_h": "Seu fuso contra seu IP",
+      "docs": [
+        [
+          "Como os sites sabem meu fuso?",
+          "Pelo Intl e Date do JavaScript, disponíveis para qualquer página sem permissão. O fuso do IP vem do mesmo tipo de base de localização que coloca seu IP numa cidade."
+        ],
+        [
+          "Como corrijo uma diferença?",
+          "Coloque no sistema um fuso do país do seu IP: no Windows em Configurações → Hora e idioma, no macOS em Ajustes do Sistema → Geral → Data e Hora, no celular nos ajustes de data e hora. Uma extensão que só muda o fuso do JavaScript é fácil de pegar; o teste de ambiente do navegador mostra por quê."
+        ],
+        [
+          "Por que outro fuso do mesmo país é só um aviso?",
+          "Países grandes têm vários fusos, e um IP muitas vezes cai no país certo mas na cidade errada. Um fuso de outro país é contradição clara; um do mesmo país, só uma pista."
+        ]
+      ]
+    },
+    "ru": {
+      "seo_title": "Проверка часового пояса: совпадает ли он с вашим IP? · Кто вы",
+      "seo_desc": "Бесплатная проверка часового пояса: часовой пояс и формат времени системы против часового пояса вашего IP. Расхождение — одна из первых подсказок, по которым сайты замечают VPN и прокси. С инструкциями для Windows, macOS и телефона.",
+      "seo_kw": "проверка часового пояса, часовой пояс IP, часовой пояс браузера, часовой пояс VPN, мой часовой пояс",
+      "h1": "Проверка часового пояса",
+      "og_sub": "Совпадают ли часы с вашим IP?",
+      "intro": "Любая страница без спроса читает часовой пояс системы, а любой сайт примерно знает, где ваш IP. Когда они расходятся — IP в Японии, а часы по китайскому времени, — это одна из первых подсказок о VPN или прокси. Вот они рядом.",
+      "focus_h": "Ваш часовой пояс и IP",
+      "docs": [
+        [
+          "Откуда сайты знают мой часовой пояс?",
+          "Из Intl и Date в JavaScript, доступных любой странице без разрешения. Часовой пояс IP берётся из той же базы геолокации, что определяет город вашего IP."
+        ],
+        [
+          "Как исправить расхождение?",
+          "Поставьте в системе часовой пояс страны вашего IP: в Windows — Параметры → Время и язык, в macOS — Системные настройки → Основные → Дата и время, на телефоне — в настройках даты и времени. Расширение, меняющее пояс только в JavaScript, легко заметить; почему — объясняет проверка окружения браузера."
+        ],
+        [
+          "Почему другой пояс той же страны — лишь предупреждение?",
+          "У больших стран несколько поясов, и IP часто попадает в верную страну, но не в тот город. Пояс другой страны — явное противоречие, пояс той же страны — лишь подсказка."
+        ]
+      ]
+    }
+  },
+  "proxy-check": {
+    "en": {
+      "seo_title": "Proxy Check: can sites tell you're behind a proxy? · Who Are You",
+      "seo_desc": "Free proxy check: the round trip your browser measures against the one Cloudflare sees on its connection, whether your IP belongs to a data center, your DNS and WebRTC addresses. A proxy adds a leg sites can measure, even on a clean residential IP.",
+      "seo_kw": "proxy check, proxy detection test, am I behind a proxy, VPN detection, latency proxy detection, data center IP check",
+      "h1": "Proxy check",
+      "og_sub": "Can sites tell there's a proxy in between?",
+      "intro": "A proxy hides your IP, but not the extra leg of the trip. Cloudflare measures the round trip on its own connection, which ends at the proxy; your browser measures the whole way. When the browser's is much longer, something sits in between, whatever the IP looks like. Here are both, with the other signs sites use.",
+      "focus_h": "Your round trip",
+      "docs": [
+        [
+          "How does the latency check work?",
+          "The page asks this site's edge for a tiny response a few times and takes the quickest, from the moment the request leaves to the first byte back. Cloudflare reports the round trip it measured on the TCP connection it served you on. Without a proxy they're close; through one, Cloudflare only sees the proxy's part."
+        ],
+        [
+          "Can a residential IP still be caught?",
+          "Yes. A residential IP passes the data center check, but the extra round trip, a DNS resolver in another country, a time zone that doesn't match and WebRTC addresses all still give it away."
+        ],
+        [
+          "Why is the check sometimes \"couldn't read\"?",
+          "Over HTTP/3 there is no TCP connection, so Cloudflare has no round trip to report, and some networks block the measuring requests."
+        ]
+      ]
+    },
+    "zh-CN": {
+      "seo_title": "代理检测：网站能看出你在用代理吗 · 你是谁",
+      "seo_desc": "免费代理检测：对比浏览器测到的往返延迟和 Cloudflare 在自己连接上看到的延迟，看 IP 是不是机房的，DNS 和 WebRTC 漏了什么。代理会多出一段网站量得出来的路程，住宅 IP 也藏不住。",
+      "seo_kw": "代理检测, 代理 IP 检测, 是否使用代理, VPN 检测, 延迟检测代理, 机房 IP 检测, 住宅 IP 检测, 节点检测",
+      "h1": "代理检测",
+      "og_sub": "网站看得出中间有代理吗？",
+      "intro": "代理能藏住 IP，藏不住多出来的那段路。Cloudflare 在自己的连接上测往返时间，这条连接的另一头是代理；你的浏览器测的是全程。浏览器测出来比它长很多，就说明中间还有一段，不管 IP 看起来多干净。下面是这两个数，以及网站常看的其他破绽。",
+      "focus_h": "你的往返延迟",
+      "docs": [
+        [
+          "延迟检测是怎么做的？",
+          "页面向本站的边缘节点要几次很小的响应，取最快的一次，从请求发出到收到第一个字节。Cloudflare 则报告它在给你服务的那条 TCP 连接上测到的往返时间。不走代理时两者接近；走代理时，Cloudflare 只看到代理那一段。"
+        ],
+        [
+          "住宅 IP 也会被识破吗？",
+          "会。住宅 IP 能过「机房 IP」这一关，但多出来的延迟、在别国的 DNS 解析器、对不上的时区和 WebRTC 漏出的地址，照样会把它暴露出来。"
+        ],
+        [
+          "为什么有时显示「读不到」？",
+          "走 HTTP/3 时没有 TCP 连接，Cloudflare 就没有往返时间可报；有些网络也会拦下测量请求。"
+        ]
+      ]
+    },
+    "zh-TW": {
+      "seo_title": "代理檢測：網站看得出你在用代理嗎 · 你是誰",
+      "seo_desc": "免費代理檢測：比對瀏覽器測到的往返延遲和 Cloudflare 在自己連線上看到的延遲，看 IP 是不是機房的，DNS 和 WebRTC 洩漏了什麼。代理會多出一段網站量得出來的路程，住宅 IP 也藏不住。",
+      "seo_kw": "代理檢測, 代理 IP 檢測, 是否使用代理, VPN 檢測, 延遲檢測代理, 機房 IP 檢測, 住宅 IP 檢測",
+      "h1": "代理檢測",
+      "og_sub": "網站看得出中間有代理嗎？",
+      "intro": "代理能藏住 IP，藏不住多出來的那段路。Cloudflare 在自己的連線上測往返時間，這條連線的另一頭是代理；你的瀏覽器測的是全程。瀏覽器測出來比它長很多，就表示中間還有一段，不管 IP 看起來多乾淨。下面是這兩個數，以及網站常看的其他破綻。",
+      "focus_h": "你的往返延遲",
+      "docs": [
+        [
+          "延遲檢測是怎麼做的？",
+          "頁面向本站的邊緣節點要幾次很小的回應，取最快的一次，從請求送出到收到第一個位元組。Cloudflare 則回報它在服務你的那條 TCP 連線上測到的往返時間。不走代理時兩者接近；走代理時，Cloudflare 只看到代理那一段。"
+        ],
+        [
+          "住宅 IP 也會被識破嗎？",
+          "會。住宅 IP 能過「機房 IP」這一關，但多出來的延遲、在別國的 DNS 解析器、對不上的時區和 WebRTC 洩漏的位址，照樣會把它暴露出來。"
+        ],
+        [
+          "為什麼有時顯示「讀不到」？",
+          "走 HTTP/3 時沒有 TCP 連線，Cloudflare 就沒有往返時間可報；有些網路也會擋下測量請求。"
+        ]
+      ]
+    },
+    "ja": {
+      "seo_title": "プロキシチェック：サイトはプロキシ経由だと見抜ける？ · あなたは誰",
+      "seo_desc": "無料プロキシチェック：ブラウザが測った往復時間と、Cloudflare が自分の接続で見た往復時間を比べ、IP がデータセンターか、DNS や WebRTC が何を漏らすかも確認。プロキシは測れる区間を一つ増やすので、住宅 IP でも隠せません。",
+      "seo_kw": "プロキシ チェック, プロキシ 検出, プロキシ 判定, VPN 検出, 遅延 プロキシ 検出, データセンター IP",
+      "h1": "プロキシチェック",
+      "og_sub": "間にプロキシがあると見抜かれる？",
+      "intro": "プロキシは IP を隠せても、増えた区間は隠せません。Cloudflare は自分の接続で往復時間を測り、その接続の相手はプロキシです。ブラウザは全行程を測ります。ブラウザの値がずっと長ければ、IP がどれほどきれいでも間に何かがあります。二つの値と、サイトが見る他の手がかりを示します。",
+      "focus_h": "往復時間",
+      "docs": [
+        [
+          "遅延チェックの仕組みは？",
+          "このサイトのエッジに小さな応答を何度か求め、送信から最初のバイトまでの最短を取ります。Cloudflare はあなたに応じた TCP 接続で測った往復時間を返します。プロキシなしなら近い値、プロキシ経由なら Cloudflare にはプロキシの区間しか見えません。"
+        ],
+        [
+          "住宅 IP でも見抜かれる？",
+          "はい。住宅 IP はデータセンター判定を通っても、増えた往復時間、他国の DNS リゾルバー、合わないタイムゾーン、WebRTC のアドレスで分かります。"
+        ],
+        [
+          "「読み取れない」になるのはなぜ？",
+          "HTTP/3 では TCP 接続がないので Cloudflare に往復時間がなく、測定のリクエストを止めるネットワークもあります。"
+        ]
+      ]
+    },
+    "ko": {
+      "seo_title": "프록시 검사: 사이트가 프록시를 알아챌까요? · 당신은 누구",
+      "seo_desc": "무료 프록시 검사: 브라우저가 잰 왕복 시간과 Cloudflare가 자기 연결에서 본 왕복 시간을 비교하고, IP가 데이터센터인지, DNS와 WebRTC가 무엇을 흘리는지 확인합니다. 프록시는 잴 수 있는 구간을 하나 더해서 가정용 IP로도 숨기지 못해요.",
+      "seo_kw": "프록시 검사, 프록시 탐지, 프록시 사용 확인, VPN 탐지, 지연 프록시 탐지, 데이터센터 IP",
+      "h1": "프록시 검사",
+      "og_sub": "중간에 프록시가 있다는 걸 알아챌까요?",
+      "intro": "프록시는 IP를 숨겨도 늘어난 구간은 숨기지 못해요. Cloudflare는 자기 연결에서 왕복 시간을 재는데, 그 연결의 상대는 프록시예요. 브라우저는 전체 경로를 잽니다. 브라우저 값이 훨씬 길면, IP가 아무리 깨끗해도 중간에 무언가 있어요. 두 값과 사이트가 보는 다른 단서를 보여 줍니다.",
+      "focus_h": "왕복 시간",
+      "docs": [
+        [
+          "지연 검사는 어떻게 하나요?",
+          "이 사이트의 엣지에 작은 응답을 몇 번 요청해, 보낸 순간부터 첫 바이트까지의 최솟값을 씁니다. Cloudflare는 당신을 응대한 TCP 연결에서 잰 왕복 시간을 알려 줘요. 프록시가 없으면 비슷하고, 있으면 Cloudflare는 프록시 구간만 봅니다."
+        ],
+        [
+          "가정용 IP도 들키나요?",
+          "네. 가정용 IP는 데이터센터 검사를 통과해도, 늘어난 왕복 시간, 다른 나라의 DNS 리졸버, 안 맞는 시간대, WebRTC 주소로 드러나요."
+        ],
+        [
+          "왜 가끔 '읽을 수 없음'이 나오나요?",
+          "HTTP/3에서는 TCP 연결이 없어서 Cloudflare가 왕복 시간을 줄 수 없고, 측정 요청을 막는 네트워크도 있어요."
+        ]
+      ]
+    },
+    "de": {
+      "seo_title": "Proxy-Test: Erkennen Websites, dass Sie hinter einem Proxy sind? · Wer sind Sie?",
+      "seo_desc": "Kostenloser Proxy-Test: die Laufzeit, die Ihr Browser misst, gegen die, die Cloudflare auf seiner Verbindung sieht; ob Ihre IP aus einem Rechenzentrum stammt; Ihre DNS- und WebRTC-Adressen. Ein Proxy fügt eine messbare Strecke hinzu, auch bei sauberer Privat-IP.",
+      "seo_kw": "Proxy Test, Proxy erkennen, bin ich hinter einem Proxy, VPN erkennen, Latenz Proxy Erkennung, Rechenzentrum IP",
+      "h1": "Proxy-Test",
+      "og_sub": "Erkennen Websites einen Proxy dazwischen?",
+      "intro": "Ein Proxy verbirgt Ihre IP, aber nicht die zusätzliche Strecke. Cloudflare misst die Laufzeit auf der eigenen Verbindung, die am Proxy endet; Ihr Browser misst den ganzen Weg. Ist die des Browsers viel länger, sitzt etwas dazwischen – wie sauber die IP auch aussieht. Hier stehen beide Werte, mit den anderen Hinweisen, auf die Websites achten.",
+      "focus_h": "Ihre Laufzeit",
+      "docs": [
+        [
+          "Wie funktioniert die Latenzprüfung?",
+          "Die Seite fragt den Edge dieser Website ein paar Mal nach einer winzigen Antwort und nimmt die schnellste, vom Absenden bis zum ersten Byte. Cloudflare meldet die Laufzeit auf der TCP-Verbindung, über die es Sie bedient hat. Ohne Proxy liegen beide nah beieinander; mit Proxy sieht Cloudflare nur dessen Teil."
+        ],
+        [
+          "Fällt auch eine Privat-IP auf?",
+          "Ja. Eine Privat-IP besteht die Rechenzentrumsprüfung, aber die zusätzliche Laufzeit, ein DNS-Resolver in einem anderen Land, eine unpassende Zeitzone und WebRTC-Adressen verraten sie trotzdem."
+        ],
+        [
+          "Warum steht manchmal „nicht lesbar“?",
+          "Über HTTP/3 gibt es keine TCP-Verbindung, also keine Laufzeit von Cloudflare, und manche Netze blockieren die Messanfragen."
+        ]
+      ]
+    },
+    "fr": {
+      "seo_title": "Test de proxy : les sites voient-ils que vous passez par un proxy ? · Qui êtes-vous ?",
+      "seo_desc": "Test de proxy gratuit : l’aller-retour mesuré par votre navigateur face à celui que voit Cloudflare sur sa connexion, si votre IP vient d’un centre de données, vos adresses DNS et WebRTC. Un proxy ajoute un tronçon mesurable, même avec une IP résidentielle propre.",
+      "seo_kw": "test proxy, détection proxy, suis-je derrière un proxy, détection VPN, détection proxy par latence, IP centre de données",
+      "h1": "Test de proxy",
+      "og_sub": "Les sites voient-ils un proxy entre les deux ?",
+      "intro": "Un proxy cache votre IP, pas le tronçon en plus. Cloudflare mesure l’aller-retour sur sa propre connexion, qui s’arrête au proxy ; votre navigateur mesure tout le trajet. Si celui du navigateur est bien plus long, quelque chose se trouve entre les deux, aussi propre que paraisse l’IP. Voici les deux valeurs, avec les autres indices qu’observent les sites.",
+      "focus_h": "Votre aller-retour",
+      "docs": [
+        [
+          "Comment fonctionne le contrôle de latence ?",
+          "La page demande plusieurs fois une toute petite réponse au serveur de bordure de ce site et garde la plus rapide, de l’envoi au premier octet reçu. Cloudflare indique l’aller-retour mesuré sur la connexion TCP qui vous a servi. Sans proxy, les deux sont proches ; avec, Cloudflare ne voit que la partie du proxy."
+        ],
+        [
+          "Une IP résidentielle peut-elle se faire prendre ?",
+          "Oui. Elle passe le contrôle des centres de données, mais l’aller-retour en plus, un résolveur DNS dans un autre pays, un fuseau qui ne colle pas et les adresses WebRTC la trahissent quand même."
+        ],
+        [
+          "Pourquoi est-ce parfois « illisible » ?",
+          "En HTTP/3, il n’y a pas de connexion TCP, donc pas d’aller-retour côté Cloudflare, et certains réseaux bloquent les requêtes de mesure."
+        ]
+      ]
+    },
+    "es": {
+      "seo_title": "Test de proxy: ¿pueden los sitios saber que usas un proxy? · Quién eres",
+      "seo_desc": "Test de proxy gratuito: el tiempo de ida y vuelta que mide tu navegador frente al que ve Cloudflare en su conexión, si tu IP es de un centro de datos, tus direcciones DNS y WebRTC. Un proxy añade un tramo que se puede medir, incluso con una IP residencial limpia.",
+      "seo_kw": "test proxy, detectar proxy, estoy detrás de un proxy, detección VPN, detección de proxy por latencia, IP de centro de datos",
+      "h1": "Test de proxy",
+      "og_sub": "¿Notan los sitios un proxy en medio?",
+      "intro": "Un proxy oculta tu IP, pero no el tramo de más. Cloudflare mide la ida y vuelta en su propia conexión, que acaba en el proxy; tu navegador mide el camino entero. Si la del navegador es mucho más larga, hay algo en medio, por limpia que parezca la IP. Aquí están las dos, con las demás pistas que miran los sitios.",
+      "focus_h": "Tu ida y vuelta",
+      "docs": [
+        [
+          "¿Cómo funciona la comprobación de latencia?",
+          "La página pide varias veces una respuesta mínima al servidor de borde de este sitio y se queda con la más rápida, desde que sale la petición hasta el primer byte. Cloudflare informa de la ida y vuelta medida en la conexión TCP con que te atendió. Sin proxy se parecen; con proxy, Cloudflare solo ve su parte."
+        ],
+        [
+          "¿También pillan una IP residencial?",
+          "Sí. Pasa la comprobación de centro de datos, pero la ida y vuelta de más, un DNS en otro país, una zona horaria que no cuadra y las direcciones WebRTC la delatan igual."
+        ],
+        [
+          "¿Por qué a veces sale «no se pudo leer»?",
+          "Con HTTP/3 no hay conexión TCP, así que Cloudflare no tiene ida y vuelta que informar, y algunas redes bloquean las peticiones de medición."
+        ]
+      ]
+    },
+    "pt": {
+      "seo_title": "Teste de proxy: os sites percebem que você usa proxy? · Quem é você",
+      "seo_desc": "Teste de proxy gratuito: a ida e volta que seu navegador mede contra a que o Cloudflare vê na conexão dele, se seu IP é de data center, seus endereços de DNS e WebRTC. Um proxy acrescenta um trecho mensurável, mesmo com IP residencial limpo.",
+      "seo_kw": "teste proxy, detectar proxy, estou atrás de um proxy, detecção de VPN, detecção de proxy por latência, IP de data center",
+      "h1": "Teste de proxy",
+      "og_sub": "Os sites percebem um proxy no meio?",
+      "intro": "Um proxy esconde seu IP, mas não o trecho a mais. O Cloudflare mede a ida e volta na própria conexão, que termina no proxy; seu navegador mede o caminho todo. Se a do navegador for bem maior, tem algo no meio, por mais limpo que o IP pareça. Aqui estão as duas, com as outras pistas que os sites observam.",
+      "focus_h": "Sua ida e volta",
+      "docs": [
+        [
+          "Como funciona a verificação de latência?",
+          "A página pede algumas vezes uma resposta mínima ao servidor de borda deste site e fica com a mais rápida, do envio ao primeiro byte. O Cloudflare informa a ida e volta medida na conexão TCP que te atendeu. Sem proxy, ficam próximas; com proxy, o Cloudflare só vê a parte do proxy."
+        ],
+        [
+          "Um IP residencial também é pego?",
+          "Sim. Ele passa na verificação de data center, mas a ida e volta a mais, um DNS em outro país, um fuso que não bate e os endereços do WebRTC o entregam do mesmo jeito."
+        ],
+        [
+          "Por que às vezes aparece \"não deu para ler\"?",
+          "No HTTP/3 não há conexão TCP, então o Cloudflare não tem ida e volta para informar, e algumas redes bloqueiam as requisições de medição."
+        ]
+      ]
+    },
+    "ru": {
+      "seo_title": "Проверка прокси: видят ли сайты, что вы за прокси? · Кто вы",
+      "seo_desc": "Бесплатная проверка прокси: время отклика, которое измеряет браузер, против того, что Cloudflare видит на своём соединении; из дата-центра ли ваш IP; ваши адреса DNS и WebRTC. Прокси добавляет измеримый участок даже на чистом домашнем IP.",
+      "seo_kw": "проверка прокси, определение прокси, сижу ли я через прокси, обнаружение VPN, определение прокси по задержке, IP дата-центра",
+      "h1": "Проверка прокси",
+      "og_sub": "Видят ли сайты прокси посередине?",
+      "intro": "Прокси скрывает IP, но не лишний участок пути. Cloudflare измеряет время отклика на своём соединении, которое заканчивается на прокси; браузер меряет весь путь. Если у браузера оно намного больше, посередине что-то есть, каким бы чистым ни выглядел IP. Вот оба значения и другие признаки, на которые смотрят сайты.",
+      "focus_h": "Ваше время отклика",
+      "docs": [
+        [
+          "Как работает проверка задержки?",
+          "Страница несколько раз запрашивает у пограничного узла этого сайта крошечный ответ и берёт самый быстрый — от отправки до первого байта. Cloudflare сообщает время отклика на TCP-соединении, по которому он вас обслужил. Без прокси значения близки; через прокси Cloudflare видит лишь его участок."
+        ],
+        [
+          "Может ли попасться домашний IP?",
+          "Да. Он пройдёт проверку дата-центра, но лишнее время отклика, DNS-резолвер в другой стране, неподходящий часовой пояс и адреса WebRTC всё равно его выдадут."
+        ],
+        [
+          "Почему иногда «не удалось прочитать»?",
+          "По HTTP/3 нет TCP-соединения, и Cloudflare не может сообщить время отклика; некоторые сети блокируют измерительные запросы."
         ]
       ]
     }

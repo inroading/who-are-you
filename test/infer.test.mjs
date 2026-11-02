@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf } from "../src/infer.mjs";
+import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress } from "../src/infer.mjs";
 
 const WIN = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36";
 const MAC_SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15";
@@ -81,9 +81,20 @@ test("fonts: only ones the system doesn't bring say something", () => {
 test("disguise checks", () => {
   const base = { tz: "Asia/Shanghai", tzOff: "+08:00", ipTzOff: "+08:00", ipcc: "CN", langs: ["zh-CN"], rtc: ["1.2.3.4"], ip: "1.2.3.4",
     asn: 4134, org: "Chinanet", uaOS: "Windows", real: true, hintOS: "Windows", gpuOS: "Windows", rand: false, webdriver: false,
-    dnsCC: "CN", exits: [["ip", "1.2.3.4"], ["ex_cn", "1.2.3.4"]] };
+    dnsCC: "CN", exits: [["ip", "1.2.3.4"], ["ex_cn", "1.2.3.4"]], rttB: 30, rttCf: 25, sys: { cc: ["CN"], from: ["fonts"] }, tamper: [] };
   const c = checks(base);
-  assert.deepEqual(Object.fromEntries(Object.entries(c).map(([k, v]) => [k, v[0]])), { tz: "ok", lang: "ok", dns: "ok", split: "ok", webrtc: "ok", dc: "ok", ua: "ok", fp: "warn", bot: "ok" });
+  assert.deepEqual(Object.fromEntries(Object.entries(c).map(([k, v]) => [k, v[0]])),
+    { tz: "ok", lang: "ok", dns: "ok", split: "ok", webrtc: "ok", dc: "ok", ua: "ok", fp: "warn", bot: "ok", rtt: "ok", syslang: "ok", tamper: "ok" });
+  // through a proxy, Cloudflare only sees the proxy's leg of the round trip
+  assert.deepEqual(checks({ ...base, rttB: 190, rttCf: 12 }).rtt, ["bad", "c_rtt_bad", { a: 12, b: 190 }]);
+  assert.equal(checks({ ...base, rttB: 80, rttCf: 20 }).rtt[0], "warn");
+  assert.equal(checks({ ...base, rttB: 210, rttCf: 180 }).rtt[0], "ok");
+  assert.equal(checks({ ...base, rttCf: 0 }).rtt, null);
+  // a system with Chinese installed behind a Japanese address; other systems can't tell
+  assert.deepEqual(checks({ ...base, ipcc: "JP", sys: { cc: ["CN"], from: ["fonts", "voices"] } }).syslang, ["warn", "c_sys_warn", { cc: "CN", from: "fonts,voices" }]);
+  assert.equal(checks({ ...base, sys: false }).syslang[1], "c_sys_na");
+  assert.equal(checks({ ...base, sys: { cc: [], from: [] } }).syslang[1], "c_sys_none");
+  assert.deepEqual(checks({ ...base, tamper: ["tp_engine", "tp_hdr"] }).tamper, ["bad", "c_tamper_bad", { list: "tp_engine,tp_hdr" }]);
   // through a VPN in Japan
   const v = checks({ ...base, ipTzOff: "+09:00", ipcc: "JP", asn: 16509, org: "Amazon.com, Inc.", rtc: ["1.2.3.4", "5.6.7.8"], ip: "5.6.7.8" });
   assert.equal(v.tz[0], "bad"); assert.equal(v.lang[0], "warn"); assert.equal(v.dc[0], "warn"); assert.equal(v.webrtc[0], "bad");
@@ -161,4 +172,41 @@ test("protocols", () => {
   assert.deepEqual(protocols({ ...base, warp: "plus" }).warp, ["info", "c_warp_on", { w: "plus" }]);
   assert.equal(protocols({ ...base, gateway: "on" }).warp[1], "c_warp_gw");
   assert.deepEqual(protocols({ http: [] }), { h3: null, ech: null, pq: null, warp: null });
+});
+
+test("the system's languages and the grade", () => {
+  // Windows: the fonts a language adds, the voices of its pack, a keyboard tied to a region
+  assert.deepEqual(sysLangs({ os: "Windows", fonts: ["Segoe UI", "KaiTi", "DengXian"], voices: ["en-US", "zh-CN"] }), { cc: ["CN"], from: ["fonts", "voices"] });
+  assert.deepEqual(sysLangs({ os: "Windows", fonts: ["Segoe UI"], voices: ["en-US"], kbd: "AZERTY" }), { cc: ["FR", "BE"], from: ["kbd"] });
+  assert.deepEqual(sysLangs({ os: "Windows", fonts: [], voices: ["en-US", "en-GB"] }), { cc: [], from: [] });
+  // other systems bring every language's fonts and voices
+  assert.equal(sysLangs({ os: "macOS", fonts: ["PingFang SC", "Hiragino Sans"] }), false);
+  // plain English in the browser, Chinese in the system
+  assert.deepEqual(nationality({ langs: ["en-US"], tz: "Asia/Tokyo", ipcc: "JP", sys: { cc: ["CN"], from: ["fonts"] } }), { cc: "CN", from: ["fonts"] });
+  const ok = id => ["ok", "x", {}], ids = ["a", "b", "c"];
+  assert.deepEqual(grade({ a: ok(), b: ok(), c: ok() }, ids), { score: 100, grade: "A+" });
+  assert.deepEqual(grade({ a: ["warn"], b: ok(), c: ok() }, ids), { score: 92, grade: "A" });
+  assert.deepEqual(grade({ a: ["bad"], b: ["bad"], c: ["warn"] }, ids), { score: 56, grade: "D" });
+});
+
+test("the screen in physical pixels", () => {
+  assert.deepEqual(physicalScreen(2560, 1440, 1.5), [3840, 2160]);    // 4K at Windows' default 150%
+  assert.deepEqual(physicalScreen(1920, 1080, 2), [3840, 2160]);      // 4K at 200%
+  assert.deepEqual(physicalScreen(2560, 1440, 1.875), [3840, 2160]);  // the same, with the page zoomed to 125%
+  assert.deepEqual(physicalScreen(2560, 1440, 1), [2560, 1440]);
+  assert.deepEqual(physicalScreen(1512, 982, 2), [3024, 1964]);       // a 14-inch MacBook Pro
+  assert.deepEqual(physicalScreen(390, 844, 3), [1170, 2532]);        // a phone keeps the plain product
+  assert.deepEqual(physicalScreen(1080, 1920, 1), [1080, 1920]);      // a monitor turned upright
+});
+
+test("software renderers and networks registered under an address", () => {
+  assert.equal(isSoftGpu("ANGLE (Microsoft, Microsoft Basic Render Driver Direct3D11 vs_5_0 ps_5_0, D3D11)"), true);
+  assert.equal(isSoftGpu("ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"), true);
+  assert.equal(isSoftGpu("ANGLE (NVIDIA, NVIDIA GeForce RTX 4080 SUPER (0x00002702) Direct3D11 vs_5_0 ps_5_0, D3D11)"), false);
+  assert.equal(looksLikeAddress("7F,World peace center,55 wo tong tsui st,kwai chung"), true);
+  assert.equal(looksLikeAddress("Room 1203, 12/F, Tower 2"), true);
+  assert.equal(looksLikeAddress("Amazon.com, Inc."), false);
+  assert.equal(looksLikeAddress("China Unicom Beijing Province Network"), false);
+  assert.equal(looksLikeAddress("1&1 Versatel Deutschland GmbH"), false);
+  assert.equal(looksLikeAddress("Level 3 Parent, LLC"), false);
 });

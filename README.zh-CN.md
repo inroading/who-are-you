@@ -6,7 +6,7 @@
 
 接着它像网站识别伪装那样，把这些信息互相对比；并列出全部 79 个嗅探器、每个的读取方式和读到的结果。
 
-**在线使用：** https://who.1ms.dog · 专题页：[浏览器指纹检测](https://who.1ms.dog/zh-cn/fingerprint/)、[DNS 泄露检测](https://who.1ms.dog/zh-cn/dns-leak/)、[WebRTC 泄漏检测](https://who.1ms.dog/zh-cn/webrtc-leak/)（同一个工具，把那一项结果放在最前面；文案在 `src/pages.mjs`）
+**在线使用：** https://who.1ms.dog · 专题页：[浏览器指纹检测](https://who.1ms.dog/zh-cn/fingerprint/)、[DNS 泄露检测](https://who.1ms.dog/zh-cn/dns-leak/)、[浏览器环境检测](https://who.1ms.dog/zh-cn/browser-check/)、[时区检测](https://who.1ms.dog/zh-cn/timezone-check/)、[代理检测](https://who.1ms.dog/zh-cn/proxy-check/)、[WebRTC 泄漏检测](https://who.1ms.dog/zh-cn/webrtc-leak/)（同一个工具，把那一项结果放在最前面；文案在 `src/pages.mjs`）
 
 ## 能看到什么
 
@@ -14,14 +14,17 @@
 - **网站会怎么想**：画像里有三个空不是读数而是结论：这台机器像是干什么用的（显卡和刷新率）、各处说法对不对得上（对不上就说网站多半会猜你在用代理）、清 Cookie 有没有用（指纹稳不稳）。
 - **和上次比**：只记在你的浏览器里，改完设置再测，会显示「上次 8 处，这次 7 处，修好了：…」。指纹变了时，会说是浏览器升级了，还是哪几项变了。
 - **想装成在哪儿上网**：选一个目标地区（默认是 IP 所在地），逐项看 IP、系统时区、浏览器语言、DNS、WebRTC 还差什么，以及怎么改。
-- **伪装检测**：想隐藏自己时最要紧的 9 项：
+- **伪装检测**：想隐藏自己时最要紧的 12 项，并按结果给出 A 到 F 的环境评分：
   - 系统时区和 IP 所在时区
   - 浏览器语言和 IP 所在国家
+  - 系统语言和 IP：Windows 装了哪国的语言包，从补充字体、本地语音和键盘布局看得出来（其他系统默认带齐各国字体和语音，看不出）
   - DNS 泄露：实际替你解析域名的 DNS 解析器在哪个国家，和 IP 是否一致
   - 分流：国内网站、国外 IP 服务、ChatGPT、Claude、Cloudflare 和本站看到的出口是否不同
   - WebRTC：STUN 服务器看到的公网地址，本站通过 IPv4 和 IPv6 都没见过的就算泄漏
+  - 延迟与连接：浏览器测到的往返时间比 Cloudflare 在自己连接上测到的长很多，说明中间还有一段，像是代理（住宅 IP 也藏不住）
   - 机房网络（云、托管、VPN 服务商）
   - User-Agent 和 Client Hints、WebGL 显卡暴露的真实系统
+  - 环境被篡改：navigator 属性被重新定义、画图和音频函数被替换、JS 引擎和 UA 对不上、请求头和 JS 里的语言不同、Date 和 Intl 的时区不同
   - 指纹是稳定的（可追踪）还是随机的
   - 自动化（`navigator.webdriver`）
 

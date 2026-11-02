@@ -113,6 +113,11 @@ h2 { font-size: 15px; font-weight: 700; }
 .v-go { display: inline-flex; align-items: center; gap: 3px; margin-top: 4px; font: 600 12.5px var(--f-ui); color: var(--ink); text-decoration: none; }
 .v-go:hover { text-decoration: underline; }
 .v-go[hidden] { display: none; }
+/* the environment's grade, beside the count */
+.m-grade { float: right; margin: 2px 0 4px 10px; padding: 2px 9px; border-radius: 999px; font: 700 12.5px var(--f-ui); color: #fff; background: var(--muted); }
+.m-grade[hidden] { display: none; }
+.m-grade.g-A, .m-grade.g-Ap { background: var(--t1); } .m-grade.g-B { background: color-mix(in srgb, var(--t1) 60%, var(--t3)); }
+.m-grade.g-C { background: var(--t3); } .m-grade.g-D { background: color-mix(in srgb, var(--t3) 50%, var(--t5)); } .m-grade.g-F { background: var(--t5); }
 /* this run against the last one */
 .v-cmp { font-size: 12.5px; line-height: 1.5; margin-top: 4px; color: var(--muted); }
 .v-cmp.ok { color: var(--t1); } .v-cmp.bad { color: var(--t5); }

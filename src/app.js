@@ -4,7 +4,7 @@
 // once, when every sniffer it needs is in, so its text doesn't reflow piece by piece. Strings: window.L1MS.
 import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO } from "./sniffers.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
 
 (function () {
@@ -67,6 +67,8 @@ import { TZ_CC } from "./tz.mjs";
     do { y = x; x = x.replace(/[,.]?\s+(inc|llc|l\.l\.c|ltd|limited|co|corp|corporation|company|gmbh|ag|s\.?a\.?|b\.?v\.?|pte|private|plc|oy|ab|as|srl|sas|kg)\.?$/i, "").trim(); } while (x !== y && x);
     return x || String(s || "");
   };
+  // the network's name for the portrait and the checks: its AS number when it's registered under an address
+  const orgName = (s, asn) => s && !looksLikeAddress(s) ? shortOrg(s) : asn ? "AS" + asn : null;
   const within = (p, ms, fb) => Promise.race([p, new Promise(r => setTimeout(() => r(fb), ms))]);
   const sha = async s => {
     try { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); }
@@ -249,6 +251,7 @@ import { TZ_CC } from "./tz.mjs";
     if (!navigator.keyboard || !navigator.keyboard.getLayoutMap) return na("kbd");
     const map = await within(navigator.keyboard.getLayoutMap(), 1500, null);
     const k = kbdLayout(map);
+    R.kbd = k;
     if (k) txt("kbd", k); else na("kbd");
   }
 
@@ -257,6 +260,7 @@ import { TZ_CC } from "./tz.mjs";
     let v = speechSynthesis.getVoices();
     if (!v.length) v = await within(new Promise(r => speechSynthesis.addEventListener("voiceschanged", () => r(speechSynthesis.getVoices()), { once: true })), 1500, []);
     if (!v.length) return na("voices", "v_none");
+    R.voices = v.filter(x => x.localService).map(x => x.lang || "");
     const langs = [...new Set(v.map(x => (x.lang || "").split(/[-_]/)[0]).filter(Boolean))];
     txt("voices", t("voices_v", { n: v.length, list: list(langs.slice(0, 6).map(language)) + (langs.length > 6 ? "…" : "") }), { why: langs.map(language).join(", ") });
   }
@@ -282,8 +286,11 @@ import { TZ_CC } from "./tz.mjs";
     else if (navigator.platform) txt("arch", navigator.platform);
     else na("arch");
     const s = screen, dpr = Math.round((devicePixelRatio || 1) * 100) / 100;
-    R.screen = s.width ? s.width + "×" + s.height : t("v_unknown");
-    if (!s.width) na("screen"); else txt("screen", t("scr_v", { w: s.width, h: s.height, dpr, d: s.colorDepth }), { why: t("scr_avail", { w: s.availWidth, h: s.availHeight, iw: innerWidth, ih: innerHeight }) });
+    // in physical pixels: screen.width is after the system's scaling (a 4K monitor at 150% reports 2560×1440)
+    const [pw, ph] = s.width ? physicalScreen(s.width, s.height, devicePixelRatio || 1) : [0, 0];
+    R.screen = s.width ? pw + "×" + ph : t("v_unknown");
+    if (!s.width) na("screen");
+    else txt("screen", t("scr_v", { w: pw, h: ph, dpr, d: s.colorDepth }), { why: t("scr_css", { w: s.width, h: s.height }) + "\n" + t("scr_avail", { w: s.availWidth, h: s.availHeight, iw: innerWidth, ih: innerHeight }) });
     if (navigator.hardwareConcurrency) txt("cpu", t("cores", { n: navigator.hardwareConcurrency })); else na("cpu");
     if (navigator.deviceMemory) txt("mem", t("mem_v", { n: navigator.deviceMemory })); else na("mem");
     txt("touch", [t("touch_v", { n: navigator.maxTouchPoints || 0 }), t(mq("(pointer: coarse)") ? "ptr_coarse" : "ptr_fine")].join(" · "));
@@ -299,8 +306,10 @@ import { TZ_CC } from "./tz.mjs";
     const ext = gl.getExtension("WEBGL_debug_renderer_info");
     const ren = ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
     const ven = ext ? gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR);
-    R.gpuRaw = ren; R.gpu = gpuName(ren);
-    txt("gpu", R.gpu || ren || "–", { why: [ven, ren].filter(Boolean).join(" · ") });
+    // a software renderer means the browser isn't using the card at all (remote desktop, a virtual machine, no driver,
+    // hardware acceleration off): say so rather than pass it off as one
+    R.gpuRaw = ren; R.gpuSoft = isSoftGpu(ren); R.gpu = R.gpuSoft ? null : gpuName(ren);
+    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : R.gpu || ren || "–", { why: [ven, ren].filter(Boolean).join(" · ") });
     const gl2 = !!document.createElement("canvas").getContext("webgl2");
     txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }));
     // everything WebGL reports about the card and driver, for the WebGL fingerprint
@@ -336,6 +345,7 @@ import { TZ_CC } from "./tz.mjs";
     let m = "";
     try { JSON.parse("null").x; } catch (e) { m = String(e.message); }
     const e = /Cannot read prop/.test(m) ? "V8" : /is null|has no properties/.test(m) ? "SpiderMonkey" : /not an object/.test(m) ? "JavaScriptCore" : null;
+    R.engine = e;
     txt("engine", e ? e + " · " + ({ V8: "Chromium", SpiderMonkey: "Firefox", JavaScriptCore: "WebKit" })[e] : t("v_unknown"), { why: m });
   }
 
@@ -407,6 +417,7 @@ import { TZ_CC } from "./tz.mjs";
     const w = f => { c.font = "72px " + f; return c.measureText(W).width; };
     const b = base.map(w);
     R.fonts = FONTS.filter(f => base.some((g, i) => w(`"${f}", ${g}`) !== b[i]));
+    R.sysFonts = SYS_FONT_LIST.filter(f => base.some((g, i) => w(`"${f}", ${g}`) !== b[i]));
     txt("fonts", t("fonts_v", { n: R.fonts.length, of: FONTS.length }) + " " + R.fonts.join(", "), { why: R.fonts.join(", ") });
   }
 
@@ -669,11 +680,11 @@ import { TZ_CC } from "./tz.mjs";
   }
   function portrait() {
     const c = (R.srv && R.srv.cf) || {}, d = R.dev || {};
-    const nat = nationality({ langs: R.langs, tz: R.tz, ipcc: c.country });
+    const nat = nationality({ langs: R.langs, tz: R.tz, ipcc: c.country, sys: sysOf() || undefined });
     const ex = allExits(), split = ex && splitOf(ex);
     return { v: 1, nat: nat ? nat.cc : null, natFrom: nat ? nat.from : null, cc: c.country || null, city: c.city || null, langs: R.langs || [],
       tz: R.tz || null, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, browser: R.browser || null,
-      screen: R.screen || null, gpu: R.gpu || null, org: c.asOrganization ? shortOrg(c.asOrganization) : c.asn ? "AS" + c.asn : null, asn: c.asn ?? null,
+      screen: R.screen || null, gpu: R.gpu || null, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
       nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
       dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, hz: R.hz || null,
       x: { split, fullOrg: [c.asn ? "AS" + c.asn : "", c.asOrganization].filter(Boolean).join(" · "), dnsOrg: R.dnsOrg || "", fpHex: R.fpHex } };
@@ -753,7 +764,7 @@ import { TZ_CC } from "./tz.mjs";
     blank("device", esc(!P.os ? t("dv_unknown") : (P.kind === "phone" || P.kind === "tablet") && P.model ? t("dv_model", { model: P.model, os: P.os }) : t("dv_" + (P.kind || "pc"), { os: P.os })));
     blank("browser", P.browser ? esc(P.browser) : U);
     blank("screen", P.screen ? esc(P.screen + (P.hz ? " · " + P.hz + " Hz" : "")) : U);
-    blank("gpu", esc(P.gpu || t("gpu_unknown")));
+    blank("gpu", esc(P.gs ? t("gpu_soft") : P.gpu || t("gpu_unknown")));
     blank("isp", P.org ? (!shared && asnOf(P.asn) ? `<a href="${esc(asnOf(P.asn))}" target="_blank" rel="noopener" title="${esc(t("go_asn"))}">${esc(P.org)}</a>` : esc(P.org)) : shared ? esc(t("masked")) : U, BLANKS.isp, X.fullOrg || (shared && !P.org ? t("masked_why") : ""));
     blank("dns", P.dns ? flagged(P.dns, country(P.dns)) : U, BLANKS.dns, X.dnsOrg || "");
     const sp = X.split;
@@ -779,7 +790,7 @@ import { TZ_CC } from "./tz.mjs";
       : P.nt === "split" ? t("rd_split") : P.nt === "dc" ? t("rd_dc") : ipc ? t("rd_home", { ipc }) : t("rd_none")));
     const g = P.gpu || "", hi = /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);
     const low = /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g), pc = P.kind === "pc" || P.kind === "mac";
-    blank("rig", esc(t(pc && hi && P.hz >= 120 ? "rg_game" : pc && hi ? "rg_power" : pc && low ? "rg_basic" : "rg_none")));
+    blank("rig", esc(t(P.gs ? "rg_soft" : pc && hi && P.hz >= 120 ? "rg_game" : pc && hi ? "rg_power" : pc && low ? "rg_basic" : "rg_none")));
     blank("track", esc(t(P.rand ? "tk_rand" : "tk_same")));
   }
 
@@ -835,6 +846,8 @@ import { TZ_CC } from "./tz.mjs";
   function ckText(id, [, key, vars], ipc) {
     const vv = Object.fromEntries(Object.entries(vars).map(([k, x]) => [k, k === "cc" ? country(x) : id === "split" ? exitName(x) : x]));
     if (id === "tz" || id === "lang" || id === "dns") vv.ipc = ipc ? country(ipc) : "?";
+    if (id === "syslang" && vars.from) vv.from = list(String(vars.from).split(",").map(rowName));
+    if (id === "tamper" && vars.list) vv.list = list(String(vars.list).split(",").map(k => t(k)));
     // each side as its zone's name with the offset ("Pacific Time UTC-08:00"), or the offset alone
     if (id === "tz") { vv.A = zoneLabel(vars.za, vars.a, ipc); vv.B = zoneLabel(vars.zb, vars.b); }
     return t(key, vv);
@@ -874,6 +887,9 @@ import { TZ_CC } from "./tz.mjs";
     $("#vText").textContent = t(n ? "v_found_d" : "v_clean_d");
     $("#vHead").className = "v-h" + (bad ? " bad" : warn ? " warn" : " ok");
     $("#mNum").textContent = n; $("#mNum").className = "m-num " + (bad ? "bad" : warn ? "warn" : "ok");
+    const gr = grade(res, CHECKS.filter(id => res[id]));
+    $("#mGrade").textContent = t("grade_v", { g: gr.grade }); $("#mGrade").className = "m-grade g-" + gr.grade.replace("+", "p"); $("#mGrade").hidden = false;
+    $("#mGrade").title = t("grade_why", { s: gr.score });
   }
   $$(".ck-fix").forEach(btn => {
     btn.onclick = e => {
@@ -882,19 +898,56 @@ import { TZ_CC } from "./tz.mjs";
       tip.hidden = !open; btn.setAttribute("aria-expanded", open);
     };
   });
+  // the languages this system installed (fonts, voices, keyboard), once the device is known
+  const sysOf = () => R.dev ? sysLangs({ os: R.dev.os, fonts: [...(R.fonts || []), ...(R.sysFonts || [])], voices: R.voices || [], kbd: R.kbd }) : undefined;
+  // Signs that something rewrote what the page reads: a property defined on navigator itself or a getter that isn't
+  // the browser's own, a drawing or sound function replaced, a JavaScript engine that isn't the user agent's, a
+  // language in JavaScript that the request's header doesn't have, a Date that disagrees with Intl about the zone
+  function tampered() {
+    const out = [], own = f => typeof f !== "function" || /\{\s*\[native code\]\s*\}\s*$/.test(Function.prototype.toString.call(f));
+    const props = ["userAgent", "platform", "language", "languages", "hardwareConcurrency", "deviceMemory", "webdriver", "vendor", "maxTouchPoints"];
+    const desc = (o, k) => { for (let p = o; p; p = Object.getPrototypeOf(p)) { const d = Object.getOwnPropertyDescriptor(p, k); if (d) return [p, d]; } return [null, null]; };
+    if (props.some(k => { const [p, d] = desc(navigator, k); return p === navigator || (d && d.get && !own(d.get)); })
+      || ["width", "height", "colorDepth"].some(k => { const [p, d] = desc(screen, k); return p === screen || (d && d.get && !own(d.get)); })) out.push("tp_props");
+    const fns = [window.HTMLCanvasElement && HTMLCanvasElement.prototype.toDataURL, window.CanvasRenderingContext2D && CanvasRenderingContext2D.prototype.getImageData,
+      window.WebGLRenderingContext && WebGLRenderingContext.prototype.getParameter, window.AudioBuffer && AudioBuffer.prototype.getChannelData,
+      Date.prototype.getTimezoneOffset, Intl.DateTimeFormat.prototype.resolvedOptions];
+    if (fns.some(f => f && !own(f))) out.push("tp_fn");
+    const name = R.br && R.br.name, ios = R.dev && /^iOS|^iPadOS/.test(R.dev.os || "");
+    const want = ios || name === "Safari" ? "JavaScriptCore" : name === "Firefox" ? "SpiderMonkey" : /^(Chrome|Edge|Opera|Brave|Vivaldi|Yandex|Samsung Internet)$/.test(name || "") ? "V8" : null;
+    if (want && R.engine && R.engine !== want) out.push("tp_engine");
+    const hl = ((R.srv && R.srv.h && R.srv.h["accept-language"]) || "").split(",")[0].split(";")[0].trim().toLowerCase();
+    if (hl && R.langs && R.langs[0] && hl !== R.langs[0].toLowerCase()) out.push("tp_hdr");
+    if (R.tzOff != null && -new Date().getTimezoneOffset() !== R.tzOff) out.push("tp_tz");
+    return out;
+  }
+  // The round trip from here to this site's edge: the quickest of a few requests to Cloudflare's trace on the open
+  // connection, from the moment it was sent to the first byte back
+  async function latency() {
+    const t = [];
+    for (let i = 0; i < 5; i++) {
+      const u = new URL("/cdn-cgi/trace?rtt=" + i, location.href).href;
+      if (!(await getT(u).then(() => true, () => false))) continue;
+      const e = performance.getEntriesByName(u)[0];
+      if (e && e.responseStart > e.requestStart && e.requestStart > 0) t.push(e.responseStart - e.requestStart);
+    }
+    R.rttB = t.length >= 3 ? Math.min(...t) : null;
+  }
+
   function judge(final) {
     const c = (R.srv && R.srv.cf) || {};
     const res = checks({
       tz: R.tz, tzOff: R.tzOff == null ? null : offTxt(R.tzOff), ipTzOff: c.timezone ? offTxt(tzOffset(c.timezone)) : null, ipTz: c.timezone || null, ipcc: c.country,
-      langs: R.langs, dnsCC: R.dnsCC, exits: allExits(), rtc: R.rtc, ip: R.srv && R.srv.ip, asn: c.asn, org: c.asOrganization && shortOrg(c.asOrganization),
+      langs: R.langs, dnsCC: R.dnsCC, exits: allExits(), rtc: R.rtc, ip: R.srv && R.srv.ip, asn: c.asn, org: orgName(c.asOrganization, c.asn),
       uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, webdriver: R.webdriver,
+      rttB: R.latDone ? R.rttB : null, rttCf: c.clientTcpRtt || null, sys: final || R.voices ? sysOf() : undefined, tamper: R.dev && R.srv ? tampered() : null,
     });
     if (res.dc === null && R.srv && !c.asn) res.dc = ["info", "c_na", {}];
     const tr = R.tr || {};
     Object.assign(res, protocols({ http: R.http && R.h3done ? [c.httpProtocol, ...R.http].filter(Boolean) : null, rtc: R.rtc, br: R.br,
       sni: tr.sni, kex: tr.kex, warp: tr.warp, gateway: tr.gateway }));
     // at the end, a protocol nothing could be read for (no trace: blocked, or not behind Cloudflare) says so
-    if (final) for (const id of PROTO) if (!res[id]) res[id] = ["info", "c_na", {}];
+    if (final) for (const id of [...CHECKS, ...PROTO]) if (!res[id]) res[id] = ["info", "c_na", {}];
     R.ck = res;
     paintChecks(res, c.country, final);
   }
@@ -989,6 +1042,7 @@ import { TZ_CC } from "./tz.mjs";
     $("#mine").onclick = () => { location.href = D.paths[LANG] || "/"; };
     $("#progTxt").textContent = " ";
     paint(P, true);
+    for (const id of CHECKS) if (!(P.ck || {})[id]) { CK[id].hidden = true; const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.hidden = true; }
     paintChecks(P.ck || {}, P.cc, true);
     readings(P, P.ck || {});
     return true;
@@ -1022,6 +1076,8 @@ import { TZ_CC } from "./tz.mjs";
     const h3 = http3().then(() => { R.h3done = true; });
     // the page's own request, and the probes that ask other sites who you are
     const srv = server(), probes = [guard("stack", stack), guard(EXITS.map(([id]) => id), exits), guard("dns", () => dnsResolver().catch(e => { R.dnsCC = null; throw e; }))];
+    // the round trip, measured once the connection is open
+    const lat = srv.then(latency).then(() => { R.latDone = true; });
     // Embedded, a run with no answer from this site's server, or none from any other site (an ad blocker drops the
     // probes all together, at once), has nothing to report: say so as soon as that's clear, not when the slowest
     // sniffer gives up
@@ -1038,7 +1094,7 @@ import { TZ_CC } from "./tz.mjs";
     ]);
     if (g !== gen) return;
     judge(false); paint(portrait(), false); readings(portrait(), R.ck);
-    await rtc; await h3;
+    await rtc; await h3; await lat;
     if (g !== gen) return;
     for (const id of Object.keys(PR)) if (!done.has(id)) na(id);   // anything a sniffer couldn't reach
     judge(true);
@@ -1054,7 +1110,7 @@ import { TZ_CC } from "./tz.mjs";
   // findings are cut to their network, as in a shared link.
   function embedResult() {
     const c = (R.srv && R.srv.cf) || {}, ck = R.ck || {}, P = sharedPortrait(false), lv = id => ck[id] && ck[id][0];
-    const found = CHECKS.filter(id => ck[id] && (ck[id][0] === "bad" || ck[id][0] === "warn")).length;
+    const found = CHECKS.filter(id => ck[id] && (ck[id][0] === "bad" || ck[id][0] === "warn")).length, gr = grade(ck, CHECKS.filter(id => ck[id]));
     const RANK = { bad: 0, warn: 1, ok: 2 };
     const findings = [...CHECKS, ...PROTO].filter(id => P.ck[id] && P.ck[id][0] in RANK).sort((a, b) => RANK[P.ck[a][0]] - RANK[P.ck[b][0]]).slice(0, 4)
       .map(id => ({ level: P.ck[id][0], text: t("c_" + id) + " · " + ckText(id, P.ck[id], c.country) }));
@@ -1069,12 +1125,15 @@ import { TZ_CC } from "./tz.mjs";
     if (R.dnsCC) facts.dnsCountry = R.dnsCC;
     if (ck.dc && lv("dc") !== "info") facts.dc = lv("dc") !== "ok";
     if (ck.fp) facts.fpSame = ck.fp[1] === "c_fp_same";
+    if (ck.rtt && lv("rtt") !== "info") facts.rttGap = lv("rtt") !== "ok";
+    if (ck.syslang && lv("syslang") !== "info") facts.sysLangMismatch = lv("syslang") !== "ok";
+    if (ck.tamper && lv("tamper") !== "info") facts.tampered = lv("tamper") === "bad";
     // HTTP/3 true once seen, false when UDP gets out nowhere, left out when there's no telling
     if (ck.h3 && (lv("h3") === "ok" || lv("h3") === "warn")) facts.h3 = lv("h3") === "ok";
     if (ck.ech) facts.ech = lv("ech") === "ok";
     if (ck.pq) facts.pq = lv("pq") === "ok";
     if (ck.warp) facts.warp = ck.warp[1] === "c_warp_on";
-    return { type: "result", lang: LANG, path: linkPath(LANG, encode(P)), grade: null, score: null, headline: $("#vHead").textContent, stats, findings, facts };
+    return { type: "result", lang: LANG, path: linkPath(LANG, encode(P)), grade: gr.grade, score: gr.score, headline: $("#vHead").textContent, stats, findings, facts };
   }
   // the report page sizes the frame to the content
   if (EMBED && window.ResizeObserver) {

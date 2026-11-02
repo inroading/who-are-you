@@ -560,4 +560,424 @@
     <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/webrtc-leak/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/webrtc-leak/"/>
   </url>
+  <url>
+    <loc>https://who.1ms.dog/browser-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/browser-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-cn/browser-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/browser-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-tw/browser-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/browser-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ja/browser-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/browser-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ko/browser-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/browser-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/es/browser-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/browser-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/fr/browser-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/browser-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/de/browser-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/browser-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/pt/browser-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/browser-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ru/browser-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/browser-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/browser-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/timezone-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/timezone-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-cn/timezone-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/timezone-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-tw/timezone-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/timezone-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ja/timezone-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/timezone-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ko/timezone-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/timezone-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/es/timezone-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/timezone-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/fr/timezone-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/timezone-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/de/timezone-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/timezone-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/pt/timezone-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/timezone-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ru/timezone-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/timezone-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/timezone-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/proxy-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-cn/proxy-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-tw/proxy-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ja/proxy-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ko/proxy-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/es/proxy-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/fr/proxy-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/de/proxy-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/pt/proxy-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ru/proxy-check/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/proxy-check/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/proxy-check/"/>
+  </url>
 </urlset>

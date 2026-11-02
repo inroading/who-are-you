@@ -6,7 +6,7 @@ Who do websites think you are? [Who Are You](https://who.1ms.dog) runs the sniff
 
 It then checks those readings against each other the way a site would to spot a disguise, and lists all 79 sniffers with how each one reads and what it read.
 
-**Live:** https://who.1ms.dog · topic pages: [browser fingerprint test](https://who.1ms.dog/fingerprint/), [DNS leak test](https://who.1ms.dog/dns-leak/), [WebRTC leak test](https://who.1ms.dog/webrtc-leak/) (same tool, that result first; text in `src/pages.mjs`)
+**Live:** https://who.1ms.dog · topic pages: [browser fingerprint test](https://who.1ms.dog/fingerprint/), [DNS leak test](https://who.1ms.dog/dns-leak/), [Browser Environment Check](https://who.1ms.dog/browser-check/), [Time Zone Check](https://who.1ms.dog/timezone-check/), [Proxy Check](https://who.1ms.dog/proxy-check/), [WebRTC leak test](https://who.1ms.dog/webrtc-leak/) (same tool, that result first; text in `src/pages.mjs`)
 
 ## What it shows
 
@@ -14,14 +14,17 @@ It then checks those readings against each other the way a site would to spot a 
 - **What a site makes of it**: three blanks of the portrait are conclusions rather than readings: what the machine looks like it's for (graphics card, refresh rate), whether everything lines up (if not, a site will likely guess a proxy), whether clearing cookies helps (a stable fingerprint).
 - **Against last time**: kept in your browser only; rerun after changing settings and it shows "last time 8, this time 7, fixed: …". When the fingerprint changes, it says whether the browser was updated or which parts moved.
 - **Where to seem to be**: pick a target region (by default the one the IP is in) and see, item by item, whether the IP, the system time zone, the browser language, the DNS resolver and WebRTC match it, and how to fix what doesn't.
-- **The disguise check**, nine rows that matter when you want to hide:
+- **The disguise check**, twelve rows that matter when you want to hide, and an A–F grade for the environment:
   - system time zone vs. the IP's time zone
   - browser language vs. the IP's country
+  - System language vs IP: the language packs a Windows system installed, from its supplemental fonts, local voices and keyboard layout (other systems ship every language's fonts and voices)
   - DNS leak: the country of the resolver that actually looked you up vs. the IP's
   - split routing: a site in mainland China, an IP service abroad, ChatGPT, Claude, Cloudflare and this site seeing different exits
   - WebRTC: public addresses STUN servers see that this site sees neither over IPv4 nor over IPv6
+  - Round trip: the browser's round trip much longer than the one Cloudflare measures on its own connection means another hop in between, like a proxy (a residential IP doesn't hide it)
   - data center network (clouds, hosting, VPN providers)
   - user agent vs. the system the client hints and WebGL renderer give away
+  - Tampered environment: navigator properties redefined, drawing or audio functions replaced, a JS engine that isn't the user agent's, a language in JavaScript the request header doesn't have, Date and Intl disagreeing on the time zone
   - whether the fingerprint is stable (trackable) or randomized
   - automation (`navigator.webdriver`)
 

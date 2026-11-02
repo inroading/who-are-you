@@ -21,10 +21,12 @@ export const tzCC = tz => TZ_CC[tz] || null;
 
 // nationality: the browser language says most about it, unless it is plain (US) English, which is every device's
 // default; then the system time zone (where the device was set up), then the address.
-export function nationality({ langs = [], tz, ipcc }) {
+export function nationality({ langs = [], tz, ipcc, sys }) {
   const first = langs[0] || "", lcc = langCC(first), tcc = tzCC(tz);
   const plainEn = /^en(-US)?$/i.test(first);
   if (lcc && !plainEn) return { cc: lcc, from: tcc === lcc ? ["langs", "tz"] : ["langs"] };
+  // a browser left in plain English on a system that installed one other language (its fonts, voices, keyboard)
+  if (sys && sys.cc.length === 1) return { cc: sys.cc[0], from: tcc === sys.cc[0] ? [...sys.from, "tz"] : sys.from };
   if (tcc) return { cc: tcc, from: ["tz"] };
   if (lcc) return { cc: lcc, from: ["langs"] };
   return ipcc ? { cc: ipcc, from: ["geo"] } : null;
@@ -194,6 +196,22 @@ export function checks(x) {
   }
   out.fp = x.rand == null ? null : x.rand ? ["ok", "c_fp_rand", {}] : ["warn", "c_fp_same", {}];
   out.bot = x.webdriver == null ? null : x.webdriver ? ["bad", "c_bot_bad", {}] : ["ok", "c_bot_ok", {}];
+  // The round trip the browser measures to this site against the one Cloudflare measures on its connection: through a
+  // proxy, Cloudflare only sees the proxy's leg, so the browser's is much longer. Over QUIC there is no TCP figure.
+  if (!x.rttB || !x.rttCf) out.rtt = null;
+  else {
+    const extra = x.rttB - x.rttCf, v = { a: Math.round(x.rttCf), b: Math.round(x.rttB) };
+    out.rtt = extra < 40 || x.rttB < x.rttCf * 1.6 ? ["ok", "c_rtt_ok", v] : extra < 100 ? ["warn", "c_rtt_warn", v] : ["bad", "c_rtt_bad", v];
+  }
+  // the languages the system itself has installed (Windows only: elsewhere every system ships them all)
+  if (x.sys === undefined || !x.ipcc) out.syslang = null;
+  else if (x.sys === false) out.syslang = ["info", "c_sys_na", {}];
+  else if (!x.sys.cc.length) out.syslang = ["ok", "c_sys_none", {}];
+  else if (x.sys.cc.includes(x.ipcc)) out.syslang = ["ok", "c_sys_ok", { cc: x.ipcc }];
+  else out.syslang = ["warn", "c_sys_warn", { cc: x.sys.cc[0], from: x.sys.from.join(",") }];
+  // an environment something rewrote: properties redefined, functions replaced, parts that should agree but don't
+  if (!x.tamper) out.tamper = null;
+  else out.tamper = x.tamper.length ? ["bad", "c_tamper_bad", { list: x.tamper.join(",") }] : ["ok", "c_tamper_ok", {}];
   return out;
 }
 
@@ -234,3 +252,57 @@ export function protocols(x) {
   else out.warp = ["info", x.gateway === "on" ? "c_warp_gw" : "c_warp_off", {}];
   return out;
 }
+
+// The signs of the languages a Windows system installed: the supplemental fonts Windows adds with a language (and
+// the ones Chinese Office installs), the voices that come with a language pack, a keyboard layout tied to a region.
+// Returns { cc: [countries], from: [rows] }, or false where it can't tell (other systems ship every font and voice).
+const SYS_FONTS = [["CN", ["DengXian", "FangSong", "KaiTi", "SimHei", "STKaiti", "STSong", "STXihei"]], ["TW", ["DFKai-SB", "MingLiU", "PMingLiU"]],
+  ["JP", ["BIZ UDGothic", "BIZ UDMincho", "UD Digi Kyokasho N-R", "Yu Mincho"]], ["KR", ["Batang", "Gulim", "Dotum", "Gungsuh"]]];
+export const SYS_FONT_LIST = SYS_FONTS.flatMap(([, l]) => l);
+const KBD_CC = { AZERTY: ["FR", "BE"], QWERTZ: ["DE", "AT", "CH", "CZ", "SK", "HU"], "ЙЦУКЕН": ["RU", "UA", "BY", "KZ"], Hebrew: ["IL"], Greek: ["GR", "CY"] };
+export function sysLangs({ os, fonts = [], voices = [], kbd }) {
+  if (os !== "Windows") return false;
+  const cc = [], from = [], add = (l, row) => { for (const c of l) if (!cc.includes(c)) cc.push(c); if (l.length && !from.includes(row)) from.push(row); };
+  for (const [c, l] of SYS_FONTS) if (l.some(n => fonts.includes(n))) add([c], "fonts");
+  // a local voice in a language other than English came with that language's pack; a dozen of them says nothing
+  const local = [...new Set(voices.map(langCC).filter(c => c && !/^(US|GB|AU|CA|IE|IN|NZ|ZA)$/.test(c)))];
+  if (local.length && local.length <= 3) add(local, "voices");
+  if (KBD_CC[kbd]) add(KBD_CC[kbd], "kbd");
+  return { cc, from };
+}
+
+// The environment's grade: every check that gives you away costs points, a clear contradiction more than a hint
+export function grade(ck, ids) {
+  let score = 100;
+  for (const id of ids) { const l = ck[id] && ck[id][0]; if (l === "bad") score -= 18; else if (l === "warn") score -= 8; }
+  score = Math.max(0, score);
+  return { score, grade: score === 100 ? "A+" : score >= 90 ? "A" : score >= 75 ? "B" : score >= 60 ? "C" : score >= 40 ? "D" : "F" };
+}
+
+// The screen in physical pixels. screen.width is in CSS pixels, after the system's scaling: a 4K monitor at the
+// 150% Windows sets by default reports 2560×1440. devicePixelRatio is that scaling times the browser's zoom, so the
+// product lands on a monitor's real size unless the page is zoomed; then the system scales Windows and macOS offer
+// are tried for one that gives a standard size. Phones (whole ratios, no zoom) keep the plain product.
+const SIZES = [[7680, 4320], [6016, 3384], [5120, 2880], [5120, 2160], [5120, 1440], [4096, 2304], [3840, 2400], [3840, 2160], [3840, 1600], [3840, 1080],
+  [3456, 2234], [3440, 1440], [3200, 1800], [3024, 1964], [3000, 2000], [2880, 1920], [2880, 1800], [2736, 1824], [2560, 1664], [2560, 1600], [2560, 1440],
+  [2560, 1080], [2496, 1664], [2256, 1504], [2160, 1440], [1920, 1200], [1920, 1080], [1680, 1050], [1600, 900], [1440, 900], [1366, 768], [1280, 1024],
+  [1280, 800], [1280, 720]];
+const near = (w, h) => SIZES.find(([a, b]) => (Math.abs(a - w) <= a * 0.01 && Math.abs(b - h) <= b * 0.01) || (Math.abs(a - h) <= a * 0.01 && Math.abs(b - w) <= b * 0.01));
+export function physicalScreen(w, h, dpr = 1) {
+  const pw = Math.round(w * dpr), ph = Math.round(h * dpr), hit = near(pw, ph);
+  if (hit) return w >= h === hit[0] >= hit[1] ? [hit[0], hit[1]] : [hit[1], hit[0]];
+  // a page is more often zoomed in than out: the scales just under the ratio first, then the rest
+  const S = [1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 3], under = S.filter(s => s < dpr).reverse(), over = S.filter(s => s > dpr);
+  for (const s of [...under, ...over]) {
+    const m = near(Math.round(w * s), Math.round(h * s));
+    if (m) return w >= h === m[0] >= m[1] ? [m[0], m[1]] : [m[1], m[0]];
+  }
+  return [pw, ph];
+}
+
+// What WebGL reports when the browser isn't drawing on the graphics card: Windows' fallback (remote desktop, virtual
+// machines, no driver), Chrome's own, Mesa's. None of them names the card.
+export const isSoftGpu = r => /Basic Render Driver|SwiftShader|llvmpipe|softpipe|Software Rasterizer/i.test(r || "");
+// Some networks are registered under a street address rather than a name ("7F, World Peace Centre, 55 Wo Tong Tsui St")
+// (a number with an address word, or a number in a list of three or more parts; "Level 3 Parent, LLC" is a name)
+export const looksLikeAddress = o => { const s = String(o || ""); return /\d/.test(s) && ((s.match(/,/g) || []).length >= 2 || /\b\d+\s*\/?\s*F\b|\b(floor|street|st|road|rd|avenue|ave|building|bldg|suite|room)\b/i.test(s)); };
