@@ -260,6 +260,9 @@ export function checks(x) {
   else if (x.sys.cc.includes(x.ipcc)) out.syslang = ["ok", "c_sys_ok", { cc: x.ipcc }];
   // (one source alone says little: Office and Windows' optional features bring East Asian fonts, a voice is one download)
   else out.syslang = [x.sys.from.length > 1 ? "warn" : "info", x.sys.from.length > 1 ? "c_sys_warn" : "c_sys_one", { cc: x.sys.cc[0], from: x.sys.from.join(",") }];
+  // an anti-detect browser's traces: parts that each look right but don't agree (one is a hint, two are a giveaway)
+  if (!x.fpb) out.fpb = null;
+  else out.fpb = x.fpb.length ? [x.fpb.length > 1 ? "bad" : "warn", "c_fpb_bad", { list: x.fpb.join(",") }] : ["ok", "c_fpb_ok", {}];
   // an environment something rewrote: properties redefined, functions replaced, parts that should agree but don't
   if (!x.tamper) out.tamper = null;
   else out.tamper = x.tamper.length ? ["bad", "c_tamper_bad", { list: x.tamper.join(",") }] : ["ok", "c_tamper_ok", {}];
@@ -386,3 +389,25 @@ export const isRelayIp = ip => { const s = String(ip || ""); if (s.includes(":")
 // Firefox with resistFingerprinting (Tor and Mullvad Browser too): Reykjavik's clock for every site (UTC in older
 // versions), and "Mozilla" for the graphics card unless WebGL is off
 export const rfpClock = (firefox, tz, gpuRaw) => !!firefox && /^(Atlantic\/Reykjavik|UTC|Etc\/UTC)$/.test(tz || "") && (gpuRaw == null || gpuRaw === "Mozilla");
+
+// The engine's version from the JavaScript it supports, each feature with the Chromium version that shipped it: a user
+// agent can be rewritten, the engine can't. lo: the newest feature there, hi: the version before the oldest missing
+export const FEATURES = [[97, "findLast"], [98, "structuredClone"], [117, "groupBy"], [119, "withResolvers"], [121, "fromAsync"],
+  [122, "union"], [128, "try"], [129, "DurationFormat"], [134, "isError"], [135, "Float16Array"], [136, "escape"]];
+export function engineRange(has) {
+  const yes = FEATURES.filter(([, k]) => has[k]).map(([v]) => v), no = FEATURES.filter(([, k]) => !has[k]).map(([v]) => v);
+  return { lo: yes.length ? Math.max(...yes) : 0, hi: no.length ? Math.min(...no) - 1 : null, n: yes.length };
+}
+// a Chromium user agent's version against that range (a feature missing below one present is itself a sign)
+export const engineOff = (claimed, r) => !!(claimed && r && (claimed < r.lo || (r.hi != null && (claimed > r.hi || r.hi < r.lo))));
+// navigator.platform against the system the user agent names
+export function platformOff(platform, os) {
+  if (!platform || !os || /Harmony/i.test(os)) return false;
+  const want = /^Windows/.test(os) ? /^Win/ : /^macOS/.test(os) ? /^Mac/ : /^(iOS|iPadOS)/.test(os) ? /^(iPhone|iPad|iPod|MacIntel)/ : /^(Android|Linux|Chrome ?OS)/i.test(os) ? /Linux|Android|arm|aarch|X11|CrOS/i : null;
+  return want ? !want.test(platform) : false;
+}
+// WebGL's vendor ("Google Inc. (NVIDIA)") against the card's maker ("ANGLE (NVIDIA, …)"), where both name one
+export function glVendorOff(vendor, renderer) {
+  const v = /^Google Inc\. \(([^)]+)\)/.exec(vendor || ""), r = /^ANGLE \(([^,]+),/.exec(renderer || "");
+  return !!(v && r && v[1].trim().toLowerCase() !== r[1].trim().toLowerCase());
+}

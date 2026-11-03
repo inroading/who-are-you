@@ -4,7 +4,7 @@
 // once, when every sniffer it needs is in, so its text doesn't reflow piece by piece. Strings: window.L1MS.
 import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO } from "./sniffers.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
 
 (function () {
@@ -310,6 +310,7 @@ import { TZ_CC } from "./tz.mjs";
     const ext = gl.getExtension("WEBGL_debug_renderer_info");
     const ren = ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
     const ven = ext ? gl.getParameter(ext.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR);
+    R.gpuVen = ven;
     // a software renderer means the browser isn't using the card at all (remote desktop, a virtual machine, no driver,
     // hardware acceleration off): say so rather than pass it off as one
     R.gpuRaw = ren; R.gpuSoft = isSoftGpu(ren); R.gpu = R.gpuSoft ? null : gpuName(ren);
@@ -638,6 +639,85 @@ import { TZ_CC } from "./tz.mjs";
     const near = [24, 30, 48, 50, 60, 72, 75, 90, 100, 120, 144, 165, 180, 240, 360].reduce((b, x) => Math.abs(x - hz) < Math.abs(b - hz) ? x : b);
     R.hz = Math.abs(near - hz) < 4 ? near : Math.round(hz);
     txt("hz", t("hz_v", { n: R.hz }));
+  }
+
+  // the engine's version from the JavaScript it supports (a rewritten user agent leaves the engine as it was)
+  function engineVer() {
+    const probe = { findLast: () => [].findLast, structuredClone: () => window.structuredClone, groupBy: () => Object.groupBy, withResolvers: () => Promise.withResolvers,
+      fromAsync: () => Array.fromAsync, union: () => Set.prototype.union, try: () => Promise.try, DurationFormat: () => Intl.DurationFormat,
+      isError: () => Error.isError, Float16Array: () => window.Float16Array, escape: () => RegExp.escape };
+    const has = {};
+    for (const [k, f] of Object.entries(probe)) { try { has[k] = typeof f() === "function"; } catch (e) { has[k] = false; } }
+    const r = R.engVer = engineRange(has);
+    txt("engver", R.engine === "V8" ? (r.hi == null ? t("ev_all", { v: r.lo }) : t("ev_range", { lo: r.lo, hi: r.hi })) : t("ev_n", { n: r.n, of: FEATURES.length }),
+      { why: FEATURES.map(([v, k]) => k + " " + v + (has[k] ? " ✓" : " ✗")).join(" · ") });
+  }
+  // what Math returns for a few hard cases differs by engine, system and processor
+  async function mathPrint() {
+    const v = [Math.tan(-1e300), Math.sin(1e300), Math.cos(1e10), Math.exp(100 / 3), Math.atanh(0.5), Math.cbrt(Math.PI), Math.expm1(1), Math.log1p(10),
+      Math.sinh(1), Math.cosh(10), Math.pow(Math.PI, -100), Math.acosh(1e300)].map(String).join(",");
+    const h = await sha(v);
+    if (h) txt("mathfp", h.slice(0, 16), { why: v }); else na("mathfp");
+  }
+  // the newest emoji the system's font draws: one glyph as wide as 😀, where a missing one is a box or its parts side by side
+  function emoji() {
+    const c = document.createElement("canvas").getContext("2d");
+    c.font = "32px sans-serif";
+    const w = s => c.measureText(s).width, base = w("\u{1F600}"), box = w("\u{10FFFD}");
+    if (!base || Math.abs(base - box) < base * 0.1) return na("emoji");
+    const V = [["16.0", "\u{1FAE9}"], ["15.1", "\u{1F642}\u200D\u2194\uFE0F"], ["15.0", "\u{1FAE8}"], ["14.0", "\u{1FAE0}"], ["13.0", "\u{1F978}"], ["12.0", "\u{1F971}"]];
+    const v = V.find(([, s]) => Math.abs(w(s) - base) < base * 0.2 && Math.abs(w(s) - box) > base * 0.1);
+    txt("emoji", v ? t("em_v", { v: v[0] }) : t("em_old"));
+  }
+  // video the system decodes on the graphics card (power-efficient), not just plays
+  async function hwdec() {
+    const mc = navigator.mediaCapabilities;
+    if (!mc || !mc.decodingInfo) return na("hwdec");
+    const L = [["H.264", 'video/mp4; codecs="avc1.640028"'], ["HEVC", 'video/mp4; codecs="hvc1.1.6.L120.90"'], ["VP9", 'video/webm; codecs="vp09.00.40.08"'], ["AV1", 'video/mp4; codecs="av01.0.08M.08"']];
+    const r = await Promise.all(L.map(([n, ct]) => within(mc.decodingInfo({ type: "media-source", video: { contentType: ct, width: 1920, height: 1080, bitrate: 8e6, framerate: 30 } }), 1500, null)
+      .then(i => i && i.supported && i.powerEfficient ? n : null, () => null)));
+    const yes = r.filter(Boolean);
+    txt("hwdec", yes.length ? yes.join(" · ") : t("hw_none"));
+  }
+  // the most a page may use (Chromium): 4 GB on a 64-bit system, about 2 on a 32-bit one
+  function heap() {
+    const m = performance.memory;
+    if (!m || !m.jsHeapSizeLimit) return na("heap");
+    txt("heap", t("heap_v", { g: +(m.jsHeapSizeLimit / 2 ** 30).toFixed(1) }), { why: String(m.jsHeapSizeLimit) });
+  }
+  // the browser's default font size (changed in its settings, it's one more trait) and the system's accent colour
+  function sysui() {
+    const d = document.createElement("div");
+    d.style.cssText = "position:absolute;visibility:hidden;font-size:medium" + (CSS.supports("color", "AccentColor") ? ";color:AccentColor" : "");
+    document.body.appendChild(d);
+    const cs = getComputedStyle(d), px = Math.round(parseFloat(cs.fontSize)), acc = CSS.supports("color", "AccentColor") ? cs.color : "";
+    d.remove();
+    txt("sysui", [t("ui_font", { n: px }), acc && t("ui_accent", { c: acc })].filter(Boolean).join(" · "));
+  }
+  // navigator as a worker reads it: extensions and some anti-detect browsers rewrite only the page's
+  async function workerNav() {
+    const read = "{ua:navigator.userAgent,langs:[...(navigator.languages||[])].join(),plat:navigator.platform,tz:Intl.DateTimeFormat().resolvedOptions().timeZone}";
+    const url = URL.createObjectURL(new Blob(["postMessage(" + read + ")"], { type: "text/javascript" }));
+    let w;
+    try { w = new Worker(url); } catch (e) { URL.revokeObjectURL(url); R.wdiff = null; return na("worker"); }
+    const m = await within(new Promise(res => { w.onmessage = e => res(e.data); w.onerror = () => res(null); }), 2000, null);
+    w.terminate(); URL.revokeObjectURL(url);
+    if (!m) { R.wdiff = null; return na("worker", "v_empty"); }
+    const main = { ua: navigator.userAgent, langs: [...(navigator.languages || [])].join(), plat: navigator.platform, tz: Intl.DateTimeFormat().resolvedOptions().timeZone };
+    const NAME = { ua: "userAgent", langs: "languages", plat: "platform", tz: "timeZone" };
+    R.wdiff = Object.keys(main).filter(k => m[k] != null && m[k] !== "" && m[k] !== main[k]);
+    txt("worker", R.wdiff.length ? t("wk_diff", { list: R.wdiff.map(k => NAME[k]).join(", ") }) : t("wk_same"),
+      { why: R.wdiff.map(k => NAME[k] + ": " + m[k]).join(" · ") });
+  }
+  // an anti-detect browser's traces: parts that each look right but don't agree with each other
+  function fpbTraces() {
+    if (R.wdiff === undefined || !R.dev) return null;
+    const out = [], cv = +((/Chrome\/(\d+)/.exec(navigator.userAgent) || [])[1]) || 0;
+    if (R.engine === "V8" && engineOff(cv, R.engVer)) out.push("fb_ver");
+    if (R.wdiff && R.wdiff.length) out.push("fb_worker");
+    if (platformOff(navigator.platform, R.dev.os)) out.push("fb_plat");
+    if (glVendorOff(R.gpuVen, R.gpuRaw)) out.push("fb_gl");
+    return out;
   }
 
   function screens() {
@@ -998,7 +1078,7 @@ import { TZ_CC } from "./tz.mjs";
     const vv = Object.fromEntries(Object.entries(vars).map(([k, x]) => [k, k === "cc" ? country(x) : id === "split" ? exitName(x) : x]));
     if (id === "tz" || id === "lang" || id === "dns") vv.ipc = ipc ? country(ipc) : "?";
     if (id === "syslang" && vars.from) vv.from = list(String(vars.from).split(",").map(rowName));
-    if (id === "tamper" && vars.list) vv.list = list(String(vars.list).split(",").map(k => t(k)));
+    if ((id === "tamper" || id === "fpb") && vars.list) vv.list = list(String(vars.list).split(",").map(k => t(k)));
     // each side as its zone's name with the offset ("Pacific Time UTC-08:00"), or the offset alone
     if (id === "tz") { vv.A = zoneLabel(vars.za, vars.a, ipc); vv.B = zoneLabel(vars.zb, vars.b); }
     return t(key, vv);
@@ -1091,7 +1171,7 @@ import { TZ_CC } from "./tz.mjs";
       tz: R.tz, rfp: rfp(), tzOff: R.tzOff == null ? null : offTxt(R.tzOff), ipTzOff: c.timezone ? offTxt(tzOffset(c.timezone)) : null, ipTz: c.timezone || null, ipcc: c.country,
       langs: R.langs, dnsCC: R.dnsCC, exits: allExits(), rtc: R.rtc, ip: R.srv && R.srv.ip, asn: c.asn, org: orgName(c.asOrganization, c.asn),
       uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, noise: R.noise, webdriver: R.webdriver,
-      rttB: R.latDone ? R.rttB : null, rttCf: c.clientTcpRtt || null, sys: final || R.voices ? sysOf() : undefined, tamper: R.dev && R.srv ? tampered() : null,
+      rttB: R.latDone ? R.rttB : null, rttCf: c.clientTcpRtt || null, sys: final || R.voices ? sysOf() : undefined, tamper: R.dev && R.srv ? tampered() : null, fpb: fpbTraces(),
     });
     if (res.dc === null && R.srv && !c.asn) res.dc = ["info", "c_na", {}];
     const tr = R.tr || {};
@@ -1252,6 +1332,7 @@ import { TZ_CC } from "./tz.mjs";
       guard(["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)),
       ...probes, guard(["kex", "warp"], trace),
       guard("webgpu", webgpu), guard("hz", refresh), guard("screens", screens), guard("codecs", codecs), guard("drm", drm), guard("perms", perms),
+      guard("engver", engineVer), guard("mathfp", mathPrint), guard("emoji", emoji), guard("hwdec", hwdec), guard("heap", heap), guard("sysui", sysui), guard("worker", workerNav),
     ]);
     if (g !== gen) return;
     judge(false); paint(portrait(), false); readings(portrait(), R.ck);

@@ -62,6 +62,7 @@ export const GROUPS = [
     { id: "glx", m: "WebGL2 · MAX_TEXTURE_SIZE" },
     { id: "cpu", m: "hardwareConcurrency" },
     { id: "mem", m: "navigator.deviceMemory" },
+    { id: "heap", m: "performance.memory" },
     { id: "touch", m: "maxTouchPoints · pointer" },
     { id: "battery", m: "navigator.getBattery" },
     { id: "conn", m: "navigator.connection" },
@@ -70,6 +71,7 @@ export const GROUPS = [
     { id: "bio", m: "PublicKeyCredential" },
     { id: "bt", m: "bluetooth.getAvailability" },
     { id: "codecs", m: "MediaSource.isTypeSupported" },
+    { id: "hwdec", m: "mediaCapabilities.decodingInfo" },
     { id: "drm", m: "requestMediaKeySystemAccess" },
     { id: "storage", m: "storage.estimate" },
   ]],
@@ -78,12 +80,14 @@ export const GROUPS = [
     { id: "motion", m: "prefers-reduced-motion" },
     { id: "gamut", m: "color-gamut · dynamic-range" },
     { id: "a11y", m: "prefers-contrast · forced-colors" },
+    { id: "sysui", m: "font-size: medium · AccentColor" },
     { id: "display", m: "display-mode" },
     { id: "dnt", m: "doNotTrack · GPC" },
     { id: "cookies", m: "navigator.cookieEnabled" },
     { id: "perms", m: "permissions.query" },
     { id: "pdf", m: "pdfViewerEnabled" },
     { id: "webdriver", m: "navigator.webdriver" },
+    { id: "worker", m: "Worker · navigator" },
     { id: "adblock", m: "bait element" },
     { id: "ext", m: "window.ethereum · DOM marks" },
     { id: "history", m: "history.length" },
@@ -91,9 +95,12 @@ export const GROUPS = [
   ]],
   ["fp", [
     { id: "engine", m: "Error.message" },
+    { id: "engver", m: "JS feature probes" },
     { id: "canvas", m: "canvas.toDataURL" },
     { id: "webgl", m: "WebGL getParameter" },
     { id: "audio", m: "OfflineAudioContext" },
+    { id: "mathfp", m: "Math.* → SHA-256" },
+    { id: "emoji", m: "emoji measureText" },
     { id: "fontfp", m: "fonts → SHA-256" },
     { id: "fpid", m: "SHA-256" },
     { id: "rand", m: "canvas × 2" },
@@ -111,6 +118,6 @@ export const BLANKS = {
 };
 
 // the disguise checks, one row each
-export const CHECKS = ["tz", "lang", "syslang", "dns", "split", "webrtc", "rtt", "dc", "ua", "tamper", "fp", "bot"];
+export const CHECKS = ["tz", "lang", "syslang", "dns", "split", "webrtc", "rtt", "dc", "ua", "tamper", "fpb", "fp", "bot"];
 // the connection's protocols: shown under the checks, judged the same way, not counted among them
 export const PROTO = ["h3", "ech", "pq", "warp"];

@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu } from "../src/infer.mjs";
+import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
 
 const WIN = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36";
 const MAC_SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15";
@@ -116,10 +116,10 @@ test("fonts: only ones the system doesn't bring say something", () => {
 test("disguise checks", () => {
   const base = { tz: "Asia/Shanghai", tzOff: "+08:00", ipTzOff: "+08:00", ipcc: "CN", langs: ["zh-CN"], rtc: ["1.2.3.4"], ip: "1.2.3.4",
     asn: 4134, org: "Chinanet", uaOS: "Windows", real: true, hintOS: "Windows", gpuOS: "Windows", rand: false, webdriver: false,
-    dnsCC: "CN", exits: [["ip", "1.2.3.4"], ["ex_cn", "1.2.3.4"]], rttB: 30, rttCf: 25, sys: { cc: ["CN"], from: ["fonts"] }, tamper: [] };
+    dnsCC: "CN", exits: [["ip", "1.2.3.4"], ["ex_cn", "1.2.3.4"]], rttB: 30, rttCf: 25, sys: { cc: ["CN"], from: ["fonts"] }, tamper: [], fpb: [] };
   const c = checks(base);
   assert.deepEqual(Object.fromEntries(Object.entries(c).map(([k, v]) => [k, v[0]])),
-    { tz: "ok", lang: "ok", dns: "ok", split: "ok", webrtc: "ok", dc: "ok", ua: "ok", fp: "warn", bot: "ok", rtt: "ok", syslang: "ok", tamper: "ok" });
+    { tz: "ok", lang: "ok", dns: "ok", split: "ok", webrtc: "ok", dc: "ok", ua: "ok", fp: "warn", bot: "ok", rtt: "ok", syslang: "ok", tamper: "ok", fpb: "ok" });
   // through a proxy, Cloudflare only sees the proxy's leg of the round trip
   assert.deepEqual(checks({ ...base, rttB: 190, rttCf: 12 }).rtt, ["bad", "c_rtt_bad", { a: 12, b: 190 }]);
   assert.equal(checks({ ...base, rttB: 80, rttCf: 20 }).rtt[0], "warn");
@@ -169,6 +169,24 @@ test("disguise checks", () => {
   // Firefox's stand-in: a card of the same class
   assert.equal(gpuName("ANGLE (AMD, Radeon R9 200 Series Direct3D11 vs_5_0 ps_5_0), or similar"), gpuName("ANGLE (AMD, Radeon R9 200 Series Direct3D11 vs_5_0 ps_5_0)"));
   assert.ok(!/ANGLE/.test(gpuName("ANGLE (AMD, Radeon R9 200 Series Direct3D11 vs_5_0 ps_5_0), or similar")));
+  // an anti-detect browser's traces
+  assert.deepEqual(checks({ ...base, fpb: [] }).fpb, ["ok", "c_fpb_ok", {}]);
+  assert.equal(checks({ ...base, fpb: ["fb_ver"] }).fpb[0], "warn");
+  assert.equal(checks({ ...base, fpb: ["fb_ver", "fb_worker"] }).fpb[0], "bad");
+  const all = Object.fromEntries(FEATURES.map(([, k]) => [k, true]));
+  assert.deepEqual(engineRange(all), { lo: 136, hi: null, n: 11 });
+  assert.equal(engineOff(156, engineRange(all)), false);
+  const old = { ...all, try: false, DurationFormat: false, isError: false, Float16Array: false, escape: false };
+  assert.deepEqual(engineRange(old), { lo: 122, hi: 127, n: 6 });
+  assert.equal(engineOff(156, engineRange(old)), true);    // claims 156, the engine stops at 127
+  assert.equal(engineOff(125, engineRange(old)), false);
+  assert.equal(engineOff(110, engineRange(all)), true);    // claims 110, the engine has 136's features
+  assert.equal(platformOff("Win32", "Windows 11"), false);
+  assert.equal(platformOff("MacIntel", "Windows 11"), true);
+  assert.equal(platformOff("MacIntel", "iPadOS 18"), false);
+  assert.equal(platformOff("Linux armv81", "Android 14"), false);
+  assert.equal(glVendorOff("Google Inc. (NVIDIA)", "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11 vs_5_0 ps_5_0, D3D11)"), false);
+  assert.equal(glVendorOff("Google Inc. (AMD)", "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11 vs_5_0 ps_5_0, D3D11)"), true);
   // iOS: Chrome there connects with Apple's TLS, classical before iOS 26
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 18 }).pq[0], "info");
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 26 }).pq[0], "warn");
