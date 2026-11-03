@@ -574,8 +574,11 @@ import { TZ_CC } from "./tz.mjs";
     if (!EN_CC) {
       EN_CC = {};
       try {
+        // (retired codes name today's countries too: FX is "France", DY "Benin", YU "Serbia"… so they're left out,
+        // and the first code for a name stands)
         const en = new Intl.DisplayNames(["en"], { type: "region" }), A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        for (const x of A) for (const y of A) { const c = x + y, n = en.of(c); if (n && n !== c) EN_CC[n] = c; }
+        const RETIRED = new Set("AN BU CS DD DY FX HV NH NT QU RH SU TP UK VD YD YU ZR".split(" "));
+        for (const x of A) for (const y of A) { const c = x + y, n = en.of(c); if (n && n !== c && !RETIRED.has(c) && !(n in EN_CC)) EN_CC[n] = c; }
       } catch (e) {}
     }
     return EN_CC[name] || null;
