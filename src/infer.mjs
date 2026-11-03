@@ -53,11 +53,12 @@ export function nationality({ langs = [], tz, ipcc, sys, ios }) {
   const first = langs[0] || "", lcc = langCC(first), tcc = tzCC(tz);
   const english = l => /^en\b/i.test(l || ""), plainEn = ios ? /^en$/i.test(first) : english(first);
   // (a language widely spoken in the time zone's country too says that country: Chinese on Kuala Lumpur's clock)
-  if (lcc && !plainEn) return tcc && tcc !== lcc && spokenIn(first).includes(tcc) ? { cc: tcc, from: ["langs", "tz"] } : { cc: lcc, from: tcc === lcc ? ["langs", "tz"] : ["langs"] };
+  // (unless the language's own country is where the IP is: Chinese on Singapore's clock in China is someone in China)
+  if (lcc && !plainEn) return tcc && tcc !== lcc && lcc !== ipcc && spokenIn(first).includes(tcc) ? { cc: tcc, from: ["langs", "tz"] } : { cc: lcc, from: tcc === lcc ? ["langs", "tz"] : ["langs"] };
   // plain English first, another language further down the list: that one says more
   // (Chinese down the list on Singapore's clock: Singapore, as for the first language)
   const tag = langs.slice(1).find(l => !english(l) && langCC(l)), other = tag && langCC(tag);
-  if (other) return tcc && tcc !== other && spokenIn(tag).includes(tcc) ? { cc: tcc, from: ["langs", "tz"] } : { cc: other, from: tcc === other ? ["langs", "tz"] : ["langs"] };
+  if (other) return tcc && tcc !== other && other !== ipcc && spokenIn(tag).includes(tcc) ? { cc: tcc, from: ["langs", "tz"] } : { cc: other, from: tcc === other ? ["langs", "tz"] : ["langs"] };
   // a browser left in plain English on a system that installed one other language (its fonts, voices, keyboard)
   // (two sources, or one the clock agrees with: fonts alone may have come with Office)
   if (sys && sys.cc.length === 1 && sys.from.length > 1 && tcc && tcc !== sys.cc[0] && sameLanguage(sys.cc[0]).includes(tcc)) return { cc: tcc, from: [...sys.from, "tz"] };

@@ -210,6 +210,9 @@ test("disguise checks", () => {
   assert.equal(checks({ ...base, ipcc: "JP", sys: { cc: ["CN"], from: ["fonts", "voices"] } }).syslang[1], "c_sys_warn");   // the clock is China's
   // ECH off is a note
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, sni: "plaintext" }).ech[0], "info");
+  // Chinese on Singapore's clock (the same UTC+8) behind a Chinese IP: someone in China
+  assert.deepEqual(nationality({ langs: ["zh-CN"], tz: "Asia/Singapore", ipcc: "CN" }), { cc: "CN", from: ["langs"] });
+  assert.deepEqual(nationality({ langs: ["zh-CN"], tz: "Asia/Kuala_Lumpur", ipcc: "SG" }), { cc: "MY", from: ["langs", "tz"] });
   // iOS: Chrome there connects with Apple's TLS, classical before iOS 26
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 18 }).pq[0], "info");
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 26 }).pq[0], "warn");

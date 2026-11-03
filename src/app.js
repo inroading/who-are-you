@@ -895,7 +895,7 @@ import { TZ_CC } from "./tz.mjs";
     blank("screen", P.screen ? esc(P.screen + (P.hz ? " · " + P.hz + " Hz" : "")) : U);
     blank("gpu", esc(P.gs ? t("gpu_soft") : P.rf && !P.gpu ? t("gpu_rfp") : P.gl && P.gpu ? t("gpu_like", { g: P.gpu }) : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")));
     blank("isp", P.org ? (!shared && asnOf(P.asn) ? `<a href="${esc(asnOf(P.asn))}" target="_blank" rel="noopener" title="${esc(t("go_asn"))}">${esc(P.org)}</a>` : esc(P.org)) : shared ? esc(t("masked")) : U, BLANKS.isp, X.fullOrg || (shared && !P.org ? t("masked_why") : ""));
-    blank("dns", P.dns ? flagged(P.dns, country(P.dns)) : U, BLANKS.dns, X.dnsOrg || "");
+    blank("dns", P.dns ? flagged(P.dns, country(P.dns)) : esc(t("dns_na")), BLANKS.dns, X.dnsOrg || "");
     const sp = X.split;
     blank("nettype", esc(P.nt === "split" ? t("nt_split", { n: P.nx }) : P.nt ? t("nt_" + P.nt) : t("v_unknown")),
       BLANKS.nettype, sp ? exitName(sp.a) + ": " + sp.ipA + "\n" + exitName(sp.b) + ": " + sp.ipB : "");
@@ -948,7 +948,8 @@ import { TZ_CC } from "./tz.mjs";
     const big = Math.max(...String(P.screen || "").split("×").map(Number).filter(Boolean), 0);
     const score = (hiG ? 2 : lowG ? 0 : 1) + (big >= 3840 ? 1 : 0) + (P.hz >= 120 ? 1 : 0) + (P.cpu >= 16 ? 1 : 0);
     const lv = score >= 3 ? "high" : score >= 2 ? "mid" : "low";
-    const spec = list([big >= 7680 ? "8K" : big >= 6016 ? "6K" : big >= 5120 ? "5K" : big >= 3840 ? "4K" : big >= 2560 ? "2K" : big >= 1920 ? "1080p" : P.screen, P.hz >= 90 ? P.hz + " Hz" : "", g, P.cpu ? t("cores", { n: P.cpu }) : ""].filter(Boolean));
+    const spec = list([{ 7680: "8K", 6016: "6K", 5120: "5K", 3840: "4K", 2560: "2K", 1920: "1080p" }[big] || P.screen,   // (2880×1800 is no "2K")
+      P.hz >= 90 ? P.hz + " Hz" : "", g, P.cpu ? t("cores", { n: P.cpu }) : ""].filter(Boolean));
     return { lv, text: t("tr_" + lv, { spec }) + (P.multi ? t("tr_multi") : "") };
   }
   // how many versions behind the browser is: a recent release of each, and one every four weeks since
@@ -994,7 +995,9 @@ import { TZ_CC } from "./tz.mjs";
   const rarest = n => READABLE.filter(k => n[k]).sort((a, b) => n[a] - n[b]).slice(0, 2);
   function standText(m, k, top) {
     const others = Math.max(0, k - 1), v = { m: m.toLocaleString(LANG), n: others.toLocaleString(LANG), top: list((top || []).map(rowName)) };
-    return t(!others ? "st_only" : others <= 20 ? "st_few" : "st_many", v);
+    const s = t(!others ? "st_only" : others <= 20 ? "st_few" : "st_many", v);
+    // (Chinese puts a space between Chinese and Latin: "显眼的是 WebGL")
+    return /^zh/.test(LANG) ? s.replace(/([\u3400-\u9fff])([A-Za-z0-9])/g, "$1 $2").replace(/([A-Za-z0-9])([\u3400-\u9fff])/g, "$1 $2") : s;
   }
 
   /* ---------- this run against the last one ---------- */
