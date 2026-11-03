@@ -294,7 +294,7 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
   .pg:not(.fold) h3::after { content: "▴"; }
   .pg h3 .pg-a + .pg-n, .pg h3 .pg-a { order: 0; }
   .pg.fold .pr { display: none; }
-  .pa { white-space: normal; overflow-wrap: anywhere; text-overflow: clip; }
+  .pa, .pa .nw { white-space: normal; overflow-wrap: anywhere; text-overflow: clip; }
 }
 /* touch: links and small buttons on their own get a finger-sized target, looking the same */
 @media (pointer: coarse) {

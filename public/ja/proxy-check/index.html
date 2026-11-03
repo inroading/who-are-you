@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="間にプロキシがあると見抜かれる？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"プロキシチェック · 1ms.dog","url":"https://who.1ms.dog/ja/proxy-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"無料プロキシチェック：ブラウザが測った往復時間と、Cloudflare が自分の接続で見た往復時間を比べ、IP がデータセンターか、DNS や WebRTC が何を漏らすかも確認。プロキシは測れる区間を一つ増やすので、住宅 IP でも隠せません。","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"遅延チェックの仕組みは？","acceptedAnswer":{"@type":"Answer","text":"このサイトのエッジに小さな応答を何度か求め、送信から最初のバイトまでの最短を取ります。Cloudflare はあなたに応じた TCP 接続で測った往復時間を返します。プロキシなしなら近い値、プロキシ経由なら Cloudflare にはプロキシの区間しか見えません。"}},{"@type":"Question","name":"住宅 IP でも見抜かれる？","acceptedAnswer":{"@type":"Answer","text":"はい。住宅 IP はデータセンター判定を通っても、増えた往復時間、他国の DNS リゾルバー、合わないタイムゾーン、WebRTC のアドレスで分かります。"}},{"@type":"Question","name":"「読み取れない」になるのはなぜ？","acceptedAnswer":{"@type":"Answer","text":"HTTP/3 では TCP 接続がないので Cloudflare に往復時間がなく、測定のリクエストを止めるネットワークもあります。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.11e0e4a441.css">
+<link rel="stylesheet" href="/assets/app.9fc1173ada.css">
 </head>
 <body>
 <div class="app">
