@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="網站以為你說什麼語言？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"瀏覽器語言檢測 · 1ms.dog","url":"https://who.1ms.dog/zh-tw/language-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免費瀏覽器語言檢測：查看瀏覽器在 Accept-Language 請求標頭送出、在 JavaScript 裡暴露的語言，以及地區設定、鍵盤配置、語音和字型，看它們和 IP 所在國家對不對得上。","inLanguage":"zh-TW","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"網站從哪裡知道我的語言？","acceptedAnswer":{"@type":"Answer","text":"每個請求裡的 Accept-Language 請求標頭、JavaScript 裡的 navigator.languages，還有地區設定、鍵盤配置、語音朗讀和系統裝的字型，都會間接透露。"}},{"@type":"Question","name":"怎麼改？","acceptedAnswer":{"@type":"Answer","text":"在瀏覽器的語言設定裡，把想要的語言放到第一位。只改一處（例如擴充功能改了 navigator.languages）會讓請求標頭還是原樣，兩邊對不上反而更顯眼。"}},{"@type":"Question","name":"為什麼英文只算「提示」？","acceptedAnswer":{"@type":"Answer","text":"英文全世界都在用，說明不了你在哪。其他語言會指向某個國家，和 IP 對不上時才算破綻。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.0fa1807bcc.css">
+<link rel="stylesheet" href="/assets/app.2c7e25a9ec.css">
 </head>
 <body>
 <div class="app">
@@ -85,9 +85,10 @@
           <div class="story-w"><div class="story wait" id="story"><p>你多半是<span class="bl wait" data-b="nat"><i class="skl"></i></span>人，眼下人在<span class="bl wait" data-b="city"><i class="skl"></i></span>。你平常說<span class="bl wait" data-b="lang"><i class="skl"></i></span>，電腦的時區是<span class="bl wait" data-b="tz"><i class="skl"></i></span>，時鐘用<span class="bl wait" data-b="clock"><i class="skl"></i></span>。</p><p>你手上這台是<span class="bl wait" data-b="device"><i class="skl"></i></span>，開的是<span class="bl wait" data-b="browser"><i class="skl"></i></span>，螢幕<span class="bl wait" data-b="screen"><i class="skl"></i></span>，顯示卡是<span class="bl wait" data-b="gpu"><i class="skl"></i></span>，<span class="bl wait" data-b="rig"><i class="skl"></i></span>。</p><p>你經<span class="bl wait" data-b="isp"><i class="skl"></i></span>上網，<span class="bl wait" data-b="nettype"><i class="skl"></i></span>；幫你查網址的 DNS 在<span class="bl wait" data-b="dns"><i class="skl"></i></span>。<span class="bl wait" data-b="read"><i class="skl"></i></span>。</p><p>你習慣用<span class="bl wait" data-b="theme"><i class="skl"></i></span>，<span class="bl wait" data-b="adblock"><i class="skl"></i></span>。<span class="bl wait" data-b="track"><i class="skl"></i></span>。裝的字型透露出：<span class="bl wait" data-b="job"><i class="skl"></i></span>。至於年齡，<span class="bl wait" data-b="age"><i class="skl"></i></span>。</p></div><button class="story-more" id="storyMore" type="button" hidden data-i="story_more">展開完整畫像</button><div class="story-sk" id="storySk" aria-hidden="true"><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i></div></div>
           <div class="idc" id="idc">
             <svg class="fp-art" id="fpArt" viewBox="0 0 64 64" aria-hidden="true"></svg>
-            <div class="idc-t"><span class="idc-h" data-i="id_h">瀏覽器指紋 ID</span><b class="idc-v" id="fpId"><i class="skl"></i></b><span class="idc-n" id="fpNote" data-i="id_note">換網站、開無痕、開 VPN，它都不變</span><span class="idc-r" id="fpRet">&nbsp;</span></div>
+            <div class="idc-t"><span class="idc-h" data-i="id_h">瀏覽器指紋 ID</span><b class="idc-v" id="fpId"><i class="skl"></i></b><span class="idc-n" id="fpNote" data-i="id_note">換網站、開無痕、開 VPN，它都不變</span><span class="idc-r" id="fpRet">&nbsp;</span><span class="idc-u" id="fpUniq" hidden></span></div>
             <button class="icon-btn idc-x" id="forget" type="button" aria-label="忘掉上次造訪" title="忘掉上次造訪" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
           </div>
+          <p class="tally" id="tally"><span data-i="tl_note">為了統計有多少人和你一樣，本站累計匿名計數：不存 IP，不存原始指紋，沒有單次造訪的紀錄。</span> <button type="button" id="tlMore" data-i="tl_more">了解詳情</button> · <button type="button" id="tlOff"></button></p>
         </div>
         <aside class="col disg">
           <div class="sec-h"><span data-i="h_checks">偽裝檢測</span><button class="rp-btn" id="rpCheck" type="button" hidden data-i="rp_check">判斷不對？</button></div>
@@ -143,7 +144,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-TW","paths":{"en":"/language-check/","zh-CN":"/zh-cn/language-check/","zh-TW":"/zh-tw/language-check/","ja":"/ja/language-check/","ko":"/ko/language-check/","es":"/es/language-check/","fr":"/fr/language-check/","de":"/de/language-check/","pt":"/pt/language-check/","ru":"/ru/language-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"language-check","rows":["langs","h_lang","locale","kbd","voices","fonts"],"check":"lang"}}</script>
-<script src="/assets/l.zh-tw.0cf81ca68e.js"></script>
-<script src="/assets/app.bf6171cf62.js"></script>
+<script src="/assets/l.zh-tw.9232e972b4.js"></script>
+<script src="/assets/app.35ea3b0dc8.js"></script>
 </body>
 </html>

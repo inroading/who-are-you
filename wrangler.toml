@@ -10,3 +10,12 @@ preview_urls = false
 [assets]
 directory = "./public"
 binding = "ASSETS"
+
+# The counter behind "how common are you" (src/tally.mjs): one Durable Object, SQLite-backed, numbers only
+[[durable_objects.bindings]]
+name = "TALLY"
+class_name = "Tally"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Tally"]

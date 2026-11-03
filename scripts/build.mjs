@@ -39,6 +39,8 @@ async function loadI18n() {
 
 // Strings only the build uses (the page already shows them); everything else goes to the browser (the check names
 // too: the share card draws them)
+// the main page's question about what is stored (the counting note links to it)
+const STORE_DOC = 5;
 const BUILD_ONLY = new Set(["name", "seo_title", "seo_desc", "seo_kw", "og_sub", "h1", "docs", "lang_label", "faq_h", "story"]);
 
 // the icon after a link to another 1ms.dog tool, the site's own (never an arrow)
@@ -143,7 +145,7 @@ export async function build({ check = false } = {}) {
       const heroTitle = page ? `<h2 class="h1">${esc(base.h1)}</h2>` : `<h1>${esc(T("h1"))}</h1>`;
       // the other pages of this tool, in this language: the topic pages, and the main page from a topic page
       const topics = pageList.filter(p => p !== page).map(p => `<a href="${path(slug, p)}">${esc(p ? TEXT[p][lang].h1 : base.h1)}</a>`).join("");
-      const helpNav = docs.map(([q], i) => `<button type="button" role="tab" data-hq="${i}" aria-selected="${i === 0}">${esc(q)}</button>`).join("");
+      const helpNav = docs.map(([q], i) => `<button type="button" role="tab" data-hq="${i}"${i === STORE_DOC ? " data-store" : ""} aria-selected="${i === 0}">${esc(q)}</button>`).join("");
       const helpC = docs.map(([q, a], i) => `<article data-hqb="${i}"${i ? " hidden" : ""}><h3>${esc(q)}</h3>${a.split(/\n+/).map(p => `<p>${esc(p)}</p>`).join("")}</article>`).join("");
       const langOpts = langs.map(([l]) => `<option value="${l}"${l === lang ? " selected" : ""}>${esc(I[l].name)}</option>`).join("");
       const paths = Object.fromEntries(langs.map(([l, sl]) => [l, path(sl, page)]));

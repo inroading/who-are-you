@@ -5,7 +5,7 @@
 <script>(function(){var d=document.documentElement,th=null,s=null;try{th=localStorage.getItem("who:theme");s=localStorage.getItem("who:lang")}catch(e){}if(th==="light"||th==="dark")d.setAttribute("data-theme",th);if(!d.hasAttribute("data-root")||/[?&]embed=/.test(location.search))return;var P=JSON.parse(d.getAttribute("data-paths")||"{}"),l=null;try{var q=new URLSearchParams(location.search).get("lang");if(P[q])l=q}catch(e){}if(!l&&P[s])l=s;for(var ls=navigator.languages||[navigator.language||"en"],i=0;!l&&!s&&i<ls.length;i++){var x=String(ls[i]).toLowerCase(),b=x.split("-")[0];l=b==="zh"?(/tw|hk|mo|hant/.test(x)?"zh-TW":"zh-CN"):P[b]?b:null}if(l&&l!=="en")location.replace(P[l]+location.search+location.hash)})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HTTP/3、ECH 与后量子加密检测 · 你是谁</title>
-<meta name="description" content="免费连接协议检测：看你的浏览器是否用上了 HTTP/3、是否用 ECH 隐藏了访问的网站名、是否协商了后量子密钥（X25519MLKEM768），缺了哪一项又说明你的网络或代理怎么了。不保存任何数据。">
+<meta name="description" content="免费连接协议检测：看你的浏览器是否用上了 HTTP/3、是否用 ECH 隐藏了访问的网站名、是否协商了后量子密钥（X25519MLKEM768），缺了哪一项又说明你的网络或代理怎么了。不保存 IP 和原始数据，只累计匿名计数，用来算你有多常见。">
 <meta name="keywords" content="HTTP/3 检测, ECH 检测, Encrypted Client Hello, 后量子加密检测, X25519MLKEM768, QUIC 检测, TLS 检测">
 <meta http-equiv="Cache-Control" content="no-transform">
 <meta http-equiv="Cache-Control" content="no-siteapp">
@@ -42,9 +42,9 @@
 <meta name="twitter:image" content="https://who.1ms.dog/og/http3-ech-zh-cn.png">
 <meta name="twitter:title" content="HTTP/3、ECH 与后量子加密检测 · 你是谁">
 <meta name="twitter:description" content="你的连接有多新？中间卡在哪？">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"HTTP/3、ECH 与后量子加密检测 · 1ms.dog","url":"https://who.1ms.dog/zh-cn/http3-ech/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免费连接协议检测：看你的浏览器是否用上了 HTTP/3、是否用 ECH 隐藏了访问的网站名、是否协商了后量子密钥（X25519MLKEM768），缺了哪一项又说明你的网络或代理怎么了。不保存任何数据。","inLanguage":"zh-CN","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"为什么没用上 HTTP/3？","acceptedAnswer":{"@type":"Answer","text":"HTTP/3 走 UDP 443 端口。浏览器要先通过 TCP 收到网站的第一次回应，才知道它支持 HTTP/3，所以第一次访问可能还没切换；但如果 UDP 哪都出不去，就是网络或代理把它拦了，或者根本不转发 UDP。很多代理配置只转 TCP。"}},{"@type":"Question","name":"ECH 是什么，为什么没开？","acceptedAnswer":{"@type":"Answer","text":"Encrypted Client Hello 会加密网站名。否则 TLS 会明文发送它，路上谁都看得到。浏览器得从 DNS 的 HTTPS 记录里拿到网站的密钥：Firefox 只在用自己的 DNS over HTTPS 时读取；Chrome 需要能返回 HTTPS 记录的解析器；Safari 目前还不用 ECH。"}},{"@type":"Question","name":"密钥交换是传统的，说明什么？","acceptedAnswer":{"@type":"Answer","text":"Chrome 124+、Firefox 132+ 和 Safari 26 默认都会提供 X25519MLKEM768。新浏览器最后却用了普通的 X25519，说明中间有东西自己建立了 TLS 连接：杀毒软件、公司代理，或者会解开 TLS 的代理客户端。旧浏览器则只是版本太老。"}}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"HTTP/3、ECH 与后量子加密检测 · 1ms.dog","url":"https://who.1ms.dog/zh-cn/http3-ech/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免费连接协议检测：看你的浏览器是否用上了 HTTP/3、是否用 ECH 隐藏了访问的网站名、是否协商了后量子密钥（X25519MLKEM768），缺了哪一项又说明你的网络或代理怎么了。不保存 IP 和原始数据，只累计匿名计数，用来算你有多常见。","inLanguage":"zh-CN","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"为什么没用上 HTTP/3？","acceptedAnswer":{"@type":"Answer","text":"HTTP/3 走 UDP 443 端口。浏览器要先通过 TCP 收到网站的第一次回应，才知道它支持 HTTP/3，所以第一次访问可能还没切换；但如果 UDP 哪都出不去，就是网络或代理把它拦了，或者根本不转发 UDP。很多代理配置只转 TCP。"}},{"@type":"Question","name":"ECH 是什么，为什么没开？","acceptedAnswer":{"@type":"Answer","text":"Encrypted Client Hello 会加密网站名。否则 TLS 会明文发送它，路上谁都看得到。浏览器得从 DNS 的 HTTPS 记录里拿到网站的密钥：Firefox 只在用自己的 DNS over HTTPS 时读取；Chrome 需要能返回 HTTPS 记录的解析器；Safari 目前还不用 ECH。"}},{"@type":"Question","name":"密钥交换是传统的，说明什么？","acceptedAnswer":{"@type":"Answer","text":"Chrome 124+、Firefox 132+ 和 Safari 26 默认都会提供 X25519MLKEM768。新浏览器最后却用了普通的 X25519，说明中间有东西自己建立了 TLS 连接：杀毒软件、公司代理，或者会解开 TLS 的代理客户端。旧浏览器则只是版本太老。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.0fa1807bcc.css">
+<link rel="stylesheet" href="/assets/app.2c7e25a9ec.css">
 </head>
 <body>
 <div class="app">
@@ -88,9 +88,10 @@
           <div class="story-w"><div class="story wait" id="story"><p>你多半是<span class="bl wait" data-b="nat"><i class="skl"></i></span>人，眼下人在<span class="bl wait" data-b="city"><i class="skl"></i></span>。你平时说<span class="bl wait" data-b="lang"><i class="skl"></i></span>，电脑的时区是<span class="bl wait" data-b="tz"><i class="skl"></i></span>，钟用<span class="bl wait" data-b="clock"><i class="skl"></i></span>。</p><p>你手上这台是<span class="bl wait" data-b="device"><i class="skl"></i></span>，开的是<span class="bl wait" data-b="browser"><i class="skl"></i></span>，屏幕<span class="bl wait" data-b="screen"><i class="skl"></i></span>，显卡是<span class="bl wait" data-b="gpu"><i class="skl"></i></span>，<span class="bl wait" data-b="rig"><i class="skl"></i></span>。</p><p>你经<span class="bl wait" data-b="isp"><i class="skl"></i></span>上网，<span class="bl wait" data-b="nettype"><i class="skl"></i></span>；替你查网址的 DNS 在<span class="bl wait" data-b="dns"><i class="skl"></i></span>。<span class="bl wait" data-b="read"><i class="skl"></i></span>。</p><p>你习惯用<span class="bl wait" data-b="theme"><i class="skl"></i></span>，<span class="bl wait" data-b="adblock"><i class="skl"></i></span>。<span class="bl wait" data-b="track"><i class="skl"></i></span>。装的字体透露出：<span class="bl wait" data-b="job"><i class="skl"></i></span>。至于年龄，<span class="bl wait" data-b="age"><i class="skl"></i></span>。</p></div><button class="story-more" id="storyMore" type="button" hidden data-i="story_more">展开完整画像</button><div class="story-sk" id="storySk" aria-hidden="true"><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i></div></div>
           <div class="idc" id="idc">
             <svg class="fp-art" id="fpArt" viewBox="0 0 64 64" aria-hidden="true"></svg>
-            <div class="idc-t"><span class="idc-h" data-i="id_h">浏览器指纹 ID</span><b class="idc-v" id="fpId"><i class="skl"></i></b><span class="idc-n" id="fpNote" data-i="id_note">换网站、开无痕、开 VPN，它都不变</span><span class="idc-r" id="fpRet">&nbsp;</span></div>
+            <div class="idc-t"><span class="idc-h" data-i="id_h">浏览器指纹 ID</span><b class="idc-v" id="fpId"><i class="skl"></i></b><span class="idc-n" id="fpNote" data-i="id_note">换网站、开无痕、开 VPN，它都不变</span><span class="idc-r" id="fpRet">&nbsp;</span><span class="idc-u" id="fpUniq" hidden></span></div>
             <button class="icon-btn idc-x" id="forget" type="button" aria-label="忘掉上次来访" title="忘掉上次来访" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
           </div>
+          <p class="tally" id="tally"><span data-i="tl_note">为了统计有多少人和你一样，本站累计匿名计数：不存 IP，不存原始指纹，没有单次访问的记录。</span> <button type="button" id="tlMore" data-i="tl_more">了解详情</button> · <button type="button" id="tlOff"></button></p>
         </div>
         <aside class="col disg">
           <div class="sec-h"><span data-i="h_checks">伪装检测</span><button class="rp-btn" id="rpCheck" type="button" hidden data-i="rp_check">判断不对？</button></div>
@@ -146,7 +147,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-CN","paths":{"en":"/http3-ech/","zh-CN":"/zh-cn/http3-ech/","zh-TW":"/zh-tw/http3-ech/","ja":"/ja/http3-ech/","ko":"/ko/http3-ech/","es":"/es/http3-ech/","fr":"/fr/http3-ech/","de":"/de/http3-ech/","pt":"/pt/http3-ech/","ru":"/ru/http3-ech/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"http3-ech","rows":["proto","kex","tlsfp","edge"],"check":"ech"}}</script>
-<script src="/assets/l.zh-cn.488d3c99df.js"></script>
-<script src="/assets/app.bf6171cf62.js"></script>
+<script src="/assets/l.zh-cn.ecc55674dc.js"></script>
+<script src="/assets/app.35ea3b0dc8.js"></script>
 </body>
 </html>

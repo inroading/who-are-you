@@ -10,7 +10,8 @@
     "deploy": "wrangler deploy",
     "tz": "node scripts/tz.mjs",
     "og": "node scripts/og.mjs",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "stats": "node scripts/stats.mjs"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

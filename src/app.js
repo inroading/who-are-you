@@ -3,6 +3,7 @@
 // read; each row is in the HTML from the start and is filled the moment its sniffer answers. The paragraph is filled
 // once, when every sniffer it needs is in, so its text doesn't reflow piece by piece. Strings: window.L1MS.
 import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO } from "./sniffers.mjs";
+import { TRAITS, rarity, MIN_TOTAL } from "./traits.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
 import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
@@ -15,7 +16,7 @@ import { TZ_CC } from "./tz.mjs";
   const t = (k, v) => { let s = L[k] ?? k; if (v) for (const x in v) s = s.split("{" + x + "}").join(v[x]); return s; };
   const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
-  const K = { scene: "who:scene", theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last", prev: "who:prev", target: "who:target", hist: "who:hist" };
+  const K = { seen: "who:seen", optout: "who:optout", scene: "who:scene", theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last", prev: "who:prev", target: "who:target", hist: "who:hist" };
   const dn = type => { try { return new Intl.DisplayNames([LANG], { type }); } catch (e) { return null; } };
   const REG = dn("region"), LNG = dn("language");
   const country = cc => { try { return REG ? REG.of(cc) : cc; } catch (e) { return cc; } };
@@ -96,7 +97,7 @@ import { TZ_CC } from "./tz.mjs";
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeDlg(); });
   // help: one answer at a time; a picker with previous / next on phones
   let helpIdx = 0;
-  const helpN = $$("#helpNav [data-hq]").length;
+  const helpN = $$("#helpNav [data-hq]").length, STORE_Q = Math.max(0, $$("#helpNav [data-hq]").findIndex(b => b.dataset.store != null));
   $("#helpSel").innerHTML = $$("#helpNav [data-hq]").map((b, i) => `<option value="${i}">${i + 1} / ${helpN} · ${esc(b.textContent)}</option>`).join("");
   function showHelp(i) {
     helpIdx = Math.max(0, Math.min(helpN - 1, i));
@@ -657,6 +658,7 @@ import { TZ_CC } from "./tz.mjs";
     const v = [Math.tan(-1e300), Math.sin(1e300), Math.cos(1e10), Math.exp(100 / 3), Math.atanh(0.5), Math.cbrt(Math.PI), Math.expm1(1), Math.log1p(10),
       Math.sinh(1), Math.cosh(10), Math.pow(Math.PI, -100), Math.acosh(1e300)].map(String).join(",");
     const h = await sha(v);
+    R.mathfp = h ? h.slice(0, 8) : null;
     if (h) txt("mathfp", h.slice(0, 16), { why: v }); else na("mathfp");
   }
   // the newest emoji the system's font draws: one glyph as wide as 😀, where a missing one is a box or its parts side by side
@@ -667,6 +669,7 @@ import { TZ_CC } from "./tz.mjs";
     if (!base || Math.abs(base - box) < base * 0.1) return na("emoji");
     const V = [["16.0", "\u{1FAE9}"], ["15.1", "\u{1F642}\u200D\u2194\uFE0F"], ["15.0", "\u{1FAE8}"], ["14.0", "\u{1FAE0}"], ["13.0", "\u{1F978}"], ["12.0", "\u{1F971}"]];
     const v = V.find(([, s]) => Math.abs(w(s) - base) < base * 0.2 && Math.abs(w(s) - box) > base * 0.1);
+    R.emoji = v ? v[0] : "<12";
     txt("emoji", v ? t("em_v", { v: v[0] }) : t("em_old"));
   }
   // video the system decodes on the graphics card (power-efficient), not just plays
@@ -677,6 +680,7 @@ import { TZ_CC } from "./tz.mjs";
     const r = await Promise.all(L.map(([n, ct]) => within(mc.decodingInfo({ type: "media-source", video: { contentType: ct, width: 1920, height: 1080, bitrate: 8e6, framerate: 30 } }), 1500, null)
       .then(i => i && i.supported && i.powerEfficient ? n : null, () => null)));
     const yes = r.filter(Boolean);
+    R.hwdec = yes.join(" · ") || "-";
     txt("hwdec", yes.length ? yes.join(" · ") : t("hw_none"));
   }
   // the most a page may use (Chromium): 4 GB on a 64-bit system, about 2 on a 32-bit one
@@ -1195,6 +1199,60 @@ import { TZ_CC } from "./tz.mjs";
   });
   phone(); paintScene();
   if (PHONE.addEventListener) PHONE.addEventListener("change", phone); else PHONE.addListener(phone);
+  // How common the visitor is. After a check the page sends its trait values and results to /api/seen, which counts
+  // them (once a day per browser and fingerprint) and answers how many checks had each value. Not counted: an embedded
+  // or automated browser, one that sends Global Privacy Control, one whose visitor said "don't count me"
+  const optedOut = () => store.get(K.optout) === "1";
+  function paintOptout() {
+    $("#tlOff").textContent = t(optedOut() ? "tl_back" : "tl_off");
+    $("#tally").classList.toggle("off", optedOut());
+  }
+  $("#tlOff").onclick = () => { store.set(K.optout, optedOut() ? "0" : "1"); paintOptout(); if (optedOut()) { $("#fpUniq").hidden = true; $$(".rar").forEach(e => e.remove()); } };
+  $("#tlMore").onclick = () => { showHelp(STORE_Q); openDlg("help"); };
+  paintOptout();
+  function traitValues() {
+    const p = R.fpParts || {}, v = { os: R.osTxt, browser: R.browser, screen: /×/.test(R.screen || "") ? R.screen : null, gpu: R.gpu, langs: (R.langs || [])[0], tz: R.tz,
+      fontfp: p.fontfp, canvas: p.canvas, webgl: p.webgl, audio: p.audio, mathfp: R.mathfp, emoji: R.emoji, hwdec: R.hwdec, fpid: R.fpHex && R.fpHex.slice(0, 8) };
+    return Object.fromEntries(TRAITS.filter(k => v[k]).map(k => [k, String(v[k])]));
+  }
+  async function seen() {
+    if (EMBED || R.webdriver || navigator.globalPrivacyControl || optedOut()) return;
+    const tv = traitValues();
+    if (!tv.fpid) return;
+    const stamp = new Date().toISOString().slice(0, 10) + ":" + tv.fpid, add = store.get(K.seen) !== stamp;
+    const ck = Object.fromEntries([...CHECKS, ...PROTO].filter(id => R.ck && R.ck[id]).map(id => [id, R.ck[id][0]]));
+    let r;
+    try {
+      const res = await within(fetch("/api/seen", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ add, t: tv, ck }) }), 4000, null);
+      r = res && res.ok ? await res.json() : null;
+    } catch (e) { r = null; }
+    if (!r || typeof r.total !== "number") return;
+    if (add) store.set(K.seen, stamp);
+    R.uniq = { total: r.total, n: r.n || {} };
+    paintUniq();
+  }
+  function paintUniq() {
+    const u = R.uniq;
+    $$(".rar").forEach(e => e.remove());
+    if (!u) return;
+    const f = $("#fpUniq");
+    f.hidden = false;
+    if (u.total < MIN_TOTAL) { f.textContent = t("tl_wait", { m: u.total.toLocaleString(LANG) }); return; }
+    const others = Math.max(0, (u.n.fpid || 1) - 1);
+    f.textContent = others ? t("tl_same", { m: u.total.toLocaleString(LANG), n: others.toLocaleString(LANG) }) : t("tl_only", { m: u.total.toLocaleString(LANG) });
+    for (const k of TRAITS) {
+      const lv = rarity(u.n[k], u.total), r = PR[k];
+      if (!lv || !r) continue;
+      r.querySelector(".pn").insertAdjacentHTML("beforeend", `<span class="rar ${lv}">${esc(t("rr_" + lv))}</span>`);
+    }
+  }
+  // the share card's line about it
+  const uniqLine = () => {
+    const u = R.uniq;
+    if (!u || u.total < MIN_TOTAL) return "";
+    const n = u.n.fpid || 1;
+    return n <= 1 ? t("card_only", { m: u.total.toLocaleString(LANG) }) : t("card_one_in", { r: Math.round(u.total / n).toLocaleString(LANG) });
+  };
   $$(".ck-fix").forEach(btn => {
     btn.onclick = e => {
       e.stopPropagation();
@@ -1304,6 +1362,8 @@ import { TZ_CC } from "./tz.mjs";
     if (paint) { c.fillStyle = LINE; c.fillRect(P, y, W - 2 * P, 2); }
     y += 24;
     c.font = `700 34px ${F}`; c.fillStyle = FG; if (paint) c.fillText(t("card_me"), P, y + 34); y += 44;
+    const ul = uniqLine();
+    if (ul) { c.font = `600 28px ${F}`; c.fillStyle = INK; if (paint) c.fillText(ul, P, y + 30); y += 42; }
     // wrapped word by word (character by character for CJK)
     const size = 28, lh = 48;
     for (const segs of lines) {
@@ -1416,7 +1476,7 @@ import { TZ_CC } from "./tz.mjs";
     judge(true);
     readings(portrait(), R.ck);
     paintTarget(); osTips(); todo();
-    if (!EMBED) { compare(); history(); }
+    if (!EMBED) { compare(); history(); seen(); }
     $("#rerun").disabled = false; $("#share").disabled = false; $("#copyTxt").disabled = false;
     if (EMBED && !failed) post(embedResult());
   }

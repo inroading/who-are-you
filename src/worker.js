@@ -4,8 +4,14 @@
 //                 data for it, the TLS and HTTP details, the headers the browser sent, the address's reverse DNS and
 //                 the server's clock.
 //   GET [/<lang>]/r/<code>  a shared portrait: its language's page with the result in the title and preview (src/share.mjs)
-// Nothing is stored or logged. Every other path is a bare 404 (the 1ms.dog shell shows its own page for those).
+//   POST /api/seen  one check's trait values and results, counted (src/tally.mjs) unless "add" is false; answers how many
+//                 checks had each value. Only from this site's own pages.
+//   GET /api/stats  every check's results per day, all visitors together
+// No address and no request is logged; the counter keeps numbers per value, no record of a single visit. Every other
+// path is a bare 404 (the 1ms.dog shell shows its own page for those).
 import { decode, findings, tier, SLUG, parsePath } from "./share.mjs";
+import { Tally } from "./tally.mjs";
+export { Tally };
 import en from "./i18n/en.mjs";
 import zhCN from "./i18n/zh-CN.mjs";
 import zhTW from "./i18n/zh-TW.mjs";
@@ -80,11 +86,28 @@ async function result(request, env, { code, lang: dir }, url) {
   return new Response(res.body, { status: 200, headers: h });
 }
 
+// the counter: counts only from this site's own pages (the Origin a browser sends with a POST), the stats for anyone
+async function tally(request, env, url) {
+  const stub = env.TALLY.get(env.TALLY.idFromName("all"));
+  if (url.pathname === "/api/stats") {
+    if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET" } });
+    const r = await stub.fetch("https://tally/stats");
+    return new Response(r.body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=300", "Access-Control-Allow-Origin": "*" } });
+  }
+  if (request.method !== "POST") return new Response(null, { status: 405, headers: { Allow: "POST" } });
+  if (request.headers.get("Origin") !== url.origin) return new Response(null, { status: 403 });
+  const body = await request.text();
+  if (body.length > 4000) return new Response(null, { status: 413 });
+  const r = await stub.fetch("https://tally/seen", { method: "POST", body });
+  return new Response(r.body, { status: r.status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const r = parsePath(url.pathname);
     if (r && request.method === "GET") return result(request, env, r, url);
+    if (url.pathname === "/api/seen" || url.pathname === "/api/stats") return tally(request, env, url);
     if (url.pathname !== "/api/me") return new Response(null, { status: 404 });
     if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET" } });
     const at = Date.now();

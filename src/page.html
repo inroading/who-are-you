@@ -43,9 +43,10 @@
           <div class="story-w"><div class="story wait" id="story">{{story}}</div><button class="story-more" id="storyMore" type="button" hidden data-i="story_more"></button><div class="story-sk" id="storySk" aria-hidden="true"><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i></div></div>
           <div class="idc" id="idc">
             <svg class="fp-art" id="fpArt" viewBox="0 0 64 64" aria-hidden="true"></svg>
-            <div class="idc-t"><span class="idc-h" data-i="id_h"></span><b class="idc-v" id="fpId"><i class="skl"></i></b><span class="idc-n" id="fpNote" data-i="id_note"></span><span class="idc-r" id="fpRet">&nbsp;</span></div>
+            <div class="idc-t"><span class="idc-h" data-i="id_h"></span><b class="idc-v" id="fpId"><i class="skl"></i></b><span class="idc-n" id="fpNote" data-i="id_note"></span><span class="idc-r" id="fpRet">&nbsp;</span><span class="idc-u" id="fpUniq" hidden></span></div>
             <button class="icon-btn idc-x" id="forget" type="button" aria-label="{{a:rv_forget}}" title="{{a:rv_forget}}" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
           </div>
+          <p class="tally" id="tally"><span data-i="tl_note"></span> <button type="button" id="tlMore" data-i="tl_more"></button> · <button type="button" id="tlOff"></button></p>
         </div>
         <aside class="col disg">
           <div class="sec-h"><span data-i="h_checks"></span><button class="rp-btn" id="rpCheck" type="button" hidden data-i="rp_check"></button></div>

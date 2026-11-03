@@ -27,7 +27,7 @@ export const TEXT = {
   fingerprint: {
     en: {
       seo_title: "Browser Fingerprint Test: can sites track you without cookies? · Who Are You",
-      seo_desc: "Free browser fingerprint test: your canvas, WebGL, audio and font fingerprints and the combined ID any site can compute without cookies, whether your browser randomizes it, and whether it recognized you since your last visit. Nothing is stored.",
+      seo_desc: "Free browser fingerprint test: your canvas, WebGL, audio and font fingerprints and the combined ID any site can compute without cookies, whether your browser randomizes it, and whether it recognized you since your last visit. No IP or raw data is kept, only anonymous counts of how common you are.",
       seo_kw: "browser fingerprint test, browser fingerprinting, canvas fingerprint, WebGL fingerprint, audio fingerprint, fingerprint checker, anti-fingerprinting, am I trackable",
       h1: "Browser fingerprint test", og_sub: "The ID any site computes for you, without cookies",
       intro: "Sites don't need cookies to recognize you. How your system draws text and shapes, processes sound and which fonts it has add up to an ID that stays the same across sites, private windows and VPNs. Here is yours, what it is made of, and whether your browser scrambles it.",
@@ -36,12 +36,12 @@ export const TEXT = {
         ["What is a browser fingerprint?", "A set of small differences between computers: how the graphics card and driver draw a canvas or a WebGL scene, how the audio stack rounds a sound, which fonts are installed, plus screen, language and time zone. Each alone is common; together they are often unique. A site hashes them into an ID, and every site that runs the same script gets the same ID for you."],
         ["Does a VPN or a private window change it?", "No. None of it depends on your IP address, and private windows draw and play sound the same way. That is why a fingerprint can follow you after you clear cookies or switch VPN servers. The ID card on this page remembers your last visit (in your browser only) to show it."],
         ["How do I stop being fingerprinted?", "Use a browser that fights it: Brave adds random noise to canvas, WebGL and audio by default; Firefox has privacy.resistFingerprinting; Tor Browser makes every user look the same. Extensions that change the user agent or block canvas often make you more unique, not less. The \"Fingerprint protection\" row tells whether your browser randomizes."],
-        ["Can this test tell how unique I am?", "Not without collecting everyone's fingerprints, which this page refuses to do: it stores nothing. It shows what a site can compute and whether it stays stable. Come back later: if the ID card says the fingerprint is the same, any site could have recognized you the same way."],
+        ["Can this test tell how unique I am?", "Yes, roughly. The page counts, anonymously, how many checks had each of your values and your whole fingerprint ID (its first 8 characters), and shows how many matched yours out of every check on this site. It keeps no IP and no full fingerprint. The numbers mean something only once enough people have taken the test; until then it says the count is still building up."],
       ],
     },
     "zh-CN": {
       seo_title: "浏览器指纹检测：不用 Cookie，网站能认出你吗 · 你是谁",
-      seo_desc: "免费浏览器指纹检测：查看你的 Canvas、WebGL、音频和字体指纹，以及任何网站不用 Cookie 就能算出的综合指纹 ID；看浏览器有没有开防指纹，上次来访后有没有被认出来。不保存任何数据。",
+      seo_desc: "免费浏览器指纹检测：查看你的 Canvas、WebGL、音频和字体指纹，以及任何网站不用 Cookie 就能算出的综合指纹 ID；看浏览器有没有开防指纹，上次来访后有没有被认出来。不保存 IP 和原始数据，只累计匿名计数，用来算你有多常见。",
       seo_kw: "浏览器指纹检测, 浏览器指纹, Canvas 指纹, WebGL 指纹, 音频指纹, 指纹浏览器检测, 防指纹, 指纹追踪",
       h1: "浏览器指纹检测", og_sub: "不用 Cookie，网站也能算出你的 ID",
       intro: "网站不需要 Cookie 也能认出你。你的系统怎么画文字和图形、怎么处理声音、装了哪些字体，合在一起就是一个 ID：换网站、开无痕、开 VPN 都不变。下面是你的指纹、它由什么组成，以及你的浏览器有没有把它打乱。",
@@ -50,12 +50,12 @@ export const TEXT = {
         ["浏览器指纹是什么？", "电脑之间的一组细微差别：显卡和驱动画 Canvas、WebGL 的结果，声卡处理声音时的舍入，装了哪些字体，再加上屏幕、语言和时区。单看每一项都很常见，合在一起往往独一无二。网站把它们算成一个哈希，跑同一段脚本的每个网站，都会得到你同一个 ID。"],
         ["开 VPN 或无痕模式会改变指纹吗？", "不会。这些都和 IP 无关，无痕窗口画图、放声音的方式也一样。所以清了 Cookie、换了 VPN 节点，指纹照样能跟着你。页面上的指纹卡会记住你上次来访（只记在你的浏览器里），下次来就能看到效果。"],
         ["怎样防止被指纹追踪？", "用会对抗指纹的浏览器：Brave 默认给 Canvas、WebGL 和音频加随机干扰；Firefox 可以开 privacy.resistFingerprinting；Tor 浏览器让所有人看起来一模一样。改 UA、屏蔽 Canvas 的扩展反而常常让你更独特。「防指纹」那一行会告诉你你的浏览器有没有随机化。"],
-        ["这个检测能说出我有多独特吗？", "要回答这个，就得收集所有人的指纹，而这个页面拒绝这么做：它什么都不存。它展示的是网站能算出什么、是否稳定。过段时间再来：如果指纹卡说指纹没变，那任何网站都能用同样的办法认出你。"],
+        ["这个检测能说出我有多独特吗？", "能，大致能。页面会匿名统计你的每一项读数、以及整个指纹 ID（前 8 位）在本站的检测里出现过多少次，告诉你在所有检测里有多少次和你一样。不存 IP，也不存完整指纹。检测的人够多，这些数字才有意义；在那之前页面会显示「数据还在积累」。"],
       ],
     },
     "zh-TW": {
       seo_title: "瀏覽器指紋檢測：不用 Cookie，網站認得出你嗎 · 你是誰",
-      seo_desc: "免費瀏覽器指紋檢測：查看你的 Canvas、WebGL、音訊和字型指紋，以及任何網站不用 Cookie 就能算出的綜合指紋 ID；看瀏覽器有沒有開防指紋，上次造訪後有沒有被認出來。不儲存任何資料。",
+      seo_desc: "免費瀏覽器指紋檢測：查看你的 Canvas、WebGL、音訊和字型指紋，以及任何網站不用 Cookie 就能算出的綜合指紋 ID；看瀏覽器有沒有開防指紋，上次造訪後有沒有被認出來。不保存 IP 和原始資料，只累計匿名計數，用來算你有多常見。",
       seo_kw: "瀏覽器指紋檢測, 瀏覽器指紋, Canvas 指紋, WebGL 指紋, 音訊指紋, 指紋瀏覽器, 防指紋, 指紋追蹤",
       h1: "瀏覽器指紋檢測", og_sub: "不用 Cookie，網站也能算出你的 ID",
       intro: "網站不需要 Cookie 也認得出你。你的系統怎麼畫文字和圖形、怎麼處理聲音、裝了哪些字型，合在一起就是一個 ID：換網站、開無痕、開 VPN 都不變。下面是你的指紋、它由什麼組成，以及你的瀏覽器有沒有把它打亂。",
@@ -64,12 +64,12 @@ export const TEXT = {
         ["瀏覽器指紋是什麼？", "電腦之間的一組細微差異：顯示卡和驅動畫 Canvas、WebGL 的結果，音效處理時的捨入，裝了哪些字型，再加上螢幕、語言和時區。單看每一項都很常見，合在一起往往獨一無二。網站把它們算成一個雜湊，跑同一段腳本的每個網站，都會得到你同一個 ID。"],
         ["開 VPN 或無痕模式會改變指紋嗎？", "不會。這些都和 IP 無關，無痕視窗畫圖、播聲音的方式也一樣。所以清了 Cookie、換了 VPN 節點，指紋照樣跟著你。頁面上的指紋卡會記住你上次造訪（只記在你的瀏覽器裡），下次來就看得到效果。"],
         ["怎樣防止被指紋追蹤？", "用會對抗指紋的瀏覽器：Brave 預設給 Canvas、WebGL 和音訊加隨機干擾；Firefox 可以開 privacy.resistFingerprinting；Tor 瀏覽器讓所有人看起來一模一樣。改 UA、封鎖 Canvas 的擴充功能反而常讓你更獨特。「防指紋」那一列會告訴你瀏覽器有沒有隨機化。"],
-        ["這個檢測能說出我有多獨特嗎？", "要回答這個，就得收集所有人的指紋，而這個頁面拒絕這麼做：它什麼都不存。它呈現的是網站能算出什麼、是否穩定。過一陣子再來：如果指紋卡說指紋沒變，任何網站都能用同樣的辦法認出你。"],
+        ["這個檢測能說出我有多獨特嗎？", "能，大致能。頁面會匿名統計你的每一項讀數、以及整個指紋 ID（前 8 位）在本站的檢測裡出現過多少次，告訴你在所有檢測裡有多少次和你一樣。不存 IP，也不存完整指紋。檢測的人夠多，這些數字才有意義；在那之前頁面會顯示「資料還在累積」。"],
       ],
     },
     ja: {
       seo_title: "ブラウザフィンガープリント検査：Cookie なしで追跡される？ · あなたは誰",
-      seo_desc: "無料のブラウザフィンガープリント検査：Canvas・WebGL・オーディオ・フォントのフィンガープリントと、どのサイトでも Cookie なしで計算できる総合 ID、ブラウザがランダム化しているか、前回の訪問から見分けられたかを表示。データは保存しません。",
+      seo_desc: "無料のブラウザフィンガープリント検査：Canvas・WebGL・オーディオ・フォントのフィンガープリントと、どのサイトでも Cookie なしで計算できる総合 ID、ブラウザがランダム化しているか、前回の訪問から見分けられたかを表示。IP や元のデータは保存せず、どれだけありふれているかを数える匿名の集計だけを残します。",
       seo_kw: "ブラウザフィンガープリント, フィンガープリント 確認, Canvas フィンガープリント, WebGL フィンガープリント, オーディオ フィンガープリント, 追跡 防止, アンチフィンガープリント",
       h1: "ブラウザフィンガープリント検査", og_sub: "Cookie なしでサイトが計算するあなたの ID",
       intro: "サイトは Cookie がなくてもあなたを見分けられます。文字や図形の描き方、音の処理、入っているフォントを合わせると 1 つの ID になり、サイトを変えても、プライベートウィンドウでも、VPN でも変わりません。あなたの ID と、その中身、ブラウザがそれをかき混ぜているかをここに示します。",
@@ -78,12 +78,12 @@ export const TEXT = {
         ["ブラウザフィンガープリントとは？", "コンピューターごとの小さな違いの集まりです：GPU とドライバーによる Canvas や WebGL の描画結果、音声処理の丸め方、インストール済みフォント、それに画面・言語・タイムゾーン。1 つずつはありふれていても、合わせると唯一になりがちです。サイトはこれをハッシュにして ID にし、同じスクリプトを動かすサイトはどこでも同じ ID を得ます。"],
         ["VPN やプライベートウィンドウで変わる？", "変わりません。どれも IP に関係なく、プライベートウィンドウでも描画や音の処理は同じです。だから Cookie を消しても VPN を変えても追いかけられます。このページの ID カードは前回の訪問を（ブラウザ内だけに）覚えていて、それを確かめられます。"],
         ["フィンガープリント追跡を防ぐには？", "対策のあるブラウザを使います：Brave は標準で Canvas・WebGL・オーディオにノイズを加え、Firefox には privacy.resistFingerprinting があり、Tor Browser は全員を同じに見せます。UA を変えたり Canvas をブロックする拡張機能は、かえって目立つことが多いです。「フィンガープリント対策」の行で、ランダム化されているか分かります。"],
-        ["どれくらい珍しいか分かる？", "それには全員のフィンガープリントを集める必要があり、このページはそれをしません：何も保存しないからです。示すのは、サイトが何を計算でき、それが安定しているかです。また来てみてください。ID カードが「同じ」と言えば、どのサイトも同じ方法であなたを見分けられたということです。"],
+        ["どれくらい珍しいか分かる？", "おおよそ分かります。ページは各読み取り値と指紋 ID 全体（先頭 8 文字）がこのサイトの検査で何回あったかを匿名で数え、全検査のうち何回が同じだったかを示します。IP や完全な指紋は保存しません。十分な人数が検査するまでは数字に意味がないので、それまでは集計中と表示します。"],
       ],
     },
     ko: {
       seo_title: "브라우저 지문 검사: 쿠키 없이도 추적될까 · 당신은 누구",
-      seo_desc: "무료 브라우저 지문 검사: Canvas, WebGL, 오디오, 글꼴 지문과 어떤 사이트든 쿠키 없이 계산하는 종합 지문 ID, 브라우저가 무작위화하는지, 지난 방문 이후 알아봤는지를 보여 줍니다. 아무것도 저장하지 않습니다.",
+      seo_desc: "무료 브라우저 지문 검사: Canvas, WebGL, 오디오, 글꼴 지문과 어떤 사이트든 쿠키 없이 계산하는 종합 지문 ID, 브라우저가 무작위화하는지, 지난 방문 이후 알아봤는지를 보여 줍니다. IP와 원본 데이터는 저장하지 않고, 얼마나 흔한지 세는 익명 집계만 남깁니다.",
       seo_kw: "브라우저 지문 검사, 브라우저 핑거프린트, 캔버스 지문, WebGL 지문, 오디오 지문, 핑거프린팅 방지, 추적 방지",
       h1: "브라우저 지문 검사", og_sub: "쿠키 없이 사이트가 계산하는 당신의 ID",
       intro: "사이트는 쿠키 없이도 당신을 알아봅니다. 시스템이 글자와 도형을 그리는 방식, 소리를 처리하는 방식, 설치된 글꼴을 합치면 하나의 ID가 되고, 사이트를 바꿔도, 시크릿 창에서도, VPN을 써도 그대로입니다. 당신의 ID와 그 구성, 그리고 브라우저가 그것을 뒤섞는지 보여 줍니다.",
@@ -92,12 +92,12 @@ export const TEXT = {
         ["브라우저 지문이란?", "컴퓨터마다 다른 작은 차이들의 묶음입니다. 그래픽 카드와 드라이버가 Canvas, WebGL을 그린 결과, 오디오 처리의 반올림, 설치된 글꼴, 여기에 화면, 언어, 시간대. 하나씩은 흔해도 합치면 대개 유일합니다. 사이트는 이것을 해시로 만들어 ID로 쓰고, 같은 스크립트를 돌리는 모든 사이트가 당신에게서 같은 ID를 얻습니다."],
         ["VPN이나 시크릿 창을 쓰면 바뀌나요?", "아니요. 모두 IP와 무관하고, 시크릿 창도 그리는 방식과 소리 처리는 같습니다. 그래서 쿠키를 지우거나 VPN 서버를 바꿔도 지문이 따라옵니다. 이 페이지의 ID 카드는 지난 방문을 브라우저 안에만 기억해서 그걸 보여 줍니다."],
         ["지문 추적을 막으려면?", "지문에 대응하는 브라우저를 쓰세요. Brave는 기본으로 Canvas, WebGL, 오디오에 무작위 잡음을 넣고, Firefox는 privacy.resistFingerprinting이 있으며, Tor 브라우저는 모두를 똑같이 보이게 합니다. UA를 바꾸거나 Canvas를 막는 확장은 오히려 더 눈에 띄게 만들기 쉽습니다. ‘지문 보호’ 줄에서 무작위화 여부를 볼 수 있습니다."],
-        ["내가 얼마나 독특한지 알 수 있나요?", "그러려면 모두의 지문을 모아야 하는데, 이 페이지는 그러지 않습니다. 아무것도 저장하지 않으니까요. 보여 주는 건 사이트가 무엇을 계산할 수 있고 그것이 유지되는지입니다. 나중에 다시 와 보세요. ID 카드가 지문이 같다고 하면, 어떤 사이트든 같은 방법으로 당신을 알아볼 수 있었다는 뜻입니다."],
+        ["내가 얼마나 독특한지 알 수 있나요?", "대략 알 수 있어요. 페이지는 각 값과 지문 ID 전체(앞 8자리)가 이 사이트의 검사에서 몇 번 나왔는지 익명으로 세고, 전체 검사 중 몇 번이 같았는지 보여 줍니다. IP와 전체 지문은 저장하지 않아요. 충분히 많은 사람이 검사해야 숫자가 의미가 있어서, 그 전에는 아직 쌓이는 중이라고 표시합니다."],
       ],
     },
     es: {
       seo_title: "Test de huella del navegador: ¿te rastrean sin cookies? · ¿Quién eres?",
-      seo_desc: "Test gratuito de huella digital del navegador: tus huellas canvas, WebGL, audio y de fuentes y el ID combinado que cualquier sitio calcula sin cookies, si tu navegador la aleatoriza y si te reconoció desde tu última visita. No se guarda nada.",
+      seo_desc: "Test gratuito de huella digital del navegador: tus huellas canvas, WebGL, audio y de fuentes y el ID combinado que cualquier sitio calcula sin cookies, si tu navegador la aleatoriza y si te reconoció desde tu última visita. No guarda tu IP ni los datos en bruto, solo recuentos anónimos de lo común que eres.",
       seo_kw: "test huella digital navegador, browser fingerprint, huella canvas, huella WebGL, huella de audio, fingerprinting, anti fingerprinting, rastreo sin cookies",
       h1: "Test de huella del navegador", og_sub: "El ID que cualquier sitio calcula para ti, sin cookies",
       intro: "Los sitios no necesitan cookies para reconocerte. Cómo dibuja tu sistema texto y formas, cómo procesa el sonido y qué fuentes tiene suman un ID que no cambia entre sitios, ventanas privadas ni VPN. Aquí está el tuyo, de qué está hecho y si tu navegador lo mezcla.",
@@ -106,12 +106,12 @@ export const TEXT = {
         ["¿Qué es la huella del navegador?", "Un conjunto de pequeñas diferencias entre equipos: cómo la gráfica y el controlador dibujan un canvas o una escena WebGL, cómo redondea el audio, qué fuentes hay instaladas, más pantalla, idioma y zona horaria. Cada una es común; juntas suelen ser únicas. Un sitio las convierte en un ID, y cada sitio que ejecuta el mismo script obtiene el mismo ID tuyo."],
         ["¿La cambia una VPN o una ventana privada?", "No. Nada de eso depende de tu IP, y una ventana privada dibuja y suena igual. Por eso la huella te sigue aunque borres cookies o cambies de servidor VPN. La tarjeta de ID de esta página recuerda tu última visita (solo en tu navegador) para demostrarlo."],
         ["¿Cómo evito el fingerprinting?", "Usa un navegador que lo combata: Brave añade ruido aleatorio a canvas, WebGL y audio por defecto; Firefox tiene privacy.resistFingerprinting; Tor Browser hace que todos parezcan iguales. Las extensiones que cambian el user agent o bloquean canvas suelen hacerte más único, no menos. La fila «Protección de huella» dice si tu navegador la aleatoriza."],
-        ["¿Puede decir lo único que soy?", "No sin reunir las huellas de todos, y esta página se niega: no guarda nada. Muestra lo que un sitio puede calcular y si se mantiene estable. Vuelve más tarde: si la tarjeta dice que la huella es la misma, cualquier sitio te habría reconocido igual."],
+        ["¿Puede decir lo único que soy?", "Sí, más o menos. La página cuenta, de forma anónima, cuántas comprobaciones tuvieron cada uno de tus valores y tu ID de huella completo (sus 8 primeros caracteres), y muestra cuántas coincidieron con la tuya entre todas las del sitio. No guarda IP ni la huella completa. Los números solo significan algo cuando suficiente gente ha hecho el test; hasta entonces dice que el recuento se está formando."],
       ],
     },
     fr: {
       seo_title: "Test d’empreinte du navigateur : pisté sans cookies ? · Qui êtes-vous ?",
-      seo_desc: "Test gratuit d’empreinte du navigateur : vos empreintes canvas, WebGL, audio et polices et l’ID combiné que tout site calcule sans cookies, si votre navigateur la rend aléatoire et s’il vous a reconnu depuis votre dernière visite. Rien n’est conservé.",
+      seo_desc: "Test gratuit d’empreinte du navigateur : vos empreintes canvas, WebGL, audio et polices et l’ID combiné que tout site calcule sans cookies, si votre navigateur la rend aléatoire et s’il vous a reconnu depuis votre dernière visite. Ni IP ni données brutes ne sont gardées, seulement des comptages anonymes de votre fréquence.",
       seo_kw: "test empreinte navigateur, empreinte digitale navigateur, browser fingerprint, empreinte canvas, empreinte WebGL, empreinte audio, anti fingerprinting, pistage sans cookies",
       h1: "Test d’empreinte du navigateur", og_sub: "L’ID que tout site calcule pour vous, sans cookies",
       intro: "Les sites n’ont pas besoin de cookies pour vous reconnaître. La façon dont votre système dessine texte et formes, traite le son et les polices qu’il possède forment un ID qui reste le même d’un site à l’autre, en navigation privée et derrière un VPN. Voici le vôtre, ce qui le compose, et si votre navigateur le brouille.",
@@ -120,12 +120,12 @@ export const TEXT = {
         ["Qu’est-ce que l’empreinte du navigateur ?", "Un ensemble de petites différences entre machines : la façon dont la carte graphique et son pilote dessinent un canvas ou une scène WebGL, l’arrondi du son, les polices installées, plus l’écran, la langue et le fuseau. Chacune est banale ; ensemble, elles sont souvent uniques. Un site en fait un ID, et chaque site qui exécute le même script obtient le même ID pour vous."],
         ["Un VPN ou la navigation privée la changent-ils ?", "Non. Rien de tout cela ne dépend de votre IP, et une fenêtre privée dessine et joue le son de la même façon. C’est pourquoi l’empreinte vous suit après l’effacement des cookies ou un changement de serveur VPN. La carte d’ID de cette page garde votre dernière visite (dans votre navigateur seulement) pour le montrer."],
         ["Comment éviter le pistage par empreinte ?", "Prenez un navigateur qui le combat : Brave ajoute du bruit aléatoire au canvas, au WebGL et à l’audio par défaut ; Firefox a privacy.resistFingerprinting ; Tor Browser fait que tout le monde se ressemble. Les extensions qui changent le user agent ou bloquent le canvas vous rendent souvent plus unique. La ligne « Protection d’empreinte » indique si votre navigateur la rend aléatoire."],
-        ["Le test peut-il dire à quel point je suis unique ?", "Pas sans collecter les empreintes de tout le monde, ce que cette page refuse : elle ne conserve rien. Elle montre ce qu’un site peut calculer et si c’est stable. Revenez plus tard : si la carte dit que l’empreinte est la même, n’importe quel site aurait pu vous reconnaître ainsi."],
+        ["Le test peut-il dire à quel point je suis unique ?", "Oui, à peu près. La page compte, anonymement, combien de tests avaient chacune de vos valeurs et votre identifiant d’empreinte complet (ses 8 premiers caractères), et montre combien correspondaient au vôtre parmi tous les tests du site. Elle ne garde ni IP ni empreinte complète. Les chiffres n’ont de sens qu’une fois assez de tests faits ; d’ici là, elle indique que le comptage se constitue."],
       ],
     },
     de: {
       seo_title: "Browser-Fingerprint-Test: Tracking ohne Cookies? · Wer sind Sie?",
-      seo_desc: "Kostenloser Browser-Fingerprint-Test: Ihre Canvas-, WebGL-, Audio- und Schriften-Fingerabdrücke und die Gesamt-ID, die jede Website ohne Cookies berechnen kann, ob Ihr Browser sie verwürfelt und ob er Sie seit dem letzten Besuch wiedererkannt hat. Nichts wird gespeichert.",
+      seo_desc: "Kostenloser Browser-Fingerprint-Test: Ihre Canvas-, WebGL-, Audio- und Schriften-Fingerabdrücke und die Gesamt-ID, die jede Website ohne Cookies berechnen kann, ob Ihr Browser sie verwürfelt und ob er Sie seit dem letzten Besuch wiedererkannt hat. Weder IP noch Rohdaten werden gespeichert, nur anonyme Zähler, wie häufig Sie sind.",
       seo_kw: "Browser Fingerprint Test, Browser-Fingerabdruck, Canvas Fingerprint, WebGL Fingerprint, Audio Fingerprint, Fingerprinting verhindern, Tracking ohne Cookies",
       h1: "Browser-Fingerprint-Test", og_sub: "Die ID, die jede Website ohne Cookies für Sie berechnet",
       intro: "Websites brauchen keine Cookies, um Sie wiederzuerkennen. Wie Ihr System Text und Formen zeichnet, Ton verarbeitet und welche Schriften es hat, ergibt eine ID, die über Websites, private Fenster und VPNs hinweg gleich bleibt. Hier ist Ihre, woraus sie besteht und ob Ihr Browser sie verwürfelt.",
@@ -134,12 +134,12 @@ export const TEXT = {
         ["Was ist ein Browser-Fingerabdruck?", "Eine Menge kleiner Unterschiede zwischen Rechnern: wie Grafikkarte und Treiber ein Canvas oder eine WebGL-Szene zeichnen, wie die Audioverarbeitung rundet, welche Schriften installiert sind, dazu Bildschirm, Sprache und Zeitzone. Einzeln alltäglich, zusammen oft einmalig. Eine Website macht daraus eine ID, und jede Website mit demselben Skript bekommt dieselbe ID von Ihnen."],
         ["Ändert ein VPN oder ein privates Fenster ihn?", "Nein. Nichts davon hängt von Ihrer IP ab, und ein privates Fenster zeichnet und spielt Ton genauso. Deshalb folgt Ihnen der Fingerabdruck auch nach dem Löschen von Cookies oder einem VPN-Wechsel. Die ID-Karte dieser Seite merkt sich Ihren letzten Besuch (nur in Ihrem Browser) und zeigt das."],
         ["Wie verhindere ich Fingerprinting?", "Mit einem Browser, der dagegen arbeitet: Brave verrauscht Canvas, WebGL und Audio standardmäßig; Firefox hat privacy.resistFingerprinting; der Tor Browser lässt alle gleich aussehen. Erweiterungen, die den User-Agent ändern oder Canvas blockieren, machen Sie oft auffälliger. Die Zeile „Fingerabdruck-Schutz“ zeigt, ob Ihr Browser verwürfelt."],
-        ["Kann der Test sagen, wie einmalig ich bin?", "Nicht ohne die Fingerabdrücke aller zu sammeln, und das tut diese Seite nicht: Sie speichert nichts. Sie zeigt, was eine Website berechnen kann und ob es stabil bleibt. Kommen Sie später wieder: Sagt die Karte, der Fingerabdruck sei gleich, hätte jede Website Sie genauso erkannt."],
+        ["Kann der Test sagen, wie einmalig ich bin?", "Ja, ungefähr. Die Seite zählt anonym, wie viele Prüfungen jeden Ihrer Werte und Ihre gesamte Fingerabdruck-ID (ihre ersten 8 Zeichen) hatten, und zeigt, wie viele davon Ihrem entsprachen, unter allen Prüfungen auf dieser Seite. Sie speichert weder IP noch den vollständigen Fingerabdruck. Die Zahlen bedeuten erst etwas, wenn genug Menschen den Test gemacht haben; bis dahin sagt sie, dass die Zählung noch wächst."],
       ],
     },
     pt: {
       seo_title: "Teste de impressão digital do navegador: rastreado sem cookies? · Quem é você?",
-      seo_desc: "Teste gratuito de impressão digital do navegador: suas impressões canvas, WebGL, de áudio e de fontes e o ID combinado que qualquer site calcula sem cookies, se o navegador embaralha e se ele reconheceu você desde a última visita. Nada é guardado.",
+      seo_desc: "Teste gratuito de impressão digital do navegador: suas impressões canvas, WebGL, de áudio e de fontes e o ID combinado que qualquer site calcula sem cookies, se o navegador embaralha e se ele reconheceu você desde a última visita. Não guarda seu IP nem os dados brutos, só contagens anônimas de quão comum você é.",
       seo_kw: "teste impressão digital navegador, browser fingerprint, fingerprint canvas, fingerprint WebGL, fingerprint de áudio, anti fingerprinting, rastreamento sem cookies",
       h1: "Teste de impressão digital do navegador", og_sub: "O ID que qualquer site calcula para você, sem cookies",
       intro: "Sites não precisam de cookies para reconhecer você. O jeito como seu sistema desenha texto e formas, processa som e quais fontes tem somam um ID que não muda entre sites, janelas anônimas e VPNs. Aqui está o seu, do que ele é feito e se o seu navegador o embaralha.",
@@ -148,12 +148,12 @@ export const TEXT = {
         ["O que é a impressão digital do navegador?", "Um conjunto de pequenas diferenças entre computadores: como a placa de vídeo e o driver desenham um canvas ou uma cena WebGL, como o áudio arredonda, quais fontes estão instaladas, mais tela, idioma e fuso. Cada uma é comum; juntas costumam ser únicas. Um site transforma isso num ID, e todo site que roda o mesmo script obtém o mesmo ID seu."],
         ["VPN ou janela anônima mudam a impressão?", "Não. Nada disso depende do seu IP, e uma janela anônima desenha e toca som do mesmo jeito. Por isso a impressão segue você mesmo depois de apagar cookies ou trocar de servidor VPN. O cartão de ID desta página lembra sua última visita (só no seu navegador) para mostrar isso."],
         ["Como evitar o fingerprinting?", "Use um navegador que o combata: o Brave adiciona ruído aleatório a canvas, WebGL e áudio por padrão; o Firefox tem privacy.resistFingerprinting; o Tor Browser faz todos parecerem iguais. Extensões que trocam o user agent ou bloqueiam canvas costumam deixar você mais único. A linha \"Proteção de impressão\" mostra se o seu navegador embaralha."],
-        ["O teste diz quão único eu sou?", "Não sem coletar a impressão de todo mundo, e esta página se recusa: não guarda nada. Ela mostra o que um site consegue calcular e se isso se mantém. Volte depois: se o cartão disser que a impressão é a mesma, qualquer site teria reconhecido você do mesmo jeito."],
+        ["O teste diz quão único eu sou?", "Sim, mais ou menos. A página conta, de forma anônima, quantas verificações tiveram cada um dos seus valores e seu ID de impressão completo (os 8 primeiros caracteres), e mostra quantas bateram com a sua entre todas do site. Não guarda IP nem a impressão completa. Os números só fazem sentido quando gente suficiente fez o teste; até lá, a página diz que a contagem ainda está se formando."],
       ],
     },
     ru: {
       seo_title: "Проверка отпечатка браузера: следят ли без cookie? · Кто вы?",
-      seo_desc: "Бесплатная проверка отпечатка браузера: отпечатки canvas, WebGL, аудио и шрифтов и общий ID, который любой сайт вычисляет без cookie, перемешивает ли его браузер и узнал ли он вас с прошлого визита. Ничего не сохраняется.",
+      seo_desc: "Бесплатная проверка отпечатка браузера: отпечатки canvas, WebGL, аудио и шрифтов и общий ID, который любой сайт вычисляет без cookie, перемешивает ли его браузер и узнал ли он вас с прошлого визита. IP и исходные данные не сохраняются — только анонимные счётчики того, насколько вы распространены.",
       seo_kw: "проверка отпечатка браузера, отпечаток браузера, browser fingerprint, canvas fingerprint, WebGL отпечаток, аудио отпечаток, защита от фингерпринтинга, слежка без cookie",
       h1: "Проверка отпечатка браузера", og_sub: "ID, который любой сайт вычисляет для вас без cookie",
       intro: "Сайтам не нужны cookie, чтобы узнать вас. То, как ваша система рисует текст и фигуры, обрабатывает звук и какие у неё шрифты, складывается в ID, который не меняется между сайтами, в приватном окне и через VPN. Вот ваш, из чего он состоит и перемешивает ли его ваш браузер.",
@@ -162,7 +162,7 @@ export const TEXT = {
         ["Что такое отпечаток браузера?", "Набор мелких различий между компьютерами: как видеокарта и драйвер рисуют canvas или сцену WebGL, как аудиотракт округляет звук, какие установлены шрифты, плюс экран, язык и часовой пояс. По отдельности это обычно, вместе часто уникально. Сайт сводит это в ID, и каждый сайт с тем же скриптом получает от вас тот же ID."],
         ["Меняют ли его VPN или приватное окно?", "Нет. Ничто из этого не зависит от IP, а приватное окно рисует и звучит так же. Поэтому отпечаток следует за вами даже после очистки cookie и смены VPN-сервера. Карточка ID на этой странице помнит прошлый визит (только в вашем браузере), чтобы это показать."],
         ["Как защититься от отпечатков?", "Возьмите браузер, который с ними борется: Brave по умолчанию добавляет шум в canvas, WebGL и аудио; в Firefox есть privacy.resistFingerprinting; Tor Browser делает всех одинаковыми. Расширения, меняющие User-Agent или блокирующие canvas, часто делают вас заметнее. Строка «Защита от отпечатков» показывает, перемешивает ли ваш браузер."],
-        ["Скажет ли тест, насколько я уникален?", "Не собирая отпечатки всех, а эта страница этого не делает: она ничего не хранит. Она показывает, что сайт может вычислить и стабильно ли это. Зайдите позже: если карточка скажет, что отпечаток тот же, любой сайт узнал бы вас так же."],
+        ["Скажет ли тест, насколько я уникален?", "Да, примерно. Страница анонимно считает, сколько проверок было с каждым вашим значением и со всем ID отпечатка (его первыми 8 символами), и показывает, сколько из всех проверок на сайте совпали с вашей. IP и полный отпечаток не сохраняются. Числа имеют смысл, только когда тест прошло достаточно людей; до тех пор страница пишет, что данные ещё накапливаются."],
       ],
     },
   },
@@ -600,7 +600,7 @@ export const TEXT = {
         ],
         [
           "Is anything stored?",
-          "No. The checks run in your browser; the server only answers with what it sees of this request, and keeps nothing."
+          "Nothing about you. The checks run in your browser, and the server answers only with what it sees of this request. Afterwards the page adds one to anonymous counters (which values you had, how each check came out), with no IP and no record of a single visit; \"Don't count me\" on the page turns it off."
         ]
       ]
     },
@@ -623,7 +623,7 @@ export const TEXT = {
         ],
         [
           "会保存什么吗？",
-          "不会。检测都在你的浏览器里进行；服务器只回答它从这次请求里本来就能看到的东西，什么都不存。"
+          "不存关于你本人的东西。检测都在你的浏览器里进行，服务器只回答它从这次请求里本来就能看到的东西。检测完，页面会给匿名计数器加一（你的各项读数、每项检查的结果），不存 IP，也没有单次访问的记录；页面上的「不参与统计」可以关掉。"
         ]
       ]
     },
@@ -646,7 +646,7 @@ export const TEXT = {
         ],
         [
           "會儲存什麼嗎？",
-          "不會。檢測都在你的瀏覽器裡進行；伺服器只回答它從這次請求本來就看得到的東西，什麼都不存。"
+          "不存關於你本人的東西。檢測都在你的瀏覽器裡進行，伺服器只回答它從這次請求裡本來就看得到的東西。檢測完，頁面會替匿名計數器加一（你的各項讀數、每項檢查的結果），不存 IP，也沒有單次造訪的紀錄；頁面上的「不參與統計」可以關掉。"
         ]
       ]
     },
@@ -669,7 +669,7 @@ export const TEXT = {
         ],
         [
           "何か保存されますか？",
-          "いいえ。検査はブラウザの中で行い、サーバーはこのリクエストから見える情報を返すだけで何も残しません。"
+          "あなた個人のことは保存しません。検査はブラウザの中で行われ、サーバーはこのリクエストから見える内容を返すだけです。検査後、ページは匿名のカウンター（あなたの値、各チェックの結果）に 1 を足しますが、IP も 1 回ごとの記録も残しません。ページの「集計に含めない」で止められます。"
         ]
       ]
     },
@@ -692,7 +692,7 @@ export const TEXT = {
         ],
         [
           "무언가 저장되나요?",
-          "아니요. 검사는 브라우저 안에서 하고, 서버는 이 요청에서 보이는 것만 답하며 아무것도 남기지 않아요."
+          "당신에 대한 것은 저장하지 않습니다. 검사는 브라우저 안에서 이뤄지고, 서버는 이 요청에서 보이는 것만 돌려줍니다. 검사 후 페이지는 익명 카운터(당신의 값, 각 검사 결과)에 1을 더하지만 IP도 방문 한 건의 기록도 남기지 않아요. 페이지의 '집계에서 빼기'로 끌 수 있습니다."
         ]
       ]
     },
@@ -715,7 +715,7 @@ export const TEXT = {
         ],
         [
           "Wird etwas gespeichert?",
-          "Nein. Die Prüfungen laufen in Ihrem Browser; der Server antwortet nur mit dem, was er von dieser Anfrage sieht, und behält nichts."
+          "Nichts über Sie. Die Prüfungen laufen in Ihrem Browser, und der Server antwortet nur mit dem, was er von dieser Anfrage sieht. Danach zählt die Seite anonyme Zähler hoch (welche Werte Sie hatten, wie jede Prüfung ausging), ohne IP und ohne Eintrag pro Besuch; „Nicht mitzählen“ auf der Seite schaltet es ab."
         ]
       ]
     },
@@ -738,7 +738,7 @@ export const TEXT = {
         ],
         [
           "Quelque chose est-il enregistré ?",
-          "Non. Les contrôles se font dans votre navigateur ; le serveur ne répond qu’avec ce qu’il voit de cette requête et ne garde rien."
+          "Rien sur vous. Les vérifications se font dans votre navigateur, et le serveur ne répond qu’avec ce qu’il voit de cette requête. Ensuite la page ajoute un à des compteurs anonymes (vos valeurs, le résultat de chaque vérification), sans IP ni trace d’une visite ; « Ne pas me compter » sur la page le désactive."
         ]
       ]
     },
@@ -761,7 +761,7 @@ export const TEXT = {
         ],
         [
           "¿Se guarda algo?",
-          "No. Las comprobaciones se hacen en tu navegador; el servidor solo responde con lo que ve de esta petición y no guarda nada."
+          "Nada sobre ti. Las comprobaciones se hacen en tu navegador y el servidor solo responde con lo que ve de esta petición. Después la página suma uno a contadores anónimos (qué valores tenías, cómo salió cada comprobación), sin IP y sin registro de una visita; «No contarme» en la página lo desactiva."
         ]
       ]
     },
@@ -784,7 +784,7 @@ export const TEXT = {
         ],
         [
           "Algo é salvo?",
-          "Não. As verificações rodam no seu navegador; o servidor só responde com o que vê desta requisição e não guarda nada."
+          "Nada sobre você. As verificações rodam no seu navegador, e o servidor só responde com o que vê desta requisição. Depois a página soma um a contadores anônimos (quais valores você tinha, o resultado de cada verificação), sem IP e sem registro de uma visita; \"Não me contar\" na página desativa isso."
         ]
       ]
     },
@@ -807,7 +807,7 @@ export const TEXT = {
         ],
         [
           "Что-нибудь сохраняется?",
-          "Нет. Проверки идут в вашем браузере; сервер отвечает лишь тем, что видит в этом запросе, и ничего не хранит."
+          "Ничего о вас лично. Проверки идут в вашем браузере, а сервер отвечает только тем, что видит в этом запросе. Затем страница прибавляет единицу к анонимным счётчикам (ваши значения, итог каждой проверки) — без IP и без записи о визите; «Не учитывать меня» на странице это отключает."
         ]
       ]
     }
@@ -2207,7 +2207,7 @@ export const TEXT = {
   "anti-detect-browser": {
     en: {
       seo_title: "Anti-Detect Browser Test: does your profile give itself away? · Who Are You",
-      seo_desc: "Free anti-detect browser test: checks whether the user agent matches the engine's real version, whether a Worker reads the same navigator as the page, and whether platform, graphics card and time zone agree. Nothing is stored.",
+      seo_desc: "Free anti-detect browser test: checks whether the user agent matches the engine's real version, whether a Worker reads the same navigator as the page, and whether platform, graphics card and time zone agree. No IP or raw data is kept, only anonymous counts of how common you are.",
       seo_kw: "anti-detect browser test, antidetect browser check, multilogin detection, browser profile check, fingerprint browser detection, user agent spoofing detection",
       h1: "Anti-detect browser test", og_sub: "Each part looks right; do they agree?",
       intro: "An anti-detect browser gives each profile its own user agent, screen, time zone and graphics card. Each value can look perfectly ordinary and still contradict another one. This page reads the parts a rewritten profile has trouble keeping in line, and says which disagree.",
@@ -2220,7 +2220,7 @@ export const TEXT = {
     },
     "zh-CN": {
       seo_title: "指纹浏览器检测：你的环境配置露馅了吗 · 你是谁",
-      seo_desc: "免费指纹浏览器检测：看用户代理和内核真实版本是否一致、Worker 里读到的 navigator 和页面是否相同、平台、显卡和时区是否对得上。适合检查 AdsPower、比特浏览器、Multilogin 等环境。不保存任何数据。",
+      seo_desc: "免费指纹浏览器检测：看用户代理和内核真实版本是否一致、Worker 里读到的 navigator 和页面是否相同、平台、显卡和时区是否对得上。适合检查 AdsPower、比特浏览器、Multilogin 等环境。不保存 IP 和原始数据，只累计匿名计数，用来算你有多常见。",
       seo_kw: "指纹浏览器检测, 指纹浏览器, 防关联浏览器, AdsPower 检测, 比特浏览器检测, 环境检测, 浏览器环境一致性, UA 伪装检测",
       h1: "指纹浏览器检测", og_sub: "每一项都像真的，合在一起对得上吗？",
       intro: "指纹浏览器给每个环境配一套自己的用户代理、屏幕、时区和显卡。每一项单看都很正常，却可能和另一项互相矛盾。这个页面专门读那些改过的环境最难保持一致的地方，告诉你哪几项对不上。",
@@ -2233,7 +2233,7 @@ export const TEXT = {
     },
     "zh-TW": {
       seo_title: "指紋瀏覽器檢測：你的環境設定露餡了嗎 · 你是誰",
-      seo_desc: "免費指紋瀏覽器檢測：看使用者代理和核心真實版本是否一致、Worker 裡讀到的 navigator 和頁面是否相同、平台、顯示卡和時區是否對得上。不保存任何資料。",
+      seo_desc: "免費指紋瀏覽器檢測：看使用者代理和核心真實版本是否一致、Worker 裡讀到的 navigator 和頁面是否相同、平台、顯示卡和時區是否對得上。不保存 IP 和原始資料，只累計匿名計數，用來算你有多常見。",
       seo_kw: "指紋瀏覽器檢測, 指紋瀏覽器, 防關聯瀏覽器, 環境檢測, 瀏覽器環境一致性, UA 偽裝檢測",
       h1: "指紋瀏覽器檢測", og_sub: "每一項都像真的，合在一起對得上嗎？",
       intro: "指紋瀏覽器替每個環境配一套自己的使用者代理、螢幕、時區和顯示卡。每一項單看都很正常，卻可能和另一項互相矛盾。這個頁面專門讀那些改過的環境最難保持一致的地方，告訴你哪幾項對不上。",
@@ -2246,7 +2246,7 @@ export const TEXT = {
     },
     ja: {
       seo_title: "アンチディテクトブラウザ検査：プロファイルがばれていないか · Who Are You",
-      seo_desc: "無料のアンチディテクトブラウザ検査：ユーザーエージェントとエンジンの実バージョンが合うか、Worker が読む navigator がページと同じか、プラットフォーム・GPU・タイムゾーンが整合するかを確認。データは保存しません。",
+      seo_desc: "無料のアンチディテクトブラウザ検査：ユーザーエージェントとエンジンの実バージョンが合うか、Worker が読む navigator がページと同じか、プラットフォーム・GPU・タイムゾーンが整合するかを確認。IP や元のデータは保存せず、どれだけありふれているかを数える匿名の集計だけを残します。",
       seo_kw: "アンチディテクトブラウザ 検出, 指紋ブラウザ, ブラウザプロファイル 検査, UA 偽装 検出, 環境 一貫性",
       h1: "アンチディテクトブラウザ検査", og_sub: "どれも本物らしい。でも互いに合っている？",
       intro: "アンチディテクトブラウザはプロファイルごとにユーザーエージェント、画面、タイムゾーン、GPU を用意します。一つずつ見れば普通でも、別の値と矛盾することがあります。このページは書き換えた環境が揃えにくい部分を読み、どこが合わないかを示します。",
@@ -2259,7 +2259,7 @@ export const TEXT = {
     },
     ko: {
       seo_title: "안티디텍트 브라우저 검사: 프로필이 들통나지 않았나 · Who Are You",
-      seo_desc: "무료 안티디텍트 브라우저 검사: 사용자 에이전트와 엔진의 실제 버전이 맞는지, Worker가 읽는 navigator가 페이지와 같은지, 플랫폼·그래픽카드·시간대가 서로 맞는지 확인합니다. 아무것도 저장하지 않습니다.",
+      seo_desc: "무료 안티디텍트 브라우저 검사: 사용자 에이전트와 엔진의 실제 버전이 맞는지, Worker가 읽는 navigator가 페이지와 같은지, 플랫폼·그래픽카드·시간대가 서로 맞는지 확인합니다. IP와 원본 데이터는 저장하지 않고, 얼마나 흔한지 세는 익명 집계만 남깁니다.",
       seo_kw: "안티디텍트 브라우저 검사, 지문 브라우저, 브라우저 프로필 검사, UA 위장 탐지, 환경 일관성",
       h1: "안티디텍트 브라우저 검사", og_sub: "하나하나는 진짜 같아도, 서로 맞나요?",
       intro: "안티디텍트 브라우저는 프로필마다 사용자 에이전트, 화면, 시간대, 그래픽카드를 따로 줍니다. 각각은 평범해 보여도 다른 값과 모순될 수 있어요. 이 페이지는 바꾼 환경이 맞추기 어려운 부분을 읽고 무엇이 맞지 않는지 알려줍니다.",
@@ -2272,7 +2272,7 @@ export const TEXT = {
     },
     es: {
       seo_title: "Test de navegador antidetección: ¿tu perfil se delata? · Who Are You",
-      seo_desc: "Test gratuito de navegador antidetección: comprueba si el user agent cuadra con la versión real del motor, si un Worker lee el mismo navigator que la página y si plataforma, tarjeta gráfica y zona horaria coinciden. No se guarda nada.",
+      seo_desc: "Test gratuito de navegador antidetección: comprueba si el user agent cuadra con la versión real del motor, si un Worker lee el mismo navigator que la página y si plataforma, tarjeta gráfica y zona horaria coinciden. No guarda tu IP ni los datos en bruto, solo recuentos anónimos de lo común que eres.",
       seo_kw: "test navegador antidetección, detectar navegador antidetect, comprobar perfil de navegador, detectar user agent falso, coherencia del navegador",
       h1: "Test de navegador antidetección", og_sub: "Cada parte parece real; ¿encajan entre sí?",
       intro: "Un navegador antidetección da a cada perfil su propio user agent, pantalla, zona horaria y tarjeta gráfica. Cada valor puede parecer normal y aun así contradecir a otro. Esta página lee las partes que a un perfil reescrito le cuesta mantener coherentes y dice cuáles no encajan.",
@@ -2285,7 +2285,7 @@ export const TEXT = {
     },
     fr: {
       seo_title: "Test de navigateur anti-détection : votre profil se trahit-il ? · Who Are You",
-      seo_desc: "Test gratuit de navigateur anti-détection : vérifie si le user agent correspond à la vraie version du moteur, si un Worker lit le même navigator que la page, et si plateforme, carte graphique et fuseau horaire concordent. Rien n’est enregistré.",
+      seo_desc: "Test gratuit de navigateur anti-détection : vérifie si le user agent correspond à la vraie version du moteur, si un Worker lit le même navigator que la page, et si plateforme, carte graphique et fuseau horaire concordent. Ni IP ni données brutes ne sont gardées, seulement des comptages anonymes de votre fréquence.",
       seo_kw: "test navigateur anti-détection, détecter navigateur antidetect, vérifier profil navigateur, détection user agent falsifié, cohérence du navigateur",
       h1: "Test de navigateur anti-détection", og_sub: "Chaque élément paraît vrai ; s’accordent-ils ?",
       intro: "Un navigateur anti-détection donne à chaque profil son user agent, son écran, son fuseau horaire et sa carte graphique. Chaque valeur peut sembler banale et pourtant en contredire une autre. Cette page lit les éléments qu’un profil réécrit a du mal à garder cohérents, et dit lesquels ne concordent pas.",
@@ -2298,7 +2298,7 @@ export const TEXT = {
     },
     de: {
       seo_title: "Anti-Detect-Browser-Test: Verrät sich dein Profil? · Who Are You",
-      seo_desc: "Kostenloser Anti-Detect-Browser-Test: prüft, ob der User-Agent zur echten Engine-Version passt, ob ein Worker denselben navigator liest wie die Seite und ob Plattform, Grafikkarte und Zeitzone zusammenpassen. Nichts wird gespeichert.",
+      seo_desc: "Kostenloser Anti-Detect-Browser-Test: prüft, ob der User-Agent zur echten Engine-Version passt, ob ein Worker denselben navigator liest wie die Seite und ob Plattform, Grafikkarte und Zeitzone zusammenpassen. Weder IP noch Rohdaten werden gespeichert, nur anonyme Zähler, wie häufig Sie sind.",
       seo_kw: "Anti-Detect-Browser Test, Antidetect Browser erkennen, Browserprofil prüfen, gefälschten User-Agent erkennen, Browser-Konsistenz",
       h1: "Anti-Detect-Browser-Test", og_sub: "Jeder Teil wirkt echt – passen sie zusammen?",
       intro: "Ein Anti-Detect-Browser gibt jedem Profil eigenen User-Agent, Bildschirm, Zeitzone und Grafikkarte. Jeder Wert kann ganz normal aussehen und trotzdem einem anderen widersprechen. Diese Seite liest die Teile, die ein umgeschriebenes Profil schwer stimmig hält, und zeigt, welche nicht passen.",
@@ -2311,7 +2311,7 @@ export const TEXT = {
     },
     pt: {
       seo_title: "Teste de navegador antidetecção: seu perfil se entrega? · Who Are You",
-      seo_desc: "Teste grátis de navegador antidetecção: verifica se o user agent bate com a versão real do motor, se um Worker lê o mesmo navigator que a página e se plataforma, placa de vídeo e fuso combinam. Nada é armazenado.",
+      seo_desc: "Teste grátis de navegador antidetecção: verifica se o user agent bate com a versão real do motor, se um Worker lê o mesmo navigator que a página e se plataforma, placa de vídeo e fuso combinam. Não guarda seu IP nem os dados brutos, só contagens anônimas de quão comum você é.",
       seo_kw: "teste navegador antidetecção, detectar navegador antidetect, verificar perfil do navegador, detectar user agent falso, consistência do navegador",
       h1: "Teste de navegador antidetecção", og_sub: "Cada parte parece real; elas combinam?",
       intro: "Um navegador antidetecção dá a cada perfil seu próprio user agent, tela, fuso horário e placa de vídeo. Cada valor pode parecer normal e ainda assim contradizer outro. Esta página lê as partes que um perfil reescrito tem dificuldade de manter coerentes e diz quais não combinam.",
@@ -2324,7 +2324,7 @@ export const TEXT = {
     },
     ru: {
       seo_title: "Проверка антидетект-браузера: выдаёт ли себя профиль? · Who Are You",
-      seo_desc: "Бесплатная проверка антидетект-браузера: совпадает ли user agent с настоящей версией движка, видит ли Worker тот же navigator, что и страница, согласуются ли платформа, видеокарта и часовой пояс. Ничего не сохраняется.",
+      seo_desc: "Бесплатная проверка антидетект-браузера: совпадает ли user agent с настоящей версией движка, видит ли Worker тот же navigator, что и страница, согласуются ли платформа, видеокарта и часовой пояс. IP и исходные данные не сохраняются — только анонимные счётчики того, насколько вы распространены.",
       seo_kw: "проверка антидетект браузера, обнаружение антидетект браузера, проверка профиля браузера, подмена user agent, согласованность браузера",
       h1: "Проверка антидетект-браузера", og_sub: "Каждая часть выглядит настоящей — а вместе?",
       intro: "Антидетект-браузер даёт каждому профилю свой user agent, экран, часовой пояс и видеокарту. Каждое значение может выглядеть обычным и всё равно противоречить другому. Эта страница читает то, что переписанному профилю трудно держать согласованным, и показывает, что не сходится.",
@@ -2339,7 +2339,7 @@ export const TEXT = {
   "icloud-private-relay": {
     en: {
       seo_title: "iCloud Private Relay Check: what sites still see · Who Are You",
-      seo_desc: "Free iCloud Private Relay check: whether your address is a relay exit, which network it belongs to, the region it shows, and whether WebRTC leaks anything past it. Nothing is stored.",
+      seo_desc: "Free iCloud Private Relay check: whether your address is a relay exit, which network it belongs to, the region it shows, and whether WebRTC leaks anything past it. No IP or raw data is kept, only anonymous counts of how common you are.",
       seo_kw: "iCloud Private Relay check, is Private Relay on, Private Relay IP, Private Relay detection, Safari Private Relay test",
       h1: "iCloud Private Relay check", og_sub: "Is the relay on, and what does it still show?",
       intro: "iCloud Private Relay sends Safari's traffic through two hops, so sites see an exit run by Cloudflare, Akamai or Fastly instead of your address. Sites can still tell it's a relay, and roughly where you are. Here is what yours shows.",
@@ -2352,7 +2352,7 @@ export const TEXT = {
     },
     "zh-CN": {
       seo_title: "iCloud 专用代理检测：网站还能看到什么 · 你是谁",
-      seo_desc: "免费 iCloud 专用代理（Private Relay）检测：看你的地址是不是中继出口、属于哪家网络、显示在哪个地区，以及 WebRTC 有没有绕过它漏出真实地址。不保存任何数据。",
+      seo_desc: "免费 iCloud 专用代理（Private Relay）检测：看你的地址是不是中继出口、属于哪家网络、显示在哪个地区，以及 WebRTC 有没有绕过它漏出真实地址。不保存 IP 和原始数据，只累计匿名计数，用来算你有多常见。",
       seo_kw: "iCloud 专用代理检测, iCloud Private Relay, 专用代理 IP, Private Relay 检测, Safari 专用代理",
       h1: "iCloud 专用代理检测", og_sub: "中继开着吗？还暴露了什么？",
       intro: "iCloud 专用代理让 Safari 的流量走两跳，网站看到的是 Cloudflare、Akamai 或 Fastly 的出口，不是你的地址。但网站仍然看得出这是中继，也能知道你大概在哪。下面是你的中继显示出来的样子。",
@@ -2365,7 +2365,7 @@ export const TEXT = {
     },
     "zh-TW": {
       seo_title: "iCloud 私密轉送檢測：網站還能看到什麼 · 你是誰",
-      seo_desc: "免費 iCloud 私密轉送（Private Relay）檢測：看你的位址是不是轉送出口、屬於哪家網路、顯示在哪個地區，以及 WebRTC 有沒有繞過它洩漏真實位址。不保存任何資料。",
+      seo_desc: "免費 iCloud 私密轉送（Private Relay）檢測：看你的位址是不是轉送出口、屬於哪家網路、顯示在哪個地區，以及 WebRTC 有沒有繞過它洩漏真實位址。不保存 IP 和原始資料，只累計匿名計數，用來算你有多常見。",
       seo_kw: "iCloud 私密轉送檢測, iCloud Private Relay, 私密轉送 IP, Private Relay 檢測, Safari 私密轉送",
       h1: "iCloud 私密轉送檢測", og_sub: "轉送開著嗎？還暴露了什麼？",
       intro: "iCloud 私密轉送讓 Safari 的流量走兩跳，網站看到的是 Cloudflare、Akamai 或 Fastly 的出口，不是你的位址。但網站仍然看得出這是轉送，也知道你大概在哪。下面是你的轉送顯示出來的樣子。",
@@ -2378,7 +2378,7 @@ export const TEXT = {
     },
     ja: {
       seo_title: "iCloud プライベートリレー検査：サイトにまだ見えるもの · Who Are You",
-      seo_desc: "無料の iCloud プライベートリレー検査：あなたのアドレスがリレーの出口か、どのネットワークか、どの地域に見えるか、WebRTC がその外へ漏れていないかを確認。データは保存しません。",
+      seo_desc: "無料の iCloud プライベートリレー検査：あなたのアドレスがリレーの出口か、どのネットワークか、どの地域に見えるか、WebRTC がその外へ漏れていないかを確認。IP や元のデータは保存せず、どれだけありふれているかを数える匿名の集計だけを残します。",
       seo_kw: "iCloud プライベートリレー 確認, Private Relay 検出, プライベートリレー IP, Safari プライベートリレー",
       h1: "iCloud プライベートリレー検査", og_sub: "リレーはオン？それでも見えるものは？",
       intro: "iCloud プライベートリレーは Safari の通信を 2 段で中継し、サイトにはあなたのアドレスではなく Cloudflare・Akamai・Fastly の出口が見えます。それでもリレーであることやおおよその場所は分かります。あなたのリレーの見え方はこちら。",
@@ -2391,7 +2391,7 @@ export const TEXT = {
     },
     ko: {
       seo_title: "iCloud 비공개 릴레이 검사: 사이트가 여전히 보는 것 · Who Are You",
-      seo_desc: "무료 iCloud 비공개 릴레이 검사: 주소가 릴레이 출구인지, 어느 네트워크인지, 어느 지역으로 보이는지, WebRTC가 그 밖으로 새지 않는지 확인합니다. 아무것도 저장하지 않습니다.",
+      seo_desc: "무료 iCloud 비공개 릴레이 검사: 주소가 릴레이 출구인지, 어느 네트워크인지, 어느 지역으로 보이는지, WebRTC가 그 밖으로 새지 않는지 확인합니다. IP와 원본 데이터는 저장하지 않고, 얼마나 흔한지 세는 익명 집계만 남깁니다.",
       seo_kw: "iCloud 비공개 릴레이 확인, Private Relay 탐지, 비공개 릴레이 IP, Safari 비공개 릴레이",
       h1: "iCloud 비공개 릴레이 검사", og_sub: "릴레이가 켜져 있나요? 그래도 보이는 건?",
       intro: "iCloud 비공개 릴레이는 Safari 트래픽을 두 단계로 중계해서, 사이트는 당신 주소 대신 Cloudflare·Akamai·Fastly의 출구를 봅니다. 그래도 릴레이라는 것과 대략적인 위치는 알 수 있어요. 당신의 릴레이가 보이는 모습입니다.",
@@ -2404,7 +2404,7 @@ export const TEXT = {
     },
     es: {
       seo_title: "Comprobar el Relé Privado de iCloud: lo que los sitios aún ven · Who Are You",
-      seo_desc: "Comprobación gratuita del Relé Privado de iCloud: si tu dirección es una salida del relé, de qué red es, qué región muestra y si WebRTC filtra algo por fuera. No se guarda nada.",
+      seo_desc: "Comprobación gratuita del Relé Privado de iCloud: si tu dirección es una salida del relé, de qué red es, qué región muestra y si WebRTC filtra algo por fuera. No guarda tu IP ni los datos en bruto, solo recuentos anónimos de lo común que eres.",
       seo_kw: "comprobar Relé Privado de iCloud, iCloud Private Relay, IP del relé privado, detectar Private Relay, Safari relé privado",
       h1: "Comprobar el Relé Privado de iCloud", og_sub: "¿Está activo el relé y qué sigue mostrando?",
       intro: "El Relé Privado de iCloud envía el tráfico de Safari por dos saltos, así que los sitios ven una salida de Cloudflare, Akamai o Fastly en lugar de tu dirección. Aun así saben que es un relé y más o menos dónde estás. Esto es lo que muestra el tuyo.",
@@ -2417,7 +2417,7 @@ export const TEXT = {
     },
     fr: {
       seo_title: "Vérifier le relais privé iCloud : ce que les sites voient encore · Who Are You",
-      seo_desc: "Vérification gratuite du relais privé iCloud : votre adresse est-elle une sortie du relais, de quel réseau, quelle région elle montre, et WebRTC laisse-t-il fuir quelque chose à côté. Rien n’est enregistré.",
+      seo_desc: "Vérification gratuite du relais privé iCloud : votre adresse est-elle une sortie du relais, de quel réseau, quelle région elle montre, et WebRTC laisse-t-il fuir quelque chose à côté. Ni IP ni données brutes ne sont gardées, seulement des comptages anonymes de votre fréquence.",
       seo_kw: "vérifier relais privé iCloud, iCloud Private Relay, IP relais privé, détecter Private Relay, Safari relais privé",
       h1: "Vérifier le relais privé iCloud", og_sub: "Le relais est-il actif, et que montre-t-il encore ?",
       intro: "Le relais privé iCloud fait passer le trafic de Safari par deux sauts : les sites voient une sortie de Cloudflare, Akamai ou Fastly au lieu de votre adresse. Ils savent pourtant que c’est un relais, et à peu près où vous êtes. Voici ce que montre le vôtre.",
@@ -2430,7 +2430,7 @@ export const TEXT = {
     },
     de: {
       seo_title: "iCloud Private Relay prüfen: Was Websites noch sehen · Who Are You",
-      seo_desc: "Kostenlose Prüfung von iCloud Private Relay: ob deine Adresse ein Relay-Ausgang ist, zu welchem Netz sie gehört, welche Region sie zeigt und ob WebRTC daran vorbei etwas verrät. Nichts wird gespeichert.",
+      seo_desc: "Kostenlose Prüfung von iCloud Private Relay: ob deine Adresse ein Relay-Ausgang ist, zu welchem Netz sie gehört, welche Region sie zeigt und ob WebRTC daran vorbei etwas verrät. Weder IP noch Rohdaten werden gespeichert, nur anonyme Zähler, wie häufig Sie sind.",
       seo_kw: "iCloud Private Relay prüfen, Private Relay erkennen, Private Relay IP, Safari Private Relay Test",
       h1: "iCloud Private Relay prüfen", og_sub: "Ist das Relay an, und was zeigt es noch?",
       intro: "iCloud Private Relay schickt Safaris Verkehr über zwei Stationen, sodass Websites einen Ausgang von Cloudflare, Akamai oder Fastly sehen statt deiner Adresse. Dass es ein Relay ist und ungefähr wo du bist, sehen sie trotzdem. So sieht deins aus.",
@@ -2443,7 +2443,7 @@ export const TEXT = {
     },
     pt: {
       seo_title: "Verificar a Retransmissão Privada do iCloud: o que os sites ainda veem · Who Are You",
-      seo_desc: "Verificação grátis da Retransmissão Privada do iCloud: se seu endereço é uma saída da retransmissão, de qual rede, qual região mostra e se o WebRTC vaza algo por fora. Nada é armazenado.",
+      seo_desc: "Verificação grátis da Retransmissão Privada do iCloud: se seu endereço é uma saída da retransmissão, de qual rede, qual região mostra e se o WebRTC vaza algo por fora. Não guarda seu IP nem os dados brutos, só contagens anônimas de quão comum você é.",
       seo_kw: "verificar Retransmissão Privada do iCloud, iCloud Private Relay, IP da retransmissão privada, detectar Private Relay, Safari",
       h1: "Verificar a Retransmissão Privada do iCloud", og_sub: "A retransmissão está ligada, e o que ainda mostra?",
       intro: "A Retransmissão Privada do iCloud manda o tráfego do Safari por dois saltos, então os sites veem uma saída da Cloudflare, Akamai ou Fastly em vez do seu endereço. Mesmo assim sabem que é uma retransmissão e mais ou menos onde você está. Veja o que a sua mostra.",
@@ -2456,7 +2456,7 @@ export const TEXT = {
     },
     ru: {
       seo_title: "Проверка частного узла iCloud: что сайты всё ещё видят · Who Are You",
-      seo_desc: "Бесплатная проверка частного узла iCloud (Private Relay): является ли ваш адрес выходом ретранслятора, чья это сеть, какой регион он показывает и не утекает ли что-то мимо него через WebRTC. Ничего не сохраняется.",
+      seo_desc: "Бесплатная проверка частного узла iCloud (Private Relay): является ли ваш адрес выходом ретранслятора, чья это сеть, какой регион он показывает и не утекает ли что-то мимо него через WebRTC. IP и исходные данные не сохраняются — только анонимные счётчики того, насколько вы распространены.",
       seo_kw: "проверка частного узла iCloud, iCloud Private Relay, IP частного узла, обнаружение Private Relay, Safari",
       h1: "Проверка частного узла iCloud", og_sub: "Узел включён — и что он всё равно показывает?",
       intro: "Частный узел iCloud пропускает трафик Safari через два перехода, и сайты видят выход Cloudflare, Akamai или Fastly вместо вашего адреса. Но что это ретранслятор и где вы примерно находитесь, они всё равно видят. Вот как выглядит ваш.",
@@ -2471,7 +2471,7 @@ export const TEXT = {
   "warp-check": {
     en: {
       seo_title: "Cloudflare WARP Check: is WARP on, and can sites tell? · Who Are You",
-      seo_desc: "Free Cloudflare WARP check: whether your traffic goes through WARP, the address and network sites see, the Cloudflare data center you reach and the key exchange in use. Nothing is stored.",
+      seo_desc: "Free Cloudflare WARP check: whether your traffic goes through WARP, the address and network sites see, the Cloudflare data center you reach and the key exchange in use. No IP or raw data is kept, only anonymous counts of how common you are.",
       seo_kw: "Cloudflare WARP check, is WARP on, WARP detection, 1.1.1.1 WARP test, WARP IP",
       h1: "Cloudflare WARP check", og_sub: "Is WARP on, and what do sites see?",
       intro: "WARP, the VPN in Cloudflare's 1.1.1.1 app, sends your traffic into Cloudflare's network. Any site behind Cloudflare can read whether a visitor arrives through WARP. Here is what yours says, and what address and network the site sees.",
@@ -2484,7 +2484,7 @@ export const TEXT = {
     },
     "zh-CN": {
       seo_title: "Cloudflare WARP 检测：WARP 开着吗，网站看得出吗 · 你是谁",
-      seo_desc: "免费 Cloudflare WARP 检测：看你的流量是否经过 WARP、网站看到的地址和网络、连到的 Cloudflare 机房和使用的密钥交换。不保存任何数据。",
+      seo_desc: "免费 Cloudflare WARP 检测：看你的流量是否经过 WARP、网站看到的地址和网络、连到的 Cloudflare 机房和使用的密钥交换。不保存 IP 和原始数据，只累计匿名计数，用来算你有多常见。",
       seo_kw: "Cloudflare WARP 检测, WARP 是否开启, WARP 检测, 1.1.1.1 WARP, WARP IP",
       h1: "Cloudflare WARP 检测", og_sub: "WARP 开着吗？网站看到了什么？",
       intro: "WARP 是 Cloudflare 1.1.1.1 App 里的 VPN，把你的流量送进 Cloudflare 的网络。任何接入 Cloudflare 的网站都能读到访客是不是经 WARP 来的。下面是你的结果，以及网站看到的地址和网络。",
@@ -2497,7 +2497,7 @@ export const TEXT = {
     },
     "zh-TW": {
       seo_title: "Cloudflare WARP 檢測：WARP 開著嗎，網站看得出嗎 · 你是誰",
-      seo_desc: "免費 Cloudflare WARP 檢測：看你的流量是否經過 WARP、網站看到的位址和網路、連到的 Cloudflare 機房和使用的金鑰交換。不保存任何資料。",
+      seo_desc: "免費 Cloudflare WARP 檢測：看你的流量是否經過 WARP、網站看到的位址和網路、連到的 Cloudflare 機房和使用的金鑰交換。不保存 IP 和原始資料，只累計匿名計數，用來算你有多常見。",
       seo_kw: "Cloudflare WARP 檢測, WARP 是否開啟, WARP 檢測, 1.1.1.1 WARP, WARP IP",
       h1: "Cloudflare WARP 檢測", og_sub: "WARP 開著嗎？網站看到了什麼？",
       intro: "WARP 是 Cloudflare 1.1.1.1 App 裡的 VPN，把你的流量送進 Cloudflare 的網路。任何接入 Cloudflare 的網站都能讀到訪客是不是經 WARP 來的。下面是你的結果，以及網站看到的位址和網路。",
@@ -2510,7 +2510,7 @@ export const TEXT = {
     },
     ja: {
       seo_title: "Cloudflare WARP 検査：WARP はオン？サイトに分かる？ · Who Are You",
-      seo_desc: "無料の Cloudflare WARP 検査：通信が WARP を通っているか、サイトに見えるアドレスとネットワーク、つながった Cloudflare のデータセンター、使われている鍵交換を確認。データは保存しません。",
+      seo_desc: "無料の Cloudflare WARP 検査：通信が WARP を通っているか、サイトに見えるアドレスとネットワーク、つながった Cloudflare のデータセンター、使われている鍵交換を確認。IP や元のデータは保存せず、どれだけありふれているかを数える匿名の集計だけを残します。",
       seo_kw: "Cloudflare WARP 確認, WARP オン 確認, WARP 検出, 1.1.1.1 WARP, WARP IP",
       h1: "Cloudflare WARP 検査", og_sub: "WARP はオン？サイトには何が見える？",
       intro: "WARP は Cloudflare の 1.1.1.1 アプリに入っている VPN で、通信を Cloudflare のネットワークに送ります。Cloudflare の後ろにあるサイトなら、訪問者が WARP 経由かどうかを読めます。あなたの結果と、サイトに見えるアドレスとネットワークはこちら。",
@@ -2523,7 +2523,7 @@ export const TEXT = {
     },
     ko: {
       seo_title: "Cloudflare WARP 검사: WARP가 켜져 있고, 사이트가 알까? · Who Are You",
-      seo_desc: "무료 Cloudflare WARP 검사: 트래픽이 WARP를 거치는지, 사이트가 보는 주소와 네트워크, 연결된 Cloudflare 데이터센터와 사용 중인 키 교환을 확인합니다. 아무것도 저장하지 않습니다.",
+      seo_desc: "무료 Cloudflare WARP 검사: 트래픽이 WARP를 거치는지, 사이트가 보는 주소와 네트워크, 연결된 Cloudflare 데이터센터와 사용 중인 키 교환을 확인합니다. IP와 원본 데이터는 저장하지 않고, 얼마나 흔한지 세는 익명 집계만 남깁니다.",
       seo_kw: "Cloudflare WARP 확인, WARP 켜짐 확인, WARP 탐지, 1.1.1.1 WARP, WARP IP",
       h1: "Cloudflare WARP 검사", og_sub: "WARP가 켜져 있나요? 사이트는 무엇을 보나요?",
       intro: "WARP는 Cloudflare 1.1.1.1 앱의 VPN으로, 트래픽을 Cloudflare 네트워크로 보냅니다. Cloudflare 뒤에 있는 사이트라면 방문자가 WARP로 왔는지 읽을 수 있어요. 당신의 결과와 사이트가 보는 주소·네트워크입니다.",
@@ -2536,7 +2536,7 @@ export const TEXT = {
     },
     es: {
       seo_title: "Comprobar Cloudflare WARP: ¿está activo y lo notan los sitios? · Who Are You",
-      seo_desc: "Comprobación gratuita de Cloudflare WARP: si tu tráfico pasa por WARP, la dirección y la red que ven los sitios, el centro de datos de Cloudflare al que llegas y el intercambio de claves en uso. No se guarda nada.",
+      seo_desc: "Comprobación gratuita de Cloudflare WARP: si tu tráfico pasa por WARP, la dirección y la red que ven los sitios, el centro de datos de Cloudflare al que llegas y el intercambio de claves en uso. No guarda tu IP ni los datos en bruto, solo recuentos anónimos de lo común que eres.",
       seo_kw: "comprobar Cloudflare WARP, WARP activado, detectar WARP, 1.1.1.1 WARP, IP de WARP",
       h1: "Comprobar Cloudflare WARP", og_sub: "¿WARP está activo y qué ven los sitios?",
       intro: "WARP, la VPN de la app 1.1.1.1 de Cloudflare, mete tu tráfico en la red de Cloudflare. Cualquier sitio detrás de Cloudflare puede leer si un visitante llega por WARP. Esto dice el tuyo, y qué dirección y red ve el sitio.",
@@ -2549,7 +2549,7 @@ export const TEXT = {
     },
     fr: {
       seo_title: "Vérifier Cloudflare WARP : est-il actif, les sites le voient-ils ? · Who Are You",
-      seo_desc: "Vérification gratuite de Cloudflare WARP : votre trafic passe-t-il par WARP, l’adresse et le réseau que voient les sites, le centre de données Cloudflare atteint et l’échange de clés utilisé. Rien n’est enregistré.",
+      seo_desc: "Vérification gratuite de Cloudflare WARP : votre trafic passe-t-il par WARP, l’adresse et le réseau que voient les sites, le centre de données Cloudflare atteint et l’échange de clés utilisé. Ni IP ni données brutes ne sont gardées, seulement des comptages anonymes de votre fréquence.",
       seo_kw: "vérifier Cloudflare WARP, WARP activé, détecter WARP, 1.1.1.1 WARP, IP WARP",
       h1: "Vérifier Cloudflare WARP", og_sub: "WARP est-il actif, et que voient les sites ?",
       intro: "WARP, le VPN de l’app 1.1.1.1 de Cloudflare, fait entrer votre trafic dans le réseau de Cloudflare. Tout site derrière Cloudflare peut lire si un visiteur arrive par WARP. Voici ce que dit le vôtre, et l’adresse et le réseau que voit le site.",
@@ -2562,7 +2562,7 @@ export const TEXT = {
     },
     de: {
       seo_title: "Cloudflare WARP prüfen: Ist WARP an, und sehen es Websites? · Who Are You",
-      seo_desc: "Kostenlose Prüfung von Cloudflare WARP: ob dein Verkehr über WARP läuft, welche Adresse und welches Netz Websites sehen, welches Cloudflare-Rechenzentrum du erreichst und welcher Schlüsselaustausch läuft. Nichts wird gespeichert.",
+      seo_desc: "Kostenlose Prüfung von Cloudflare WARP: ob dein Verkehr über WARP läuft, welche Adresse und welches Netz Websites sehen, welches Cloudflare-Rechenzentrum du erreichst und welcher Schlüsselaustausch läuft. Weder IP noch Rohdaten werden gespeichert, nur anonyme Zähler, wie häufig Sie sind.",
       seo_kw: "Cloudflare WARP prüfen, WARP aktiv, WARP erkennen, 1.1.1.1 WARP, WARP IP",
       h1: "Cloudflare WARP prüfen", og_sub: "Ist WARP an, und was sehen Websites?",
       intro: "WARP, das VPN in Cloudflares 1.1.1.1-App, schickt deinen Verkehr in Cloudflares Netz. Jede Website hinter Cloudflare kann lesen, ob ein Besucher über WARP kommt. Das sagt deins, und diese Adresse und dieses Netz sieht die Website.",
@@ -2575,7 +2575,7 @@ export const TEXT = {
     },
     pt: {
       seo_title: "Verificar o Cloudflare WARP: está ligado e os sites percebem? · Who Are You",
-      seo_desc: "Verificação grátis do Cloudflare WARP: se seu tráfego passa pelo WARP, o endereço e a rede que os sites veem, o data center da Cloudflare que você alcança e a troca de chaves em uso. Nada é armazenado.",
+      seo_desc: "Verificação grátis do Cloudflare WARP: se seu tráfego passa pelo WARP, o endereço e a rede que os sites veem, o data center da Cloudflare que você alcança e a troca de chaves em uso. Não guarda seu IP nem os dados brutos, só contagens anônimas de quão comum você é.",
       seo_kw: "verificar Cloudflare WARP, WARP ligado, detectar WARP, 1.1.1.1 WARP, IP do WARP",
       h1: "Verificar o Cloudflare WARP", og_sub: "O WARP está ligado, e o que os sites veem?",
       intro: "O WARP, a VPN do app 1.1.1.1 da Cloudflare, leva seu tráfego para a rede da Cloudflare. Qualquer site atrás da Cloudflare consegue ler se o visitante chega pelo WARP. Veja o que diz o seu, e o endereço e a rede que o site vê.",
@@ -2588,7 +2588,7 @@ export const TEXT = {
     },
     ru: {
       seo_title: "Проверка Cloudflare WARP: включён ли WARP и видят ли сайты · Who Are You",
-      seo_desc: "Бесплатная проверка Cloudflare WARP: идёт ли ваш трафик через WARP, какой адрес и сеть видят сайты, к какому дата-центру Cloudflare вы подключены и какой обмен ключами используется. Ничего не сохраняется.",
+      seo_desc: "Бесплатная проверка Cloudflare WARP: идёт ли ваш трафик через WARP, какой адрес и сеть видят сайты, к какому дата-центру Cloudflare вы подключены и какой обмен ключами используется. IP и исходные данные не сохраняются — только анонимные счётчики того, насколько вы распространены.",
       seo_kw: "проверка Cloudflare WARP, включён ли WARP, обнаружение WARP, 1.1.1.1 WARP, IP WARP",
       h1: "Проверка Cloudflare WARP", og_sub: "WARP включён — и что видят сайты?",
       intro: "WARP, VPN в приложении 1.1.1.1 от Cloudflare, отправляет ваш трафик в сеть Cloudflare. Любой сайт за Cloudflare может узнать, пришёл ли посетитель через WARP. Вот что показывает ваш, и какой адрес и сеть видит сайт.",
@@ -2603,7 +2603,7 @@ export const TEXT = {
   "http3-ech": {
     en: {
       seo_title: "HTTP/3, ECH and Post-Quantum TLS Test · Who Are You",
-      seo_desc: "Free connection test: whether your browser uses HTTP/3, hides the site's name with Encrypted Client Hello (ECH), and agrees a post-quantum key (X25519MLKEM768), and what a missing one says about your network or proxy. Nothing is stored.",
+      seo_desc: "Free connection test: whether your browser uses HTTP/3, hides the site's name with Encrypted Client Hello (ECH), and agrees a post-quantum key (X25519MLKEM768), and what a missing one says about your network or proxy. No IP or raw data is kept, only anonymous counts of how common you are.",
       seo_kw: "HTTP/3 test, ECH test, encrypted client hello check, post-quantum TLS test, X25519MLKEM768, QUIC test, TLS check",
       h1: "HTTP/3, ECH and post-quantum test", og_sub: "How modern is your connection, and what's in the way?",
       intro: "A current browser on an open network talks HTTP/3 over UDP, hides which site it connects to with ECH, and agrees a key that a future quantum computer can't break. When one of them is missing, something on the path is often the reason. Here is your connection.",
@@ -2616,7 +2616,7 @@ export const TEXT = {
     },
     "zh-CN": {
       seo_title: "HTTP/3、ECH 与后量子加密检测 · 你是谁",
-      seo_desc: "免费连接协议检测：看你的浏览器是否用上了 HTTP/3、是否用 ECH 隐藏了访问的网站名、是否协商了后量子密钥（X25519MLKEM768），缺了哪一项又说明你的网络或代理怎么了。不保存任何数据。",
+      seo_desc: "免费连接协议检测：看你的浏览器是否用上了 HTTP/3、是否用 ECH 隐藏了访问的网站名、是否协商了后量子密钥（X25519MLKEM768），缺了哪一项又说明你的网络或代理怎么了。不保存 IP 和原始数据，只累计匿名计数，用来算你有多常见。",
       seo_kw: "HTTP/3 检测, ECH 检测, Encrypted Client Hello, 后量子加密检测, X25519MLKEM768, QUIC 检测, TLS 检测",
       h1: "HTTP/3、ECH 与后量子加密检测", og_sub: "你的连接有多新？中间卡在哪？",
       intro: "新浏览器在畅通的网络上，会用 UDP 跑 HTTP/3，用 ECH 隐藏自己连的是哪个网站，再协商一把未来量子计算机也破不了的密钥。少了哪一项，往往是路上的什么东西造成的。下面是你的连接。",
@@ -2629,7 +2629,7 @@ export const TEXT = {
     },
     "zh-TW": {
       seo_title: "HTTP/3、ECH 與後量子加密檢測 · 你是誰",
-      seo_desc: "免費連線協定檢測：看你的瀏覽器是否用上了 HTTP/3、是否用 ECH 隱藏了造訪的網站名稱、是否協商了後量子金鑰（X25519MLKEM768），缺了哪一項又代表你的網路或代理怎麼了。不保存任何資料。",
+      seo_desc: "免費連線協定檢測：看你的瀏覽器是否用上了 HTTP/3、是否用 ECH 隱藏了造訪的網站名稱、是否協商了後量子金鑰（X25519MLKEM768），缺了哪一項又代表你的網路或代理怎麼了。不保存 IP 和原始資料，只累計匿名計數，用來算你有多常見。",
       seo_kw: "HTTP/3 檢測, ECH 檢測, Encrypted Client Hello, 後量子加密檢測, X25519MLKEM768, QUIC 檢測, TLS 檢測",
       h1: "HTTP/3、ECH 與後量子加密檢測", og_sub: "你的連線有多新？中間卡在哪？",
       intro: "新瀏覽器在暢通的網路上，會用 UDP 跑 HTTP/3，用 ECH 隱藏自己連的是哪個網站，再協商一把未來量子電腦也破不了的金鑰。少了哪一項，往往是路上的什麼東西造成的。下面是你的連線。",
@@ -2642,7 +2642,7 @@ export const TEXT = {
     },
     ja: {
       seo_title: "HTTP/3・ECH・耐量子暗号の検査 · Who Are You",
-      seo_desc: "無料の接続検査：ブラウザが HTTP/3 を使っているか、ECH で接続先のサイト名を隠しているか、耐量子の鍵（X25519MLKEM768）で合意しているか、欠けている場合ネットワークやプロキシについて何が分かるかを確認。データは保存しません。",
+      seo_desc: "無料の接続検査：ブラウザが HTTP/3 を使っているか、ECH で接続先のサイト名を隠しているか、耐量子の鍵（X25519MLKEM768）で合意しているか、欠けている場合ネットワークやプロキシについて何が分かるかを確認。IP や元のデータは保存せず、どれだけありふれているかを数える匿名の集計だけを残します。",
       seo_kw: "HTTP/3 確認, ECH 確認, Encrypted Client Hello, 耐量子暗号 TLS, X25519MLKEM768, QUIC 確認, TLS 確認",
       h1: "HTTP/3・ECH・耐量子暗号の検査", og_sub: "接続はどれだけ新しい？どこで止まっている？",
       intro: "最新のブラウザは開かれたネットワークなら UDP で HTTP/3 を使い、ECH で接続先のサイトを隠し、将来の量子コンピュータでも破れない鍵で合意します。どれかが欠けていれば、経路上の何かが原因であることが多いです。あなたの接続はこちら。",
@@ -2655,7 +2655,7 @@ export const TEXT = {
     },
     ko: {
       seo_title: "HTTP/3·ECH·양자내성 암호 검사 · Who Are You",
-      seo_desc: "무료 연결 검사: 브라우저가 HTTP/3를 쓰는지, ECH로 접속하는 사이트 이름을 숨기는지, 양자내성 키(X25519MLKEM768)로 합의하는지, 빠진 항목이 네트워크나 프록시에 대해 무엇을 말하는지 확인합니다. 아무것도 저장하지 않습니다.",
+      seo_desc: "무료 연결 검사: 브라우저가 HTTP/3를 쓰는지, ECH로 접속하는 사이트 이름을 숨기는지, 양자내성 키(X25519MLKEM768)로 합의하는지, 빠진 항목이 네트워크나 프록시에 대해 무엇을 말하는지 확인합니다. IP와 원본 데이터는 저장하지 않고, 얼마나 흔한지 세는 익명 집계만 남깁니다.",
       seo_kw: "HTTP/3 확인, ECH 확인, Encrypted Client Hello, 양자내성 TLS, X25519MLKEM768, QUIC 확인, TLS 확인",
       h1: "HTTP/3·ECH·양자내성 암호 검사", og_sub: "연결은 얼마나 최신인가요? 어디서 막히나요?",
       intro: "최신 브라우저는 막힘없는 네트워크에서 UDP로 HTTP/3를 쓰고, ECH로 어느 사이트에 접속하는지 숨기고, 미래의 양자 컴퓨터도 못 깨는 키로 합의합니다. 하나라도 빠지면 대개 경로 위의 무언가가 원인이에요. 당신의 연결입니다.",
@@ -2668,7 +2668,7 @@ export const TEXT = {
     },
     es: {
       seo_title: "Test de HTTP/3, ECH y TLS poscuántico · Who Are You",
-      seo_desc: "Test gratuito de conexión: si tu navegador usa HTTP/3, oculta el nombre del sitio con Encrypted Client Hello (ECH) y acuerda una clave poscuántica (X25519MLKEM768), y qué dice la que falte sobre tu red o tu proxy. No se guarda nada.",
+      seo_desc: "Test gratuito de conexión: si tu navegador usa HTTP/3, oculta el nombre del sitio con Encrypted Client Hello (ECH) y acuerda una clave poscuántica (X25519MLKEM768), y qué dice la que falte sobre tu red o tu proxy. No guarda tu IP ni los datos en bruto, solo recuentos anónimos de lo común que eres.",
       seo_kw: "test HTTP/3, test ECH, encrypted client hello, TLS poscuántico, X25519MLKEM768, test QUIC, comprobar TLS",
       h1: "Test de HTTP/3, ECH y poscuántico", og_sub: "¿Qué tan moderna es tu conexión y qué la frena?",
       intro: "Un navegador actual en una red abierta usa HTTP/3 sobre UDP, oculta con ECH a qué sitio se conecta y acuerda una clave que un futuro ordenador cuántico no podrá romper. Cuando falta alguna, suele haber algo en el camino. Esta es tu conexión.",
@@ -2681,7 +2681,7 @@ export const TEXT = {
     },
     fr: {
       seo_title: "Test HTTP/3, ECH et TLS post-quantique · Who Are You",
-      seo_desc: "Test de connexion gratuit : votre navigateur utilise-t-il HTTP/3, masque-t-il le nom du site avec Encrypted Client Hello (ECH), convient-il d’une clé post-quantique (X25519MLKEM768), et ce qu’un manque dit de votre réseau ou proxy. Rien n’est enregistré.",
+      seo_desc: "Test de connexion gratuit : votre navigateur utilise-t-il HTTP/3, masque-t-il le nom du site avec Encrypted Client Hello (ECH), convient-il d’une clé post-quantique (X25519MLKEM768), et ce qu’un manque dit de votre réseau ou proxy. Ni IP ni données brutes ne sont gardées, seulement des comptages anonymes de votre fréquence.",
       seo_kw: "test HTTP/3, test ECH, encrypted client hello, TLS post-quantique, X25519MLKEM768, test QUIC, vérifier TLS",
       h1: "Test HTTP/3, ECH et post-quantique", og_sub: "Votre connexion est-elle moderne, et qu’est-ce qui bloque ?",
       intro: "Un navigateur récent sur un réseau ouvert parle HTTP/3 sur UDP, masque avec ECH le site auquel il se connecte et convient d’une clé qu’un futur ordinateur quantique ne cassera pas. Quand l’un manque, c’est souvent à cause de quelque chose sur le chemin. Voici votre connexion.",
@@ -2694,7 +2694,7 @@ export const TEXT = {
     },
     de: {
       seo_title: "HTTP/3-, ECH- und Post-Quanten-TLS-Test · Who Are You",
-      seo_desc: "Kostenloser Verbindungstest: ob dein Browser HTTP/3 nutzt, den Namen der Website mit Encrypted Client Hello (ECH) verbirgt und einen Post-Quanten-Schlüssel (X25519MLKEM768) aushandelt – und was ein fehlendes davon über dein Netz oder deinen Proxy sagt. Nichts wird gespeichert.",
+      seo_desc: "Kostenloser Verbindungstest: ob dein Browser HTTP/3 nutzt, den Namen der Website mit Encrypted Client Hello (ECH) verbirgt und einen Post-Quanten-Schlüssel (X25519MLKEM768) aushandelt – und was ein fehlendes davon über dein Netz oder deinen Proxy sagt. Weder IP noch Rohdaten werden gespeichert, nur anonyme Zähler, wie häufig Sie sind.",
       seo_kw: "HTTP/3 Test, ECH Test, Encrypted Client Hello, Post-Quanten TLS, X25519MLKEM768, QUIC Test, TLS prüfen",
       h1: "HTTP/3-, ECH- und Post-Quanten-Test", og_sub: "Wie modern ist deine Verbindung – und was steht im Weg?",
       intro: "Ein aktueller Browser in einem offenen Netz spricht HTTP/3 über UDP, verbirgt mit ECH, mit welcher Website er sich verbindet, und handelt einen Schlüssel aus, den ein künftiger Quantencomputer nicht knackt. Fehlt eines davon, liegt es oft an etwas auf dem Weg. Das ist deine Verbindung.",
@@ -2707,7 +2707,7 @@ export const TEXT = {
     },
     pt: {
       seo_title: "Teste de HTTP/3, ECH e TLS pós-quântico · Who Are You",
-      seo_desc: "Teste grátis de conexão: se seu navegador usa HTTP/3, esconde o nome do site com Encrypted Client Hello (ECH) e combina uma chave pós-quântica (X25519MLKEM768), e o que a falta de um diz sobre sua rede ou proxy. Nada é armazenado.",
+      seo_desc: "Teste grátis de conexão: se seu navegador usa HTTP/3, esconde o nome do site com Encrypted Client Hello (ECH) e combina uma chave pós-quântica (X25519MLKEM768), e o que a falta de um diz sobre sua rede ou proxy. Não guarda seu IP nem os dados brutos, só contagens anônimas de quão comum você é.",
       seo_kw: "teste HTTP/3, teste ECH, encrypted client hello, TLS pós-quântico, X25519MLKEM768, teste QUIC, verificar TLS",
       h1: "Teste de HTTP/3, ECH e pós-quântico", og_sub: "Quão moderna é sua conexão, e o que atrapalha?",
       intro: "Um navegador atual numa rede aberta usa HTTP/3 sobre UDP, esconde com ECH a qual site se conecta e combina uma chave que um futuro computador quântico não quebra. Quando falta um deles, costuma haver algo no caminho. Esta é sua conexão.",
@@ -2720,7 +2720,7 @@ export const TEXT = {
     },
     ru: {
       seo_title: "Проверка HTTP/3, ECH и постквантового TLS · Who Are You",
-      seo_desc: "Бесплатная проверка соединения: использует ли браузер HTTP/3, скрывает ли имя сайта с помощью Encrypted Client Hello (ECH), согласует ли постквантовый ключ (X25519MLKEM768) и что отсутствие одного из них говорит о сети или прокси. Ничего не сохраняется.",
+      seo_desc: "Бесплатная проверка соединения: использует ли браузер HTTP/3, скрывает ли имя сайта с помощью Encrypted Client Hello (ECH), согласует ли постквантовый ключ (X25519MLKEM768) и что отсутствие одного из них говорит о сети или прокси. IP и исходные данные не сохраняются — только анонимные счётчики того, насколько вы распространены.",
       seo_kw: "проверка HTTP/3, проверка ECH, encrypted client hello, постквантовый TLS, X25519MLKEM768, проверка QUIC, проверка TLS",
       h1: "Проверка HTTP/3, ECH и постквантового обмена", og_sub: "Насколько современно ваше соединение и что мешает?",
       intro: "Современный браузер в открытой сети говорит по HTTP/3 через UDP, скрывает через ECH, к какому сайту подключается, и согласует ключ, который не взломает будущий квантовый компьютер. Если чего-то нет, причина часто где-то на пути. Вот ваше соединение.",

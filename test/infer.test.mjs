@@ -2,6 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
+import { cleanSeen, rarity } from "../src/traits.mjs";
 
 const WIN = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36";
 const MAC_SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15";
@@ -187,6 +188,14 @@ test("disguise checks", () => {
   assert.equal(platformOff("Linux armv81", "Android 14"), false);
   assert.equal(glVendorOff("Google Inc. (NVIDIA)", "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11 vs_5_0 ps_5_0, D3D11)"), false);
   assert.equal(glVendorOff("Google Inc. (AMD)", "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Direct3D11 vs_5_0 ps_5_0, D3D11)"), true);
+  // the counter takes known traits and checks only, hashes as 8 hex characters
+  assert.deepEqual(cleanSeen({ add: true, t: { os: "Windows 11", fpid: "0123abcd", canvas: "not-a-hash", ip: "1.2.3.4" }, ck: { tz: "bad", nope: "ok", dns: "weird" } }),
+    { add: true, t: { os: "Windows 11", fpid: "0123abcd" }, ck: { tz: "bad" } });
+  assert.equal(cleanSeen({ t: { ip: "1.2.3.4" } }), null);
+  assert.equal(rarity(1, 5000), "uniq");
+  assert.equal(rarity(50, 5000), "rare");
+  assert.equal(rarity(500, 5000), "common");
+  assert.equal(rarity(1, 500), null);   // too few checks to say
   // iOS: Chrome there connects with Apple's TLS, classical before iOS 26
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 18 }).pq[0], "info");
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 26 }).pq[0], "warn");
