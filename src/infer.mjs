@@ -275,6 +275,12 @@ export function checks(x) {
   // an anti-detect browser's traces: parts that each look right but don't agree (one is a hint, two are a giveaway)
   if (!x.fpb) out.fpb = null;
   else out.fpb = x.fpb.length ? [x.fpb.length > 1 ? "bad" : "warn", "c_fpb_bad", { list: x.fpb.join(",") }] : ["ok", "c_fpb_ok", {}];
+  // a language or a system that isn't the IP country's, with the clock and the DNS both local: someone who lives there
+  // (still a warning: passing as a local, it's what gives you away)
+  if (out.tz && out.tz[0] === "ok" && out.dns && out.dns[0] === "ok") {
+    if (out.lang && out.lang[1] === "c_lang_warn") out.lang = ["warn", "c_lang_abroad", out.lang[2]];
+    if (out.syslang && out.syslang[1] === "c_sys_warn") out.syslang = ["warn", "c_sys_abroad", out.syslang[2]];
+  }
   // an environment something rewrote: properties redefined, functions replaced, parts that should agree but don't
   if (!x.tamper) out.tamper = null;
   else out.tamper = x.tamper.length ? ["bad", "c_tamper_bad", { list: x.tamper.join(",") }] : ["ok", "c_tamper_ok", {}];
@@ -304,7 +310,8 @@ export function protocols(x) {
   // talks to. When it doesn't, the likeliest reason depends on the browser.
   if (!x.sni) out.ech = null;
   else if (x.sni === "encrypted") out.ech = ["ok", "c_ech_ok", {}];
-  else out.ech = ["warn", name === "Safari" ? "c_ech_safari" : name === "Firefox" ? "c_ech_ff" : "c_ech_dns", {}];
+  // (most browsers don't use it yet: a note, not a warning)
+  else out.ech = ["info", name === "Safari" ? "c_ech_safari" : name === "Firefox" ? "c_ech_ff" : "c_ech_dns", {}];
   // post-quantum key exchange: browsers that offer it by default (Chromium 124, Firefox 132, Safari 26) and still
   // end up with a classical one point to something in between that makes its own TLS connections
   if (!x.kex) out.pq = null;

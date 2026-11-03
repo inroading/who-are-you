@@ -120,5 +120,8 @@ export const BLANKS = {
 
 // the disguise checks, one row each
 export const CHECKS = ["tz", "lang", "syslang", "dns", "split", "webrtc", "rtt", "dc", "ua", "tamper", "fpb", "fp", "bot"];
+// what the verdict counts by default (passing as elsewhere): every check but the fingerprint's, which says nothing
+// about where someone is (the privacy scene counts it)
+export const COUNTED = CHECKS.filter(id => id !== "fp");
 // the connection's protocols: shown under the checks, judged the same way, not counted among them
 export const PROTO = ["h3", "ech", "pq", "warp"];

@@ -2,7 +2,7 @@
 // readings against each other the way a site would to spot a disguise. The second card lists every sniffer and what it
 // read; each row is in the HTML from the start and is filled the moment its sniffer answers. The paragraph is filled
 // once, when every sniffer it needs is in, so its text doesn't reflow piece by piece. Strings: window.L1MS.
-import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO } from "./sniffers.mjs";
+import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO, COUNTED } from "./sniffers.mjs";
 import { TRAITS, rarity, MIN_TOTAL } from "./traits.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
 import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "./infer.mjs";
@@ -1001,11 +1001,11 @@ import { TZ_CC } from "./tz.mjs";
     let prev = null;
     try { prev = JSON.parse(store.get(K.prev) || "null"); } catch (e) {}
     const bad = l => l === "bad" || l === "warn", lvl = Object.fromEntries(CHECKS.map(id => [id, R.ck[id] ? R.ck[id][0] : null]));
-    const n = CHECKS.filter(id => bad(lvl[id])).length;
+    const n = COUNTED.filter(id => bad(lvl[id])).length;
     store.set(K.prev, JSON.stringify({ at: Date.now(), n, ck: lvl }));
     const el = $("#vCmp");
     if (!prev || !prev.ck) { el.hidden = true; return; }
-    const fixed = CHECKS.filter(id => bad(prev.ck[id]) && lvl[id] === "ok"), worse = CHECKS.filter(id => prev.ck[id] === "ok" && bad(lvl[id]));
+    const fixed = COUNTED.filter(id => bad(prev.ck[id]) && lvl[id] === "ok"), worse = COUNTED.filter(id => prev.ck[id] === "ok" && bad(lvl[id]));
     const out = [t(prev.n === n ? "cmp_same" : "cmp_v", { ago: ago(prev.at), a: prev.n, b: n })];
     if (fixed.length) out.push(t("cmp_fixed", { list: list(fixed.map(id => t("c_" + id))) }));
     if (worse.length) out.push(t("cmp_new", { list: list(worse.map(id => t("c_" + id))) }));
@@ -1024,7 +1024,7 @@ import { TZ_CC } from "./tz.mjs";
     for (const [id, k] of [["#rpRead", "rp_read_pre"], ["#rpCheck", "rp_check_pre"]]) { $(id).setAttribute("data-ms-report", t(k)); $(id).hidden = false; }
     window.msReport = () => {
       if (!R || !R.ck || $("#rerun").disabled) return null;
-      const c = (R.srv && R.srv.cf) || {}, gr = grade(R.ck, CHECKS.filter(id => R.ck[id])), hi = R.hi || {};
+      const c = (R.srv && R.srv.cf) || {}, gr = grade(R.ck, COUNTED.filter(id => R.ck[id])), hi = R.hi || {};
       // the screen as it is now, in physical pixels with the CSS size and ratio (the most reported reading)
       const sc = screen.width ? physicalScreen(screen.width, screen.height, devicePixelRatio || 1).join("×") + " (" + screen.width + "×" + screen.height + " @" + (devicePixelRatio || 1) + "x)" : R.screen;
       const summary = [$("#vHead").textContent, t("grade_v", { g: gr.grade }), R.osTxt, R.browser, sc, R.gpuSoft ? R.gpuRaw : R.gpu].filter(Boolean).join(" · ").slice(0, 300);
@@ -1049,7 +1049,7 @@ import { TZ_CC } from "./tz.mjs";
   function history() {
     let h = [];
     try { h = JSON.parse(store.get(K.hist) || "[]"); } catch (e) {}
-    const n = CHECKS.filter(id => R.ck[id] && (R.ck[id][0] === "bad" || R.ck[id][0] === "warn")).length;
+    const n = COUNTED.filter(id => R.ck[id] && (R.ck[id][0] === "bad" || R.ck[id][0] === "warn")).length;
     h = [...(Array.isArray(h) ? h : []), { at: Date.now(), n }].slice(-10);
     store.set(K.hist, JSON.stringify(h));
     const el = $("#vHist");
@@ -1073,7 +1073,7 @@ import { TZ_CC } from "./tz.mjs";
     }).join("").trim()).filter(Boolean).join("\n\n");
     const mark = { ok: "✓", warn: "!", bad: "✗", info: "·" };
     const rows = ids => ids.filter(id => P.ck[id]).map(id => mark[P.ck[id][0]] + " " + t("c_" + id) + colon + ckText(id, P.ck[id], c.country));
-    const gr = grade(P.ck, CHECKS.filter(id => P.ck[id]));
+    const gr = grade(P.ck, COUNTED.filter(id => P.ck[id]));
     return [t("card_me") + " · " + location.host, "", story, "", $("#vHead").textContent + " · " + t("grade_v", { g: gr.grade }), ...rows(CHECKS), "",
       t("h_proto"), ...rows(PROTO), "", t("card_cta") + colon + location.origin + (D.paths[LANG] || "/")].join("\n");
   }
@@ -1163,7 +1163,7 @@ import { TZ_CC } from "./tz.mjs";
   // a check's result as text: [level, key, vars]; ipc: the address's country
   function ckText(id, [, key, vars], ipc) {
     const vv = Object.fromEntries(Object.entries(vars).map(([k, x]) => [k, k === "cc" ? country(x) : id === "split" ? exitName(x) : x]));
-    if (id === "tz" || id === "lang" || id === "dns") vv.ipc = ipc ? country(ipc) : "?";
+    if (id === "tz" || id === "lang" || id === "dns" || id === "syslang") vv.ipc = ipc ? country(ipc) : "?";
     if (id === "syslang" && vars.from) vv.from = list(String(vars.from).split(",").map(rowName));
     if ((id === "tamper" || id === "fpb") && vars.list) vv.list = list(String(vars.list).split(",").map(k => t(k)));
     // each side as its zone's name with the offset ("Pacific Time UTC-08:00"), or the offset alone
@@ -1216,10 +1216,14 @@ import { TZ_CC } from "./tz.mjs";
   const PRIV = ["webrtc", "dns", "fp", "fpb", "tamper", "bot"];
   let scene = !EMBED && store.get(K.scene) === "priv" ? "priv" : "all";
   let shownShared = false;
-  const counted = id => scene !== "priv" || PRIV.includes(id) || shownShared;
+  // (a shared portrait is judged as passing as elsewhere: what its link's preview counts)
+  const counted = id => scene === "priv" && !shownShared ? PRIV.includes(id) : COUNTED.includes(id);
   function paintScene() {
     $$("#scene [data-sc]").forEach(b => b.setAttribute("aria-checked", b.dataset.sc === scene));
-    for (const id of CHECKS) { CK[id].classList.toggle("off", !counted(id)); const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.classList.toggle("off", !counted(id)); }
+    for (const id of CHECKS) {
+      CK[id].classList.toggle("off", !counted(id)); CK[id].title = counted(id) ? "" : t(id === "fp" ? "sc_off_fp" : "sc_off");
+      const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.classList.toggle("off", !counted(id));
+    }
   }
   $("#scene").onclick = e => {
     const b = e.target.closest("[data-sc]");
@@ -1585,7 +1589,7 @@ import { TZ_CC } from "./tz.mjs";
   // findings are cut to their network, as in a shared link.
   function embedResult() {
     const c = (R.srv && R.srv.cf) || {}, ck = R.ck || {}, P = sharedPortrait(false), lv = id => ck[id] && ck[id][0];
-    const found = CHECKS.filter(id => ck[id] && (ck[id][0] === "bad" || ck[id][0] === "warn")).length, gr = grade(ck, CHECKS.filter(id => ck[id]));
+    const found = COUNTED.filter(id => ck[id] && (ck[id][0] === "bad" || ck[id][0] === "warn")).length, gr = grade(ck, COUNTED.filter(id => ck[id]));
     const RANK = { bad: 0, warn: 1, ok: 2 };
     const findings = [...CHECKS, ...PROTO].filter(id => P.ck[id] && P.ck[id][0] in RANK).sort((a, b) => RANK[P.ck[a][0]] - RANK[P.ck[b][0]]).slice(0, 4)
       .map(id => ({ level: P.ck[id][0], text: t("c_" + id) + " · " + ckText(id, P.ck[id], c.country) }));

@@ -204,6 +204,12 @@ test("disguise checks", () => {
   // #35: coarse timers can't time the round trip
   assert.equal(checks({ ...base, rttB: 103, rttCf: 1, coarse: true }).rtt[1], "c_rtt_coarse");
   assert.equal(gpuName("Generic Renderer"), null);
+  // a language or system that isn't the IP country's, with the clock and DNS local: someone living there
+  assert.equal(checks({ ...base, ipcc: "GB", tz: "Europe/London", tzOff: "+00:00", ipTzOff: "+00:00", dnsCC: "GB", sys: { cc: ["CN"], from: ["fonts", "voices"] } }).syslang[1], "c_sys_abroad");
+  assert.equal(checks({ ...base, ipcc: "GB", tz: "Europe/London", tzOff: "+00:00", ipTzOff: "+00:00", dnsCC: "GB" }).lang[1], "c_lang_abroad");
+  assert.equal(checks({ ...base, ipcc: "JP", sys: { cc: ["CN"], from: ["fonts", "voices"] } }).syslang[1], "c_sys_warn");   // the clock is China's
+  // ECH off is a note
+  assert.equal(protocols({ br: { name: "Chrome", v: "156" }, sni: "plaintext" }).ech[0], "info");
   // iOS: Chrome there connects with Apple's TLS, classical before iOS 26
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 18 }).pq[0], "info");
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 26 }).pq[0], "warn");

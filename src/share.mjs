@@ -3,6 +3,7 @@
 // `v`. A newer page still opens older versions; a version it doesn't know yet is refused. Used by the page (to write
 // and read links) and by the Worker (to give /r/ pages their own title, description and preview image).
 // The portrait carries no address, no fingerprint, and the city and network only when the sharer chose to show them.
+import { COUNTED } from "./sniffers.mjs";
 export const VERSION = 2;
 // language → its folder, as the site lays them out
 export const SLUG = { en: "", "zh-CN": "zh-cn", "zh-TW": "zh-tw", ja: "ja", ko: "ko", es: "es", fr: "fr", de: "de", pt: "pt", ru: "ru" };
@@ -31,5 +32,5 @@ export function decode(code) {
   } catch (e) { return null; }
 }
 // how many checks give the sharer away, and the preview image's tier for it: none, a few, many
-export const findings = P => Object.values(P.ck || {}).filter(v => v && (v[0] === "bad" || v[0] === "warn")).length;
+export const findings = P => COUNTED.filter(id => P.ck && P.ck[id] && (P.ck[id][0] === "bad" || P.ck[id][0] === "warn")).length;
 export const tier = n => n === 0 ? 0 : n <= 3 ? 1 : 2;
