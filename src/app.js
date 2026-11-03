@@ -948,7 +948,7 @@ import { TZ_CC } from "./tz.mjs";
     const big = Math.max(...String(P.screen || "").split("×").map(Number).filter(Boolean), 0);
     const score = (hiG ? 2 : lowG ? 0 : 1) + (big >= 3840 ? 1 : 0) + (P.hz >= 120 ? 1 : 0) + (P.cpu >= 16 ? 1 : 0);
     const lv = score >= 3 ? "high" : score >= 2 ? "mid" : "low";
-    const spec = list([big >= 3840 ? "4K" : big >= 2560 ? "2K" : big >= 1920 ? "1080p" : P.screen, P.hz >= 90 ? P.hz + " Hz" : "", g, P.cpu ? t("cores", { n: P.cpu }) : ""].filter(Boolean));
+    const spec = list([big >= 7680 ? "8K" : big >= 6016 ? "6K" : big >= 5120 ? "5K" : big >= 3840 ? "4K" : big >= 2560 ? "2K" : big >= 1920 ? "1080p" : P.screen, P.hz >= 90 ? P.hz + " Hz" : "", g, P.cpu ? t("cores", { n: P.cpu }) : ""].filter(Boolean));
     return { lv, text: t("tr_" + lv, { spec }) + (P.multi ? t("tr_multi") : "") };
   }
   // how many versions behind the browser is: a recent release of each, and one every four weeks since
