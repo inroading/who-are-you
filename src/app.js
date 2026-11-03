@@ -1047,7 +1047,7 @@ import { TZ_CC } from "./tz.mjs";
     if (h.length < 2) { el.hidden = true; return; }
     const W = 120, H = 26, top = Math.max(1, ...h.map(x => x.n)), x = i => (i * W / (h.length - 1)).toFixed(1), y = v => (H - 3 - v / top * (H - 6)).toFixed(1);
     const pts = h.map((p, i) => x(i) + "," + y(p.n)).join(" ");
-    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t("hist_v", { n: h.length }))}"><polyline points="${pts}"/>` +
+    el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t("runs_v", { n: h.length }))}"><polyline points="${pts}"/>` +
       h.map((p, i) => `<circle cx="${x(i)}" cy="${y(p.n)}" r="2.6"><title>${esc(t("hist_pt", { ago: ago(p.at), n: p.n }))}</title></circle>`).join("") + "</svg>";
     el.hidden = false; $("#vMeta").hidden = false;
   }
