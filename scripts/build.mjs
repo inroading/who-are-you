@@ -141,14 +141,14 @@ export async function build({ check = false } = {}) {
       // its own heading. The main page has no focus panel.
       const P = PAGES[page];
       const focus = !page ? "" : P.stats ? `<section class="cp" id="crowd" data-page="${page}">
-      <div class="cp-head card"><div class="cp-t"><h1>${esc(T("h1"))}</h1><p>${esc(T("intro"))}</p></div>
+      <div class="cp-head card"><div class="cp-t"><h1>${esc(T("h1"))}</h1><p>${esc(T("intro"))}</p><a class="btn primary cp-try" href="${path(slug)}">${esc(T("cr_try"))}</a></div>
         <div class="cp-n"><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM1 14c.4-2.6 2.2-4 4.5-4s4.1 1.4 4.5 4M11 7.5a2 2 0 1 0 0-4M12 10c1.6.3 2.7 1.6 3 4"/></svg></span><b id="crN"><i class="skl"></i></b><span>${esc(T("cr_n_l"))}</span></div></div>
       <ul class="cp-facts" id="crFacts">${'<li class="card"><i class="skl"></i></li>'.repeat(5)}</ul>
       <div class="cp-grid">
         <div class="card cp-bars"><h2><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8l6.5 11.4H1.5zM8 6v3.4M8 11.3v.2"/></svg></span>${esc(T("cr_bars_h"))}</h2><ul id="crBars"></ul></div>
         <div class="card cp-top"><h2><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l6.5 3.5L8 8.5 1.5 5zM1.5 8L8 11.5 14.5 8M1.5 11L8 14.5 14.5 11"/></svg></span>${esc(T("cr_top_h"))}</h2><div id="crTop"></div></div>
       </div>
-      <div class="cp-foot"><p class="cp-note"><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg></span>${esc(T("cr_note"))}</p><a class="btn primary" href="${path(slug)}">${esc(T("cr_try"))}</a></div>
+      <div class="cp-foot"><p class="cp-note"><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg></span>${esc(T("cr_note"))}</p></div>
     </section>` : `<section class="focus card" id="focus" data-page="${page}">
       <div class="focus-t"><h1>${esc(T("h1"))}</h1><p>${esc(T("intro"))}</p></div>
       <div class="focus-r"><h2>${esc(T("focus_h"))}</h2>

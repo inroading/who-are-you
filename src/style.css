@@ -88,6 +88,7 @@ main.topic > .hero, main.topic > .target, main.topic > .probes { display: none; 
   background: radial-gradient(120% 90% at 0% 0%, var(--ink-soft), transparent 55%), var(--panel); }
 .cp-t h1 { font-size: clamp(24px, 3.2vw, 34px); line-height: 1.15; letter-spacing: -.025em; font-weight: 800; margin-bottom: 10px; }
 .cp-t p { color: var(--muted); font-size: 15px; line-height: 1.7; }
+.cp-try { margin-top: 16px; text-decoration: none; }
 .cp-n { display: grid; justify-items: start; gap: 6px; padding: 16px 18px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); }
 .cp-n b { font-size: 40px; line-height: 1; font-weight: 800; letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; } .cp-n b .skl { width: 4em; height: 32px; }
 .cp-n > span:last-child { font-size: 13px; color: var(--muted); }
