@@ -295,7 +295,7 @@ import { TZ_CC } from "./tz.mjs";
     const [pw, ph] = s.width ? physicalScreen(s.width, s.height, devicePixelRatio || 1) : [0, 0];
     R.screen = s.width ? pw + "×" + ph : t("v_unknown");
     if (!s.width) na("screen");
-    else txt("screen", t("scr_v", { w: pw, h: ph, dpr, d: s.colorDepth }), { why: t("scr_css", { w: s.width, h: s.height }) + "\n" + t("scr_avail", { w: s.availWidth, h: s.availHeight, iw: innerWidth, ih: innerHeight }) });
+    else txt("screen", t("scr_v", { w: pw, h: ph, dpr, d: s.colorDepth }), { why: t("scr_which") + "\n" + t("scr_css", { w: s.width, h: s.height }) + "\n" + t("scr_avail", { w: s.availWidth, h: s.availHeight, iw: innerWidth, ih: innerHeight }) });
     if (navigator.hardwareConcurrency) txt("cpu", t("cores", { n: navigator.hardwareConcurrency })); else na("cpu");
     if (navigator.deviceMemory) txt("mem", t("mem_v", { n: navigator.deviceMemory })); else na("mem");
     txt("touch", [t("touch_v", { n: navigator.maxTouchPoints || 0 }), t(mq("(pointer: coarse)") ? "ptr_coarse" : "ptr_fine")].join(" · "));
