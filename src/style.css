@@ -155,6 +155,24 @@ html.shared #share, html[data-who-embed] #share { display: none; }
 .ck-fix::after { content: " ▾"; font-size: 9px; }
 .ck-fix[aria-expanded="true"]::after { content: " ▴"; }
 .ck-fix:hover { text-decoration: underline; }
+/* check one again, without the rest */
+.ck-re { border: 0; background: none; padding: 0; font: 500 11.5px var(--f-ui); color: var(--muted); cursor: pointer; }
+.ck-re:hover { color: var(--ink); text-decoration: underline; }
+.ck-re:disabled { cursor: default; text-decoration: none; opacity: .7; }
+.ckr.re-done { animation: reDone 1.2s ease-out; }
+@keyframes reDone { from { background: var(--ink-soft); } to { background: transparent; } }
+/* what to fix first: the checks that give you away most, each with its first step */
+.todo { margin: 12px 0 4px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); }
+.todo-h { font-size: 12.5px; font-weight: 700; color: var(--muted); margin: 0 0 6px; }
+.todo ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; counter-reset: td; }
+.todo li { counter-increment: td; }
+.todo button { all: unset; box-sizing: border-box; width: 100%; display: grid; grid-template-columns: 20px 1fr; gap: 0 8px; padding: 5px 6px; border-radius: 8px; cursor: pointer; font-size: 13px; line-height: 1.45; }
+.todo button::before { content: counter(td); grid-row: span 2; width: 18px; height: 18px; margin-top: 1px; border-radius: 50%; display: grid; place-items: center; font: 700 10.5px/1 var(--f-ui); color: #fff; background: var(--t3); }
+.todo .bad button::before { background: var(--bad); }
+.todo button:hover, .todo button:focus-visible { background: var(--ink-soft); }
+.todo b { font-weight: 600; }
+.todo span { color: var(--muted); font-size: 12.5px; }
+html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: none; }
 .ck-tip { grid-column: 1 / -1; margin: 6px 0 4px 28px; padding: 8px 12px 8px 26px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); font-size: 12.5px; line-height: 1.6; color: var(--fg); }
 .ck-tip li::marker { color: var(--ink); }
 /* two lines at most, so a long network name doesn't make the row taller; the whole text is on hover */

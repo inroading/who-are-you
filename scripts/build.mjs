@@ -120,7 +120,7 @@ export async function build({ check = false } = {}) {
       // (the connection's protocols follow under their own heading, in the same rows)
       const ckRows = (id, list) => `<ul class="ck" id="${id}">` + list.map(c => `<li class="ckr" data-c="${c}"><i class="st"></i><span class="ck-l">${esc(T("c_" + c))}` +
         `<span class="ck-acts"><button class="ck-fix" type="button" aria-expanded="false" hidden>${esc(T("fix"))}</button>` +
-        (GO[c] ? `<a class="ck-go" target="_blank" rel="noopener" hidden>${esc(T("go_" + GO[c]))}${EXT}</a>` : "") +
+        (GO[c] ? `<a class="ck-go" target="_blank" rel="noopener" hidden>${esc(T("go_" + GO[c]))}${EXT}</a>` : "") + `<button class="ck-re" type="button" hidden>${esc(T("re_btn"))}</button>` +
         `</span></span><span class="ck-v"><i class="skl"></i></span>` +
         `<ul class="ck-tip" hidden>${T("tip_" + c).split("\n").map(l => `<li>${esc(l)}</li>`).join("")}</ul></li>`).join("") + "</ul>";
       const checks = ckRows("checks", CHECKS) + `<div class="proto" id="protoBox"><div class="sec-h"><span>${esc(T("h_proto"))}</span></div>${ckRows("proto", PROTO)}</div>`;

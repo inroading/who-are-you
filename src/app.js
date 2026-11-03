@@ -1007,7 +1007,9 @@ import { TZ_CC } from "./tz.mjs";
   // The DNS and WebRTC fixes name the clients and settings of the system the visitor is on, when there are any
   function osTips() {
     const os = (R.dev && R.dev.os) || "", plat = /^Windows/.test(os) ? "win" : /^macOS/.test(os) ? "mac" : /^(iOS|iPadOS)/.test(os) ? "ios" : /^Android/.test(os) ? "and" : /Linux|Chrome OS/.test(os) ? "linux" : "";
-    const keys = { dns: plat && plat !== "linux" ? "tip_dns_" + plat : "", webrtc: plat === "ios" ? "tip_webrtc_ios" : plat === "and" ? "tip_webrtc_and" : plat ? "tip_webrtc_desk" : "", fp: plat === "ios" ? "tip_fp_ios" : "" };
+    const bn = (R.br && R.br.name) || "", brw = bn === "Firefox" ? "ff" : bn === "Safari" ? "sf" : /^(Chrome|Edge|Opera|Brave|Vivaldi|Yandex)$/.test(bn) ? "cr" : "";
+    const keys = { tz: plat ? "tip_tz_" + plat : "", lang: plat === "ios" || plat === "and" ? "tip_lang_" + plat : brw ? "tip_lang_" + brw : "",
+      dns: plat && plat !== "linux" ? "tip_dns_" + plat : "", webrtc: plat === "ios" ? "tip_webrtc_ios" : plat === "and" ? "tip_webrtc_and" : plat ? "tip_webrtc_desk" : "", fp: plat === "ios" ? "tip_fp_ios" : "" };
     for (const [id, k] of Object.entries(keys)) if (k && L[k]) CK[id].querySelector(".ck-tip").innerHTML = t(k).split("\n").map(l => `<li>${esc(l)}</li>`).join("");
   }
 
@@ -1103,6 +1105,7 @@ import { TZ_CC } from "./tz.mjs";
       }
       // a check that gives you away says how to fix it
       r.querySelector(".ck-fix").hidden = lv !== "bad" && lv !== "warn";
+      const re = r.querySelector(".ck-re"); if (re) re.hidden = !final || (lv !== "bad" && lv !== "warn");
       const go = r.querySelector(".ck-go");
       if (go) {
         // only when the check gives you away
@@ -1122,6 +1125,43 @@ import { TZ_CC } from "./tz.mjs";
     $("#mGrade").textContent = t("grade_v", { g: gr.grade }); $("#mGrade").className = "m-grade g-" + gr.grade.replace("+", "p"); $("#mGrade").hidden = false;
     $("#mGrade").title = t("grade_why", { s: gr.score });
   }
+  // What to fix first: the checks that give you away, a contradiction before a hint, the ones a site weighs most first;
+  // each with the first step of its fix. A click opens that check's fix
+  const WEIGHT = { bot: 9, webrtc: 9, dns: 8, tz: 8, tamper: 7, fpb: 7, ua: 6, rtt: 6, split: 5, dc: 5, lang: 4, syslang: 3, fp: 2 };
+  function todo() {
+    const res = R.ck || {}, lvOf = id => res[id] && res[id][0];
+    const top = CHECKS.filter(id => lvOf(id) === "bad" || lvOf(id) === "warn")
+      .sort((a, b) => (lvOf(a) === "bad" ? 0 : 1) - (lvOf(b) === "bad" ? 0 : 1) || (WEIGHT[b] || 0) - (WEIGHT[a] || 0)).slice(0, 3);
+    $("#todo").hidden = !top.length;
+    $("#todoL").innerHTML = top.map(id => {
+      const step = (CK[id].querySelector(".ck-tip li") || {}).textContent || "";
+      return `<li class="${lvOf(id)}"><button type="button" data-go="${id}"><b>${esc(t("c_" + id))}</b><span>${esc(step)}</span></button></li>`;
+    }).join("");
+  }
+  $("#todoL").onclick = e => {
+    const b = e.target.closest("[data-go]");
+    if (!b) return;
+    const r = CK[b.dataset.go], tip = r.querySelector(".ck-tip"), fix = r.querySelector(".ck-fix");
+    tip.hidden = false; fix.setAttribute("aria-expanded", "true");
+    r.scrollIntoView({ block: "center", behavior: "smooth" });
+  };
+  // Checking one again: the readings a check rests on, taken again without reloading (a time zone, DNS or proxy change
+  // shows at once). Checks that rest on what the page read as it loaded (a rewritten environment) need the whole test
+  const RETEST = { tz: [locale], lang: [locale], syslang: [fonts, voices, keyboard], dns: [dnsResolver], split: [server, exits], webrtc: [webrtc],
+    rtt: [server, latency], dc: [server] };
+  $$(".ck-re").forEach(btn => {
+    const id = btn.closest(".ckr").dataset.c;
+    if (!RETEST[id]) return btn.remove();
+    btn.onclick = async e => {
+      e.stopPropagation();
+      btn.disabled = true; btn.textContent = t("re_wait");
+      for (const f of RETEST[id]) { try { await f(); } catch (x) {} }
+      if (id === "rtt") R.latDone = true;
+      judge(true); readings(portrait(), R.ck); paintTarget(); osTips(); todo();
+      btn.disabled = false; btn.textContent = t("re_btn");
+      const r = CK[id]; r.classList.remove("re-done"); void r.offsetWidth; r.classList.add("re-done");
+    };
+  });
   $$(".ck-fix").forEach(btn => {
     btn.onclick = e => {
       e.stopPropagation();
@@ -1341,7 +1381,7 @@ import { TZ_CC } from "./tz.mjs";
     for (const id of Object.keys(PR)) if (!done.has(id)) na(id);   // anything a sniffer couldn't reach
     judge(true);
     readings(portrait(), R.ck);
-    paintTarget(); osTips();
+    paintTarget(); osTips(); todo();
     if (!EMBED) { compare(); history(); }
     $("#rerun").disabled = false; $("#share").disabled = false; $("#copyTxt").disabled = false;
     if (EMBED && !failed) post(embedResult());
