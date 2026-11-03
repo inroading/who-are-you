@@ -322,7 +322,7 @@ import { TZ_CC } from "./tz.mjs";
     } catch (e) { R.gpuHi = null; }
     const dg = discreteGpu(R.gpu, R.gpuHi, null);
     txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : ren === "Mozilla" ? "Mozilla · " + t("gpu_rfp") : /or similar$/.test(ren || "") && R.gpu ? t("gpu_like", { g: R.gpu }) : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
-      { why: [ven, ren, R.gpuHiRaw && R.gpuHiRaw !== ren ? R.gpuHiRaw : ""].filter(Boolean).join(" · ") });
+      { why: (/or similar$/.test(ren || "") ? t("gpu_like_why") + "\n" : "") + [ven, ren, R.gpuHiRaw && R.gpuHiRaw !== ren ? R.gpuHiRaw : ""].filter(Boolean).join(" · ") });
     const gl2 = !!document.createElement("canvas").getContext("webgl2");
     txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }));
     // everything WebGL reports about the card and driver, for the WebGL fingerprint
@@ -893,7 +893,8 @@ import { TZ_CC } from "./tz.mjs";
     blank("device", esc(!P.os ? t("dv_unknown") : (P.kind === "phone" || P.kind === "tablet") && P.model ? t("dv_model", { model: P.model, os: P.os }) : t("dv_" + (P.kind || "pc"), { os: P.os })));
     blank("browser", P.browser ? esc(P.browser) : U);
     blank("screen", P.screen ? esc(P.screen + (P.hz ? " · " + P.hz + " Hz" : "")) : U);
-    blank("gpu", esc(P.gs ? t("gpu_soft") : P.rf && !P.gpu ? t("gpu_rfp") : P.gl && P.gpu ? t("gpu_like", { g: P.gpu }) : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")));
+    blank("gpu", esc(P.gs ? t("gpu_soft") : P.rf && !P.gpu ? t("gpu_rfp") : P.gl && P.gpu ? t("gpu_like", { g: P.gpu }) : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")),
+      BLANKS.gpu, P.gl ? t("gpu_like_why") : "");
     blank("isp", P.org ? (!shared && asnOf(P.asn) ? `<a href="${esc(asnOf(P.asn))}" target="_blank" rel="noopener" title="${esc(t("go_asn"))}">${esc(P.org)}</a>` : esc(P.org)) : shared ? esc(t("masked")) : U, BLANKS.isp, X.fullOrg || (shared && !P.org ? t("masked_why") : ""));
     blank("dns", P.dns ? flagged(P.dns, country(P.dns)) : esc(t("dns_na")), BLANKS.dns, X.dnsOrg || "");
     const sp = X.split;
