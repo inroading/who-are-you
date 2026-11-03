@@ -7,6 +7,8 @@ import { DurableObject } from "cloudflare:workers";
 import { cleanSeen } from "./traits.mjs";
 
 const KEEP_DAYS = 90, FLUSH_MS = 10000;
+// the traits whose commonest values the stats page lists, and how many checks a value needs to be listed
+const TOP = ["os", "browser", "screen", "gpu", "tz", "langs"], MIN_SHARED = 20;
 const day = (t = Date.now()) => new Date(t).toISOString().slice(0, 10);
 
 export class Tally extends DurableObject {
@@ -71,12 +73,20 @@ export class Tally extends DurableObject {
     });
   }
 
-  // every check's results per day (the last KEEP_DAYS days), and the number of checks counted
+  // every check's results per day (the last KEEP_DAYS days), the number of checks counted, and the commonest values
+  // of the coarse traits (each shared by MIN_SHARED checks or more, so no rare value is shown); worked out once a minute
   stats() {
+    if (this.statsAt && Date.now() - this.statsAt < 60000) return this.statsMemo;
+    this.statsAt = Date.now();
+    return (this.statsMemo = this.statsNow());
+  }
+  statsNow() {
     const days = {};
     const add = (d, id, lv, n) => { ((days[d] ||= {})[id] ||= {})[lv] = (days[d][id][lv] || 0) + n; };
     for (const r of this.sql.exec("SELECT day, id, lv, n FROM checks ORDER BY day").toArray()) add(r.day, r.id, r.lv, r.n);
     for (const [k, n] of this.pendingCk) { const [d, id, lv] = k.split("\0"); add(d, id, lv, n); }
-    return { total: this.count("", "total"), days };
+    const top = {};
+    for (const f of TOP) top[f] = this.sql.exec("SELECT v, n FROM counts WHERE f = ? AND n >= ? ORDER BY n DESC LIMIT 8", f, MIN_SHARED).toArray().map(r => [r.v, r.n]);
+    return { total: this.count("", "total"), days, top };
   }
 }

@@ -1341,6 +1341,26 @@ import { TZ_CC } from "./tz.mjs";
     const n = u.n.fpid || 1;
     return n <= 1 ? t("card_only", { m: u.total.toLocaleString(LANG) }) : t("card_one_in", { r: Math.round(u.total / n).toLocaleString(LANG) });
   };
+  // The stats page: everyone counted (anonymous counts from /api/stats), the last 7 days
+  async function crowd() {
+    let s = null;
+    try { const r = await within(fetch("/api/stats"), 6000, null); s = r && r.ok ? await r.json() : null; } catch (e) {}
+    if (!s || !s.days) { $("#crN").textContent = t("cr_na"); return; }
+    const since = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10), sum = {};
+    for (const [d, per] of Object.entries(s.days)) if (d >= since) for (const [id, lv] of Object.entries(per)) { const o = sum[id] ||= {}; for (const [k, c] of Object.entries(lv)) o[k] = (o[k] || 0) + c; }
+    const all = id => Object.values(sum[id] || {}).reduce((a, b) => a + b, 0), share = (id, lvs) => all(id) ? lvs.reduce((a, l) => a + ((sum[id] || {})[l] || 0), 0) / all(id) : 0;
+    const n = Math.max(0, ...COUNTED.map(all)), pc = x => Math.round(x * 100) + "%";
+    $("#crN").innerHTML = t("cr_total", { n: `<b>${n.toLocaleString(LANG)}</b>` });
+    $("#crFacts").innerHTML = [["split", ["warn"], "cr_f_split"], ["tz", ["bad"], "cr_f_tz"], ["dns", ["bad"], "cr_f_dns"], ["webrtc", ["bad"], "cr_f_rtc"], ["dc", ["warn", "bad"], "cr_f_dc"]]
+      .map(([id, lvs, k]) => `<li><b>${pc(share(id, lvs))}</b>${esc(t(k))}</li>`).join("");
+    $("#crBars").innerHTML = COUNTED.filter(id => all(id)).map(id => [id, share(id, ["warn", "bad"])]).sort((a, b) => b[1] - a[1])
+      .map(([id, p]) => `<li><span>${esc(t("c_" + id))}</span><i><span style="width:${Math.round(p * 100)}%"></span></i><em>${pc(p)}</em></li>`).join("");
+    const shown = { os: v => v, browser: v => v, screen: v => v, gpu: v => v, tz: v => tzLabel(v), langs: v => language(v) };
+    $("#crTop").innerHTML = Object.keys(shown).filter(f => (s.top || {})[f] && s.top[f].length).map(f => `<div><h4>${esc(t(f === "tz" ? "s_tz" : "s_" + f))}</h4><ol>` +
+      s.top[f].slice(0, 5).map(([v, c]) => `<li>${esc(shown[f](v))}<span>${pc(c / (s.total || 1))}</span></li>`).join("") + "</ol></div>").join("");
+    $(".cr-top").hidden = !$("#crTop").children.length;   // (nothing shared by enough checks yet)
+  }
+  if (D.focus && D.focus.stats) crowd();
   $$(".ck-fix").forEach(btn => {
     btn.onclick = e => {
       e.stopPropagation();

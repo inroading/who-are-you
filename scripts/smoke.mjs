@@ -24,6 +24,7 @@ const ME = { ip: "203.0.113.7", v: 4, ptr: null, h: { "user-agent": "smoke", "ac
 
 const server = createServer(async (req, res) => {
   const path = decodeURIComponent(new URL(req.url, "http://x").pathname);
+  if (path === "/api/stats") { const d = new Date().toISOString().slice(0, 10); res.writeHead(200, { "content-type": "application/json" }); return res.end(JSON.stringify({ total: 5000, days: { [d]: { tz: { ok: 600, bad: 400 }, split: { ok: 500, warn: 500 }, dns: { ok: 800, bad: 200 } } }, top: { os: [["Windows 11", 2000]], tz: [["Asia/Shanghai", 1500]] } })); }
   if (path === "/api/me") { res.writeHead(200, { "content-type": "application/json" }); return res.end(JSON.stringify({ ...ME, at: Date.now() })); }
   // a shared portrait: the Worker serves its language's page (here without the preview tags it adds)
   const r = parsePath(path);
@@ -115,6 +116,12 @@ for (const topic of Object.keys(PAGES)) for (const [lang, slug] of LANGS) {
   const where = `${lang} ${topic}`;
   const { page, errors } = await open(`${base}/${slug ? slug + "/" : ""}${topic}/`);
   await page.waitForFunction(() => !document.querySelector("#rerun").disabled, { timeout: 30000 }).catch(() => fail(where, "the run never finished"));
+  if (PAGES[topic].stats) {
+    await page.waitForFunction(() => /\d/.test(document.querySelector("#crN").textContent) && document.querySelectorAll("#crBars li").length, { timeout: 15000 }).catch(() => fail(where, "the numbers never came"));
+    for (const e of errors) fail(where, "script error: " + e);
+    await page.close();
+    continue;
+  }
   const f = await page.evaluate(() => ({ v: document.querySelector("#focusV").className, rows: [...document.querySelectorAll(".focus-rows [data-f]")].map(x => [x.dataset.f, x.querySelector("b").textContent]) }));
   for (const e of errors) fail(where, "script error: " + e);
   if (!/st-/.test(f.v)) fail(where, "no verdict in the focus panel");

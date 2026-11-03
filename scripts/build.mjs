@@ -143,10 +143,10 @@ export async function build({ check = false } = {}) {
       const focus = !page ? "" : `<section class="focus card" id="focus" data-page="${page}">
       <div class="focus-t"><h1>${esc(T("h1"))}</h1><p>${esc(T("intro"))}</p></div>
       <div class="focus-r"><h2>${esc(T("focus_h"))}</h2>
-        <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        ${P.stats ? `<p class="cr-n" id="crN"><i class="skl"></i></p><ul class="cr-facts" id="crFacts"></ul><p class="cr-note">${esc(T("cr_note"))}</p>` : `<p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>`}
         <ul class="focus-rows">${P.rows.map(id => `<li data-f="${id}"><span>${esc(T("s_" + id))}</span><b>…</b></li>`).join("")}</ul>
         ${P.go ? `<a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>${esc(T("go_" + P.go))}${EXT}</a>` : ""}
-      </div>
+      </div>${P.stats ? `<div class="crowd" id="crowd"><div class="cr-bars"><h3>${esc(T("cr_bars_h"))}</h3><ul id="crBars"></ul></div><div class="cr-top"><h3>${esc(T("cr_top_h"))}</h3><div id="crTop"></div></div><a class="btn primary cr-try" href="#main">${esc(T("cr_try"))}</a></div>` : ""}
     </section>`;
       const heroTitle = page ? `<h2 class="h1">${esc(base.h1)}</h2>` : `<h1>${esc(T("h1"))}</h1>`;
       // the other pages of this tool, in this language: the topic pages, and the main page from a topic page
