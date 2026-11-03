@@ -27,16 +27,16 @@ export const TEXT = {
   fingerprint: {
     en: {
       seo_title: "Browser Fingerprint Test: can sites track you without cookies? · Who Are You",
-      seo_desc: "Free browser fingerprint test: your canvas, WebGL, audio and font fingerprints and the combined ID any site can compute without cookies, whether your browser randomizes it, and whether it recognized you since your last visit. No IP or raw data is kept, only anonymous counts of how common you are.",
+      seo_desc: "Free browser fingerprint test: see your canvas, WebGL, audio and font fingerprints and the combined ID any site can work out without cookies, whether your browser scrambles it, and whether this site recognized you since your last visit. No IP is kept, only anonymous counts of how common each value is.",
       seo_kw: "browser fingerprint test, browser fingerprinting, canvas fingerprint, WebGL fingerprint, audio fingerprint, fingerprint checker, anti-fingerprinting, am I trackable",
-      h1: "Browser fingerprint test", og_sub: "The ID any site computes for you, without cookies",
-      intro: "Sites don't need cookies to recognize you. How your system draws text and shapes, processes sound and which fonts it has add up to an ID that stays the same across sites, private windows and VPNs. Here is yours, what it is made of, and whether your browser scrambles it.",
+      h1: "Browser fingerprint test", og_sub: "The ID any site can work out for you, without cookies",
+      intro: "Sites don't need cookies to recognize you. The way your system draws text and shapes, processes sound and which fonts it has add up to an ID that stays the same across sites, private windows and VPNs. Here is yours, what it's made of, and whether your browser scrambles it.",
       focus_h: "Your fingerprint",
       docs: [
-        ["What is a browser fingerprint?", "A set of small differences between computers: how the graphics card and driver draw a canvas or a WebGL scene, how the audio stack rounds a sound, which fonts are installed, plus screen, language and time zone. Each alone is common; together they are often unique. A site hashes them into an ID, and every site that runs the same script gets the same ID for you."],
-        ["Does a VPN or a private window change it?", "No. None of it depends on your IP address, and private windows draw and play sound the same way. That is why a fingerprint can follow you after you clear cookies or switch VPN servers. The ID card on this page remembers your last visit (in your browser only) to show it."],
-        ["How do I stop being fingerprinted?", "Use a browser that fights it: Brave adds random noise to canvas, WebGL and audio by default; Firefox has privacy.resistFingerprinting; Tor Browser makes every user look the same. Extensions that change the user agent or block canvas often make you more unique, not less. The \"Fingerprint protection\" row tells whether your browser randomizes."],
-        ["Can this test tell how unique I am?", "Yes, roughly. The page counts, anonymously, how many checks had each of your values and your whole fingerprint ID (its first 8 characters), and shows how many matched yours out of every check on this site. It keeps no IP and no full fingerprint. The numbers mean something only once enough people have taken the test; until then it says the count is still building up."],
+        ["What is a browser fingerprint?", "A set of small differences between computers: how the graphics card and driver draw a canvas or a WebGL scene, how the audio system rounds a sound, which fonts are installed, plus your screen, language and time zone. Each one alone is common; together they're often unique. A site combines them into one ID, and every site that runs the same script gets the same ID for you."],
+        ["Does a VPN or a private window change it?", "No. None of it depends on your IP address, and private windows draw and play sound the same way. That's why a fingerprint can follow you after you clear cookies or switch VPN servers. The ID card on this page remembers your last visit (in your browser only) so you can see it happen."],
+        ["How do I stop being fingerprinted?", "Use a browser that fights it: Brave adds random noise to canvas, WebGL and audio by default, Firefox has privacy.resistFingerprinting, and Tor Browser makes every user look the same. Extensions that change the user agent or block canvas often make you stand out more, not less. The \"Fingerprint protection\" row shows whether your browser scrambles it."],
+        ["Can this test tell how unique I am?", "Roughly, yes. The page counts, anonymously, how many checks had each of your values and your fingerprint ID (its first 8 characters), and shows how many of all the checks on this site matched yours. It keeps no IP and no full fingerprint. The numbers only mean something once enough people have taken the test; until then, the page says the count is still growing."],
       ],
     },
     "zh-CN": {
@@ -69,16 +69,16 @@ export const TEXT = {
     },
     ja: {
       seo_title: "ブラウザフィンガープリント検査：Cookie なしで追跡される？ · あなたは誰",
-      seo_desc: "無料のブラウザフィンガープリント検査：Canvas・WebGL・オーディオ・フォントのフィンガープリントと、どのサイトでも Cookie なしで計算できる総合 ID、ブラウザがランダム化しているか、前回の訪問から見分けられたかを表示。IP や元のデータは保存せず、どれだけありふれているかを数える匿名の集計だけを残します。",
+      seo_desc: "無料のブラウザフィンガープリント検査：Canvas・WebGL・オーディオ・フォントのフィンガープリントと、どのサイトでも Cookie なしで割り出せる総合 ID を表示。ブラウザがそれをかき混ぜているか、前回の訪問から見分けられたかも分かります。IP は保存せず、残すのはそれぞれの値がどれだけありふれているかの匿名の集計だけです。",
       seo_kw: "ブラウザフィンガープリント, フィンガープリント 確認, Canvas フィンガープリント, WebGL フィンガープリント, オーディオ フィンガープリント, 追跡 防止, アンチフィンガープリント",
-      h1: "ブラウザフィンガープリント検査", og_sub: "Cookie なしでサイトが計算するあなたの ID",
-      intro: "サイトは Cookie がなくてもあなたを見分けられます。文字や図形の描き方、音の処理、入っているフォントを合わせると 1 つの ID になり、サイトを変えても、プライベートウィンドウでも、VPN でも変わりません。あなたの ID と、その中身、ブラウザがそれをかき混ぜているかをここに示します。",
+      h1: "ブラウザフィンガープリント検査", og_sub: "Cookie がなくても、サイトはあなたの ID を割り出せる",
+      intro: "サイトは Cookie がなくてもあなたを見分けられます。文字や図形の描き方、音の処理、入っているフォントを合わせると 1 つの ID になり、サイトを変えても、プライベートウィンドウでも、VPN を使っても変わりません。あなたの ID とその中身、ブラウザがそれをかき混ぜているかを示します。",
       focus_h: "あなたのフィンガープリント",
       docs: [
-        ["ブラウザフィンガープリントとは？", "コンピューターごとの小さな違いの集まりです：GPU とドライバーによる Canvas や WebGL の描画結果、音声処理の丸め方、インストール済みフォント、それに画面・言語・タイムゾーン。1 つずつはありふれていても、合わせると唯一になりがちです。サイトはこれをハッシュにして ID にし、同じスクリプトを動かすサイトはどこでも同じ ID を得ます。"],
-        ["VPN やプライベートウィンドウで変わる？", "変わりません。どれも IP に関係なく、プライベートウィンドウでも描画や音の処理は同じです。だから Cookie を消しても VPN を変えても追いかけられます。このページの ID カードは前回の訪問を（ブラウザ内だけに）覚えていて、それを確かめられます。"],
-        ["フィンガープリント追跡を防ぐには？", "対策のあるブラウザを使います：Brave は標準で Canvas・WebGL・オーディオにノイズを加え、Firefox には privacy.resistFingerprinting があり、Tor Browser は全員を同じに見せます。UA を変えたり Canvas をブロックする拡張機能は、かえって目立つことが多いです。「フィンガープリント対策」の行で、ランダム化されているか分かります。"],
-        ["どれくらい珍しいか分かる？", "おおよそ分かります。ページは各読み取り値と指紋 ID 全体（先頭 8 文字）がこのサイトの検査で何回あったかを匿名で数え、全検査のうち何回が同じだったかを示します。IP や完全な指紋は保存しません。十分な人数が検査するまでは数字に意味がないので、それまでは集計中と表示します。"],
+        ["ブラウザフィンガープリントとは何ですか？", "端末ごとの小さな違いの集まりです。GPU とドライバーによる Canvas や WebGL の描画結果、音声処理の丸め方、インストール済みのフォント、それに画面・言語・タイムゾーン。一つひとつはありふれていても、合わせると唯一になることがよくあります。サイトはこれをまとめて 1 つの ID にします。同じスクリプトを使うサイトなら、どこでもあなたに同じ ID が付きます。"],
+        ["VPN やプライベートウィンドウで変わりますか？", "変わりません。どれも IP とは関係がなく、プライベートウィンドウでも描画や音の処理は同じだからです。そのため、Cookie を消しても VPN のサーバーを変えても、フィンガープリントで追いかけられます。このページの ID カードは前回の訪問を（ブラウザの中にだけ）覚えているので、実際に確かめられます。"],
+        ["フィンガープリントによる追跡を防ぐには？", "対策機能のあるブラウザを使いましょう。Brave は標準で Canvas・WebGL・オーディオにノイズを加え、Firefox には privacy.resistFingerprinting があり、Tor Browser は利用者全員を同じに見せます。UA を変えたり Canvas をブロックしたりする拡張機能は、かえって目立つことがよくあります。かき混ぜられているかは「フィンガープリント対策」の行で分かります。"],
+        ["自分がどれくらい珍しいか分かりますか？", "おおよそ分かります。ページは、あなたの各値とフィンガープリント ID（先頭 8 文字）がこのサイトの検査で何回出たかを匿名で数え、全検査のうち何回が同じだったかを示します。IP や完全なフィンガープリントは保存しません。十分な人数が検査するまでは数字に意味がないので、それまでは「集計中」と表示します。"],
       ],
     },
     ko: {
@@ -169,16 +169,16 @@ export const TEXT = {
   "dns-leak": {
     en: {
       seo_title: "DNS Leak Test: does your DNS go around your VPN? · Who Are You",
-      seo_desc: "Free DNS leak test: find the DNS resolver that actually looks up sites for you, its country and network, and compare it with the IP sites see. If they differ, your VPN or proxy leaks DNS. With how to fix it in Clash, V2Ray and the browser.",
+      seo_desc: "Free DNS leak test: find the DNS resolver that actually looks up sites for you, see its country and network, and compare it with the IP sites see. If they don't match, your VPN or proxy leaks DNS. Includes fixes for Clash, V2Ray and the browser.",
       seo_kw: "DNS leak test, DNS leak, VPN DNS leak, which DNS server am I using, DNS resolver test, Clash DNS leak, fake-ip, proxy DNS leak",
       h1: "DNS leak test", og_sub: "Does your DNS go around your VPN?",
-      intro: "Your VPN may carry your traffic while your DNS lookups still go to your own provider, which tells whoever runs the name servers where you really are. This test makes a lookup nobody made before and asks the name server who made it: your resolver, its country and network, compared with the address sites see.",
+      intro: "Your VPN may carry your traffic while your DNS lookups still go to your own internet provider. Whoever runs those servers can then see where you really are. This test looks up a name nobody has asked for before and asks the name server who asked: that's your resolver. You'll see its country and network next to the address sites see.",
       focus_h: "Your DNS resolver",
       docs: [
-        ["What is a DNS leak?", "Before your browser connects to a site, a DNS resolver turns the name into an address. If that lookup skips the VPN or proxy, it goes to your own ISP's resolver: the ISP sees every site you visit, and sites that compare your resolver with your IP can tell you're using a VPN and where you actually are."],
-        ["How does this test find my resolver?", "The page looks up a random name under edns.ip-api.com that has never been asked before, so no cache can answer: your resolver has to ask ip-api's name server, which reports the resolver's address and network, and the client subnet if your resolver passes one along (ECS). The test compares the resolver's country with the country of your IP."],
-        ["How do I fix a DNS leak?", "Clash / Mihomo: enable its DNS with enhanced-mode fake-ip, or use TUN mode so every lookup goes through it. V2Ray / Xray clients: route DNS through the proxy (or set a DoH server that goes through it). In the browser, Secure DNS (DoH) also keeps lookups away from the ISP. Then run this test again."],
-        ["My resolver is Cloudflare or Google in another city. Is that a leak?", "Usually not. Public resolvers like 1.1.1.1 and 8.8.8.8 answer from the data center nearest to the request, so the city may differ from your VPN exit. What gives you away is a resolver run by your home ISP, or in your home country while your IP is abroad."],
+        ["What is a DNS leak?", "Before your browser connects to a site, a DNS resolver turns the site's name into an address. If that lookup skips the VPN or proxy, it goes to your internet provider's resolver. Your provider then sees every site you visit, and sites that compare your resolver with your IP can tell you're using a VPN and where you actually are."],
+        ["How does this test find my resolver?", "The page looks up a random name under edns.ip-api.com that has never been asked for, so no cache can answer. Your resolver has to ask ip-api's name server, which reports the resolver's address and network, plus your client subnet if the resolver passes it along (ECS). The test then compares the resolver's country with your IP's."],
+        ["How do I fix a DNS leak?", "Clash / Mihomo: turn on its DNS with enhanced-mode fake-ip, or use TUN mode so every lookup goes through it. V2Ray / Xray clients: route DNS through the proxy (or set a DoH server that goes through it). In the browser, Secure DNS (DoH) also keeps lookups away from your provider. Then run this test again."],
+        ["My resolver is Cloudflare or Google in another city. Is that a leak?", "Usually not. Public resolvers like 1.1.1.1 and 8.8.8.8 answer from the data center nearest the request, so the city can differ from your VPN exit. What gives you away is a resolver run by your home internet provider, or one in your home country while your IP is abroad."],
       ],
     },
     "zh-CN": {
@@ -210,17 +210,17 @@ export const TEXT = {
       ],
     },
     ja: {
-      seo_title: "DNS リークテスト：DNS が VPN を迂回していない？ · あなたは誰",
-      seo_desc: "無料の DNS リークテスト：実際にあなたの名前解決をしている DNS リゾルバーを見つけ、国とネットワークを、サイトから見える IP と比べます。食い違えば VPN やプロキシから DNS が漏れています。Clash、V2Ray、ブラウザでの直し方付き。",
-      seo_kw: "DNS リーク テスト, DNS 漏れ, VPN DNS リーク, 使っている DNS サーバー 確認, DNS リゾルバー 確認, Clash DNS 漏れ, fake-ip",
-      h1: "DNS リークテスト", og_sub: "DNS が VPN を迂回していませんか？",
-      intro: "VPN が通信を運んでいても、DNS の問い合わせは手元のプロバイダーに出ているかもしれません。そうなると、ネームサーバーの運営者にあなたの本当の居場所が分かります。このテストは誰も問い合わせたことのない名前を引き、ネームサーバーに誰が問い合わせたかを聞きます。それがあなたのリゾルバーで、その国とネットワークを、サイトから見えるアドレスと比べます。",
-      focus_h: "あなたの DNS リゾルバー",
+      seo_title: "DNS リークテスト：DNS が VPN を素通りしていない？ · あなたは誰",
+      seo_desc: "無料の DNS リークテスト：実際にサイト名を調べている DNS サーバーを見つけ、その国とネットワークを、サイトから見える IP と比べます。食い違っていれば、VPN やプロキシから DNS が漏れています。Clash、V2Ray、ブラウザでの直し方付き。",
+      seo_kw: "DNS リーク テスト, DNS 漏れ, VPN DNS リーク, 使っている DNS サーバー 確認, DNS サーバー 確認, Clash DNS 漏れ, fake-ip",
+      h1: "DNS リークテスト", og_sub: "DNS が VPN を素通りしていませんか？",
+      intro: "VPN が通信を運んでいても、DNS の問い合わせだけは手元のプロバイダーに出ていることがあります。そうなると、DNS サーバーを運営する側にあなたの本当の居場所が分かります。このテストは誰も問い合わせたことのない名前を引き、ネームサーバーに「誰が問い合わせてきたか」を聞きます。それがあなたの DNS サーバーです。その国とネットワークを、サイトから見えるアドレスと並べて示します。",
+      focus_h: "あなたの DNS サーバー",
       docs: [
-        ["DNS リークとは？", "ブラウザがサイトにつなぐ前に、DNS リゾルバーが名前をアドレスに変えます。この問い合わせが VPN やプロキシを通らないと、手元のプロバイダーのリゾルバーに行きます。プロバイダーには訪れたサイトがすべて見え、リゾルバーと IP を比べるサイトには、VPN を使っていることと本当の居場所が分かります。"],
-        ["どうやってリゾルバーを見つける？", "ページは edns.ip-api.com の下の、誰も問い合わせたことのないランダムな名前を引きます。キャッシュでは答えられないので、あなたのリゾルバーは ip-api のネームサーバーに聞くしかなく、ネームサーバーはリゾルバーのアドレスとネットワーク、リゾルバーが付けたクライアントサブネット（ECS）を報告します。テストはリゾルバーの国と IP の国を比べます。"],
-        ["DNS リークの直し方は？", "Clash / Mihomo：DNS を有効にして enhanced-mode を fake-ip にするか、TUN モードで全問い合わせを通します。V2Ray / Xray：DNS もプロキシ経由に（プロキシを通る DoH サーバーを設定）。ブラウザの「セキュア DNS」（DoH）でもプロバイダーを避けられます。直したらもう一度テストしてください。"],
-        ["リゾルバーが別の都市の Cloudflare や Google。これは漏れ？", "たいてい違います。1.1.1.1 や 8.8.8.8 のような公開 DNS は問い合わせに最も近いデータセンターから答えるので、都市が VPN の出口と違うことがあります。正体がばれるのは、手元のプロバイダーのリゾルバーや、IP は海外なのにリゾルバーが自国にある場合です。"],
+        ["DNS リークとは何ですか？", "ブラウザがサイトにつなぐ前に、DNS サーバーがサイト名をアドレスに変換します。この問い合わせが VPN やプロキシを通らないと、手元のプロバイダーの DNS サーバーに届きます。するとプロバイダーには訪れたサイトがすべて見え、DNS サーバーと IP を比べるサイトには、VPN を使っていることと本当の居場所が分かってしまいます。"],
+        ["どうやって DNS サーバーを見つけるのですか？", "ページは edns.ip-api.com の下にある、誰も問い合わせたことのないランダムな名前を引きます。キャッシュでは答えられないので、あなたの DNS サーバーは ip-api のネームサーバーに聞くしかありません。ネームサーバーはその DNS サーバーのアドレスとネットワーク、さらに DNS サーバーが付けていればクライアントのサブネット（ECS）を報告します。テストはその国と IP の国を比べます。"],
+        ["DNS リークはどう直しますか？", "Clash / Mihomo：DNS を有効にして enhanced-mode を fake-ip にするか、TUN モードですべての問い合わせを通します。V2Ray / Xray：DNS もプロキシ経由にします（プロキシを通る DoH サーバーを設定）。ブラウザの「セキュア DNS」（DoH）でも、プロバイダーへの問い合わせを避けられます。直したら、もう一度テストしてください。"],
+        ["DNS サーバーが別の都市の Cloudflare や Google です。これは漏れ？", "たいていは違います。1.1.1.1 や 8.8.8.8 のような公開 DNS は問い合わせにいちばん近いデータセンターから答えるので、都市が VPN の出口と違うことがあります。正体がばれるのは、自宅のプロバイダーの DNS サーバーが使われている場合や、IP は海外なのに DNS サーバーが自国にある場合です。"],
       ],
     },
     ko: {
@@ -311,28 +311,28 @@ export const TEXT = {
   "webrtc-leak": {
     "en": {
       "seo_title": "WebRTC Leak Test: does WebRTC show your real IP? · Who Are You",
-      "seo_desc": "Free WebRTC leak test: the public IPv4 and IPv6 addresses and the local addresses WebRTC hands to any site, compared with the IP your VPN or proxy shows. If they differ, WebRTC leaks your real IP. With how to fix it in Chrome, Firefox, Brave and proxy clients.",
+      "seo_desc": "Free WebRTC leak test: see the public IPv4 and IPv6 addresses and the local addresses WebRTC hands to any site, compared with the IP your VPN or proxy shows. If they differ, WebRTC leaks your real IP. Includes fixes for Chrome, Firefox, Brave and proxy clients.",
       "seo_kw": "WebRTC leak test, WebRTC leak, WebRTC IP leak, VPN WebRTC leak, check WebRTC, STUN IP leak, local IP leak, disable WebRTC",
       "h1": "WebRTC leak test",
       "og_sub": "Does WebRTC show your real IP?",
-      "intro": "Video calls in the browser use WebRTC, and any page can start it without asking. It asks a STUN server which address you came from, over UDP, which many VPNs and proxies don't carry. Here are the addresses WebRTC gives away, compared with the address sites see.",
+      "intro": "Video calls in the browser use WebRTC, and any page can start it without asking. WebRTC asks a STUN server which address you came from, over UDP, and many VPNs and proxies don't carry UDP. Here are the addresses WebRTC gives away, next to the address sites see.",
       "focus_h": "Your WebRTC addresses",
       "docs": [
         [
           "What is a WebRTC leak?",
-          "To set up a call, WebRTC collects every address it could be reached at: the local ones on your network card, and the public one a STUN server sees. A page reads them with a few lines of script, no permission needed. If your VPN or proxy carries only the page's web requests, the STUN request goes out on your own line, and the page learns your real IP behind the VPN."
+          "To set up a call, WebRTC collects every address you could be reached at: the local ones on your network card, and the public one a STUN server sees. A page can read them with a few lines of script, no permission needed. If your VPN or proxy carries only the page's web requests, the STUN request goes out over your own connection, and the page learns your real IP behind the VPN."
         ],
         [
           "How does this test work?",
-          "The page opens a WebRTC connection to the STUN servers of Cloudflare and Google and lists the addresses they report (\"server reflexive\" candidates), then compares them with the address this site, your other exits and the IPv6 test see. An address that none of them show is a leak. The local addresses come from the \"host\" candidates; nothing is stored or sent anywhere."
+          "The page opens a WebRTC connection to Cloudflare's and Google's STUN servers and lists the addresses they report (\"server reflexive\" candidates). It then compares them with the addresses this site, your other exits and the IPv6 test see. An address none of them show is a leak. The local addresses come from the \"host\" candidates. Nothing is stored or sent anywhere."
         ],
         [
           "How do I fix a WebRTC leak?",
-          "Proxy clients (Clash, V2Ray and others): turn on TUN mode so UDP goes through the proxy too. Chrome and Edge: the WebRTC Network Limiter extension, or uBlock Origin's \"Prevent WebRTC from leaking local IP addresses\". Brave: Settings → Privacy → WebRTC IP handling policy → Disable non-proxied UDP. Firefox: set media.peerconnection.ice.default_address_only to true in about:config, or media.peerconnection.enabled to false to turn WebRTC off. Then run this test again."
+          "Proxy clients (Clash, V2Ray and others): turn on TUN mode so UDP goes through the proxy too. Chrome and Edge: the WebRTC Network Limiter extension, or uBlock Origin's \"Prevent WebRTC from leaking local IP addresses\". Brave: Settings → Privacy → WebRTC IP handling policy → Disable non-proxied UDP. Firefox: in about:config, set media.peerconnection.ice.default_address_only to true, or media.peerconnection.enabled to false to turn WebRTC off. Then run this test again."
         ],
         [
           "Is a local address or a .local name a leak?",
-          "A name ending in .local is the browser hiding your local address (mDNS), which is what you want. A real local address such as 192.168.1.5 doesn't reveal where you are, but it makes your fingerprint more unique. An IPv6 address that differs from your IPv4 exit is a leak only if it isn't your IPv6 exit: the test checks it against the IPv6 address sites see."
+          "A name ending in .local means the browser is hiding your local address (mDNS), which is what you want. A real local address such as 192.168.1.5 doesn't reveal where you are, but it makes your fingerprint more unique. An IPv6 address that differs from your IPv4 exit is a leak only if it isn't your IPv6 exit; the test checks it against the IPv6 address sites see."
         ]
       ]
     },
@@ -391,29 +391,29 @@ export const TEXT = {
       ]
     },
     "ja": {
-      "seo_title": "WebRTC リークテスト：WebRTC で本当の IP が見えていないか · あなたは誰",
-      "seo_desc": "無料の WebRTC リークテスト：WebRTC がどのサイトにも渡す公開 IPv4・IPv6 アドレスとローカルアドレスを一覧にし、VPN やプロキシが示す IP と比べます。違えば WebRTC から本当の IP が漏れています。Chrome、Firefox、Brave、プロキシクライアントでの対策つき。",
+      "seo_title": "WebRTC リークテスト：WebRTC から本当の IP が漏れていない？ · あなたは誰",
+      "seo_desc": "無料の WebRTC リークテスト：WebRTC がどのサイトにも渡してしまう公開 IPv4・IPv6 アドレスとローカルアドレスを一覧にし、VPN やプロキシの IP と比べます。違っていれば、WebRTC から本当の IP が漏れています。Chrome、Firefox、Brave、プロキシのクライアントでの直し方付き。",
       "seo_kw": "WebRTC リークテスト, WebRTC リーク, WebRTC IP 漏れ, VPN WebRTC リーク, WebRTC チェック, ローカル IP 漏洩, WebRTC 無効化, WebRTC leak test",
       "h1": "WebRTC リークテスト",
-      "og_sub": "WebRTC で本当の IP が見えていないか",
-      "intro": "ブラウザのビデオ通話は WebRTC を使い、どのページも許可なしに起動できます。WebRTC は UDP で STUN サーバーにどのアドレスから来たかを尋ねますが、UDP を通さない VPN やプロキシは少なくありません。WebRTC が明かすアドレスを、サイトから見えるアドレスと比べます。",
+      "og_sub": "WebRTC から本当の IP が漏れていませんか？",
+      "intro": "ブラウザでのビデオ通話には WebRTC が使われ、どのページも許可なしにこれを起動できます。WebRTC は UDP で STUN サーバーに「自分はどのアドレスから来たか」を尋ねますが、UDP を通さない VPN やプロキシは少なくありません。WebRTC が明かすアドレスを、サイトから見えるアドレスと並べて示します。",
       "focus_h": "あなたの WebRTC アドレス",
       "docs": [
         [
-          "WebRTC リークとは？",
-          "通話をつなぐため、WebRTC は連絡に使えるアドレスをすべて集めます。ネットワークカードのローカルアドレスと、STUN サーバーから見た公開アドレスです。ページは数行のスクリプトで、許可なしにそれを読めます。VPN やプロキシがページの通信しか運ばないと、STUN の問い合わせは自分の回線から出て、VPN の裏の本当の IP がページに知られます。"
+          "WebRTC リークとは何ですか？",
+          "通話をつなぐため、WebRTC は自分に届く可能性のあるアドレスをすべて集めます。ネットワークカードのローカルアドレスと、STUN サーバーから見た公開アドレスです。ページは数行のスクリプトで、許可なしにそれを読めます。VPN やプロキシがページの通信しか運ばない場合、STUN への問い合わせは自分の回線から直接出ていき、VPN の裏にある本当の IP がページに知られてしまいます。"
         ],
         [
-          "このテストの仕組みは？",
-          "ページは Cloudflare と Google の STUN サーバーに WebRTC 接続を開き、返ってきたアドレス（srflx 候補）を一覧にして、このサイト、ほかの出口、IPv6 テストから見えるアドレスと比べます。どれとも一致しないアドレスがリークです。ローカルアドレスは host 候補から取ります。何も保存・送信しません。"
+          "このテストはどういう仕組みですか？",
+          "ページは Cloudflare と Google の STUN サーバーに WebRTC 接続を開き、返ってきたアドレス（srflx 候補）を一覧にします。それを、このサイト、ほかの出口、IPv6 テストから見えるアドレスと比べます。どれとも一致しないアドレスがあれば、それが漏れです。ローカルアドレスは host 候補から取ります。何も保存せず、どこにも送りません。"
         ],
         [
-          "WebRTC リークの直し方は？",
-          "プロキシクライアント（Clash、V2Ray など）：TUN モードをオンにして UDP もプロキシに通します。Chrome と Edge：拡張機能 WebRTC Network Limiter か、uBlock Origin の「WebRTC によるローカル IP アドレスの漏洩を防ぐ」。Brave：設定 → プライバシー → WebRTC IP 処理ポリシー → プロキシ経由でない UDP を無効にする。Firefox：about:config で media.peerconnection.ice.default_address_only を true に、完全に止めるなら media.peerconnection.enabled を false に。変更後にもう一度テストしてください。"
+          "WebRTC リークはどう直しますか？",
+          "プロキシのクライアント（Clash、V2Ray など）：TUN モードをオンにして、UDP もプロキシに通します。Chrome と Edge：拡張機能 WebRTC Network Limiter か、uBlock Origin の「WebRTC によるローカル IP アドレスの漏洩を防ぐ」。Brave：設定 → プライバシー → WebRTC IP 処理ポリシー → プロキシ経由でない UDP を無効にする。Firefox：about:config で media.peerconnection.ice.default_address_only を true に、完全に止めるなら media.peerconnection.enabled を false に。変更したら、もう一度テストしてください。"
         ],
         [
-          "ローカルアドレスや .local の名前はリーク？",
-          ".local で終わる名前は、ブラウザがローカルアドレスを隠している（mDNS）印で、望ましい状態です。192.168.1.5 のような本物のローカルアドレスは居場所を明かしませんが、フィンガープリントをより一意にします。IPv4 の出口と違う IPv6 アドレスは、それが自分の IPv6 出口でない場合だけリークです。テストはサイトから見える IPv6 アドレスと照合します。"
+          "ローカルアドレスや .local の名前は漏れですか？",
+          ".local で終わる名前は、ブラウザがローカルアドレスを隠している（mDNS）しるしで、望ましい状態です。192.168.1.5 のような本物のローカルアドレスは居場所を明かしませんが、フィンガープリントをより珍しくします。IPv4 の出口と違う IPv6 アドレスは、それが自分の IPv6 の出口でない場合だけ漏れです。テストはサイトから見える IPv6 アドレスと照らし合わせます。"
         ]
       ]
     },
@@ -582,25 +582,25 @@ export const TEXT = {
   },
   "browser-check": {
     "en": {
-      "seo_title": "Browser Environment Check: is your browser consistent, or does it give itself away? · Who Are You",
-      "seo_desc": "Free browser environment check for anti-detect browsers and multi-account setups: whether the user agent, JavaScript engine, languages, time zone, fonts and fingerprint agree, whether extensions rewrote what sites read, and an A–F grade.",
+      "seo_title": "Browser Environment Check: does your browser give itself away? · Who Are You",
+      "seo_desc": "Free browser environment check for anti-detect browsers and multi-account setups: whether the user agent, JavaScript engine, languages, time zone, fonts and fingerprint agree, whether extensions rewrote what sites read, with an A–F grade.",
       "seo_kw": "browser environment check, anti-detect browser test, browser consistency check, fingerprint browser check, user agent spoofing detection, multi-account browser check",
       "h1": "Browser environment check",
       "og_sub": "Does your browser agree with itself?",
-      "intro": "Sites that fight fraud don't just read your IP: they check that everything your browser says fits together. A user agent that says Safari on a Chromium engine, a language set only in JavaScript, a time zone that two APIs disagree on: each is a giveaway. Here is what this browser says, and where it contradicts itself.",
+      "intro": "Sites that fight fraud don't just look at your IP. They check that everything your browser says fits together. A user agent that says Safari on a Chromium engine, a language changed only in JavaScript, a time zone two APIs disagree on: each one is a giveaway. Here's what this browser says, and where it contradicts itself.",
       "focus_h": "Tampering check",
       "docs": [
         [
           "What does this check look at?",
-          "Whether properties sites read (user agent, platform, languages, screen) were redefined instead of coming from the browser, whether the drawing and audio functions fingerprints use were replaced, whether the JavaScript engine matches the user agent, whether the request header's language matches the one in JavaScript, and whether Date and Intl agree on the time zone. Every other check on the page counts toward the grade too."
+          "Whether the properties sites read (user agent, platform, languages, screen) were overwritten instead of coming from the browser; whether the drawing and audio functions used for fingerprints were replaced; whether the JavaScript engine matches the user agent; whether the language in the request headers matches the one in JavaScript; and whether Date and Intl agree on the time zone. Every other check on the page counts toward the grade too."
         ],
         [
           "Why do extensions that change the user agent get caught?",
-          "They change what JavaScript reads, but not the request headers the browser sends, the engine underneath, or the functions they wrap. Each mismatch is something a site can compare. To seem to be elsewhere, change the system itself: its language and time zone."
+          "They change what JavaScript reads, but not the headers the browser sends with each request, the engine underneath, or the functions they wrap. Each mismatch is something a site can compare. To seem to be somewhere else, change the system itself: its language and time zone."
         ],
         [
           "Is anything stored?",
-          "Nothing about you. The checks run in your browser, and the server answers only with what it sees of this request. Afterwards the page adds one to anonymous counters (which values you had, how each check came out), with no IP and no record of a single visit; \"Don't count me\" on the page turns it off."
+          "Nothing that identifies you. The checks run in your browser, and the server only answers with what it can already see in this request, keeping no log. Afterwards the page adds one to anonymous counters (which values you had, how each check came out), with no IP and no record of a single visit. \"Don't count me\" on the page turns this off, and browsers that send Global Privacy Control are never counted."
         ]
       ]
     },
@@ -651,25 +651,25 @@ export const TEXT = {
       ]
     },
     "ja": {
-      "seo_title": "ブラウザ環境チェック：アンチディテクトブラウザの整合性を確認 · あなたは誰",
-      "seo_desc": "アンチディテクトブラウザや複数アカウント運用向けの無料ブラウザ環境チェック：UA、JS エンジン、言語、タイムゾーン、フォント、指紋が一致しているか、拡張機能がサイトの読む値を書き換えていないか、A〜F の評価付き。",
+      "seo_title": "ブラウザ環境チェック：ブラウザの言い分は辻褄が合っている？ · あなたは誰",
+      "seo_desc": "アンチディテクトブラウザや複数アカウント運用向けの無料ブラウザ環境チェック：UA、JavaScript エンジン、言語、タイムゾーン、フォント、フィンガープリントが一致しているか、拡張機能がサイトの読む値を書き換えていないかを調べ、A〜F で評価します。",
       "seo_kw": "ブラウザ環境チェック, アンチディテクトブラウザ, ブラウザ指紋チェック, UA 偽装 検出, 複数アカウント 環境",
       "h1": "ブラウザ環境チェック",
-      "og_sub": "あなたのブラウザは辻褄が合っている？",
-      "intro": "不正対策をするサイトは IP だけでなく、ブラウザの言うことがすべて噛み合うかを確かめます。UA は Safari なのにエンジンは Chromium、言語は JS の中だけ変更、二つの API でタイムゾーンが違う――どれも手がかりです。このブラウザの言い分と、矛盾している所を示します。",
-      "focus_h": "改ざんチェック",
+      "og_sub": "あなたのブラウザ、辻褄は合っていますか？",
+      "intro": "不正対策をするサイトは IP だけを見ているわけではありません。ブラウザの言うことがすべて噛み合っているかを確かめます。UA は Safari なのにエンジンは Chromium、言語を JavaScript の中だけで変えている、2 つの API でタイムゾーンが違う。どれも手がかりになります。このブラウザが何と言っていて、どこで矛盾しているかを示します。",
+      "focus_h": "書き換えチェック",
       "docs": [
         [
-          "何を調べますか？",
-          "サイトが読むプロパティ（UA、プラットフォーム、言語、画面）が再定義されていないか、指紋に使う描画や音声の関数が差し替えられていないか、JS エンジンが UA と合うか、リクエストヘッダーの言語が JS の言語と同じか、Date と Intl のタイムゾーンが一致するか。ページの他の検査も評価に入ります。"
+          "何を調べるのですか？",
+          "サイトが読むプロパティ（UA、プラットフォーム、言語、画面）がブラウザ本来の値ではなく書き換えられていないか。フィンガープリントに使われる描画や音声の関数が差し替えられていないか。JavaScript エンジンが UA と合っているか。リクエストヘッダーの言語が JavaScript の言語と同じか。Date と Intl のタイムゾーンが一致しているか。ページのほかの検査も評価に含まれます。"
         ],
         [
-          "UA を変える拡張機能はなぜ見破られる？",
-          "JS が読む値だけを変え、ブラウザが送るヘッダーや下のエンジン、包んだ関数はそのままだからです。食い違いはどれもサイトが比べられます。別の場所にいるように見せるなら、システムの言語とタイムゾーンを変えてください。"
+          "UA を変える拡張機能はなぜ見破られるのですか？",
+          "変わるのは JavaScript が読む値だけで、ブラウザがリクエストごとに送るヘッダー、内部のエンジン、包んだ関数そのものは元のままだからです。食い違いはどれも、サイトが比べられる手がかりになります。別の場所にいるように見せたいなら、システムの言語とタイムゾーンそのものを変えてください。"
         ],
         [
           "何か保存されますか？",
-          "あなた個人のことは保存しません。検査はブラウザの中で行われ、サーバーはこのリクエストから見える内容を返すだけです。検査後、ページは匿名のカウンター（あなたの値、各チェックの結果）に 1 を足しますが、IP も 1 回ごとの記録も残しません。ページの「集計に含めない」で止められます。"
+          "あなたを特定できる情報は保存しません。検査はブラウザの中で行い、サーバーはこのリクエストから元々見える情報を返すだけで、ログも残しません。検査のあと、ページは匿名のカウンター（あなたの値、各チェックの結果）に 1 を足しますが、IP も 1 回ごとの記録も残りません。ページの「集計に含めない」で止められ、グローバル・プライバシー・コントロール（GPC）を送るブラウザは集計しません。"
         ]
       ]
     },
@@ -815,24 +815,24 @@ export const TEXT = {
   "timezone-check": {
     "en": {
       "seo_title": "Time Zone Check: does your time zone match your IP? · Who Are You",
-      "seo_desc": "Free time zone check: your system time zone and clock format against the time zone of your IP address. A mismatch is one of the first things sites use to spot a VPN or proxy. With how to fix it on Windows, macOS and phones.",
+      "seo_desc": "Free time zone check: your system time zone and clock format next to the time zone of your IP address. A mismatch is one of the first things sites use to spot a VPN or proxy. Includes fixes for Windows, macOS and phones.",
       "seo_kw": "time zone check, timezone IP mismatch, browser time zone, VPN time zone, what is my time zone, time zone detection",
       "h1": "Time zone check",
       "og_sub": "Does your clock match your IP?",
-      "intro": "Every page can read your system's time zone without asking, and every site knows roughly where your IP is. When the two disagree, say an IP in Japan and a clock on China Standard Time, it's one of the first signs sites use to spot a VPN or proxy. Here are both, side by side.",
-      "focus_h": "Your time zone against your IP",
+      "intro": "Any page can read your system's time zone without asking, and every site knows roughly where your IP is. When the two disagree, say an IP in Japan and a clock on China Standard Time, it's one of the first signs sites use to spot a VPN or proxy. Here are both, side by side.",
+      "focus_h": "Your time zone vs your IP",
       "docs": [
         [
           "How do sites know my time zone?",
-          "Through JavaScript's Intl and Date, available to every page without a permission prompt. The IP's time zone comes from the same kind of location database that places your IP in a city."
+          "Through JavaScript's Intl and Date, which any page can use without a permission prompt. The IP's time zone comes from the same kind of location database that places your IP in a city."
         ],
         [
           "How do I fix a mismatch?",
-          "Set the system time zone to one in the country your IP is in: on Windows in Settings → Time & language, on macOS in System Settings → General → Date & Time, on phones in the date and time settings. A browser extension that only changes JavaScript's time zone is easy to catch: the browser environment check shows why."
+          "Set the system time zone to one in the country your IP is in: on Windows in Settings → Time & language, on macOS in System Settings → General → Date & Time, on phones in the date and time settings. An extension that only changes JavaScript's time zone is easy to catch; the browser environment check shows why."
         ],
         [
           "Why is a different zone in the same country only a warning?",
-          "Large countries have several time zones, and an IP is often placed in the right country but the wrong city. A zone of another country is a clear contradiction; a zone of the same country is only a hint."
+          "Large countries have several time zones, and an IP is often placed in the right country but the wrong city. A zone in another country is a clear contradiction; a zone in the same country is only a hint."
         ]
       ]
     },
@@ -883,25 +883,25 @@ export const TEXT = {
       ]
     },
     "ja": {
-      "seo_title": "タイムゾーンチェック：システムの時刻と IP は一致している？ · あなたは誰",
-      "seo_desc": "無料タイムゾーンチェック：システムのタイムゾーンと時計の形式を、IP のある場所のタイムゾーンと比べます。食い違いは、サイトが VPN やプロキシを見抜く最初の手がかりの一つ。Windows・macOS・スマホでの直し方付き。",
+      "seo_title": "タイムゾーンチェック：端末の時刻と IP は合っている？ · あなたは誰",
+      "seo_desc": "無料のタイムゾーンチェック：システムのタイムゾーンと時刻の表示形式を、IP のある場所のタイムゾーンと比べます。この食い違いは、サイトが VPN やプロキシを見抜くときに真っ先に見る手がかりの一つです。Windows・macOS・スマホでの直し方付き。",
       "seo_kw": "タイムゾーン チェック, タイムゾーン IP 不一致, ブラウザ タイムゾーン, VPN タイムゾーン, 時刻 検出",
       "h1": "タイムゾーンチェック",
-      "og_sub": "時計と IP は合っている？",
-      "intro": "どのページも許可なしにシステムのタイムゾーンを読めますし、どのサイトも IP のおおよその場所を知っています。二つが食い違う――IP は日本なのに時計は中国標準時――のは、サイトが VPN やプロキシを見抜く最初の手がかりの一つです。両方を並べて示します。",
+      "og_sub": "端末の時計と IP は合っていますか？",
+      "intro": "どのページも許可なしにシステムのタイムゾーンを読めますし、どのサイトも IP のおおよその場所を知っています。この 2 つが食い違う、たとえば IP は日本なのに時計は中国標準時、というのは、サイトが VPN やプロキシを見抜くときに真っ先に見る手がかりの一つです。両方を並べて示します。",
       "focus_h": "タイムゾーンと IP",
       "docs": [
         [
-          "サイトはどうやってタイムゾーンを知る？",
-          "JavaScript の Intl と Date からで、どのページでも許可なしに使えます。IP のタイムゾーンは、IP を都市まで特定するのと同じ種類の位置データベースから来ます。"
+          "サイトはどうやってタイムゾーンを知るのですか？",
+          "JavaScript の Intl と Date からです。どのページでも、許可のダイアログなしに使えます。IP のタイムゾーンは、IP から都市を割り出すのと同じ種類の位置情報データベースから取ります。"
         ],
         [
-          "食い違いはどう直す？",
-          "システムのタイムゾーンを IP の国のものにします：Windows は「設定 → 時刻と言語」、macOS は「システム設定 → 一般 → 日付と時刻」、スマホは日付と時刻の設定。JS のタイムゾーンだけを変える拡張機能はすぐ見破られます（ブラウザ環境チェック参照）。"
+          "食い違いはどう直しますか？",
+          "システムのタイムゾーンを、IP のある国のものにします。Windows は「設定 → 時刻と言語」、macOS は「システム設定 → 一般 → 日付と時刻」、スマホは日付と時刻の設定です。JavaScript のタイムゾーンだけを変える拡張機能はすぐに見破られます（理由はブラウザ環境チェックで分かります）。"
         ],
         [
-          "同じ国の別のタイムゾーンはなぜ黄色だけ？",
-          "大きな国には複数のタイムゾーンがあり、IP は国は合っていても都市がずれることがよくあります。他国のタイムゾーンははっきりした矛盾、同じ国ならヒントにとどめます。"
+          "同じ国の別のタイムゾーンが黄色の注意で済むのはなぜですか？",
+          "大きな国にはタイムゾーンが複数あり、IP は国は合っていても都市がずれることがよくあるからです。別の国のタイムゾーンははっきりした矛盾ですが、同じ国ならヒント程度にとどめます。"
         ]
       ]
     },
@@ -1047,24 +1047,24 @@ export const TEXT = {
   "proxy-check": {
     "en": {
       "seo_title": "Proxy Check: can sites tell you're behind a proxy? · Who Are You",
-      "seo_desc": "Free proxy check: the round trip your browser measures against the one Cloudflare sees on its connection, whether your IP belongs to a data center, your DNS and WebRTC addresses. A proxy adds a leg sites can measure, even on a clean residential IP.",
+      "seo_desc": "Free proxy check: compares the round trip your browser measures with the one Cloudflare sees on its connection, and checks whether your IP belongs to a data center, plus your DNS and WebRTC addresses. A proxy adds a leg sites can measure, even on a clean residential IP.",
       "seo_kw": "proxy check, proxy detection test, am I behind a proxy, VPN detection, latency proxy detection, data center IP check",
       "h1": "Proxy check",
       "og_sub": "Can sites tell there's a proxy in between?",
-      "intro": "A proxy hides your IP, but not the extra leg of the trip. Cloudflare measures the round trip on its own connection, which ends at the proxy; your browser measures the whole way. When the browser's is much longer, something sits in between, whatever the IP looks like. Here are both, with the other signs sites use.",
+      "intro": "A proxy hides your IP, but not the extra leg of the trip. Cloudflare measures the round trip on its own connection, which ends at the proxy; your browser measures the whole way. When the browser's number is much bigger, something sits in between, however clean the IP looks. Here are both, with the other signs sites use.",
       "focus_h": "Your round trip",
       "docs": [
         [
           "How does the latency check work?",
-          "The page asks this site's edge for a tiny response a few times and takes the quickest, from the moment the request leaves to the first byte back. Cloudflare reports the round trip it measured on the TCP connection it served you on. Without a proxy they're close; through one, Cloudflare only sees the proxy's part."
+          "The page asks this site's nearest Cloudflare server for a tiny response a few times and keeps the fastest, timed from when the request leaves to when the first byte comes back. Cloudflare reports the round trip it measured on the TCP connection it served you on. Without a proxy the two are close; through one, Cloudflare only sees the proxy's part."
         ],
         [
           "Can a residential IP still be caught?",
-          "Yes. A residential IP passes the data center check, but the extra round trip, a DNS resolver in another country, a time zone that doesn't match and WebRTC addresses all still give it away."
+          "Yes. A residential IP passes the data center check, but the extra round trip, a DNS resolver in another country, a time zone that doesn't match and WebRTC addresses can all still give it away."
         ],
         [
-          "Why is the check sometimes \"couldn't read\"?",
-          "Over HTTP/3 there is no TCP connection, so Cloudflare has no round trip to report, and some networks block the measuring requests."
+          "Why does the check sometimes say \"couldn't read\"?",
+          "Over HTTP/3 there's no TCP connection, so Cloudflare has no round trip to report. Some networks also block the measuring requests."
         ]
       ]
     },
@@ -1115,25 +1115,25 @@ export const TEXT = {
       ]
     },
     "ja": {
-      "seo_title": "プロキシチェック：サイトはプロキシ経由だと見抜ける？ · あなたは誰",
-      "seo_desc": "無料プロキシチェック：ブラウザが測った往復時間と、Cloudflare が自分の接続で見た往復時間を比べ、IP がデータセンターか、DNS や WebRTC が何を漏らすかも確認。プロキシは測れる区間を一つ増やすので、住宅 IP でも隠せません。",
+      "seo_title": "プロキシチェック：プロキシ経由だとサイトに見抜かれる？ · あなたは誰",
+      "seo_desc": "無料のプロキシチェック：ブラウザが測った往復時間と、Cloudflare が自分の接続で見た往復時間を比べます。IP がデータセンターのものか、DNS や WebRTC のアドレスも確認。プロキシを通すと測れる区間が 1 つ増えるので、きれいな家庭用回線の IP でも隠しきれません。",
       "seo_kw": "プロキシ チェック, プロキシ 検出, プロキシ 判定, VPN 検出, 遅延 プロキシ 検出, データセンター IP",
       "h1": "プロキシチェック",
       "og_sub": "間にプロキシがあると見抜かれる？",
-      "intro": "プロキシは IP を隠せても、増えた区間は隠せません。Cloudflare は自分の接続で往復時間を測り、その接続の相手はプロキシです。ブラウザは全行程を測ります。ブラウザの値がずっと長ければ、IP がどれほどきれいでも間に何かがあります。二つの値と、サイトが見る他の手がかりを示します。",
+      "intro": "プロキシで IP は隠せても、増えた区間は隠せません。Cloudflare は自分の接続で往復時間を測りますが、その接続の相手はプロキシです。一方、ブラウザは全行程を測ります。ブラウザの値のほうがずっと大きければ、IP がどれほどきれいでも、間に何かがあります。2 つの値と、サイトが見るほかの手がかりを示します。",
       "focus_h": "往復時間",
       "docs": [
         [
-          "遅延チェックの仕組みは？",
-          "このサイトのエッジに小さな応答を何度か求め、送信から最初のバイトまでの最短を取ります。Cloudflare はあなたに応じた TCP 接続で測った往復時間を返します。プロキシなしなら近い値、プロキシ経由なら Cloudflare にはプロキシの区間しか見えません。"
+          "遅延チェックはどういう仕組みですか？",
+          "ページはこのサイトのいちばん近い Cloudflare のサーバーに小さな応答を何度か求め、リクエストを送ってから最初の 1 バイトが返るまでの最短時間を取ります。Cloudflare は、あなたとの TCP 接続で測った往復時間を返します。プロキシがなければ 2 つは近い値になり、プロキシ経由なら Cloudflare にはプロキシの区間しか見えません。"
         ],
         [
-          "住宅 IP でも見抜かれる？",
-          "はい。住宅 IP はデータセンター判定を通っても、増えた往復時間、他国の DNS リゾルバー、合わないタイムゾーン、WebRTC のアドレスで分かります。"
+          "家庭用回線の IP でも見抜かれますか？",
+          "はい。家庭用回線の IP ならデータセンターの判定は通りますが、増えた往復時間、別の国にある DNS サーバー、合わないタイムゾーン、WebRTC のアドレスから、やはり分かってしまいます。"
         ],
         [
-          "「読み取れない」になるのはなぜ？",
-          "HTTP/3 では TCP 接続がないので Cloudflare に往復時間がなく、測定のリクエストを止めるネットワークもあります。"
+          "「読み取れず」と出るのはなぜですか？",
+          "HTTP/3 では TCP 接続を使わないので、Cloudflare には返す往復時間がありません。また、測定のリクエストを止めるネットワークもあります。"
         ]
       ]
     },
@@ -1279,23 +1279,23 @@ export const TEXT = {
   "language-check": {
     "en": {
       "seo_title": "Browser Language Check: what language do sites think you speak? · Who Are You",
-      "seo_desc": "Free browser language check: the languages your browser sends in its Accept-Language header and exposes in JavaScript, your locale, keyboard layout, voices and fonts, and whether they match the country of your IP.",
+      "seo_desc": "Free browser language check: the languages your browser sends in its Accept-Language header and shows to JavaScript, plus your locale, keyboard layout, voices and fonts, and whether they match the country of your IP.",
       "seo_kw": "browser language check, Accept-Language check, what is my browser language, navigator.languages, language IP mismatch, locale test",
       "h1": "Browser language check",
       "og_sub": "What language do sites think you speak?",
-      "intro": "Every request your browser sends says which languages you read, and every page can read the same list in JavaScript, along with your locale, keyboard layout and the voices and fonts your system has. Sites compare them with where your IP is. Here is what yours say.",
-      "focus_h": "Your language against your IP",
+      "intro": "Every request your browser sends says which languages you read, and any page can read the same list in JavaScript, along with your locale, keyboard layout and the voices and fonts on your system. Sites compare all this with where your IP is. Here's what yours say.",
+      "focus_h": "Your language vs your IP",
       "docs": [
         [
           "Where do sites get my language from?",
-          "From the Accept-Language header on every request, from navigator.languages in JavaScript, and indirectly from the locale, the keyboard layout, the speech voices and the fonts your system installed."
+          "From the Accept-Language header, a line your browser sends with every request; from navigator.languages in JavaScript; and indirectly from your locale, keyboard layout, speech voices and the fonts your system has installed."
         ],
         [
           "How do I change it?",
-          "In the browser's language settings: put the language you want first. Changing only one place, like an extension that edits navigator.languages, leaves the header as it was, and the two disagree."
+          "In the browser's language settings, put the language you want first. Changing it in only one place, such as with an extension that edits navigator.languages, leaves the header as it was, and the two then disagree."
         ],
         [
-          "Why is English only \"info\"?",
+          "Why is English only marked as \"info\"?",
           "English is used everywhere, so it says little about where you are. Other languages point to a country, and a mismatch with the IP is a hint."
         ]
       ]
@@ -1347,25 +1347,25 @@ export const TEXT = {
       ]
     },
     "ja": {
-      "seo_title": "ブラウザ言語チェック：サイトはあなたを何語の人だと思う？ · あなたは誰",
-      "seo_desc": "無料ブラウザ言語チェック：Accept-Language ヘッダーと JavaScript に出る言語、ロケール、キーボード配列、音声、フォントを調べ、IP の国と合うかを確認します。",
+      "seo_title": "ブラウザ言語チェック：サイトはあなたを何語の人だと思っている？ · あなたは誰",
+      "seo_desc": "無料のブラウザ言語チェック：ブラウザが Accept-Language ヘッダーで送り、JavaScript にも見せている言語、ロケール、キーボード配列、読み上げ音声、フォントを調べ、IP の国と合っているかを確認します。",
       "seo_kw": "ブラウザ 言語 チェック, Accept-Language, navigator.languages, 言語 IP 不一致, ロケール",
       "h1": "ブラウザ言語チェック",
-      "og_sub": "サイトはあなたを何語の人だと思う？",
-      "intro": "ブラウザが送るリクエストには読める言語が書かれ、どのページも JavaScript で同じ一覧やロケール、キーボード配列、システムの音声とフォントを読めます。サイトはそれを IP の場所と照らし合わせます。あなたの場合はこうです。",
+      "og_sub": "サイトはあなたを何語の人だと思っている？",
+      "intro": "ブラウザが送るリクエストには、あなたが読める言語が毎回書かれています。どのページも JavaScript で同じ一覧を読めるうえ、ロケール、キーボード配列、システムの読み上げ音声やフォントも分かります。サイトはそれを IP の場所と照らし合わせます。あなたの場合はこうです。",
       "focus_h": "言語と IP",
       "docs": [
         [
-          "サイトはどこから言語を知る？",
-          "毎回のリクエストの Accept-Language ヘッダー、JavaScript の navigator.languages、さらにロケール、キーボード配列、音声、インストール済みフォントからも間接的に分かります。"
+          "サイトはどこから言語を知るのですか？",
+          "リクエストのたびに送られる Accept-Language ヘッダー、JavaScript の navigator.languages からです。さらにロケール、キーボード配列、読み上げ音声、インストール済みのフォントからも間接的に分かります。"
         ],
         [
-          "どう変える？",
-          "ブラウザの言語設定で、使いたい言語を一番上に。拡張機能で navigator.languages だけ変えるとヘッダーはそのままで、食い違いがかえって目立ちます。"
+          "どう変えればいいですか？",
+          "ブラウザの言語設定で、使いたい言語をいちばん上にします。拡張機能で navigator.languages だけを変えるなど 1 か所だけ変えると、ヘッダーは元のままなので、2 つが食い違ってしまいます。"
         ],
         [
-          "英語はなぜ「情報」だけ？",
-          "英語は世界中で使われ、居場所の手がかりになりません。他の言語は国を指すので、IP と合わなければヒントになります。"
+          "英語だと「参考」扱いになるのはなぜですか？",
+          "英語は世界中で使われているので、居場所の手がかりにはほとんどなりません。ほかの言語は特定の国を指すので、IP と合わなければヒントになります。"
         ]
       ]
     },
@@ -1510,25 +1510,25 @@ export const TEXT = {
   },
   "canvas-fingerprint": {
     "en": {
-      "seo_title": "Canvas Fingerprint Test: what your canvas, WebGL and audio fingerprints are · Who Are You",
-      "seo_desc": "Free canvas fingerprint test: the hashes of how your system draws a canvas, renders WebGL and processes audio, whether your browser adds noise to them, and the combined fingerprint ID sites use to recognize you without cookies.",
+      "seo_title": "Canvas Fingerprint Test: your canvas, WebGL and audio fingerprints · Who Are You",
+      "seo_desc": "Free canvas fingerprint test: the codes that come from how your system draws a canvas, renders WebGL and processes audio, whether your browser adds noise to them, and the combined fingerprint ID sites use to recognize you without cookies.",
       "seo_kw": "canvas fingerprint test, canvas fingerprinting, WebGL fingerprint, audio fingerprint, canvas noise, anti canvas fingerprint",
       "h1": "Canvas fingerprint test",
-      "og_sub": "How your computer draws gives it away",
-      "intro": "Ask two computers to draw the same text and shapes, and the pixels come out slightly different: the graphics card, the driver, the fonts and the anti-aliasing all leave a mark. Sites hash that drawing into a fingerprint. Here are yours, and whether your browser scrambles them.",
+      "og_sub": "The way your computer draws gives it away",
+      "intro": "Ask two computers to draw the same text and shapes, and the pixels come out slightly different: the graphics card, the driver, the fonts and the smoothing all leave a mark. Sites turn that drawing into a fingerprint. Here are yours, and whether your browser scrambles them.",
       "focus_h": "Your canvas fingerprint",
       "docs": [
         [
           "What is a canvas fingerprint?",
-          "A page draws text and shapes on an invisible canvas, reads the pixels back and hashes them. The result is the same every time on your machine and differs between machines, so it works like an ID."
+          "A page draws text and shapes on an invisible canvas, reads the pixels back and turns them into a short fixed code. The code is the same every time on your machine and different on other machines, so it works like an ID."
         ],
         [
           "How do I stop it?",
-          "Use a browser that adds random noise to canvas, WebGL and audio, like Brave by default or Firefox with resistFingerprinting. The \"fingerprint protection\" row shows whether two drawings came out different."
+          "Use a browser that adds random noise to canvas, WebGL and audio, like Brave (on by default) or Firefox with resistFingerprinting. The \"Fingerprint protection\" row shows whether two drawings came out different."
         ],
         [
           "Do privacy extensions help?",
-          "Some do, by wrapping the drawing functions. That can itself be noticed: the browser environment check flags replaced functions."
+          "Some do, by wrapping the drawing functions. But that can itself be noticed: the browser environment check flags replaced functions."
         ]
       ]
     },
@@ -1579,25 +1579,25 @@ export const TEXT = {
       ]
     },
     "ja": {
-      "seo_title": "Canvas フィンガープリント検査：Canvas・WebGL・音声の指紋 · あなたは誰",
-      "seo_desc": "無料 Canvas フィンガープリント検査：Canvas の描画、WebGL、音声処理から得られるハッシュ、ブラウザがノイズを加えているか、Cookie なしで識別に使われる総合 ID を表示します。",
+      "seo_title": "Canvas フィンガープリント検査：Canvas・WebGL・音声のフィンガープリント · あなたは誰",
+      "seo_desc": "無料の Canvas フィンガープリント検査：Canvas の描画、WebGL、音声処理から得られる値、ブラウザがそれにノイズを加えているか、Cookie なしであなたを見分けるのに使われる総合 ID を表示します。",
       "seo_kw": "Canvas フィンガープリント, Canvas 指紋 検査, WebGL フィンガープリント, 音声 指紋, Canvas ノイズ",
       "h1": "Canvas フィンガープリント検査",
-      "og_sub": "描き方でコンピュータがばれる",
-      "intro": "二台のコンピュータに同じ文字と図形を描かせると、ピクセルがわずかに違います。GPU、ドライバ、フォント、アンチエイリアスが跡を残すからです。サイトはその絵をハッシュにして指紋にします。あなたの指紋と、ブラウザがそれを乱しているかを示します。",
-      "focus_h": "Canvas の指紋",
+      "og_sub": "描き方で、あなたのパソコンが分かる",
+      "intro": "2 台のパソコンに同じ文字と図形を描かせると、ピクセルがわずかに違ってきます。GPU、ドライバー、フォント、文字のなめらか処理がそれぞれ跡を残すからです。サイトはその絵をフィンガープリントに変えます。あなたのフィンガープリントと、ブラウザがそれをかき混ぜているかを示します。",
+      "focus_h": "Canvas のフィンガープリント",
       "docs": [
         [
-          "Canvas フィンガープリントとは？",
-          "ページが見えないキャンバスに文字と図形を描き、ピクセルを読み戻してハッシュにします。同じマシンなら毎回同じ、マシンが違えば違うので ID になります。"
+          "Canvas フィンガープリントとは何ですか？",
+          "ページが見えないキャンバスに文字と図形を描き、そのピクセルを読み取って、短い固定の値に変えたものです。同じパソコンなら毎回同じ、違うパソコンなら違う値になるので、ID のように使えます。"
         ],
         [
-          "防ぐには？",
-          "Canvas・WebGL・音声にランダムなノイズを入れるブラウザを使う：標準で有効な Brave や、resistFingerprinting を有効にした Firefox。「フィンガープリント保護」の行で二回の描画が違ったか分かります。"
+          "防ぐにはどうすればいいですか？",
+          "Canvas・WebGL・音声にランダムなノイズを加えるブラウザを使います。標準で有効な Brave や、resistFingerprinting を有効にした Firefox です。2 回の描画結果が違ったかは「フィンガープリント対策」の行で分かります。"
         ],
         [
-          "プライバシー拡張機能は効く？",
-          "描画関数を包むことで効くものもあります。ただしそれ自体が見つかることもあり、ブラウザ環境チェックは差し替えられた関数を示します。"
+          "プライバシー系の拡張機能は効きますか？",
+          "描画の関数を包むことで効くものもあります。ただ、それ自体が気づかれることもあり、ブラウザ環境チェックでは差し替えられた関数として表示されます。"
         ]
       ]
     },
@@ -1743,24 +1743,24 @@ export const TEXT = {
   "user-agent": {
     "en": {
       "seo_title": "User Agent Check: what browser and system do sites think you use? · Who Are You",
-      "seo_desc": "Free user agent check: your User-Agent string, client hints (Sec-CH-UA, platform), the system and browser they claim, and whether the JavaScript engine, graphics card and hints agree with them.",
+      "seo_desc": "Free user agent check: your User-Agent string and client hints (Sec-CH-UA, platform), the system and browser they claim, and whether the JavaScript engine, graphics card and hints agree with them.",
       "seo_kw": "user agent check, what is my user agent, user agent string, client hints, Sec-CH-UA, user agent spoofing check",
       "h1": "User agent check",
       "og_sub": "What browser and system do sites think you use?",
-      "intro": "Every request names your browser and system, once in the User-Agent string and again, in Chromium browsers, in client hints. Pages can cross-check that against the JavaScript engine and the graphics card. Here is what yours claims, and whether the rest agrees.",
-      "focus_h": "Your user agent against your system",
+      "intro": "Every request names your browser and system: once in the User-Agent string and, in Chromium browsers, again in client hints. Pages can cross-check that against the JavaScript engine and the graphics card. Here's what yours claims, and whether the rest agrees.",
+      "focus_h": "Your user agent vs your system",
       "docs": [
         [
           "What is a user agent?",
-          "A line of text your browser sends with every request, naming the browser, its version and your system. Chromium browsers also send client hints, a newer, structured version of the same information."
+          "A line of text your browser sends with every request, naming the browser, its version and your system. Chromium browsers also send client hints: a newer, more structured version of the same information."
         ],
         [
-          "Why does it say Windows 10 on Windows 11?",
-          "Browsers froze the user agent at Windows 10 (and macOS at 10.15) for privacy. The real version comes from client hints, which is what this page shows."
+          "Why does it say Windows 10 when I'm on Windows 11?",
+          "For privacy, browsers froze the user agent at Windows 10 (and macOS at 10.15). The real version comes from client hints, and that's what this page shows."
         ],
         [
           "Can I fake it?",
-          "You can change the string, but the JavaScript engine, the graphics card and client hints usually tell a different story; the checks on this page show where."
+          "You can change the string, but the JavaScript engine, the graphics card and client hints usually tell a different story. The checks on this page show where."
         ]
       ]
     },
@@ -1811,25 +1811,25 @@ export const TEXT = {
       ]
     },
     "ja": {
-      "seo_title": "ユーザーエージェント確認：サイトから見たブラウザとシステム · あなたは誰",
-      "seo_desc": "無料ユーザーエージェント確認：User-Agent 文字列とクライアントヒント（Sec-CH-UA、プラットフォーム）、それが名乗るシステムとブラウザ、JS エンジン・GPU・ヒントが一致するかを表示します。",
+      "seo_title": "ユーザーエージェント確認：サイトから見たブラウザと OS · あなたは誰",
+      "seo_desc": "無料のユーザーエージェント確認：User-Agent 文字列とクライアントヒント（Sec-CH-UA、プラットフォーム）、そこで名乗っている OS とブラウザを表示し、JavaScript エンジン・GPU・ヒントと一致しているかを調べます。",
       "seo_kw": "ユーザーエージェント 確認, UA 確認, User-Agent, クライアントヒント, Sec-CH-UA, UA 偽装",
       "h1": "ユーザーエージェント確認",
-      "og_sub": "サイトから見たブラウザとシステム",
-      "intro": "リクエストのたびにブラウザとシステムが名乗られます。User-Agent 文字列で一度、Chromium 系ではクライアントヒントでもう一度。ページはそれを JS エンジンや GPU と突き合わせられます。あなたの UA が名乗る内容と、他が認めるかを示します。",
+      "og_sub": "サイトから見たあなたのブラウザと OS",
+      "intro": "リクエストのたびに、ブラウザと OS が名乗られています。User-Agent 文字列で一度、Chromium 系のブラウザではクライアントヒントでもう一度。ページはそれを JavaScript エンジンや GPU と突き合わせることができます。あなたの UA が何と名乗っていて、ほかの手がかりと合っているかを示します。",
       "focus_h": "UA と実際のシステム",
       "docs": [
         [
-          "ユーザーエージェントとは？",
-          "毎回のリクエストに付くテキスト一行で、ブラウザ・バージョン・システムを示します。Chromium 系は同じ情報を構造化したクライアントヒントも送ります。"
+          "ユーザーエージェントとは何ですか？",
+          "ブラウザがリクエストのたびに送る 1 行のテキストで、ブラウザの名前とバージョン、OS が書かれています。Chromium 系のブラウザは、同じ情報を整理した新しい形式のクライアントヒントも送ります。"
         ],
         [
-          "Windows 11 なのに Windows 10 と出るのはなぜ？",
-          "プライバシーのため、ブラウザは UA を Windows 10（macOS は 10.15）で固定しています。実際の版はクライアントヒントから取れ、このページはそれを表示します。"
+          "Windows 11 なのに Windows 10 と出るのはなぜですか？",
+          "プライバシーのため、ブラウザは UA を Windows 10（macOS は 10.15）のまま固定しているからです。実際のバージョンはクライアントヒントから分かり、このページはそれを表示しています。"
         ],
         [
-          "偽装できる？",
-          "文字列は変えられますが、JS エンジンや GPU、クライアントヒントが別の話をすることが多く、このページの検査がどこが合わないか示します。"
+          "偽装できますか？",
+          "文字列は変えられますが、JavaScript エンジンや GPU、クライアントヒントが別のことを語っている場合がほとんどです。どこが合わないかは、このページの検査で分かります。"
         ]
       ]
     },
@@ -1980,19 +1980,19 @@ export const TEXT = {
       "h1": "Browser extension check",
       "og_sub": "Which of your extensions can sites see?",
       "intro": "Many extensions change the page to do their job: a wallet adds an object, a dark mode adds attributes, a translator adds elements, antivirus web protection adds its own script. Any site can read those marks, and they say a lot about you. Here are the ones this page found.",
-      "focus_h": "Extensions that rewrite the page",
+      "focus_h": "Extensions that change the page",
       "docs": [
         [
           "How can a site see my extensions?",
-          "It can't list them, but it can see what they leave behind: objects like window.ethereum, attributes on the page, elements they insert, scripts they add. Some extensions leave nothing and stay invisible."
+          "It can't list them, but it can see what they leave behind: objects like window.ethereum, attributes on the page, elements they insert, scripts they add. Extensions that leave nothing behind stay invisible."
         ],
         [
           "Why does it matter?",
-          "Extensions narrow you down: a crypto wallet, developer tools or a particular translator says something about who you are, and adds to your fingerprint."
+          "Extensions narrow you down. A crypto wallet, developer tools or a particular translator says something about who you are, and makes your fingerprint more unique."
         ],
         [
-          "What does the tamper check have to do with it?",
-          "Extensions that change your user agent, language or time zone, or wrap the drawing functions fingerprints use, rewrite what sites read. That's what the check in front looks for."
+          "What does the tampering check have to do with it?",
+          "Extensions that change your user agent, language or time zone, or wrap the drawing functions used for fingerprints, rewrite what sites read. That's what the check at the top looks for."
         ]
       ]
     },
@@ -2044,24 +2044,24 @@ export const TEXT = {
     },
     "ja": {
       "seo_title": "ブラウザ拡張機能チェック：サイトから見える拡張機能は？ · あなたは誰",
-      "seo_desc": "無料ブラウザ拡張機能チェック：どのサイトでも読める跡を残す拡張機能（暗号資産ウォレット、開発者ツール、Grammarly、Dark Reader、翻訳、ウイルス対策のウェブ保護）、広告ブロッカー、サイトが読む値の書き換えを調べます。",
+      "seo_desc": "無料のブラウザ拡張機能チェック：どのサイトでも読める跡を残す拡張機能（暗号資産ウォレット、開発者ツール、Grammarly、Dark Reader、翻訳、ウイルス対策ソフトのウェブ保護）、広告ブロッカー、サイトが読む値の書き換えを調べます。",
       "seo_kw": "ブラウザ 拡張機能 チェック, 拡張機能 検出, サイト 拡張機能 見える, 拡張機能 フィンガープリント, 広告ブロッカー 検出",
       "h1": "ブラウザ拡張機能チェック",
       "og_sub": "サイトから見える拡張機能は？",
-      "intro": "多くの拡張機能は動くためにページを変えます。ウォレットはオブジェクトを、ダークモードは属性を、翻訳は要素を、ウイルス対策のウェブ保護は自前のスクリプトを足します。その跡はどのサイトでも読め、あなたについて多くを語ります。このページが見つけたものです。",
-      "focus_h": "ページを書き換える拡張機能",
+      "intro": "多くの拡張機能は、働くためにページに手を加えます。ウォレットはオブジェクトを、ダークモードは属性を、翻訳は要素を、ウイルス対策ソフトのウェブ保護は自前のスクリプトを足します。その跡はどのサイトでも読め、あなたについて多くを語ります。このページで見つかったものを示します。",
+      "focus_h": "ページに手を加える拡張機能",
       "docs": [
         [
-          "サイトはどうやって拡張機能を見る？",
-          "一覧はできませんが、残した跡は見えます：window.ethereum のようなオブジェクト、ページの属性、挿入された要素、追加されたスクリプト。何も残さない拡張機能は見えません。"
+          "サイトはどうやって拡張機能を知るのですか？",
+          "一覧を取ることはできませんが、残した跡は見えます。window.ethereum のようなオブジェクト、ページに付いた属性、挿入された要素、追加されたスクリプトなどです。何も跡を残さない拡張機能は見えません。"
         ],
         [
-          "それが何に関係する？",
-          "拡張機能はあなたを絞り込みます。暗号資産ウォレットや開発者ツール、特定の翻訳ツールは、あなたがどんな人かを語り、指紋も独自にします。"
+          "それで何が困るのですか？",
+          "拡張機能からあなたが絞り込まれます。暗号資産ウォレット、開発者ツール、特定の翻訳ツールは、あなたがどんな人かを物語り、フィンガープリントもより珍しくします。"
         ],
         [
-          "改ざんチェックとの関係は？",
-          "UA・言語・タイムゾーンを変えたり、指紋に使う描画関数を包んだりする拡張機能は、サイトが読む値を書き換えます。上の検査はそれを見ています。"
+          "書き換えチェックとはどう関係しますか？",
+          "UA・言語・タイムゾーンを変えたり、フィンガープリントに使われる描画の関数を包んだりする拡張機能は、サイトが読む値を書き換えます。上のチェックはそれを探しています。"
         ]
       ]
     },
@@ -2207,15 +2207,15 @@ export const TEXT = {
   "anti-detect-browser": {
     en: {
       seo_title: "Anti-Detect Browser Test: does your profile give itself away? · Who Are You",
-      seo_desc: "Free anti-detect browser test: checks whether the user agent matches the engine's real version, whether a Worker reads the same navigator as the page, and whether platform, graphics card and time zone agree. No IP or raw data is kept, only anonymous counts of how common you are.",
+      seo_desc: "Free anti-detect browser test: checks whether the user agent matches the engine's real version, whether a Worker reads the same navigator as the page, and whether platform, graphics card and time zone agree. No IP is kept, only anonymous counts of how common each value is.",
       seo_kw: "anti-detect browser test, antidetect browser check, multilogin detection, browser profile check, fingerprint browser detection, user agent spoofing detection",
-      h1: "Anti-detect browser test", og_sub: "Each part looks right; do they agree?",
-      intro: "An anti-detect browser gives each profile its own user agent, screen, time zone and graphics card. Each value can look perfectly ordinary and still contradict another one. This page reads the parts a rewritten profile has trouble keeping in line, and says which disagree.",
+      h1: "Anti-detect browser test", og_sub: "Each part looks right. Do they agree?",
+      intro: "An anti-detect browser gives each profile its own user agent, screen, time zone and graphics card. Each value can look perfectly ordinary and still contradict another one. This page reads the parts a rewritten profile has trouble keeping consistent, and shows which ones disagree.",
       focus_h: "Your profile's traces",
       docs: [
-        ["What gives an anti-detect browser away?", "Parts that don't agree. A user agent that says Chrome 156 while the engine lacks features Chrome shipped long ago; a Worker that reads another user agent or language than the page; navigator.platform saying Mac on a Windows user agent; WebGL naming one maker as vendor and another as the card. Sites rarely look for the browser itself, they look for these contradictions."],
-        ["Why does the engine's real version matter?", "The user agent is a string any browser can rewrite. The JavaScript the engine supports can't be rewritten the same way: each Chromium version adds functions (Promise.try in 128, RegExp.escape in 136), and their presence pins the engine to a range. A user agent outside that range is a profile, not a browser."],
-        ["How do I make a profile pass?", "Pick a user agent version that matches the browser's kernel; prefer changes made in the kernel over injected scripts, so a Worker reads the same values; choose system, platform and graphics vendor as one set; and set time zone and language to the proxy's country. Then check again here."],
+        ["What gives an anti-detect browser away?", "Parts that don't agree. A user agent that says Chrome 156 while the engine lacks features Chrome shipped long ago; a Worker that reads a different user agent or language than the page; navigator.platform saying Mac with a Windows user agent; WebGL naming one maker as vendor and another as the card. Sites rarely look for the browser itself; they look for these contradictions."],
+        ["Why does the engine's real version matter?", "The user agent is just text, and any browser can rewrite it. The JavaScript features an engine supports can't be rewritten the same way: each Chromium version adds functions (Promise.try in 128, RegExp.escape in 136), so which ones exist pins the engine to a range of versions. A user agent outside that range belongs to a profile, not a real browser."],
+        ["How do I make a profile pass?", "Pick a user agent version that matches the browser's core; prefer changes made in the browser's core over injected scripts, so a Worker reads the same values; choose system, platform and graphics vendor as one set; and set the time zone and language to the proxy's country. Then check again here."],
       ],
     },
     "zh-CN": {
@@ -2245,16 +2245,16 @@ export const TEXT = {
       ],
     },
     ja: {
-      seo_title: "アンチディテクトブラウザ検査：プロファイルがばれていないか · Who Are You",
-      seo_desc: "無料のアンチディテクトブラウザ検査：ユーザーエージェントとエンジンの実バージョンが合うか、Worker が読む navigator がページと同じか、プラットフォーム・GPU・タイムゾーンが整合するかを確認。IP や元のデータは保存せず、どれだけありふれているかを数える匿名の集計だけを残します。",
+      seo_title: "アンチディテクトブラウザ検査：プロファイルがばれていない？ · あなたは誰",
+      seo_desc: "無料のアンチディテクトブラウザ検査：ユーザーエージェントとエンジンの実際のバージョンが合っているか、Worker が読む navigator がページと同じか、プラットフォーム・GPU・タイムゾーンが噛み合っているかを確認します。IP は保存せず、残すのは匿名の集計だけです。",
       seo_kw: "アンチディテクトブラウザ 検出, 指紋ブラウザ, ブラウザプロファイル 検査, UA 偽装 検出, 環境 一貫性",
-      h1: "アンチディテクトブラウザ検査", og_sub: "どれも本物らしい。でも互いに合っている？",
-      intro: "アンチディテクトブラウザはプロファイルごとにユーザーエージェント、画面、タイムゾーン、GPU を用意します。一つずつ見れば普通でも、別の値と矛盾することがあります。このページは書き換えた環境が揃えにくい部分を読み、どこが合わないかを示します。",
+      h1: "アンチディテクトブラウザ検査", og_sub: "一つひとつは本物らしい。でも、互いに合っている？",
+      intro: "アンチディテクトブラウザは、プロファイルごとにユーザーエージェント、画面、タイムゾーン、GPU を用意します。一つずつ見ればごく普通の値でも、別の値と矛盾していることがあります。このページは、書き換えた環境では揃えにくい部分を読み取り、どこが合っていないかを示します。",
       focus_h: "プロファイルの痕跡",
       docs: [
-        ["アンチディテクトブラウザはどこでばれる？", "値同士が合わないところです。Chrome 156 を名乗るのに古くからある機能がない、Worker が読むユーザーエージェントや言語がページと違う、Windows の UA なのに navigator.platform が Mac、WebGL のベンダーと GPU 名のメーカーが違う。サイトはブラウザそのものより、こうした矛盾を探します。"],
-        ["なぜエンジンの実バージョンが重要？", "ユーザーエージェントはただの文字列で書き換えられます。エンジンが持つ JavaScript の機能はそうはいきません。Chromium は版ごとに関数を追加するので（128 で Promise.try、136 で RegExp.escape）、その有無でエンジンの版が絞れます。範囲外の UA は作られたプロファイルです。"],
-        ["プロファイルを通すには？", "UA のバージョンをカーネルに合わせ、スクリプト注入ではなくカーネル側の変更を使って Worker でも同じ値にし、システム・プラットフォーム・GPU ベンダーを一揃いで選び、タイムゾーンと言語をプロキシの国に合わせます。そのあとここでもう一度確認を。"],
+        ["アンチディテクトブラウザはどこでばれるのですか？", "値どうしが合わないところです。Chrome 156 を名乗っているのに、Chrome がずっと前に入れた機能がエンジンにない。Worker が読むユーザーエージェントや言語がページと違う。Windows の UA なのに navigator.platform が Mac。WebGL のベンダーと GPU 名でメーカーが違う。サイトはブラウザそのものより、こうした矛盾を探しています。"],
+        ["エンジンの実際のバージョンがなぜ大事なのですか？", "ユーザーエージェントはただの文字列なので、どのブラウザでも書き換えられます。でも、エンジンが備える JavaScript の機能は同じようには書き換えられません。Chromium はバージョンごとに関数を追加するので（128 で Promise.try、136 で RegExp.escape）、どの関数があるかでエンジンのバージョンの範囲が絞れます。その範囲から外れた UA は、本物のブラウザではなく作られたプロファイルです。"],
+        ["プロファイルを見破られないようにするには？", "UA のバージョンをブラウザ本体に合わせる。Worker でも同じ値になるよう、スクリプト注入ではなくブラウザ本体側で変更する。システム・プラットフォーム・GPU ベンダーは一揃いで選ぶ。タイムゾーンと言語はプロキシの国に合わせる。そのうえで、ここでもう一度確認してください。"],
       ],
     },
     ko: {
@@ -2339,15 +2339,15 @@ export const TEXT = {
   "icloud-private-relay": {
     en: {
       seo_title: "iCloud Private Relay Check: what sites still see · Who Are You",
-      seo_desc: "Free iCloud Private Relay check: whether your address is a relay exit, which network it belongs to, the region it shows, and whether WebRTC leaks anything past it. No IP or raw data is kept, only anonymous counts of how common you are.",
+      seo_desc: "Free iCloud Private Relay check: whether your address is a relay exit, which network it belongs to, the region it shows, and whether WebRTC leaks anything past it. No IP is kept, only anonymous counts of how common each value is.",
       seo_kw: "iCloud Private Relay check, is Private Relay on, Private Relay IP, Private Relay detection, Safari Private Relay test",
       h1: "iCloud Private Relay check", og_sub: "Is the relay on, and what does it still show?",
-      intro: "iCloud Private Relay sends Safari's traffic through two hops, so sites see an exit run by Cloudflare, Akamai or Fastly instead of your address. Sites can still tell it's a relay, and roughly where you are. Here is what yours shows.",
+      intro: "iCloud Private Relay sends Safari's traffic through two hops, so sites see an exit run by Cloudflare, Akamai or Fastly instead of your own address. Sites can still tell it's a relay, and roughly where you are. Here's what yours shows.",
       focus_h: "Your relay",
       docs: [
         ["Can sites tell I use Private Relay?", "Yes. Apple publishes the list of its exit addresses, and this page checks your address against it. A site sees a relay exit, not your own address, and usually a city or region near you, which Apple keeps on purpose so local content still works."],
-        ["Is Private Relay a VPN?", "No. It covers Safari and unencrypted traffic from apps, not every app; it can't be pointed at another country; and it hides your address from sites and your network provider from what you visit. For a site, it looks like a privacy relay, not like a person abroad."],
-        ["Why does WebRTC show another relay address?", "Each connection gets an exit of its own, so the page and WebRTC can come out of different relay addresses. Both being relay exits is no leak; the check flags only a real address beside them."],
+        ["Is Private Relay a VPN?", "No. It covers Safari and unencrypted traffic from apps, not every app; you can't point it at another country; and it hides your address from sites, and the sites you visit from your network provider. To a site it looks like a privacy relay, not like someone abroad."],
+        ["Why does WebRTC show another relay address?", "Each connection gets its own exit, so the page and WebRTC can come out of different relay addresses. If both are relay exits, nothing is leaking; the check only warns when a real address shows up next to them."],
       ],
     },
     "zh-CN": {
@@ -2377,16 +2377,16 @@ export const TEXT = {
       ],
     },
     ja: {
-      seo_title: "iCloud プライベートリレー検査：サイトにまだ見えるもの · Who Are You",
-      seo_desc: "無料の iCloud プライベートリレー検査：あなたのアドレスがリレーの出口か、どのネットワークか、どの地域に見えるか、WebRTC がその外へ漏れていないかを確認。IP や元のデータは保存せず、どれだけありふれているかを数える匿名の集計だけを残します。",
+      seo_title: "iCloud プライベートリレー検査：それでもサイトに見えるもの · あなたは誰",
+      seo_desc: "無料の iCloud プライベートリレー検査：あなたのアドレスがリレーの出口か、どのネットワークのものか、どの地域に見えるか、WebRTC からリレーの外へ何か漏れていないかを確認します。IP は保存せず、残すのは匿名の集計だけです。",
       seo_kw: "iCloud プライベートリレー 確認, Private Relay 検出, プライベートリレー IP, Safari プライベートリレー",
       h1: "iCloud プライベートリレー検査", og_sub: "リレーはオン？それでも見えるものは？",
-      intro: "iCloud プライベートリレーは Safari の通信を 2 段で中継し、サイトにはあなたのアドレスではなく Cloudflare・Akamai・Fastly の出口が見えます。それでもリレーであることやおおよその場所は分かります。あなたのリレーの見え方はこちら。",
+      intro: "iCloud プライベートリレーは Safari の通信を 2 段階で中継するので、サイトにはあなたのアドレスではなく、Cloudflare・Akamai・Fastly が運営する出口が見えます。それでも、リレーを使っていることやおおよその場所は分かります。あなたのリレーの見え方を示します。",
       focus_h: "あなたのリレー",
       docs: [
-        ["プライベートリレーを使っているとサイトに分かる？", "分かります。Apple は出口アドレスの一覧を公開しており、このページもそれと照合します。サイトに見えるのはリレーの出口で、あなた自身のアドレスではありません。ただし近くの都市や地域は見えることが多く、地域のコンテンツが使えるよう Apple が意図的に残しています。"],
-        ["プライベートリレーは VPN？", "いいえ。対象は Safari とアプリの暗号化されていない通信だけで、すべてのアプリではありません。別の国も選べません。サイトからはアドレスを、通信事業者からは閲覧先を隠します。サイトから見ればプライバシー中継であって、海外にいる人ではありません。"],
-        ["WebRTC が別のリレーアドレスを示すのはなぜ？", "接続ごとに出口が割り当てられるため、ページと WebRTC が別のリレーアドレスから出ることがあります。どちらもリレーの出口なら漏れではありません。本当のアドレスが並んだときだけ警告します。"],
+        ["プライベートリレーを使っているとサイトに分かりますか？", "分かります。Apple は出口アドレスの一覧を公開しており、このページもそれと照らし合わせています。サイトに見えるのはリレーの出口で、あなた自身のアドレスではありません。ただ、近くの都市や地域は見えることが多く、これは地域向けのコンテンツが使えるよう Apple が意図して残しているものです。"],
+        ["プライベートリレーは VPN ですか？", "いいえ。対象は Safari と、アプリの暗号化されていない通信だけで、すべてのアプリではありません。別の国を選ぶこともできません。隠すのは、サイトからはあなたのアドレス、通信事業者からはあなたの閲覧先です。サイトから見れば、海外にいる人ではなく、プライバシー用の中継です。"],
+        ["WebRTC に別のリレーアドレスが出るのはなぜですか？", "接続ごとに出口が割り当てられるため、ページと WebRTC が別のリレーアドレスから出ることがあります。どちらもリレーの出口なら、漏れではありません。本当のアドレスが並んで見えたときだけ警告します。"],
       ],
     },
     ko: {
@@ -2471,15 +2471,15 @@ export const TEXT = {
   "warp-check": {
     en: {
       seo_title: "Cloudflare WARP Check: is WARP on, and can sites tell? · Who Are You",
-      seo_desc: "Free Cloudflare WARP check: whether your traffic goes through WARP, the address and network sites see, the Cloudflare data center you reach and the key exchange in use. No IP or raw data is kept, only anonymous counts of how common you are.",
+      seo_desc: "Free Cloudflare WARP check: whether your traffic goes through WARP, the address and network sites see, the Cloudflare data center you reach and the key exchange in use. No IP is kept, only anonymous counts of how common each value is.",
       seo_kw: "Cloudflare WARP check, is WARP on, WARP detection, 1.1.1.1 WARP test, WARP IP",
       h1: "Cloudflare WARP check", og_sub: "Is WARP on, and what do sites see?",
-      intro: "WARP, the VPN in Cloudflare's 1.1.1.1 app, sends your traffic into Cloudflare's network. Any site behind Cloudflare can read whether a visitor arrives through WARP. Here is what yours says, and what address and network the site sees.",
+      intro: "WARP, the VPN in Cloudflare's 1.1.1.1 app, sends your traffic into Cloudflare's network. Any site behind Cloudflare can tell whether a visitor arrives through WARP. Here's what yours says, and which address and network the site sees.",
       focus_h: "Your WARP",
       docs: [
-        ["How can a site tell I use WARP?", "Sites behind Cloudflare can ask Cloudflare's trace, which says warp=on for traffic that comes through WARP. Even elsewhere, a WARP address belongs to Cloudflare's own network (AS13335), which sites list as a data center rather than a home connection."],
-        ["Does WARP hide where I am?", "Mostly not. WARP exits near you, usually in your own country, so a site still places you roughly where you are; it is built for privacy and speed, not for appearing elsewhere. Sites see a Cloudflare address instead of your provider's."],
-        ["What does warp=plus mean?", "The trace says plus for WARP+, the paid tier with Cloudflare's faster routes. To a site the two look the same: a Cloudflare address and WARP on."],
+        ["How can a site tell I use WARP?", "Sites behind Cloudflare can read Cloudflare's trace, which says warp=on for traffic that comes through WARP. Even elsewhere, a WARP address belongs to Cloudflare's own network (AS13335), which sites treat as a data center rather than a home connection."],
+        ["Does WARP hide where I am?", "Mostly not. WARP exits near you, usually in your own country, so a site can still place you roughly. It's built for privacy and speed, not for appearing somewhere else. Sites see a Cloudflare address instead of your internet provider's."],
+        ["What does warp=plus mean?", "The trace says plus for WARP+, the paid tier that uses Cloudflare's faster routes. To a site the two look the same: a Cloudflare address with WARP on."],
       ],
     },
     "zh-CN": {
@@ -2509,16 +2509,16 @@ export const TEXT = {
       ],
     },
     ja: {
-      seo_title: "Cloudflare WARP 検査：WARP はオン？サイトに分かる？ · Who Are You",
-      seo_desc: "無料の Cloudflare WARP 検査：通信が WARP を通っているか、サイトに見えるアドレスとネットワーク、つながった Cloudflare のデータセンター、使われている鍵交換を確認。IP や元のデータは保存せず、どれだけありふれているかを数える匿名の集計だけを残します。",
+      seo_title: "Cloudflare WARP 検査：WARP はオン？サイトに分かる？ · あなたは誰",
+      seo_desc: "無料の Cloudflare WARP 検査：通信が WARP を通っているか、サイトに見えるアドレスとネットワーク、つながった Cloudflare のデータセンター、使われている鍵交換を確認します。IP は保存せず、残すのは匿名の集計だけです。",
       seo_kw: "Cloudflare WARP 確認, WARP オン 確認, WARP 検出, 1.1.1.1 WARP, WARP IP",
       h1: "Cloudflare WARP 検査", og_sub: "WARP はオン？サイトには何が見える？",
-      intro: "WARP は Cloudflare の 1.1.1.1 アプリに入っている VPN で、通信を Cloudflare のネットワークに送ります。Cloudflare の後ろにあるサイトなら、訪問者が WARP 経由かどうかを読めます。あなたの結果と、サイトに見えるアドレスとネットワークはこちら。",
+      intro: "WARP は Cloudflare の 1.1.1.1 アプリに入っている VPN で、通信を Cloudflare のネットワークに送ります。Cloudflare を通して配信しているサイトなら、訪問者が WARP 経由かどうかを読み取れます。あなたの結果と、サイトに見えるアドレスとネットワークを示します。",
       focus_h: "あなたの WARP",
       docs: [
-        ["サイトはどうやって WARP 利用を知る？", "Cloudflare の後ろにあるサイトは Cloudflare の trace を読め、WARP 経由の通信では warp=on と出ます。それ以外でも、WARP のアドレスは Cloudflare 自身のネットワーク（AS13335）なので、サイトは家庭回線ではなくデータセンターとして扱います。"],
-        ["WARP で居場所は隠せる？", "ほとんど隠せません。WARP は近くから、たいてい自国から出るので、サイトはおおよその場所を把握できます。プライバシーと速度のためのもので、別の場所に見せるためではありません。見えるのは通信事業者ではなく Cloudflare のアドレスです。"],
-        ["warp=plus とは？", "trace の plus は有料版 WARP+ で、Cloudflare の速い経路を使います。サイトから見ればどちらも同じで、Cloudflare のアドレスと WARP オンです。"],
+        ["サイトはどうやって WARP の利用を知るのですか？", "Cloudflare を通して配信しているサイトは Cloudflare の trace を読めて、WARP 経由の通信には warp=on と出ます。それ以外のサイトでも、WARP のアドレスは Cloudflare 自身のネットワーク（AS13335）のものなので、家庭用回線ではなくデータセンターとして扱われます。"],
+        ["WARP で居場所は隠せますか？", "ほとんど隠せません。WARP は近くの、たいていは自国の出口から出るので、サイトはおおよその場所をつかめます。WARP はプライバシーと速度のためのもので、別の場所にいるように見せるためのものではありません。サイトに見えるのが、プロバイダーのアドレスではなく Cloudflare のアドレスになるだけです。"],
+        ["warp=plus とは何ですか？", "trace の plus は、Cloudflare の速い経路を使う有料版 WARP+ のことです。サイトから見ればどちらも同じで、Cloudflare のアドレスで WARP がオン、というだけです。"],
       ],
     },
     ko: {
@@ -2603,15 +2603,15 @@ export const TEXT = {
   "http3-ech": {
     en: {
       seo_title: "HTTP/3, ECH and Post-Quantum TLS Test · Who Are You",
-      seo_desc: "Free connection test: whether your browser uses HTTP/3, hides the site's name with Encrypted Client Hello (ECH), and agrees a post-quantum key (X25519MLKEM768), and what a missing one says about your network or proxy. No IP or raw data is kept, only anonymous counts of how common you are.",
+      seo_desc: "Free connection test: whether your browser uses HTTP/3, hides the site's name with Encrypted Client Hello (ECH), and agrees on a post-quantum key (X25519MLKEM768), and what a missing one says about your network or proxy. No IP is kept, only anonymous counts of how common each value is.",
       seo_kw: "HTTP/3 test, ECH test, encrypted client hello check, post-quantum TLS test, X25519MLKEM768, QUIC test, TLS check",
       h1: "HTTP/3, ECH and post-quantum test", og_sub: "How modern is your connection, and what's in the way?",
-      intro: "A current browser on an open network talks HTTP/3 over UDP, hides which site it connects to with ECH, and agrees a key that a future quantum computer can't break. When one of them is missing, something on the path is often the reason. Here is your connection.",
+      intro: "On an open network, a current browser talks HTTP/3 over UDP, hides which site it connects to with ECH, and agrees on a key that a future quantum computer can't break. When one of these is missing, something along the way is often the reason. Here's your connection.",
       focus_h: "Your connection",
       docs: [
-        ["Why isn't HTTP/3 used?", "HTTP/3 runs over UDP port 443. A browser learns that a site speaks it from a first answer over TCP, so a first visit may not switch yet; but if UDP gets out nowhere, a network or a proxy is blocking it or doesn't carry UDP at all. Many proxy setups carry only TCP."],
-        ["What is ECH and why is it off?", "Encrypted Client Hello encrypts the site's name, which TLS otherwise sends in the clear for anyone on the path to read. The browser needs the site's keys from a DNS HTTPS record: Firefox reads them only over its own DNS over HTTPS; Chrome needs a resolver that returns HTTPS records; Safari doesn't use ECH yet."],
-        ["What does a classical key exchange mean?", "Chrome 124+, Firefox 132+ and Safari 26 offer X25519MLKEM768 by default. A current browser that ends up with plain X25519 points to something in between that makes its own TLS connection: an antivirus, a company proxy, or a proxy client that terminates TLS. On older browsers it's just their age."],
+        ["Why isn't HTTP/3 used?", "HTTP/3 runs over UDP port 443. A browser learns that a site supports it from a first answer over TCP, so it may not switch on a first visit. But if UDP can't get out at all, a network or proxy is blocking it or doesn't carry UDP. Many proxy setups carry only TCP."],
+        ["What is ECH, and why is it off?", "Encrypted Client Hello encrypts the name of the site you connect to, which TLS otherwise sends in the clear for anyone along the way to read. The browser needs the site's keys from a DNS HTTPS record: Firefox reads them only over its own DNS over HTTPS, Chrome needs a resolver that returns HTTPS records, and Safari doesn't use ECH yet."],
+        ["What does a classical key exchange mean?", "Chrome 124+, Firefox 132+ and Safari 26 offer X25519MLKEM768 by default. A current browser that ends up with plain X25519 points to something in between making its own TLS connection: an antivirus, a company proxy, or a proxy client that terminates TLS. On older browsers it just means the browser is old."],
       ],
     },
     "zh-CN": {
@@ -2641,16 +2641,16 @@ export const TEXT = {
       ],
     },
     ja: {
-      seo_title: "HTTP/3・ECH・耐量子暗号の検査 · Who Are You",
-      seo_desc: "無料の接続検査：ブラウザが HTTP/3 を使っているか、ECH で接続先のサイト名を隠しているか、耐量子の鍵（X25519MLKEM768）で合意しているか、欠けている場合ネットワークやプロキシについて何が分かるかを確認。IP や元のデータは保存せず、どれだけありふれているかを数える匿名の集計だけを残します。",
+      seo_title: "HTTP/3・ECH・耐量子暗号の検査 · あなたは誰",
+      seo_desc: "無料の接続検査：ブラウザが HTTP/3 を使っているか、ECH（Encrypted Client Hello）で接続先のサイト名を隠しているか、耐量子の鍵（X25519MLKEM768）で合意しているか、欠けているならネットワークやプロキシについて何が分かるかを確認します。IP は保存せず、残すのは匿名の集計だけです。",
       seo_kw: "HTTP/3 確認, ECH 確認, Encrypted Client Hello, 耐量子暗号 TLS, X25519MLKEM768, QUIC 確認, TLS 確認",
-      h1: "HTTP/3・ECH・耐量子暗号の検査", og_sub: "接続はどれだけ新しい？どこで止まっている？",
-      intro: "最新のブラウザは開かれたネットワークなら UDP で HTTP/3 を使い、ECH で接続先のサイトを隠し、将来の量子コンピュータでも破れない鍵で合意します。どれかが欠けていれば、経路上の何かが原因であることが多いです。あなたの接続はこちら。",
+      h1: "HTTP/3・ECH・耐量子暗号の検査", og_sub: "あなたの接続はどれだけ新しい？何が邪魔している？",
+      intro: "制限のないネットワークなら、最新のブラウザは UDP で HTTP/3 を使い、ECH でどのサイトにつなぐかを隠し、将来の量子コンピューターでも破れない鍵で合意します。どれかが欠けているときは、途中の経路にある何かが原因であることがよくあります。あなたの接続を示します。",
       focus_h: "あなたの接続",
       docs: [
-        ["なぜ HTTP/3 が使われない？", "HTTP/3 は UDP 443 番を使います。ブラウザは TCP での最初の応答で対応を知るので、初回はまだ切り替わらないことがあります。しかし UDP がどこにも出られないなら、ネットワークかプロキシがブロックしているか、UDP を運んでいません。TCP だけを運ぶプロキシ設定は多いです。"],
-        ["ECH とは？なぜオフ？", "Encrypted Client Hello はサイト名を暗号化します。そうしないと TLS はそれを平文で送り、経路上の誰でも読めます。ブラウザは DNS の HTTPS レコードからサイトの鍵を得る必要があり、Firefox は自身の DNS over HTTPS 使用時のみ読み、Chrome は HTTPS レコードを返すリゾルバが必要で、Safari はまだ ECH を使いません。"],
-        ["従来型の鍵交換は何を意味する？", "Chrome 124 以降、Firefox 132 以降、Safari 26 は既定で X25519MLKEM768 を提示します。最新のブラウザなのに普通の X25519 になったなら、途中で独自に TLS 接続を張るもの（ウイルス対策ソフト、社内プロキシ、TLS を終端するプロキシクライアント）があります。古いブラウザなら単に古いだけです。"],
+        ["HTTP/3 が使われないのはなぜですか？", "HTTP/3 は UDP の 443 番ポートを使います。ブラウザはサイトが HTTP/3 に対応していることを TCP での最初の応答で知るので、初回の訪問ではまだ切り替わらないことがあります。ただ、UDP がどこにも出られないなら、ネットワークかプロキシが遮断しているか、UDP を通していません。TCP しか通さないプロキシ設定はよくあります。"],
+        ["ECH とは何ですか？オフなのはなぜですか？", "Encrypted Client Hello は、接続先のサイト名を暗号化する仕組みです。これがないと TLS はサイト名を暗号化せずに送るので、経路上の誰でも読めてしまいます。ブラウザは DNS の HTTPS レコードからサイトの鍵を得る必要があります。Firefox は自身の DNS over HTTPS を使うときだけ読み、Chrome は HTTPS レコードを返す DNS サーバーが必要で、Safari はまだ ECH を使っていません。"],
+        ["従来型の鍵交換になっているのはどういう意味ですか？", "Chrome 124 以降、Firefox 132 以降、Safari 26 は、標準で X25519MLKEM768 を提示します。最新のブラウザなのに普通の X25519 になっているなら、途中で独自に TLS 接続を張り直すもの（ウイルス対策ソフト、社内プロキシ、TLS を終端するプロキシのクライアント）があると考えられます。古いブラウザなら、単に古いだけです。"],
       ],
     },
     ko: {
