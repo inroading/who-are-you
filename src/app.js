@@ -1396,7 +1396,8 @@ import { TZ_CC } from "./tz.mjs";
     let nf; try { nf = new Intl.NumberFormat(LANG, { notation: "compact", maximumFractionDigits: 1 }).format(n); } catch (e) { nf = n.toLocaleString(LANG); }
     el.querySelector(".live-t").innerHTML = t("lv_bar", { n: `<b>${esc(nf)}</b>`, top: esc(t("c_" + top)), p: `<b>${Math.round(bad(top) * 100)}%</b>` });
   }
-  if (!D.focus && !EMBED && $("#live")) (window.requestIdleCallback || (f => setTimeout(f, 1500)))(() => live());
+  // (when the page is idle, or after 2.5 s at most: the checks keep it busy, and a background tab may never idle)
+  if (!D.focus && !EMBED && $("#live")) { if (window.requestIdleCallback) requestIdleCallback(() => live(), { timeout: 2500 }); else setTimeout(live, 1500); }
   $$(".ck-fix").forEach(btn => {
     btn.onclick = e => {
       e.stopPropagation();
