@@ -6,7 +6,7 @@ export default {
   seo_desc: "Was jede Website über dich erfährt, ohne zu fragen: vermutliche Herkunft, Stadt, Sprache, Gerät, Grafikkarte, Netz, Schriften und Browser-Fingerabdruck, zusammengefasst in einem Porträt. Dazu alle 86 Signale (Infos, die eine Website ohne deine Zustimmung lesen kann) mit dem gelesenen Wert. Der Check findet auch Widersprüche, die ein VPN, einen Proxy oder einen gefälschten Browser verraten. IP und Rohdaten werden nicht gespeichert, nur anonyme Zähler, damit wir sagen können, wie häufig deine Werte sind.",
   seo_kw: "Browser-Fingerabdruck, Fingerprint, Datenschutz-Check, was wissen Websites über mich, WebRTC-Leak, Canvas-Fingerprint, VPN erkennen, IP-Standort, User-Agent, bin ich einzigartig",
   og_sub: "Was jede Website über dich erfährt, ohne zu fragen",
-  h1: "Wer du für Websites bist",
+  h1: "Für wen Websites dich halten",
   story: "Herkunft vermutlich: {nat}. Gerade bist du in {city}. Du sprichst {lang}; Zeitzone deines Computers: {tz}, die Uhr im {clock}-Format.\nDu nutzt {device} mit {browser}; Bildschirm {screen}, Grafik {gpu}: {rig}.\nIns Netz gehst du über {isp}: {nettype}. Der DNS-Server, der für dich die Adressen von Websites nachschlägt, steht hier: {dns}. {read}.\nDu magst {theme}, und {adblock}. {track}. Deine Schriften verraten: {job}. Zu deinem Alter: {age}.\nFür eine Website ist das {tier}. {fresh}. Du hast diese Seite {when} geöffnet, {power}, {prefs}.\nIn der Menge: {stand}.",
 
   lang_label: "Sprache", faq_h: "Hilfe", th_system: "Design: System", th_light: "Design: hell", th_dark: "Design: dunkel",
@@ -106,7 +106,7 @@ export default {
   ps_denied: "blockiert",
   ps_prompt: "fragen",
 
-  fix: "So behebst du es",
+  fix: "Lösung",
   tip_tz: "Stell die Systemzeitzone auf die der IP\nWindows: Einstellungen → Zeit und Sprache\nmacOS: Systemeinstellungen → Allgemein → Datum & Uhrzeit",
   tip_lang: "Setz die Sprache des IP-Landes im Browser an die erste Stelle\nDu willst nicht als Einheimischer durchgehen? Dann lass es so",
   tip_dns: "Clash / Mihomo: DNS mit fake-ip oder TUN-Modus\nV2Ray / Xray: DNS ebenfalls über den Proxy schicken\nBrowser: sicheres DNS einschalten",
