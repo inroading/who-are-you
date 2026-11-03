@@ -934,7 +934,7 @@ import { TZ_CC } from "./tz.mjs";
     blank("prefs", esc(P.fs == null && P.rm == null ? t("pf_na") : pf.length ? list(pf) : t("pf_none")));
     labels(P, ck, tier);
     if (P.u) blank("stand", esc(standText(P.u.m, P.u.k, P.u.top)));
-    else if (!R.uniq) blank("stand", esc(t(!shownShared && (optedOut() || navigator.globalPrivacyControl) ? "st_off" : "st_wait")));
+    else if (!(R && R.uniq)) blank("stand", esc(t(!shownShared && (optedOut() || navigator.globalPrivacyControl) ? "st_off" : "st_wait")));
   }
   // what a site makes of the machine: high-end, mainstream or entry-level, from the card, the screen and the processor
   function tierOf(P) {
@@ -981,7 +981,7 @@ import { TZ_CC } from "./tz.mjs";
       [hour != null && hour < 5, "lb_night", ["tz"]],
     ].filter(([on]) => on).slice(0, 5);
     L.push([true, P.rand || P.fz || P.rf ? "lb_priv_hi" : P.ab ? "lb_priv_mid" : "lb_priv_lo", ["rand", "adblock"]]);
-    R.labels = L.map(([, k]) => k);
+    if (R) R.labels = L.map(([, k]) => k);
     $("#lbsL").innerHTML = L.map(([, k, from]) => `<span class="lb" tabindex="0" title="${esc(t("from", { list: list(from.map(rowName)) }))}">${esc(t(k))}</span>`).join("");
     $("#lbs").hidden = false;
   }
