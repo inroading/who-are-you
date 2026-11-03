@@ -11,6 +11,7 @@
 // path is a bare 404 (the 1ms.dog shell shows its own page for those).
 import { decode, findings, tier, SLUG, parsePath } from "./share.mjs";
 import { Tally } from "./tally.mjs";
+import { regionName } from "./regions.mjs";
 export { Tally };
 import en from "./i18n/en.mjs";
 import zhCN from "./i18n/zh-CN.mjs";
@@ -62,7 +63,7 @@ async function result(request, env, { code, lang: dir }, url) {
   const page = await env.ASSETS.fetch(new URL("/" + (slug ? slug + "/" : ""), url));
   if (!page.ok) return page;
   let nat = P.nat || "";
-  try { if (nat) nat = new Intl.DisplayNames([lang], { type: "region" }).of(nat); } catch (e) {}
+  if (nat) nat = regionName(nat, lang);
   const n = findings(P);
   const title = n ? fill(d.r_title, { n }) : d.r_title_clean;
   const desc = fill(d.r_desc, { nat: nat || "?", os: P.os || "?", browser: P.browser || "?" });

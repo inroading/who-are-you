@@ -4,6 +4,7 @@
 // once, when every sniffer it needs is in, so its text doesn't reflow piece by piece. Strings: window.L1MS.
 import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO, COUNTED } from "./sniffers.mjs";
 import { TRAITS, rarity, MIN_TOTAL } from "./traits.mjs";
+import { TW, flagCode } from "./regions.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
 import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
@@ -19,9 +20,15 @@ import { TZ_CC } from "./tz.mjs";
   const K = { seen: "who:seen", optout: "who:optout", scene: "who:scene", theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last", prev: "who:prev", target: "who:target", hist: "who:hist" };
   const dn = type => { try { return new Intl.DisplayNames([LANG], { type }); } catch (e) { return null; } };
   const REG = dn("region"), LNG = dn("language");
-  const country = cc => { try { return REG ? REG.of(cc) : cc; } catch (e) { return cc; } };
-  const language = tag => { try { return LNG ? LNG.of(tag) : tag; } catch (e) { return tag; } };
-  const flag = cc => /^[A-Z]{2}$/.test(cc || "") ? `<img class="flag" src="/flags/${cc.toLowerCase()}.svg" alt="" width="20" height="15">` : "";
+  // (Taiwan: "中国台湾 / Taiwan, China" and China's flag, in every language; src/regions.mjs)
+  const country = cc => { if (cc === "TW") return TW[LANG]; try { return REG ? REG.of(cc) : cc; } catch (e) { return cc; } };
+  // a language's name, Taiwan's part named the same way ("中文（中国台湾）")
+  const language = tag => {
+    let s; try { s = LNG ? LNG.of(tag) : tag; } catch (e) { s = tag; }
+    if (/-TW\b/i.test(tag) && REG) { try { const sys = REG.of("TW"); if (sys && s.includes(sys)) s = s.replace(sys, TW[LANG]); } catch (e) {} }
+    return s;
+  };
+  const flag = cc => /^[A-Z]{2}$/.test(cc || "") ? `<img class="flag" src="/flags/${flagCode(cc)}.svg" alt="" width="20" height="15">` : "";
   // A flag and the text after it, the flag kept on the line of the text's first word; that word can be a link.
   const flagged = (cc, s, href) => {
     const m = String(s).match(/^(\S+)([\s\S]*)$/) || ["", "", ""];

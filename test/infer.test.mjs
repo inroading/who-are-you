@@ -3,6 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
 import { cleanSeen, rarity } from "../src/traits.mjs";
+import { regionName, flagCode } from "../src/regions.mjs";
 
 const WIN = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36";
 const MAC_SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15";
@@ -213,6 +214,12 @@ test("disguise checks", () => {
   // Chinese on Singapore's clock (the same UTC+8) behind a Chinese IP: someone in China
   assert.deepEqual(nationality({ langs: ["zh-CN"], tz: "Asia/Singapore", ipcc: "CN" }), { cc: "CN", from: ["langs"] });
   assert.deepEqual(nationality({ langs: ["zh-CN"], tz: "Asia/Kuala_Lumpur", ipcc: "SG" }), { cc: "MY", from: ["langs", "tz"] });
+  // Taiwan: its fixed name in every language, China's flag; Hong Kong keeps the system's name and its own flag
+  assert.equal(regionName("TW", "zh-CN"), "中国台湾");
+  assert.equal(regionName("TW", "en"), "Taiwan, China");
+  assert.equal(regionName("TW", "ru"), "Тайвань, Китай");
+  assert.equal(flagCode("TW"), "cn");
+  assert.equal(flagCode("HK"), "hk");
   // iOS: Chrome there connects with Apple's TLS, classical before iOS 26
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 18 }).pq[0], "info");
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 26 }).pq[0], "warn");
