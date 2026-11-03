@@ -1,11 +1,12 @@
 // The counter behind "how common are you": one Durable Object for the whole site, holding numbers only. Per trait value
 // (a system, a browser, the first 8 characters of a fingerprint hash), how many checks had it; per day, how each check
-// came out. No address, no full fingerprint, no row for a single visit. Increments wait in memory and go to SQLite
-// once a minute, so writes grow with the number of different values, not with traffic.
+// came out. No address, no full fingerprint, no row for a single visit. Increments wait in memory at most 10 seconds
+// (written with the next request, or by an alarm), so common values cost one write per 10 seconds, not one per visit,
+// and an object that is evicted or redeployed loses no more than that.
 import { DurableObject } from "cloudflare:workers";
 import { cleanSeen } from "./traits.mjs";
 
-const KEEP_DAYS = 90;
+const KEEP_DAYS = 90, FLUSH_MS = 10000;
 const day = (t = Date.now()) => new Date(t).toISOString().slice(0, 10);
 
 export class Tally extends DurableObject {
@@ -18,6 +19,7 @@ export class Tally extends DurableObject {
     this.pendingCk = new Map(); // "day\0id\0lv" → increments not yet written
     this.cache = new Map();     // "f\0v" → the stored count, as last read
     this.armed = false;
+    this.flushed = Date.now();
   }
 
   stored(k) {
@@ -40,16 +42,19 @@ export class Tally extends DurableObject {
       for (const [f, v] of Object.entries(seen.t)) this.bump(this.pending, f + "\0" + v);
       const d = day();
       for (const [id, lv] of Object.entries(seen.ck)) this.bump(this.pendingCk, d + "\0" + id + "\0" + lv);
-      if (!this.armed) { this.armed = true; await this.ctx.storage.setAlarm(Date.now() + 60000); }
+      if (Date.now() - this.flushed >= FLUSH_MS) this.flush();
+      else if (!this.armed) { this.armed = true; await this.ctx.storage.setAlarm(Date.now() + FLUSH_MS); }
     }
     const n = {};
     for (const [f, v] of Object.entries(seen.t)) n[f] = this.count(f, v);
     return Response.json({ total: this.count("", "total"), n });
   }
 
-  // once a minute: the increments into SQLite, and days past KEEP_DAYS out
-  async alarm() {
-    this.armed = false;
+  async alarm() { this.armed = false; this.flush(); }
+  // the increments into SQLite, and days past KEEP_DAYS out
+  flush() {
+    this.flushed = Date.now();
+    if (!this.pending.size && !this.pendingCk.size) return;
     const counts = [...this.pending], checks = [...this.pendingCk];
     this.pending = new Map(); this.pendingCk = new Map();
     this.ctx.storage.transactionSync(() => {

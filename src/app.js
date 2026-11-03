@@ -391,7 +391,8 @@ import { TZ_CC } from "./tz.mjs";
   function prefs() {
     R.dark = mq("(prefers-color-scheme: dark)");
     txt("scheme", t(R.dark ? "sch_dark" : "sch_light") + (mq("(prefers-contrast: more)") ? " · " + t("sch_contrast") : "") + (mq("(forced-colors: active)") ? " · forced-colors" : ""));
-    txt("motion", t(mq("(prefers-reduced-motion: reduce)") ? "mo_reduce" : "mo_no"));
+    R.rm = mq("(prefers-reduced-motion: reduce)"); R.hc = mq("(prefers-contrast: more)") || mq("(forced-colors: active)");
+    txt("motion", t(R.rm ? "mo_reduce" : "mo_no"));
     const g = mq("(color-gamut: rec2020)") ? "Rec.2020" : mq("(color-gamut: p3)") ? "Display P3" : mq("(color-gamut: srgb)") ? "sRGB" : "–";
     txt("gamut", g + " · " + (mq("(dynamic-range: high)") ? "HDR" : "SDR"));
     const dnt = navigator.doNotTrack === "1" || window.doNotTrack === "1";
@@ -694,7 +695,7 @@ import { TZ_CC } from "./tz.mjs";
     const d = document.createElement("div");
     d.style.cssText = "position:absolute;visibility:hidden;font-size:medium" + (CSS.supports("color", "AccentColor") ? ";color:AccentColor" : "");
     document.body.appendChild(d);
-    const cs = getComputedStyle(d), px = Math.round(parseFloat(cs.fontSize)), acc = CSS.supports("color", "AccentColor") ? cs.color : "";
+    const cs = getComputedStyle(d), px = R.fontPx = Math.round(parseFloat(cs.fontSize)), acc = CSS.supports("color", "AccentColor") ? cs.color : "";
     d.remove();
     txt("sysui", [t("ui_font", { n: px }), acc && t("ui_accent", { c: acc })].filter(Boolean).join(" · "));
   }
@@ -726,6 +727,7 @@ import { TZ_CC } from "./tz.mjs";
 
   function screens() {
     const ext = screen.isExtended;
+    R.multi = ext;
     txt("screens", (ext == null ? t("v_unsup") : t(ext ? "scr_multi" : "scr_single")) + " · " + t("win_at", { x: screenX, y: screenY }));
   }
 
@@ -808,6 +810,8 @@ import { TZ_CC } from "./tz.mjs";
       screen: R.screen || null, gpu: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) || R.gpu || null, gi: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) ? R.gpu : undefined, gl: /or similar$/.test(R.gpuRaw || "") || undefined, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
       nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
       dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, app: inApp() || undefined, fz: !!R.noise || undefined, hz: R.hz || null,
+      cpu: navigator.hardwareConcurrency || null, multi: R.multi === true || undefined, fs: R.fontPx || null, rm: R.rm || undefined, hc: R.hc || undefined,
+      bat: !R.battery ? undefined : R.battery.level === 1 && R.battery.charging && R.battery.chargingTime === 0 ? "ac" : (R.battery.charging ? "c" : "b") + Math.round(R.battery.level * 100),
       x: { split, fullOrg: [c.asn ? "AS" + c.asn : "", c.asOrganization].filter(Boolean).join(" · "), dnsOrg: R.dnsOrg || "", fpHex: R.fpHex } };
   }
 
@@ -919,6 +923,74 @@ import { TZ_CC } from "./tz.mjs";
     const low = /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g), pc = P.kind === "pc" || P.kind === "mac";
     blank("rig", esc(t(P.gs ? "rg_soft" : pc && hi && P.hz >= 120 ? "rg_game" : pc && hi ? "rg_power" : pc && low ? "rg_basic" : "rg_none")));
     blank("track", esc(t(P.rand ? "tk_rand" : P.fz ? "tk_site" : "tk_same")));
+    // the paragraphs after: what the machine is worth, updates, when, power, settings; then the labels and standing out
+    const tier = tierOf(P);
+    blank("tier", esc(tier.text));
+    const b = behind(P);
+    blank("fresh", esc(b == null ? t("fr_na") : b <= 2 ? t("fr_new") : t("fr_old", { n: b })), BLANKS.fresh, P.browser || "");
+    blank("when", esc(whenOf(P)));
+    blank("power", esc(!P.bat ? t("pw_na") : P.bat === "ac" ? t("pw_ac") : t(P.bat[0] === "c" ? "pw_chg" : "pw_bat", { p: P.bat.slice(1) })));
+    const pf = [P.fs && P.fs !== 16 && t("pf_font", { n: P.fs }), P.rm && t("pf_motion"), P.hc && t("pf_contrast")].filter(Boolean);
+    blank("prefs", esc(P.fs == null && P.rm == null ? t("pf_na") : pf.length ? list(pf) : t("pf_none")));
+    labels(P, ck, tier);
+    if (P.u) blank("stand", esc(standText(P.u.m, P.u.k, P.u.top)));
+    else if (!R.uniq) blank("stand", esc(t(!shownShared && (optedOut() || navigator.globalPrivacyControl) ? "st_off" : "st_wait")));
+  }
+  // what a site makes of the machine: high-end, mainstream or entry-level, from the card, the screen and the processor
+  function tierOf(P) {
+    if (P.kind === "phone" || P.kind === "tablet") return { lv: null, text: t("tr_phone") };
+    const g = P.gpu || "", hiG = !!P.gi || /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);
+    const lowG = /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics|Radeon \d{3}M|Arc\(TM\) Graphics/i.test(g);
+    const big = Math.max(...String(P.screen || "").split("×").map(Number).filter(Boolean), 0);
+    const score = (hiG ? 2 : lowG ? 0 : 1) + (big >= 3840 ? 1 : 0) + (P.hz >= 120 ? 1 : 0) + (P.cpu >= 16 ? 1 : 0);
+    const lv = score >= 3 ? "high" : score >= 2 ? "mid" : "low";
+    const spec = list([big >= 3840 ? "4K" : big >= 2560 ? "2K" : big >= 1920 ? "1080p" : P.screen, P.hz >= 90 ? P.hz + " Hz" : "", g, P.cpu ? t("cores", { n: P.cpu }) : ""].filter(Boolean));
+    return { lv, text: t("tr_" + lv, { spec }) + (P.multi ? t("tr_multi") : "") };
+  }
+  // how many versions behind the browser is: a recent release of each, and one every four weeks since
+  const LATEST = { Chrome: [156, "2026-11-03"], Edge: [156, "2026-11-03"], Firefox: [159, "2026-11-03"] };
+  function behind(P) {
+    const m = /^(Chrome|Edge|Firefox) (\d+)/.exec(P.browser || "");
+    if (!m) return null;
+    const [v0, d0] = LATEST[m[1]], want = v0 + Math.floor(((P.t || Date.now()) - Date.parse(d0)) / (28 * 864e5));
+    return Math.max(0, want - +m[2]);
+  }
+  // the visitor's local time when they came, by their clock (not when the clock is a stand-in)
+  function whenOf(P) {
+    if (!P.tz || P.rf) return t("wh_na");
+    let h;
+    try { h = +new Intl.DateTimeFormat("en-US", { timeZone: P.tz, hour: "numeric", hourCycle: "h23" }).format(new Date(P.t || Date.now())) % 24; } catch (e) { return t("wh_na"); }
+    const part = h < 5 ? 0 : h < 8 ? 1 : h < 11 ? 2 : h < 13 ? 3 : h < 18 ? 4 : h < 22 ? 5 : 6;
+    return t("wh_v", { part: t("wh_" + part), h, h12: h % 12 || 12 });
+  }
+  // the labels a site would file the visitor under, each from the readings it rests on
+  function labels(P, ck, tier) {
+    const lv = id => ck && ck[id] && ck[id][0], jobs = (P.jobs || []).map(([k]) => k), pc = P.kind === "pc" || P.kind === "mac";
+    const g = P.gpu || "", hiG = !!P.gi || /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);
+    let hour = null;
+    try { if (P.tz && !P.rf) hour = +new Intl.DateTimeFormat("en-US", { timeZone: P.tz, hour: "numeric", hourCycle: "h23" }).format(new Date(P.t || Date.now())) % 24; } catch (e) {}
+    const proxy = lv("tz") === "bad" || lv("dns") === "bad" || P.nt === "dc" || P.nt === "split";
+    const L = [
+      [tier.lv === "high" || /Apple M\d+ (Pro|Max|Ultra)/i.test(g), "lb_rich", ["gpu", "screen", "cpu"]],
+      [pc && hiG && P.hz >= 120, "lb_game", ["gpu", "hz"]],
+      [jobs.includes("dev"), "lb_dev", ["fonts"]], [jobs.includes("design"), "lb_design", ["fonts"]], [jobs.includes("crypto"), "lb_crypto", ["ext"]],
+      [proxy, "lb_proxy", ["isp", "dns", "tz", "ex_cn"]],
+      [!proxy && lv("lang") === "warn", "lb_abroad", ["langs", "geo"]],
+      [/^(macOS|iOS|iPadOS)/.test(P.os || ""), "lb_apple", ["os"]],
+      [!!P.multi, "lb_multi", ["screens"]],
+      [hour != null && hour < 5, "lb_night", ["tz"]],
+    ].filter(([on]) => on).slice(0, 5);
+    L.push([true, P.rand || P.fz || P.rf ? "lb_priv_hi" : P.ab ? "lb_priv_mid" : "lb_priv_lo", ["rand", "adblock"]]);
+    R.labels = L.map(([, k]) => k);
+    $("#lbsL").innerHTML = L.map(([, k, from]) => `<span class="lb" tabindex="0" title="${esc(t("from", { list: list(from.map(rowName)) }))}">${esc(t(k))}</span>`).join("");
+    $("#lbs").hidden = false;
+  }
+  // how much the visitor stands out: how many had the same fingerprint, and the readings that are rarest
+  const READABLE = ["gpu", "screen", "browser", "os", "langs", "tz", "emoji", "hwdec", "fontfp", "canvas", "audio", "webgl", "mathfp"];
+  const rarest = n => READABLE.filter(k => n[k]).sort((a, b) => n[a] - n[b]).slice(0, 2);
+  function standText(m, k, top) {
+    const others = Math.max(0, k - 1), v = { m: m.toLocaleString(LANG), n: others.toLocaleString(LANG), top: list((top || []).map(rowName)) };
+    return t(!others ? "st_only" : others <= 20 ? "st_few" : "st_many", v);
   }
 
   /* ---------- this run against the last one ---------- */
@@ -1207,7 +1279,7 @@ import { TZ_CC } from "./tz.mjs";
     $("#tlOff").textContent = t(optedOut() ? "tl_back" : "tl_off");
     $("#tally").classList.toggle("off", optedOut());
   }
-  $("#tlOff").onclick = () => { store.set(K.optout, optedOut() ? "0" : "1"); paintOptout(); if (optedOut()) { $("#fpUniq").hidden = true; $$(".rar").forEach(e => e.remove()); } };
+  $("#tlOff").onclick = () => { store.set(K.optout, optedOut() ? "0" : "1"); paintOptout(); if (optedOut()) { $("#fpUniq").hidden = true; $$(".rar").forEach(e => e.remove()); R.uniq = null; blank("stand", esc(t("st_off"))); } };
   $("#tlMore").onclick = () => { showHelp(STORE_Q); openDlg("help"); };
   paintOptout();
   function traitValues() {
@@ -1237,7 +1309,8 @@ import { TZ_CC } from "./tz.mjs";
     if (!u) return;
     const f = $("#fpUniq");
     f.hidden = false;
-    if (u.total < MIN_TOTAL) { f.textContent = t("tl_wait", { m: u.total.toLocaleString(LANG) }); return; }
+    if (u.total < MIN_TOTAL) { f.textContent = t("tl_wait", { m: u.total.toLocaleString(LANG) }); blank("stand", esc(t("st_wait"))); return; }
+    blank("stand", esc(standText(u.total, u.n.fpid || 1, rarest(u.n))));
     const others = Math.max(0, (u.n.fpid || 1) - 1);
     f.textContent = others ? t("tl_same", { m: u.total.toLocaleString(LANG), n: others.toLocaleString(LANG) }) : t("tl_only", { m: u.total.toLocaleString(LANG) });
     for (const k of TRAITS) {
@@ -1328,6 +1401,8 @@ import { TZ_CC } from "./tz.mjs";
     if (!show) { P.city = null; P.org = null; }
     delete P.asn;
     P.l = LANG; P.t = Date.now();
+    const su = R.uniq && R.uniq.total >= MIN_TOTAL ? R.uniq : null;
+    if (su) P.u = { m: su.total, k: su.n.fpid || 1, top: rarest(su.n) };
     P.ck = Object.fromEntries(Object.entries(R.ck || {}).filter(([, v]) => v).map(([id, [lv, key, vars]]) =>
       [id, [lv, key, Object.fromEntries(Object.entries(vars).map(([k, x]) => [k, k === "ip" ? maskIp(String(x)) : k === "org" && !show ? t("masked") : k === "za" && !show ? null : x]))]]));
     return P;
@@ -1368,6 +1443,12 @@ import { TZ_CC } from "./tz.mjs";
     c.font = `700 34px ${F}`; c.fillStyle = FG; if (paint) c.fillText(t("card_me"), P, y + 34); y += 44;
     const ul = uniqLine();
     if (ul) { c.font = `600 28px ${F}`; c.fillStyle = INK; if (paint) c.fillText(ul, P, y + 30); y += 42; }
+    if ((R.labels || []).length) {
+      const lt = t("card_tags", { list: R.labels.map(k => t(k)).join(" · ") });
+      let fz = 28; c.font = `600 ${fz}px ${F}`;
+      while (fz > 20 && c.measureText(lt).width > W - 2 * P) { fz -= 1; c.font = `600 ${fz}px ${F}`; }
+      c.fillStyle = FG; if (paint) c.fillText(lt, P, y + fz + 2); y += fz + 14;
+    }
     // wrapped word by word (character by character for CJK)
     const size = 28, lh = 48;
     for (const segs of lines) {
