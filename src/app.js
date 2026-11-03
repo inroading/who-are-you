@@ -1294,6 +1294,10 @@ import { TZ_CC } from "./tz.mjs";
       if (e && e.responseStart > e.requestStart && e.requestStart > 0) t.push(e.responseStart - e.requestStart);
     }
     R.rttB = t.length >= 3 ? Math.min(...t) : null;
+    // the timer's step: a browser that coarsens it (resistFingerprinting: tens of milliseconds) can't time a round trip
+    let step = Infinity, last = performance.now();
+    for (let i = 0, n = 0; i < 2e6 && n < 5; i++) { const x = performance.now(); if (x !== last) { step = Math.min(step, x - last); last = x; n++; } }
+    R.coarse = step >= 10;
   }
 
   function judge(final) {
@@ -1302,7 +1306,7 @@ import { TZ_CC } from "./tz.mjs";
       tz: R.tz, rfp: rfp(), tzOff: R.tzOff == null ? null : offTxt(R.tzOff), ipTzOff: c.timezone ? offTxt(tzOffset(c.timezone)) : null, ipTz: c.timezone || null, ipcc: c.country,
       langs: R.langs, dnsCC: R.dnsCC, exits: allExits(), rtc: R.rtc, ip: R.srv && R.srv.ip, asn: c.asn, org: orgName(c.asOrganization, c.asn),
       uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, noise: R.noise, webdriver: R.webdriver,
-      rttB: R.latDone ? R.rttB : null, rttCf: c.clientTcpRtt || null, sys: final || R.voices ? sysOf() : undefined, tamper: R.dev && R.srv ? tampered() : null, fpb: fpbTraces(),
+      rttB: R.latDone ? R.rttB : null, coarse: R.latDone ? !!R.coarse : false, rttCf: c.clientTcpRtt || null, sys: final || R.voices ? sysOf() : undefined, tamper: R.dev && R.srv ? tampered() : null, fpb: fpbTraces(),
     });
     if (res.dc === null && R.srv && !c.asn) res.dc = ["info", "c_na", {}];
     const tr = R.tr || {};

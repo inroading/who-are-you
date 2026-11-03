@@ -196,6 +196,14 @@ test("disguise checks", () => {
   assert.equal(rarity(50, 5000), "rare");
   assert.equal(rarity(500, 5000), "common");
   assert.equal(rarity(1, 500), null);   // too few checks to say
+  // 1ms-shell#34: Simplified Chinese fonts and voices in Singapore fit; in Japan they don't
+  assert.equal(checks({ ...base, ipcc: "SG", sys: { cc: ["CN"], from: ["fonts", "voices"] } }).syslang[0], "ok");
+  assert.equal(checks({ ...base, ipcc: "JP", sys: { cc: ["CN"], from: ["fonts", "voices"] } }).syslang[0], "warn");
+  assert.equal(checks({ ...base, ipcc: "HK", sys: { cc: ["TW"], from: ["fonts", "voices"] } }).syslang[0], "ok");
+  assert.deepEqual(nationality({ langs: ["en-US"], tz: "Asia/Singapore", ipcc: "SG", sys: { cc: ["CN"], from: ["fonts", "voices"] } }), { cc: "SG", from: ["fonts", "voices", "tz"] });
+  // #35: coarse timers can't time the round trip
+  assert.equal(checks({ ...base, rttB: 103, rttCf: 1, coarse: true }).rtt[1], "c_rtt_coarse");
+  assert.equal(gpuName("Generic Renderer"), null);
   // iOS: Chrome there connects with Apple's TLS, classical before iOS 26
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 18 }).pq[0], "info");
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, kex: "X25519", ios: 26 }).pq[0], "warn");

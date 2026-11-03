@@ -19,6 +19,14 @@ const SPOKEN = {
   ta: ["IN", "LK", "SG", "MY"], tr: ["TR", "CY"], el: ["GR", "CY"], ro: ["RO", "MD"], sr: ["RS", "BA", "ME"], hr: ["HR", "BA"], fa: ["IR", "AF", "TJ"],
   ur: ["PK", "IN"], bn: ["BD", "IN"], ko: ["KR", "KP"], he: ["IL"], uk: ["UA"], hi: ["IN"], sw: ["KE", "TZ", "UG"],
 };
+// the countries that share a country's language: China's Simplified Chinese with Singapore and Malaysia, Taiwan's
+// Traditional with Hong Kong and Macau, Spain's Spanish with Latin America
+export function sameLanguage(cc) {
+  const out = new Set([cc]);
+  // (each language's list starts with its own country)
+  for (const [k, l] of Object.entries(SPOKEN)) if (l[0] === cc) for (const c of spokenIn(k === "zh-Hant" ? "zh-TW" : k)) out.add(c);
+  return [...out];
+}
 // the countries where a language tag's language is widely spoken (its own region among them)
 export function spokenIn(tag) {
   if (!tag) return [];
@@ -52,6 +60,7 @@ export function nationality({ langs = [], tz, ipcc, sys, ios }) {
   if (other) return tcc && tcc !== other && spokenIn(tag).includes(tcc) ? { cc: tcc, from: ["langs", "tz"] } : { cc: other, from: tcc === other ? ["langs", "tz"] : ["langs"] };
   // a browser left in plain English on a system that installed one other language (its fonts, voices, keyboard)
   // (two sources, or one the clock agrees with: fonts alone may have come with Office)
+  if (sys && sys.cc.length === 1 && sys.from.length > 1 && tcc && tcc !== sys.cc[0] && sameLanguage(sys.cc[0]).includes(tcc)) return { cc: tcc, from: [...sys.from, "tz"] };
   if (sys && sys.cc.length === 1 && (sys.from.length > 1 || sys.cc[0] === tcc)) return { cc: sys.cc[0], from: tcc === sys.cc[0] ? [...sys.from, "tz"] : sys.from };
   if (tcc) return { cc: tcc, from: ["tz"] };
   if (lcc) return { cc: lcc, from: ["langs"] };
@@ -113,7 +122,7 @@ export function browser(ua = "", brands = []) {
 
 // "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 (0x00002786) Direct3D11 vs_5_0 ps_5_0, D3D11)" → "NVIDIA GeForce RTX 4070"
 export function gpuName(r) {
-  if (!r || /^(Brave|Mozilla)$/i.test(r)) return null;   // Brave's and Firefox's (resistFingerprinting) stand-ins for the card's name
+  if (!r || /^(Brave|Mozilla|Generic Renderer)$/i.test(r)) return null;   // Brave's and Firefox's (resistFingerprinting) stand-ins for the card's name
   let s = String(r).replace(/,? or similar$/, "");   // Firefox names a card of the same class, not the card
   const m = s.match(/^ANGLE \((?:[^,]*), (.*?)(?:, [^,]*)?\)$/);
   if (m) s = m[1].replace(/^ANGLE Metal Renderer: /, "");
@@ -248,7 +257,9 @@ export function checks(x) {
   out.bot = x.webdriver == null ? null : x.webdriver ? ["bad", "c_bot_bad", {}] : ["ok", "c_bot_ok", {}];
   // The round trip the browser measures to this site against the one Cloudflare measures on its connection: through a
   // proxy, Cloudflare only sees the proxy's leg, so the browser's is much longer. Over QUIC there is no TCP figure.
-  if (!x.rttB || !x.rttCf) out.rtt = null;
+  // (a browser that coarsens its timers, as Firefox's resistFingerprinting does, can't measure it)
+  if (x.coarse && x.rttCf) out.rtt = ["info", "c_rtt_coarse", {}];
+  else if (!x.rttB || !x.rttCf) out.rtt = null;
   else {
     const extra = x.rttB - x.rttCf, v = { a: Math.round(x.rttCf), b: Math.round(x.rttB) };
     out.rtt = extra < 40 || x.rttB < x.rttCf * 1.6 ? ["ok", "c_rtt_ok", v] : extra < 100 ? ["warn", "c_rtt_warn", v] : ["bad", "c_rtt_bad", v];
@@ -257,7 +268,8 @@ export function checks(x) {
   if (x.sys === undefined || !x.ipcc) out.syslang = null;
   else if (x.sys === false) out.syslang = ["info", "c_sys_na", {}];
   else if (!x.sys.cc.length) out.syslang = ["ok", "c_sys_none", {}];
-  else if (x.sys.cc.includes(x.ipcc)) out.syslang = ["ok", "c_sys_ok", { cc: x.ipcc }];
+  // (a language's fonts and voices fit every country that writes it: Simplified Chinese ones in Singapore too)
+  else if (x.sys.cc.some(c => sameLanguage(c).includes(x.ipcc))) out.syslang = ["ok", "c_sys_ok", { cc: x.ipcc }];
   // (one source alone says little: Office and Windows' optional features bring East Asian fonts, a voice is one download)
   else out.syslang = [x.sys.from.length > 1 ? "warn" : "info", x.sys.from.length > 1 ? "c_sys_warn" : "c_sys_one", { cc: x.sys.cc[0], from: x.sys.from.join(",") }];
   // an anti-detect browser's traces: parts that each look right but don't agree (one is a hint, two are a giveaway)
@@ -388,7 +400,7 @@ export const isRelayIp = ip => { const s = String(ip || ""); if (s.includes(":")
 
 // Firefox with resistFingerprinting (Tor and Mullvad Browser too): Reykjavik's clock for every site (UTC in older
 // versions), and "Mozilla" for the graphics card unless WebGL is off
-export const rfpClock = (firefox, tz, gpuRaw) => !!firefox && /^(Atlantic\/Reykjavik|UTC|Etc\/UTC)$/.test(tz || "") && (gpuRaw == null || gpuRaw === "Mozilla");
+export const rfpClock = (firefox, tz, gpuRaw) => !!firefox && /^(Atlantic\/Reykjavik|UTC|Etc\/UTC)$/.test(tz || "") && (gpuRaw == null || /^(Mozilla|Generic Renderer)$/.test(gpuRaw));
 
 // The engine's version from the JavaScript it supports, each feature with the Chromium version that shipped it: a user
 // agent can be rewritten, the engine can't. lo: the newest feature there, hi: the version before the oldest missing
