@@ -125,3 +125,6 @@ export const CHECKS = ["tz", "lang", "syslang", "dns", "split", "webrtc", "rtt",
 export const COUNTED = CHECKS.filter(id => id !== "fp");
 // the connection's protocols: shown under the checks, judged the same way, not counted among them
 export const PROTO = ["h3", "ech", "pq", "warp"];
+
+// "fix these first" while a run goes: three placeholder rows, the height its list keeps (the page's todo())
+export const TODO_SK = '<li class="sk"><i class="skl"></i><i class="skl"></i></li>'.repeat(3);

@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
-import { cleanSeen, rarity } from "../src/traits.mjs";
+import { cleanSeen, rarity, durOf } from "../src/traits.mjs";
 import { regionName, flagCode } from "../src/regions.mjs";
 
 const WIN = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36";
@@ -192,6 +192,12 @@ test("disguise checks", () => {
   // the counter takes known traits and checks only, hashes as 8 hex characters
   assert.deepEqual(cleanSeen({ add: true, t: { os: "Windows 11", fpid: "0123abcd", canvas: "not-a-hash", ip: "1.2.3.4" }, ck: { tz: "bad", nope: "ok", dns: "weird" } }),
     { add: true, t: { os: "Windows 11", fpid: "0123abcd" }, ck: { tz: "bad" } });
+  // a run's time: a known range rides along; a stuck run sends it alone, which counts no traits
+  assert.equal(cleanSeen({ add: true, t: { os: "Windows 11" }, dur: "5-10" }).dur, "5-10");
+  assert.equal(cleanSeen({ add: true, t: { os: "Windows 11" }, dur: "forever" }).dur, undefined);
+  assert.deepEqual(cleanSeen({ dur: "stuck", add: true }), { add: false, t: {}, ck: {}, dur: "stuck" });
+  assert.equal(cleanSeen({ dur: "nope" }), null);
+  assert.equal(durOf(2999), "0-3"); assert.equal(durOf(4000), "3-5"); assert.equal(durOf(61000), "60+");
   assert.equal(cleanSeen({ t: { ip: "1.2.3.4" } }), null);
   assert.equal(rarity(1, 5000), "uniq");
   assert.equal(rarity(50, 5000), "rare");

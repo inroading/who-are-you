@@ -106,12 +106,13 @@ export function device(ua = "", hi = {}, touch = 0) {
 
 // the browser and its version: client hints name the real brand (Edge, Opera, Brave report "Chromium" plus their own);
 // otherwise read the user agent, most specific first
-export function browser(ua = "", brands = []) {
-  // the browsers apps open links in, which otherwise read as WebKit or Android WebView with no name
-  const apps = [["X", /Twitter for (?:iPhone|iPad|Android)\/(\d+)|TwitterAndroid\/(\d+)/], ["WeChat", /MicroMessenger\/(\d+)/], ["Weibo", /Weibo \(|__weibo__(\d+)/],
+// the browsers apps open links in, which otherwise read as WebKit or Android WebView with no name (also read before
+// the page paints, for the line that says so: scripts/build.mjs PREPAINT)
+export const IN_APPS = [["X", /Twitter for (?:iPhone|iPad|Android)\/(\d+)|TwitterAndroid\/(\d+)/], ["WeChat", /MicroMessenger\/(\d+)/], ["Weibo", /Weibo \(|__weibo__(\d+)/],
     ["QQ", /\bQQ\/(\d+)/], ["Instagram", /Instagram (\d+)/], ["Facebook", /FBAV\/(\d+)|\[FBAN/], ["LINE", /\bLine\/(\d+)/], ["TikTok", /musical_ly_(\d+)|BytedanceWebview|TikTok (\d+)/],
     ["Telegram", /Telegram-Android\/(\d+)/]];
-  for (const [name, re] of apps) { const m = ua.match(re); if (m) return { name, v: (m.slice(1).find(Boolean) || "").split(".")[0] }; }
+export function browser(ua = "", brands = []) {
+  for (const [name, re] of IN_APPS) { const m = ua.match(re); if (m) return { name, v: (m.slice(1).find(Boolean) || "").split(".")[0] }; }
   const real = brands.filter(b => !/Not.?A.?Brand|Chromium/i.test(b.brand));
   const b = real.find(b => !/Google Chrome/.test(b.brand)) || real[0];
   if (b) return { name: b.brand.replace(/^Microsoft /, "").replace(/^Google /, ""), v: String(b.version).split(".")[0] };

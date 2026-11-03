@@ -12,8 +12,9 @@ import { mkdir, readFile, readdir, writeFile, rm } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { build as bundle, transform } from "esbuild";
-import { GROUPS, COLUMNS, SNIFFERS, BLANKS, CHECKS, PROTO } from "../src/sniffers.mjs";
+import { GROUPS, COLUMNS, SNIFFERS, BLANKS, CHECKS, PROTO, TODO_SK } from "../src/sniffers.mjs";
 import { BLANK_W } from "../src/blank-widths.mjs";
+import { IN_APPS } from "../src/infer.mjs";
 import { PAGES, TEXT } from "../src/pages.mjs";
 
 const SITE = (process.env.SITE_URL || "https://who.1ms.dog").replace(/\/+$/, "");
@@ -25,7 +26,9 @@ export const LANGS = [["en", "", "en_US"], ["zh-CN", "zh-cn", "zh_CN"], ["zh-TW"
 // Runs before first paint: apply the saved theme. On the English root, send visitors to their language's page
 // (a saved choice first, then the browser languages); crawlers and English readers stay, and so does an embedded
 // page, which the report page opens in the language it wants (a redirect would also lose its referrer).
-const PREPAINT = `(function(){var d=document.documentElement,th=null,s=null;try{th=localStorage.getItem("who:theme");s=localStorage.getItem("who:lang")}catch(e){}if(th==="light"||th==="dark")d.setAttribute("data-theme",th);if(!d.hasAttribute("data-root")||/[?&]embed=/.test(location.search))return;var P=JSON.parse(d.getAttribute("data-paths")||"{}"),l=null;try{var q=new URLSearchParams(location.search).get("lang");if(P[q])l=q}catch(e){}if(!l&&P[s])l=s;for(var ls=navigator.languages||[navigator.language||"en"],i=0;!l&&!s&&i<ls.length;i++){var x=String(ls[i]).toLowerCase(),b=x.split("-")[0];l=b==="zh"?(/tw|hk|mo|hant/.test(x)?"zh-TW":"zh-CN"):P[b]?b:null}if(l&&l!=="en")location.replace(P[l]+location.search+location.hash)})();`;
+// (also: an app's own browser, named on the root so the line about it shows from the first paint)
+const IA = JSON.stringify(IN_APPS.map(([n, re]) => [n, re.source]));
+const PREPAINT = `(function(){var d=document.documentElement,th=null,s=null;try{th=localStorage.getItem("who:theme");s=localStorage.getItem("who:lang")}catch(e){}if(th==="light"||th==="dark")d.setAttribute("data-theme",th);var u=navigator.userAgent,A=${IA};for(var j=0;j<A.length;j++)if(new RegExp(A[j][1]).test(u)){d.setAttribute("data-inapp",A[j][0]);break}if(!d.hasAttribute("data-inapp")&&/; wv\\)/.test(u))d.setAttribute("data-inapp","wv");if(!d.hasAttribute("data-root")||/[?&]embed=/.test(location.search))return;var P=JSON.parse(d.getAttribute("data-paths")||"{}"),l=null;try{var q=new URLSearchParams(location.search).get("lang");if(P[q])l=q}catch(e){}if(!l&&P[s])l=s;for(var ls=navigator.languages||[navigator.language||"en"],i=0;!l&&!s&&i<ls.length;i++){var x=String(ls[i]).toLowerCase(),b=x.split("-")[0];l=b==="zh"?(/tw|hk|mo|hant/.test(x)?"zh-TW":"zh-CN"):P[b]?b:null}if(l&&l!=="en")location.replace(P[l]+location.search+location.hash)})();`;
 
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const hash = s => createHash("sha256").update(s).digest("hex").slice(0, 10);
@@ -42,7 +45,7 @@ async function loadI18n() {
 // too: the share card draws them)
 // the main page's question about what is stored (the counting note links to it)
 const STORE_DOC = 5;
-const BUILD_ONLY = new Set(["name", "seo_title", "seo_desc", "seo_kw", "og_sub", "h1", "docs", "lang_label", "faq_h", "story"]);
+const BUILD_ONLY = new Set(["name", "seo_title", "seo_desc", "seo_kw", "og_sub", "h1", "docs", "lang_label", "faq_h", "story", "ia_txt", "ia_wv", "ia_wx"]);
 
 // the icon after a link to another 1ms.dog tool, the site's own (never an arrow)
 export const EXT = '<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg>';
@@ -59,7 +62,9 @@ export function storyHtml(s, lang) {
   // each blank waits as filler about as long as its answer (CJK: one character per em; others: "xxxx " per 2.6 em, as the blank's bold font draws it),
   // transparent on a skeleton background, so it wraps like the words that will replace it
   const cjk = /^(zh|ja|ko)/.test(lang), w = BLANK_W[lang] || {};
-  const filler = b => { const n = Math.round((w && w[b]) || 7);
+  // (a fifth longer than measured: a longer answer would add a line and push the page below down, a shorter one
+  // only leaves the paragraph a little room at its end)
+  const filler = b => { const n = Math.round(((w && w[b]) || 7) * 1.2);
     return cjk ? "口".repeat(n) : "xxxx ".repeat(Math.max(1, Math.round(n / 2.6))).trim(); };
   const line = l => l.split(/(\{\w+\})/).map(p => /^\{\w+\}$/.test(p) ? `<span class="bl wait" data-b="${p.slice(1, -1)}"><i class="skt">${filler(p.slice(1, -1))}</i></span>` : esc(p)).join("");
   return s.split("\n").map(l => `<p>${line(l)}</p>`).join("");
@@ -174,7 +179,7 @@ export async function build({ check = false } = {}) {
         .replace("{{lang}}", lang).replace("{{pathsAttr}}", esc(JSON.stringify(paths))).replace("{{rootAttr}}", slug ? "" : " data-root")
         .replace("{{prepaint}}", PREPAINT).replace("{{head}}", head).replace("{{css}}", cssName).replace("{{js}}", jsName).replace("{{strings}}", sName)
         .split("{{homeHref}}").join(path(slug)).replace("{{statsHref}}", path(slug, "stats")).replace("{{langOpts}}", langOpts).replace("{{focus}}", focus).replace("{{mainAttr}}", page ? ` class="topic${PAGES[page].stats ? " stats" : ""}"` : "").replace("{{heroTitle}}", heroTitle)
-        .replace("{{story}}", storyHtml(T("story"), lang)).replace("{{checks}}", checks).replace("{{segs}}", CHECKS.map(c => `<i data-c="${c}"></i>`).join(""))
+        .replace("{{story}}", storyHtml(T("story"), lang)).replace("{{checks}}", checks).replace("{{todoSk}}", TODO_SK).replace("{{iaTxt}}", esc(T("ia_txt")).replace("{app}", '<b class="ia-n"></b>')).replace("{{segs}}", CHECKS.map(c => `<i data-c="${c}"></i>`).join(""))
         .replace("{{eyebrow}}", esc(T("eyebrow").replace("{n}", SNIFFERS.length))).replace("{{groups}}", groups).replace("{{topics}}", topics)
         .replace("{{helpNav}}", helpNav).replace("{{helpC}}", helpC).replace("{{data}}", JSON.stringify(data).replace(/</g, "\\u003c"));
       if (/\{\{\w+\}\}/.test(html)) throw new Error("unfilled placeholder in " + path(slug, page) + ": " + /\{\{\w+\}\}/.exec(html)[0]);

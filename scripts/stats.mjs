@@ -7,6 +7,7 @@
 // the reporter saw them.
 import { execFileSync } from "node:child_process";
 import { CHECKS, PROTO } from "../src/sniffers.mjs";
+import { DUR } from "../src/traits.mjs";
 
 const days = Math.max(1, +process.argv[2] || 7);
 const since = new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
@@ -54,3 +55,14 @@ console.log("check     flagged    warn     bad   in reports   × vs everyone");
 for (const r of rows) console.log(`${r.id.padEnd(8)} ${pad(r.flagged, 8)} ${pad(r.warn, 7)} ${pad(r.bad, 7)} ${pad(r.inReports ?? "–", 12)} ${pad(r.lift ? r.lift.toFixed(1) + "×" : "–", 14)}`);
 console.log("\n\"× vs everyone\": how much more often reporters had the check flagged than everyone did. Well above 1, and");
 console.log("with several reports, that check is worth a look: its wording, or its rule.");
+
+// how long runs took in the window: the share of finished runs per range, and how many were still going 45 s in
+const dur = {};
+for (const [d, per] of Object.entries(res.dur || {})) if (d >= since) for (const [k, c] of Object.entries(per)) dur[k] = (dur[k] || 0) + c;
+const ranges = DUR.filter(k => k !== "stuck"), runs = ranges.reduce((a, k) => a + (dur[k] || 0), 0);
+console.log("");
+if (!runs && !dur.stuck) console.log("run time: none counted yet");
+else {
+  console.log(`run time (${runs.toLocaleString("en")} finished runs; ${(dur.stuck || 0).toLocaleString("en")} still going at 45 s, ${pct(dur.stuck || 0, runs + (dur.stuck || 0))} of all started):`);
+  for (const k of ranges) console.log(`  ${(k + " s").padEnd(8)} ${pad(pct(dur[k] || 0, runs), 6)}  ${"█".repeat(Math.round(40 * (dur[k] || 0) / (runs || 1)))}`);
+}

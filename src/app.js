@@ -2,8 +2,8 @@
 // readings against each other the way a site would to spot a disguise. The second card lists every sniffer and what it
 // read; each row is in the HTML from the start and is filled the moment its sniffer answers. The paragraph is filled
 // once, when every sniffer it needs is in, so its text doesn't reflow piece by piece. Strings: window.L1MS.
-import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO, COUNTED } from "./sniffers.mjs";
-import { TRAITS, rarity, MIN_TOTAL } from "./traits.mjs";
+import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO, COUNTED, TODO_SK } from "./sniffers.mjs";
+import { TRAITS, rarity, MIN_TOTAL, durOf, STUCK_MS } from "./traits.mjs";
 import { TW, flagCode } from "./regions.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
 import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "./infer.mjs";
@@ -1091,15 +1091,23 @@ import { TZ_CC } from "./tz.mjs";
     return [t("card_me") + " · " + location.host, "", story, "", $("#vHead").textContent + " · " + t("grade_v", { g: gr.grade }), ...rows(CHECKS), "",
       t("h_proto"), ...rows(PROTO), "", t("card_cta") + colon + location.origin + (D.paths[LANG] || "/")].join("\n");
   }
-  $("#copyTxt").onclick = async () => {
-    const s = asText();
-    let ok = false;
-    try { await navigator.clipboard.writeText(s); ok = true; } catch (e) {
+  const copy = async s => {
+    try { await navigator.clipboard.writeText(s); return true; } catch (e) {
       const ta = document.createElement("textarea"); ta.value = s; ta.style.position = "fixed"; ta.style.opacity = "0";
-      document.body.appendChild(ta); ta.select(); try { ok = document.execCommand("copy"); } catch (x) {} ta.remove();
+      document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand("copy"); } catch (x) {} ta.remove(); return ok;
     }
+  };
+  $("#copyTxt").onclick = async () => {
+    const ok = await copy(asText());
     $("#copyT").textContent = t(ok ? "copied_txt" : "copy_fail");
     setTimeout(() => { $("#copyT").textContent = t("copy_txt"); }, 2000);
+  };
+
+  // in an app's own browser: the page's address, to open it in the visitor's usual browser
+  $("#iaCopy").onclick = async () => {
+    const ok = await copy(location.origin + location.pathname);
+    $("#iaCopy").textContent = t(ok ? "ia_copied" : "copy_fail");
+    setTimeout(() => { $("#iaCopy").textContent = t("ia_copy"); }, 2000);
   };
 
   /* ---------- fixes for the visitor's own system ---------- */
@@ -1328,17 +1336,22 @@ import { TZ_CC } from "./tz.mjs";
     if (EMBED || R.webdriver || navigator.globalPrivacyControl || optedOut()) return;
     const tv = traitValues();
     if (!tv.fpid) return;
-    const stamp = new Date().toISOString().slice(0, 10) + ":" + tv.fpid, add = store.get(K.seen) !== stamp;
+    const stamp = new Date().toISOString().slice(0, 10) + ":" + tv.fpid, add = store.get(K.seen) !== stamp, dur = durOf(performance.now() - R.t0);
     const ck = Object.fromEntries([...CHECKS, ...PROTO].filter(id => R.ck && R.ck[id]).map(id => [id, R.ck[id][0]]));
     let r;
     try {
-      const res = await within(fetch("/api/seen", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ add, t: tv, ck }) }), 4000, null);
+      const res = await within(fetch("/api/seen", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ add, t: tv, ck, dur }) }), 4000, null);
       r = res && res.ok ? await res.json() : null;
     } catch (e) { r = null; }
     if (!r || typeof r.total !== "number") return;
     if (add) store.set(K.seen, stamp);
     R.uniq = { total: r.total, n: r.n || {} };
     paintUniq();
+  }
+  // a run still going STUCK_MS in: counted once as stuck, the time alone (nothing about the visitor)
+  function stuck() {
+    if (EMBED || navigator.webdriver || navigator.globalPrivacyControl || optedOut()) return;
+    fetch("/api/seen", { method: "POST", keepalive: true, headers: { "Content-Type": "application/json" }, body: JSON.stringify({ dur: "stuck" }) }).catch(() => {});
   }
   function paintUniq() {
     const u = R.uniq;
@@ -1409,6 +1422,7 @@ import { TZ_CC } from "./tz.mjs";
     if (!n || !top) { el.hidden = true; return; }
     let nf; try { nf = new Intl.NumberFormat(LANG, { notation: "compact", maximumFractionDigits: 1 }).format(n); } catch (e) { nf = n.toLocaleString(LANG); }
     el.querySelector(".live-t").innerHTML = t("lv_bar", { n: `<b>${esc(nf)}</b>`, top: esc(t("c_" + top)), p: `<b>${Math.round(bad(top) * 100)}%</b>` });
+    el.title = el.querySelector(".live-t").textContent;
   }
   // (when the page is idle, or after 2.5 s at most: the checks keep it busy, and a background tab may never idle)
   if (!D.focus && !EMBED && $("#live")) { if (window.requestIdleCallback) requestIdleCallback(() => live(), { timeout: 2500 }); else setTimeout(live, 1500); }
@@ -1585,7 +1599,7 @@ import { TZ_CC } from "./tz.mjs";
     document.documentElement.classList.add("shared");
     $("#mine").hidden = false; $("#share").hidden = true; $("#rerun").hidden = true; $("#copyTxt").hidden = true;
     $("#mine").onclick = () => { location.href = D.paths[LANG] || "/"; };
-    $("#progTxt").textContent = " ";
+    $("#progTxt").textContent = " "; $("#todo").hidden = true;
     paint(P, true);
     for (const id of CHECKS) if (!(P.ck || {})[id]) { CK[id].hidden = true; const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.hidden = true; }
     paintChecks(P.ck || {}, P.cc, true);
@@ -1598,7 +1612,8 @@ import { TZ_CC } from "./tz.mjs";
   /* ---------- a run ---------- */
   async function run() {
     const g = ++gen;
-    R = {}; done = new Set();
+    R = { t0: performance.now() }; done = new Set();
+    setTimeout(() => { if (g === gen && !R.end) stuck(); }, STUCK_MS);
     for (const r of Object.values(PR)) { r.classList.add("wait"); r.classList.remove("na"); r.querySelector(".pa").textContent = "…"; delete r.dataset.why; }
     for (const r of Object.values(FR)) { r.classList.remove("na"); r.querySelector("b").textContent = "…"; }
     if ($("#focusV")) { $("#focusV").className = "focus-v"; $("#focusV b").innerHTML = '<i class="skl"></i>'; $("#focusV .st").textContent = ""; }
@@ -1610,6 +1625,7 @@ import { TZ_CC } from "./tz.mjs";
       r.querySelector(".ck-fix").hidden = true; r.querySelector(".ck-tip").hidden = true;
       const go = r.querySelector(".ck-go"); if (go) go.hidden = true;
     }
+    $("#todo").hidden = false; $("#todoL").innerHTML = TODO_SK;
     $("#vHead").textContent = t("checking"); $("#vHead").className = "v-h";
     $("#mNum").textContent = "–"; $("#mNum").className = "m-num"; $$("#segs i").forEach(i => { i.className = ""; });
     $("#fpId").innerHTML = '<i class="skl"></i>'; $("#fpArt").innerHTML = ""; $("#fpNote").textContent = t("id_note"); $("#vText").innerHTML = "&nbsp;";
@@ -1650,6 +1666,7 @@ import { TZ_CC } from "./tz.mjs";
     judge(true);
     readings(portrait(), R.ck);
     paintTarget(); osTips(); todo(); focusFix();
+    R.end = true;
     if (!EMBED) { compare(); history(); seen(); }
     $("#rerun").disabled = false; $("#share").disabled = false; $("#copyTxt").disabled = false;
     if (EMBED && !failed) post(embedResult());

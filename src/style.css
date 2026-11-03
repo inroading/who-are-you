@@ -21,7 +21,21 @@ h2 { font-size: 15px; font-weight: 700; }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-bottom: 10px; padding: 3px 10px 3px 8px; border-radius: 999px;
   font-size: 12px; font-weight: 600; color: var(--ink); background: var(--ink-soft); }
 /* beside it, everyone's numbers: a pill to the stats page, its room kept until the numbers come */
-.eb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-bottom: 10px; } .eb-row .eyebrow { margin-bottom: 0; }
+/* an app's own browser (the root's data-inapp, set before the first paint): which browser the results are for */
+.inapp { display: none; align-items: center; gap: 10px; margin: 0 0 12px; padding: 9px 10px 9px 12px; border-radius: 12px; font-size: 13px; line-height: 1.5;
+  border: 1px solid color-mix(in srgb, var(--warn) 40%, var(--line)); background: color-mix(in srgb, var(--warn) 9%, var(--panel)); }
+html[data-inapp] .inapp { display: flex; } html.shared .inapp, html[data-who-embed] .inapp { display: none; }
+.ia-t { flex: 1; min-width: 0; } .ia-v, .ia-x { display: none; }
+html[data-inapp="wv"] .ia-a, html[data-inapp="WeChat"] .ia-a { display: none; } html[data-inapp="wv"] .ia-v, html[data-inapp="WeChat"] .ia-x { display: inline; }
+html[data-inapp="X"] .ia-n::before { content: "X"; } html[data-inapp="Weibo"] .ia-n::before { content: "Weibo"; } html[lang^="zh"][data-inapp="Weibo"] .ia-n::before { content: "微博"; }
+html[data-inapp="QQ"] .ia-n::before { content: "QQ"; } html[data-inapp="Instagram"] .ia-n::before { content: "Instagram"; } html[data-inapp="Facebook"] .ia-n::before { content: "Facebook"; }
+html[data-inapp="LINE"] .ia-n::before { content: "LINE"; } html[data-inapp="TikTok"] .ia-n::before { content: "TikTok"; } html[data-inapp="Telegram"] .ia-n::before { content: "Telegram"; }
+#iaCopy { flex: none; min-height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; }
+/* one line on a wide screen (a longer count shortens with "…" instead of wrapping, so the title below stays put),
+   the count on a line of its own on a phone from the first paint */
+.eb-row { display: flex; align-items: center; gap: 6px 8px; margin-bottom: 10px; } .eb-row .eyebrow { margin-bottom: 0; flex: none; }
+.eb-row .live { min-width: 0; } .live-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 720px) { .eb-row { flex-direction: column; align-items: flex-start; } .eb-row .live { max-width: 100%; } }
 .live { display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--fg);
   background: var(--panel); border: 1px solid var(--line); text-decoration: none; min-width: 16em; }
 .live:hover { border-color: var(--ink); color: var(--ink); }
@@ -259,12 +273,15 @@ html.shared .scene, html[data-who-embed] .scene { display: none; }
 /* what to fix first: the checks that give you away most, each with its first step */
 .todo { margin: 12px 0 4px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); }
 .todo-h { font-size: 12.5px; font-weight: 700; color: var(--muted); margin: 0 0 6px; }
-.todo ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; counter-reset: td; }
+/* three rows of one height, kept from the first paint: the list fills in place and the checks below don't move */
+.todo ol { margin: 0; padding: 0; list-style: none; display: grid; grid-auto-rows: 47px; align-content: start; gap: 4px; min-height: calc(3 * 47px + 2 * 4px); counter-reset: td; }
+.todo li.sk { padding: 8px 6px 0 34px; } .todo li.sk .skl { display: block; width: 45%; } .todo li.sk .skl + .skl { width: 80%; margin-top: 9px; }
 .todo li { counter-increment: td; }
-.todo button { all: unset; box-sizing: border-box; width: 100%; display: grid; grid-template-columns: 20px 1fr; gap: 0 8px; padding: 5px 6px; border-radius: 8px; cursor: pointer; font-size: 13px; line-height: 1.45; }
+.todo button { all: unset; box-sizing: border-box; width: 100%; height: 100%; display: grid; grid-template-columns: 20px minmax(0, 1fr); align-content: center; gap: 0 8px; padding: 5px 6px; border-radius: 8px; cursor: pointer; font-size: 13px; line-height: 1.45; }
 .todo button::before { content: counter(td); grid-row: span 2; width: 18px; height: 18px; margin-top: 1px; border-radius: 50%; display: grid; place-items: center; font: 700 10.5px/1 var(--f-ui); color: #fff; background: var(--t3); }
 .todo .bad button::before { background: var(--bad); }
 .todo button:hover, .todo button:focus-visible { background: var(--ink-soft); }
+.todo b, .todo span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .todo b { font-weight: 600; }
 .todo span { color: var(--muted); font-size: 12.5px; }
 html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: none; }

@@ -37,6 +37,7 @@
     <section class="hero card">
       <div class="hero-b">
         <div class="col who">
+          <p class="inapp" id="inapp"><span class="ia-t"><span class="ia-a">{{iaTxt}}</span><span class="ia-v" data-i="ia_wv"></span><span class="ia-x" data-i="ia_wx"></span></span><button type="button" id="iaCopy" data-i="ia_copy"></button></p>
           <div class="eb-row"><p class="eyebrow"><i></i>{{eyebrow}}</p><a class="live" id="live" href="{{statsHref}}"><span class="live-t"><i class="skl"></i></span><span aria-hidden="true">→</span></a></div>
           {{heroTitle}}
           <div class="m-slot" id="mSlot"></div>
@@ -55,7 +56,7 @@
           <div class="segs" id="segs">{{segs}}</div>
           <div class="v-meta" id="vMeta" hidden><div class="v-hist" id="vHist" hidden></div><p class="v-cmp" id="vCmp" hidden></p></div>
           <div class="scene" id="scene" role="radiogroup" aria-labelledby="sceneL"><span class="scene-l" id="sceneL" data-i="sc_h"></span><button type="button" role="radio" data-sc="all" data-i="sc_all"></button><button type="button" role="radio" data-sc="priv" data-i="sc_priv"></button></div>
-          <div class="todo" id="todo" hidden><p class="todo-h" data-i="todo_h"></p><ol id="todoL"></ol></div>
+          <div class="todo" id="todo"><p class="todo-h" data-i="todo_h"></p><ol id="todoL">{{todoSk}}</ol></div>
           {{checks}}
         </aside>
       </div>

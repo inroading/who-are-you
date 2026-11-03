@@ -1,6 +1,6 @@
 // The counter behind "how common are you": one Durable Object for the whole site, holding numbers only. Per trait value
 // (a system, a browser, the first 8 characters of a fingerprint hash), how many checks had it; per day, how each check
-// came out. No address, no full fingerprint, no row for a single visit. Increments wait in memory at most 10 seconds
+// came out, and how long runs took (a range of seconds). No address, no full fingerprint, no row for a single visit. Increments wait in memory at most 10 seconds
 // (written with the next request, or by an alarm), so common values cost one write per 10 seconds, not one per visit,
 // and an object that is evicted or redeployed loses no more than that.
 import { DurableObject } from "cloudflare:workers";
@@ -39,11 +39,15 @@ export class Tally extends DurableObject {
     if (url.pathname === "/stats") return Response.json(this.stats());
     const seen = cleanSeen(await request.json().catch(() => null));
     if (!seen) return new Response(null, { status: 400 });
+    const d = day();
     if (seen.add) {
       this.bump(this.pending, "\0total");
       for (const [f, v] of Object.entries(seen.t)) this.bump(this.pending, f + "\0" + v);
-      const d = day();
       for (const [id, lv] of Object.entries(seen.ck)) this.bump(this.pendingCk, d + "\0" + id + "\0" + lv);
+    }
+    // (every run's time, a repeat visit's too: it is about the page, not the visitor)
+    if (seen.dur) this.bump(this.pendingCk, d + "\0dur\0" + seen.dur);
+    if (seen.add || seen.dur) {
       if (Date.now() - this.flushed >= FLUSH_MS) this.flush();
       else if (!this.armed) { this.armed = true; await this.ctx.storage.setAlarm(Date.now() + FLUSH_MS); }
     }
@@ -73,7 +77,7 @@ export class Tally extends DurableObject {
     });
   }
 
-  // every check's results per day (the last KEEP_DAYS days), the number of checks counted, and the commonest values
+  // every check's results per day (the last KEEP_DAYS days), runs' times per day, the number of checks counted, and the commonest values
   // of the coarse traits (each shared by MIN_SHARED checks or more, so no rare value is shown); worked out once a minute
   stats() {
     if (this.statsAt && Date.now() - this.statsAt < 60000) return this.statsMemo;
@@ -81,12 +85,15 @@ export class Tally extends DurableObject {
     return (this.statsMemo = this.statsNow());
   }
   statsNow() {
-    const days = {};
-    const add = (d, id, lv, n) => { ((days[d] ||= {})[id] ||= {})[lv] = (days[d][id][lv] || 0) + n; };
+    const days = {}, dur = {};
+    const add = (d, id, lv, n) => {
+      if (id === "dur") { (dur[d] ||= {})[lv] = (dur[d][lv] || 0) + n; return; }
+      ((days[d] ||= {})[id] ||= {})[lv] = (days[d][id][lv] || 0) + n;
+    };
     for (const r of this.sql.exec("SELECT day, id, lv, n FROM checks ORDER BY day").toArray()) add(r.day, r.id, r.lv, r.n);
     for (const [k, n] of this.pendingCk) { const [d, id, lv] = k.split("\0"); add(d, id, lv, n); }
     const top = {};
     for (const f of TOP) top[f] = this.sql.exec("SELECT v, n FROM counts WHERE f = ? AND n >= ? ORDER BY n DESC LIMIT 8", f, MIN_SHARED).toArray().map(r => [r.v, r.n]);
-    return { total: this.count("", "total"), days, top };
+    return { total: this.count("", "total"), days, dur, top };
   }
 }
