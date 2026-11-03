@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="El ID que cualquier web calcula para ti, sin cookies">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Test de huella del navegador · 1ms.dog","url":"https://who.1ms.dog/es/fingerprint/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Test gratuito de huella del navegador: tus huellas canvas, WebGL, de audio y de fuentes, y el ID combinado que cualquier web puede calcular sin cookies. Comprueba si tu navegador lo mezcla y si te reconoció desde tu última visita. No guarda tu IP ni los datos en bruto, solo recuentos anónimos para saber lo común que eres.","inLanguage":"es","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Qué es la huella del navegador?","acceptedAnswer":{"@type":"Answer","text":"Un conjunto de pequeñas diferencias entre equipos: cómo la tarjeta gráfica y su controlador dibujan un canvas o una escena WebGL, cómo se redondea el audio, qué fuentes hay instaladas, más la pantalla, el idioma y la zona horaria. Cada dato por separado es común; juntos suelen ser únicos. Una web los convierte en un código fijo (un hash) que usa como ID, y todas las webs que usan el mismo script obtienen el mismo ID tuyo."}},{"@type":"Question","name":"¿La cambia una VPN o una ventana privada?","acceptedAnswer":{"@type":"Answer","text":"No. Nada de eso depende de tu IP, y una ventana privada dibuja y reproduce sonido igual. Por eso la huella te sigue aunque borres las cookies o cambies de servidor VPN. La tarjeta de ID de esta página recuerda tu última visita (solo en tu navegador) para demostrarlo."}},{"@type":"Question","name":"¿Cómo evito que me rastreen por la huella?","acceptedAnswer":{"@type":"Answer","text":"Usa un navegador que lo combata: Brave añade ruido aleatorio a canvas, WebGL y audio por defecto; Firefox tiene privacy.resistFingerprinting; Tor Browser hace que todos parezcan iguales. Las extensiones que cambian el user agent o bloquean el canvas suelen hacerte más reconocible, no menos. La fila «Protección de huella» te dice si tu navegador la mezcla."}},{"@type":"Question","name":"¿Puede decirme lo único que soy?","acceptedAnswer":{"@type":"Answer","text":"Sí, de forma aproximada. La página cuenta, de forma anónima, en cuántas pruebas de este sitio apareció cada uno de tus valores y tu ID de huella completo (sus 8 primeros caracteres), y te muestra cuántas coincidieron con la tuya. No guarda tu IP ni la huella completa. Los números solo dicen algo cuando ya ha hecho el test suficiente gente; hasta entonces, la página indica que el recuento aún se está formando."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="fingerprint">
       <div class="focus-t"><h1>Test de huella del navegador</h1><p>Las webs no necesitan cookies para reconocerte. Cómo dibuja tu sistema el texto y las formas, cómo procesa el sonido y qué fuentes tiene se suman en un ID que no cambia entre webs, en ventanas privadas ni con VPN. Aquí tienes el tuyo, de qué está hecho y si tu navegador lo mezcla.</p></div>
       <div class="focus-r"><h2>Tu huella</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Cómo arreglarlo</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="fpid"><span>Huella combinada</span><b>…</b></li><li data-f="canvas"><span>Canvas</span><b>…</b></li><li data-f="webgl"><span>WebGL</span><b>…</b></li><li data-f="audio"><span>Audio</span><b>…</b></li><li data-f="fontfp"><span>Lista de fuentes</span><b>…</b></li><li data-f="rand"><span>Protección de huella</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"es","paths":{"en":"/fingerprint/","zh-CN":"/zh-cn/fingerprint/","zh-TW":"/zh-tw/fingerprint/","ja":"/ja/fingerprint/","ko":"/ko/fingerprint/","es":"/es/fingerprint/","fr":"/fr/fingerprint/","de":"/de/fingerprint/","pt":"/pt/fingerprint/","ru":"/ru/fingerprint/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"fingerprint","rows":["fpid","canvas","webgl","audio","fontfp","rand"],"check":"fp"}}</script>
-<script src="/assets/l.es.5a2fce50c2.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.es.9480ec7b7c.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

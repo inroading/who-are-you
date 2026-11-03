@@ -44,7 +44,7 @@
 <meta name="twitter:description" content="大家最常在哪露馅">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"全站访客画像 · 1ms.dog","url":"https://who.1ms.dog/zh-cn/stats/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"who.1ms.dog 的匿名统计：过去 7 天多少人测过浏览器指纹和 IP，多少人在分流、时区和 IP 对不上、DNS 泄露、WebRTC 泄露，最常见的系统、浏览器、屏幕和显卡。不保存 IP 和原始数据，只累计匿名计数。","inLanguage":"zh-CN","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"这些数字从哪来？","acceptedAnswer":{"@type":"Answer","text":"每次有人在这里测完，页面会给匿名计数器加一：这次各项检查的结果，和系统、浏览器、屏幕这类读到的值。不存 IP，没有单次访问的记录，所以这里只有汇总后的数字。"}},{"@type":"Question","name":"为什么这么多人「露馅」？","acceptedAnswer":{"@type":"Answer","text":"来这里测的人，很多本来就在用代理或 VPN，想看看自己藏得好不好。所以分流、时区对不上、DNS 泄露的比例，比普通网民高得多。"}},{"@type":"Question","name":"多久更新一次？","acceptedAnswer":{"@type":"Answer","text":"页面每次打开都会读最新的数字，统计每分钟汇总一次。「最常见」只列至少 20 次检测共有的值，少见的值不会出现在这里。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -70,14 +70,16 @@
     </div>
   </header>
 
-  <main id="main">
-    <section class="focus card" id="focus" data-page="stats">
-      <div class="focus-t"><h1>全站访客画像</h1><p>这里的数字来自每一次检测的匿名计数：多少人测过，哪些地方最常露馅，大家用的系统、浏览器和显卡是什么。看完往下，就是你自己的结果。</p></div>
-      <div class="focus-r"><h2>过去 7 天</h2>
-        <p class="cr-n" id="crN"><i class="skl"></i></p><ul class="cr-facts" id="crFacts"></ul><p class="cr-note">数据来自匿名计数：不存 IP，没有单次访问的记录。「最常见」只列至少 20 次检测共有的值。</p>
-        <ul class="focus-rows"></ul>
-        
-      </div><div class="crowd" id="crowd"><div class="cr-bars"><h3>大家最常在哪露馅</h3><ul id="crBars"></ul></div><div class="cr-top"><h3>最常见的设备和设置</h3><div id="crTop"></div></div><a class="btn primary cr-try" href="#main">测测你自己</a></div>
+  <main id="main" class="topic stats">
+    <section class="cp" id="crowd" data-page="stats">
+      <div class="cp-head card"><div class="cp-t"><h1>全站访客画像</h1><p>这里的数字来自每一次检测的匿名计数：多少人测过，哪些地方最常露馅，大家用的系统、浏览器和显卡是什么。</p></div>
+        <div class="cp-n"><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM1 14c.4-2.6 2.2-4 4.5-4s4.1 1.4 4.5 4M11 7.5a2 2 0 1 0 0-4M12 10c1.6.3 2.7 1.6 3 4"/></svg></span><b id="crN"><i class="skl"></i></b><span>次检测 · 过去 7 天</span></div></div>
+      <ul class="cp-facts" id="crFacts"><li class="card"><i class="skl"></i></li><li class="card"><i class="skl"></i></li><li class="card"><i class="skl"></i></li><li class="card"><i class="skl"></i></li><li class="card"><i class="skl"></i></li></ul>
+      <div class="cp-grid">
+        <div class="card cp-bars"><h2><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8l6.5 11.4H1.5zM8 6v3.4M8 11.3v.2"/></svg></span>大家最常在哪露馅</h2><ul id="crBars"></ul></div>
+        <div class="card cp-top"><h2><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l6.5 3.5L8 8.5 1.5 5zM1.5 8L8 11.5 14.5 8M1.5 11L8 14.5 14.5 11"/></svg></span>最常见的设备和设置</h2><div id="crTop"></div></div>
+      </div>
+      <div class="cp-foot"><p class="cp-note"><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg></span>数据来自匿名计数：不存 IP，没有单次访问的记录。「最常见」只列至少 20 次检测共有的值。</p><a class="btn primary" href="/zh-cn/">测测你自己</a></div>
     </section>
     <section class="hero card">
       <div class="hero-b">
@@ -148,7 +150,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-CN","paths":{"en":"/stats/","zh-CN":"/zh-cn/stats/","zh-TW":"/zh-tw/stats/","ja":"/ja/stats/","ko":"/ko/stats/","es":"/es/stats/","fr":"/fr/stats/","de":"/de/stats/","pt":"/pt/stats/","ru":"/ru/stats/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"stats","rows":[],"stats":true}}</script>
-<script src="/assets/l.zh-cn.24b78db73c.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.zh-cn.88f4fee5bc.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

@@ -1171,6 +1171,13 @@ import { TZ_CC } from "./tz.mjs";
     return t(key, vv);
   }
   // res: check id → [level, key, vars]; ipc: the address's country
+  // a topic page's fix: the check's own steps (for this system and browser, once osTips has named them), when it gives you away
+  function focusFix() {
+    const id = D.focus && D.focus.check, box = $("#focusFix");
+    if (!id || !box || !CK[id] || !R || !R.ck || !R.ck[id]) return;
+    box.querySelector("ul").innerHTML = CK[id].querySelector(".ck-tip").innerHTML;
+    box.hidden = R.ck[id][0] !== "bad" && R.ck[id][0] !== "warn";
+  }
   function paintChecks(res, ipc, final) {
     let bad = 0, warn = 0;
     for (const id of [...CHECKS, ...PROTO]) {
@@ -1187,6 +1194,7 @@ import { TZ_CC } from "./tz.mjs";
       if (D.focus && D.focus.check === id) {
         const fv = $("#focusV"); fv.className = "focus-v st-" + lv;
         fv.querySelector("b").textContent = cv.textContent; fv.querySelector(".st").textContent = r.querySelector(".st").textContent;
+        focusFix();
       }
       // a check that gives you away says how to fix it
       r.querySelector(".ck-fix").hidden = lv !== "bad" && lv !== "warn";
@@ -1342,23 +1350,36 @@ import { TZ_CC } from "./tz.mjs";
     return n <= 1 ? t("card_only", { m: u.total.toLocaleString(LANG) }) : t("card_one_in", { r: Math.round(u.total / n).toLocaleString(LANG) });
   };
   // The stats page: everyone counted (anonymous counts from /api/stats), the last 7 days
+  const IC = {
+    split: '<path d="M2 4h3l6 8h3M2 12h3l2-2.7M10 6.7L11 4h3M12.5 2.5L14 4l-1.5 1.5M12.5 10.5L14 12l-1.5 1.5"/>',
+    tz: '<circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.5 1.5"/>',
+    dns: '<circle cx="8" cy="8" r="6.2"/><path d="M1.8 8h12.4M8 1.8c1.8 1.7 2.6 3.8 2.6 6.2S9.8 12.5 8 14.2C6.2 12.5 5.4 10.4 5.4 8S6.2 3.5 8 1.8z"/>',
+    webrtc: '<path d="M4.6 11.4a4.8 4.8 0 0 1 0-6.8M11.4 4.6a4.8 4.8 0 0 1 0 6.8M2.7 13.3a7.5 7.5 0 0 1 0-10.6M13.3 2.7a7.5 7.5 0 0 1 0 10.6"/><circle cx="8" cy="8" r="1.4"/>',
+    dc: '<rect x="2" y="2.5" width="12" height="4.5" rx="1"/><rect x="2" y="9" width="12" height="4.5" rx="1"/><path d="M4.5 4.75h.01M4.5 11.25h.01"/>',
+    os: '<rect x="1.5" y="2.5" width="13" height="8.5" rx="1.2"/><path d="M5.5 13.5h5M8 11v2.5"/>',
+    browser: '<rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M1.5 5.5h13M3.8 4h.01M5.6 4h.01"/>',
+    screen: '<path d="M2 5V2.5h2.5M11.5 2.5H14V5M14 11v2.5h-2.5M4.5 13.5H2V11"/>',
+    gpu: '<rect x="4" y="4" width="8" height="8" rx="1"/><path d="M6.5 1.5V4M9.5 1.5V4M6.5 12v2.5M9.5 12v2.5M1.5 6.5H4M1.5 9.5H4M12 6.5h2.5M12 9.5h2.5"/>',
+    langs: '<path d="M2 3.5h7M5.5 2v1.5M3.5 3.5c.5 2.5 2.2 4.4 4.5 5.4M7.5 3.5c-.5 2.6-2.4 4.7-5 5.8M9 14l2.7-6.5L14.5 14M9.9 12h3.7"/>',
+  };
+  const ic = (k, cls = "cp-i") => `<span class="${cls}"><svg viewBox="0 0 16 16" aria-hidden="true">${IC[k] || ""}</svg></span>`;
   async function crowd() {
     let s = null;
     try { const r = await within(fetch("/api/stats"), 6000, null); s = r && r.ok ? await r.json() : null; } catch (e) {}
-    if (!s || !s.days) { $("#crN").textContent = t("cr_na"); return; }
+    if (!s || !s.days) { $("#crN").textContent = "–"; $("#crFacts").innerHTML = `<li class="card"><p>${esc(t("cr_na"))}</p></li>`; return; }
     const since = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10), sum = {};
     for (const [d, per] of Object.entries(s.days)) if (d >= since) for (const [id, lv] of Object.entries(per)) { const o = sum[id] ||= {}; for (const [k, c] of Object.entries(lv)) o[k] = (o[k] || 0) + c; }
     const all = id => Object.values(sum[id] || {}).reduce((a, b) => a + b, 0), share = (id, lvs) => all(id) ? lvs.reduce((a, l) => a + ((sum[id] || {})[l] || 0), 0) / all(id) : 0;
     const n = Math.max(0, ...COUNTED.map(all)), pc = x => Math.round(x * 100) + "%";
-    $("#crN").innerHTML = t("cr_total", { n: `<b>${n.toLocaleString(LANG)}</b>` });
+    $("#crN").textContent = n.toLocaleString(LANG);
     $("#crFacts").innerHTML = [["split", ["warn"], "cr_f_split"], ["tz", ["bad"], "cr_f_tz"], ["dns", ["bad"], "cr_f_dns"], ["webrtc", ["bad"], "cr_f_rtc"], ["dc", ["warn", "bad"], "cr_f_dc"]]
-      .map(([id, lvs, k]) => `<li><b>${pc(share(id, lvs))}</b>${esc(t(k))}</li>`).join("");
-    $("#crBars").innerHTML = COUNTED.filter(id => all(id)).map(id => [id, share(id, ["warn", "bad"])]).sort((a, b) => b[1] - a[1])
-      .map(([id, p]) => `<li><span>${esc(t("c_" + id))}</span><i><span style="width:${Math.round(p * 100)}%"></span></i><em>${pc(p)}</em></li>`).join("");
-    const shown = { os: v => v, browser: v => v, screen: v => v, gpu: v => v, tz: v => tzLabel(v), langs: v => language(v) };
-    $("#crTop").innerHTML = Object.keys(shown).filter(f => (s.top || {})[f] && s.top[f].length).map(f => `<div><h4>${esc(t(f === "tz" ? "s_tz" : "s_" + f))}</h4><ol>` +
-      s.top[f].slice(0, 5).map(([v, c]) => `<li>${esc(shown[f](v))}<span>${pc(c / (s.total || 1))}</span></li>`).join("") + "</ol></div>").join("");
-    $(".cr-top").hidden = !$("#crTop").children.length;   // (nothing shared by enough checks yet)
+      .map(([id, lvs, k]) => { const p = share(id, lvs); return `<li class="card ${p >= .3 ? "hi" : p >= .15 ? "mid" : ""}">${ic(id)}<b>${pc(p)}</b><p>${esc(t(k))}</p></li>`; }).join("");
+    $("#crBars").innerHTML = COUNTED.filter(id => all(id)).map(id => [id, share(id, ["warn", "bad"]), share(id, ["bad"])]).sort((a, b) => b[1] - a[1])
+      .map(([id, p, bad]) => `<li class="${bad >= p / 2 && p ? "bad" : p < .05 ? "low" : ""}"><span>${esc(t("c_" + id))}</span><i><span style="width:${Math.max(1, Math.round(p * 100))}%"></span></i><em>${pc(p)}</em></li>`).join("");
+    const shown = { os: v => v, browser: v => v, screen: v => v, gpu: v => v, tz: v => tzLabel(v), langs: v => language(v) }, T0 = s.total || 1;
+    $("#crTop").innerHTML = Object.keys(shown).filter(f => (s.top || {})[f] && s.top[f].length).map(f => `<div><h3>${ic(f === "tz" ? "tz" : f)}${esc(t("s_" + f))}</h3><ol>` +
+      s.top[f].slice(0, 5).map(([v, c]) => `<li><span title="${esc(shown[f](v))}">${esc(shown[f](v))}</span><em>${pc(c / T0)}</em><i><span style="width:${Math.max(2, Math.round(c / s.top[f][0][1] * 100))}%"></span></i></li>`).join("") + "</ol></div>").join("");
+    $(".cp-top").hidden = !$("#crTop").children.length;   // (nothing shared by enough checks yet)
   }
   if (D.focus && D.focus.stats) crowd();
   $$(".ck-fix").forEach(btn => {
@@ -1598,7 +1619,7 @@ import { TZ_CC } from "./tz.mjs";
     for (const id of Object.keys(PR)) if (!done.has(id)) na(id);   // anything a sniffer couldn't reach
     judge(true);
     readings(portrait(), R.ck);
-    paintTarget(); osTips(); todo();
+    paintTarget(); osTips(); todo(); focusFix();
     if (!EMBED) { compare(); history(); seen(); }
     $("#rerun").disabled = false; $("#share").disabled = false; $("#copyTxt").disabled = false;
     if (EMBED && !failed) post(embedResult());
@@ -1642,5 +1663,6 @@ import { TZ_CC } from "./tz.mjs";
 
   $("#rerun").onclick = run;
   const shared = !EMBED && sharedCode && showShared(sharedCode);
-  if (!shared) run();
+  // (the stats page is everyone's numbers: no check of its own)
+  if (!shared && !(D.focus && D.focus.stats)) run();
 })();

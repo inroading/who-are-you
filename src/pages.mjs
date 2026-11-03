@@ -2740,7 +2740,7 @@ export const TEXT = {
       seo_desc: "who.1ms.dog 的匿名统计：过去 7 天多少人测过浏览器指纹和 IP，多少人在分流、时区和 IP 对不上、DNS 泄露、WebRTC 泄露，最常见的系统、浏览器、屏幕和显卡。不保存 IP 和原始数据，只累计匿名计数。",
       seo_kw: "浏览器指纹统计, IP 检测统计, 代理检测数据, DNS 泄露比例, WebRTC 泄露比例, 浏览器使用率",
       h1: "全站访客画像", og_sub: "大家最常在哪露馅",
-      intro: "这里的数字来自每一次检测的匿名计数：多少人测过，哪些地方最常露馅，大家用的系统、浏览器和显卡是什么。看完往下，就是你自己的结果。",
+      intro: "这里的数字来自每一次检测的匿名计数：多少人测过，哪些地方最常露馅，大家用的系统、浏览器和显卡是什么。",
       focus_h: "过去 7 天",
       docs: [
         ["这些数字从哪来？","每次有人在这里测完，页面会给匿名计数器加一：这次各项检查的结果，和系统、浏览器、屏幕这类读到的值。不存 IP，没有单次访问的记录，所以这里只有汇总后的数字。"],
@@ -2753,7 +2753,7 @@ export const TEXT = {
       seo_desc: "who.1ms.dog 的匿名統計：過去 7 天多少人測過瀏覽器指紋和 IP，多少人在分流、時區和 IP 對不上、DNS 外洩、WebRTC 外洩，最常見的系統、瀏覽器、螢幕和顯示卡。不保存 IP 和原始資料，只累計匿名計數。",
       seo_kw: "瀏覽器指紋統計, IP 檢測統計, 代理檢測資料, DNS 外洩比例, WebRTC 外洩比例, 瀏覽器使用率",
       h1: "全站訪客畫像", og_sub: "大家最常在哪露餡",
-      intro: "這裡的數字來自每一次檢測的匿名計數：多少人測過，哪些地方最常露餡，大家用的系統、瀏覽器和顯示卡是什麼。看完往下，就是你自己的結果。",
+      intro: "這裡的數字來自每一次檢測的匿名計數：多少人測過，哪些地方最常露餡，大家用的系統、瀏覽器和顯示卡是什麼。",
       focus_h: "過去 7 天",
       docs: [
         ["這些數字從哪來？","每次有人在這裡測完，頁面會替匿名計數器加一：這次各項檢查的結果，和系統、瀏覽器、螢幕這類讀到的值。不存 IP，沒有單次造訪的紀錄，所以這裡只有彙總後的數字。"],
@@ -2766,7 +2766,7 @@ export const TEXT = {
       seo_desc: "who.1ms.dog's anonymous stats: how many checked their browser fingerprint and IP in the last 7 days, how many split their traffic, have a clock that doesn't match their IP, leak DNS or WebRTC, and the commonest systems, browsers, screens and graphics cards. No IP or raw data is kept, only anonymous counts.",
       seo_kw: "browser fingerprint statistics, IP check statistics, proxy detection data, DNS leak rate, WebRTC leak rate, browser usage",
       h1: "Who takes the test", og_sub: "What gives people away, in numbers",
-      intro: "These numbers come from anonymous counts of every check: how many people took the test, what gives them away most, and which systems, browsers and cards they use. Scroll down for your own result.",
+      intro: "These numbers come from anonymous counts of every check: how many people took the test, what gives them away most, and which systems, browsers and cards they use.",
       focus_h: "The last 7 days",
       docs: [
         ["Where do these numbers come from?","Each time someone finishes a check here, the page adds one to anonymous counters: how each check came out, and readings like the system, browser and screen. No IP and no record of a single visit are kept, so there are only totals here."],
@@ -2779,7 +2779,7 @@ export const TEXT = {
       seo_desc: "who.1ms.dog の匿名集計：過去 7 日間にブラウザフィンガープリントと IP を調べた人数、スプリットトンネル（分流）・時計と IP の不一致・DNS 漏れ・WebRTC 漏れの割合、よくある OS・ブラウザ・画面・GPU。IP や元のデータは保存せず、匿名の集計だけです。",
       seo_kw: "ブラウザフィンガープリント 統計, IP 確認 統計, プロキシ 検出 データ, DNS 漏れ 割合, WebRTC 漏れ 割合",
       h1: "みんなの診断結果", og_sub: "どこで見抜かれやすいか",
-      intro: "ここの数字は、毎回の検査の匿名集計からできています。何人が調べたか、どこで見抜かれやすいか、どんな OS・ブラウザ・GPU が使われているか。下にスクロールすると、あなた自身の結果です。",
+      intro: "ここの数字は、毎回の検査の匿名集計からできています。何人が調べたか、どこで見抜かれやすいか、どんな OS・ブラウザ・GPU が使われているか。",
       focus_h: "過去 7 日間",
       docs: [
         ["数字はどこから？","ここで誰かが検査を終えるたびに、ページは匿名のカウンターに 1 を足します。各チェックの結果と、OS・ブラウザ・画面などの読み取った値です。IP も 1 回ごとの記録も保存しないので、ここにあるのは合計だけです。"],
@@ -2792,7 +2792,7 @@ export const TEXT = {
       seo_desc: "who.1ms.dog의 익명 통계: 지난 7일 동안 브라우저 지문과 IP를 검사한 횟수, 분할 라우팅·시계와 IP 불일치·DNS 유출·WebRTC 유출 비율, 가장 흔한 시스템·브라우저·화면·그래픽카드. IP와 원본 데이터는 저장하지 않고 익명 집계만 남깁니다.",
       seo_kw: "브라우저 지문 통계, IP 확인 통계, 프록시 탐지 데이터, DNS 유출 비율, WebRTC 유출 비율",
       h1: "모두의 검사 결과", og_sub: "어디서 가장 자주 들통날까",
-      intro: "여기 숫자는 매번 검사의 익명 집계로 만들어졌어요. 몇 명이 검사했는지, 어디서 가장 자주 들통나는지, 어떤 시스템·브라우저·그래픽카드를 쓰는지. 아래로 내리면 당신의 결과가 나와요.",
+      intro: "여기 숫자는 매번 검사의 익명 집계로 만들어졌어요. 몇 명이 검사했는지, 어디서 가장 자주 들통나는지, 어떤 시스템·브라우저·그래픽카드를 쓰는지.",
       focus_h: "지난 7일",
       docs: [
         ["이 숫자는 어디서 오나요?","누군가 여기서 검사를 마칠 때마다 페이지는 익명 카운터에 1을 더해요. 각 검사 결과와 시스템·브라우저·화면 같은 읽은 값이에요. IP와 방문 한 건의 기록은 저장하지 않아서 여기엔 합계만 있어요."],
@@ -2805,7 +2805,7 @@ export const TEXT = {
       seo_desc: "Estadísticas anónimas de who.1ms.dog: cuántos comprobaron su huella del navegador e IP en los últimos 7 días, cuántos usan enrutamiento dividido, tienen el reloj desajustado con su IP o fugas de DNS o WebRTC, y los sistemas, navegadores, pantallas y tarjetas gráficas más comunes. Sin IP ni datos en bruto, solo recuentos anónimos.",
       seo_kw: "estadísticas huella del navegador, estadísticas comprobar IP, datos detección proxy, porcentaje fuga DNS, porcentaje fuga WebRTC",
       h1: "Quién hace el test", og_sub: "Lo que más delata a la gente, en cifras",
-      intro: "Estas cifras salen de recuentos anónimos de cada comprobación: cuánta gente hizo el test, qué la delata más y qué sistemas, navegadores y tarjetas usa. Baja para ver tu propio resultado.",
+      intro: "Estas cifras salen de recuentos anónimos de cada comprobación: cuánta gente hizo el test, qué la delata más y qué sistemas, navegadores y tarjetas usa.",
       focus_h: "Los últimos 7 días",
       docs: [
         ["¿De dónde salen estas cifras?","Cada vez que alguien termina una comprobación aquí, la página suma uno a contadores anónimos: el resultado de cada comprobación y valores como el sistema, el navegador y la pantalla. No se guarda la IP ni un registro de cada visita, así que aquí solo hay totales."],
@@ -2818,7 +2818,7 @@ export const TEXT = {
       seo_desc: "Statistiques anonymes de who.1ms.dog : combien ont testé leur empreinte du navigateur et leur IP ces 7 derniers jours, combien utilisent le routage séparé, ont une horloge qui ne colle pas à leur IP, une fuite DNS ou WebRTC, et les systèmes, navigateurs, écrans et cartes graphiques les plus courants. Ni IP ni données brutes, seulement des comptages anonymes.",
       seo_kw: "statistiques empreinte navigateur, statistiques test IP, données détection proxy, taux de fuite DNS, taux de fuite WebRTC",
       h1: "Qui fait le test", og_sub: "Ce qui trahit le plus, en chiffres",
-      intro: "Ces chiffres viennent de comptages anonymes de chaque test : combien de personnes l’ont fait, ce qui les trahit le plus, et quels systèmes, navigateurs et cartes elles utilisent. Descendez pour voir votre propre résultat.",
+      intro: "Ces chiffres viennent de comptages anonymes de chaque test : combien de personnes l’ont fait, ce qui les trahit le plus, et quels systèmes, navigateurs et cartes elles utilisent.",
       focus_h: "Les 7 derniers jours",
       docs: [
         ["D’où viennent ces chiffres ?","Chaque fois que quelqu’un termine un test ici, la page ajoute un à des compteurs anonymes : le résultat de chaque vérification, et des valeurs comme le système, le navigateur et l’écran. Ni l’IP ni la trace d’une visite ne sont gardées : il n’y a ici que des totaux."],
@@ -2831,7 +2831,7 @@ export const TEXT = {
       seo_desc: "Anonyme Statistik von who.1ms.dog: wie viele in den letzten 7 Tagen ihren Browser-Fingerabdruck und ihre IP geprüft haben, wie viele Split-Routing nutzen, eine Uhr haben, die nicht zur IP passt, ein DNS- oder WebRTC-Leck haben, und die häufigsten Systeme, Browser, Bildschirme und Grafikkarten. Keine IP, keine Rohdaten, nur anonyme Zähler.",
       seo_kw: "Browser-Fingerabdruck Statistik, IP-Check Statistik, Proxy-Erkennung Daten, DNS-Leck Anteil, WebRTC-Leck Anteil",
       h1: "Wer den Test macht", og_sub: "Was Leute am häufigsten verrät, in Zahlen",
-      intro: "Diese Zahlen kommen aus anonymen Zählern jedes Checks: wie viele den Test gemacht haben, was sie am häufigsten verrät und welche Systeme, Browser und Grafikkarten sie nutzen. Scroll nach unten zu deinem eigenen Ergebnis.",
+      intro: "Diese Zahlen kommen aus anonymen Zählern jedes Checks: wie viele den Test gemacht haben, was sie am häufigsten verrät und welche Systeme, Browser und Grafikkarten sie nutzen.",
       focus_h: "Die letzten 7 Tage",
       docs: [
         ["Woher kommen diese Zahlen?","Jedes Mal, wenn hier jemand einen Check beendet, zählt die Seite anonyme Zähler hoch: wie jede Prüfung ausging und Werte wie System, Browser und Bildschirm. Weder die IP noch ein Eintrag pro Besuch wird gespeichert, hier stehen also nur Summen."],
@@ -2844,7 +2844,7 @@ export const TEXT = {
       seo_desc: "Estatísticas anônimas do who.1ms.dog: quantos verificaram a impressão digital do navegador e o IP nos últimos 7 dias, quantos usam roteamento dividido, têm o relógio diferente do IP, vazam DNS ou WebRTC, e os sistemas, navegadores, telas e placas de vídeo mais comuns. Sem IP nem dados brutos, só contagens anônimas.",
       seo_kw: "estatísticas impressão digital do navegador, estatísticas verificar IP, dados detecção de proxy, taxa de vazamento DNS, taxa de vazamento WebRTC",
       h1: "Quem faz o teste", og_sub: "O que mais entrega as pessoas, em números",
-      intro: "Estes números vêm de contagens anônimas de cada verificação: quantas pessoas fizeram o teste, o que mais as entrega e quais sistemas, navegadores e placas usam. Role para baixo para ver o seu resultado.",
+      intro: "Estes números vêm de contagens anônimas de cada verificação: quantas pessoas fizeram o teste, o que mais as entrega e quais sistemas, navegadores e placas usam.",
       focus_h: "Últimos 7 dias",
       docs: [
         ["De onde vêm esses números?","Cada vez que alguém termina uma verificação aqui, a página soma um a contadores anônimos: o resultado de cada verificação e valores como sistema, navegador e tela. Não se guarda o IP nem registro de cada visita, então aqui só há totais."],
@@ -2857,7 +2857,7 @@ export const TEXT = {
       seo_desc: "Анонимная статистика who.1ms.dog: сколько человек за 7 дней проверили цифровой отпечаток браузера и IP, у скольких раздельная маршрутизация, часы не совпадают с IP, утечки DNS или WebRTC, и самые частые системы, браузеры, экраны и видеокарты. Без IP и исходных данных, только анонимные счётчики.",
       seo_kw: "статистика отпечатка браузера, статистика проверки IP, данные обнаружения прокси, доля утечек DNS, доля утечек WebRTC",
       h1: "Кто проходит тест", og_sub: "Что чаще всего выдаёт людей, в цифрах",
-      intro: "Эти цифры — анонимные счётчики каждой проверки: сколько людей прошли тест, что чаще всего их выдаёт и какие у них системы, браузеры и видеокарты. Прокрутите вниз, чтобы увидеть свой результат.",
+      intro: "Эти цифры — анонимные счётчики каждой проверки: сколько людей прошли тест, что чаще всего их выдаёт и какие у них системы, браузеры и видеокарты.",
       focus_h: "Последние 7 дней",
       docs: [
         ["Откуда эти цифры?","Каждый раз, когда кто-то заканчивает проверку, страница прибавляет единицу к анонимным счётчикам: итог каждой проверки и значения вроде системы, браузера и экрана. Ни IP, ни записи о визите не сохраняется, поэтому здесь только суммы."],

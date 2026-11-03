@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="端末の時計と IP は合っていますか？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"タイムゾーンチェック · 1ms.dog","url":"https://who.1ms.dog/ja/timezone-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"無料のタイムゾーンチェック：システムのタイムゾーンと時刻の表示形式を、IP のある場所のタイムゾーンと比べます。この食い違いは、サイトが VPN やプロキシを見抜くときに真っ先に見る手がかりの一つです。Windows・macOS・スマホでの直し方付き。","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"サイトはどうやってタイムゾーンを知るのですか？","acceptedAnswer":{"@type":"Answer","text":"JavaScript の Intl と Date からです。どのページでも、許可のダイアログなしに使えます。IP のタイムゾーンは、IP から都市を割り出すのと同じ種類の位置情報データベースから取ります。"}},{"@type":"Question","name":"食い違いはどう直しますか？","acceptedAnswer":{"@type":"Answer","text":"システムのタイムゾーンを、IP のある国のものにします。Windows は「設定 → 時刻と言語」、macOS は「システム設定 → 一般 → 日付と時刻」、スマホは日付と時刻の設定です。JavaScript のタイムゾーンだけを変える拡張機能はすぐに見破られます（理由はブラウザ環境チェックで分かります）。"}},{"@type":"Question","name":"同じ国の別のタイムゾーンが黄色の注意で済むのはなぜですか？","acceptedAnswer":{"@type":"Answer","text":"大きな国にはタイムゾーンが複数あり、IP は国は合っていても都市がずれることがよくあるからです。別の国のタイムゾーンははっきりした矛盾ですが、同じ国ならヒント程度にとどめます。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="timezone-check">
       <div class="focus-t"><h1>タイムゾーンチェック</h1><p>どのページも許可なしにシステムのタイムゾーンを読めますし、どのサイトも IP のおおよその場所を知っています。この 2 つが食い違う、たとえば IP は日本なのに時計は中国標準時、というのは、サイトが VPN やプロキシを見抜くときに真っ先に見る手がかりの一つです。両方を並べて示します。</p></div>
       <div class="focus-r"><h2>タイムゾーンと IP</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>直し方</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="tz"><span>システムのタイムゾーン</span><b>…</b></li><li data-f="tzip"><span>IP のタイムゾーン</span><b>…</b></li><li data-f="hour"><span>時刻の表示形式</span><b>…</b></li><li data-f="geo"><span>位置</span><b>…</b></li><li data-f="clock"><span>端末の時計</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ja","paths":{"en":"/timezone-check/","zh-CN":"/zh-cn/timezone-check/","zh-TW":"/zh-tw/timezone-check/","ja":"/ja/timezone-check/","ko":"/ko/timezone-check/","es":"/es/timezone-check/","fr":"/fr/timezone-check/","de":"/de/timezone-check/","pt":"/pt/timezone-check/","ru":"/ru/timezone-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"timezone-check","rows":["tz","tzip","hour","geo","clock"],"check":"tz"}}</script>
-<script src="/assets/l.ja.2692ecaf95.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.ja.f54125f31e.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

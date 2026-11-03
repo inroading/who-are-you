@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="What language do sites think you speak?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Browser language check · 1ms.dog","url":"https://who.1ms.dog/language-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Free browser language check: the languages your browser sends in its Accept-Language header and shows to JavaScript, plus your locale, keyboard layout, voices and fonts, and whether they match the country of your IP.","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where do sites get my language from?","acceptedAnswer":{"@type":"Answer","text":"From the Accept-Language header, a line your browser sends with every request; from navigator.languages in JavaScript; and indirectly from your locale, keyboard layout, speech voices and the fonts your system has installed."}},{"@type":"Question","name":"How do I change it?","acceptedAnswer":{"@type":"Answer","text":"In the browser's language settings, put the language you want first. Changing it in only one place, such as with an extension that edits navigator.languages, leaves the header as it was, and the two then disagree."}},{"@type":"Question","name":"Why is English only marked as \"info\"?","acceptedAnswer":{"@type":"Answer","text":"English is used everywhere, so it says little about where you are. Other languages point to a country, and a mismatch with the IP is a hint."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="language-check">
       <div class="focus-t"><h1>Browser language check</h1><p>Every request your browser sends says which languages you read, and any page can read the same list in JavaScript, along with your locale, keyboard layout and the voices and fonts on your system. Sites compare all this with where your IP is. Here's what yours say.</p></div>
       <div class="focus-r"><h2>Your language vs your IP</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>How to fix</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="langs"><span>Browser languages</span><b>…</b></li><li data-f="h_lang"><span>Languages</span><b>…</b></li><li data-f="locale"><span>Locale</span><b>…</b></li><li data-f="kbd"><span>Keyboard layout</span><b>…</b></li><li data-f="voices"><span>Speech voices</span><b>…</b></li><li data-f="fonts"><span>Installed fonts</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"en","paths":{"en":"/language-check/","zh-CN":"/zh-cn/language-check/","zh-TW":"/zh-tw/language-check/","ja":"/ja/language-check/","ko":"/ko/language-check/","es":"/es/language-check/","fr":"/fr/language-check/","de":"/de/language-check/","pt":"/pt/language-check/","ru":"/ru/language-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"language-check","rows":["langs","h_lang","locale","kbd","voices","fonts"],"check":"lang"}}</script>
-<script src="/assets/l.en.6bd0cb7857.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.en.114859391e.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

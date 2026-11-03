@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="サイトはあなたを何語の人だと思っている？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"ブラウザ言語チェック · 1ms.dog","url":"https://who.1ms.dog/ja/language-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"無料のブラウザ言語チェック：ブラウザが Accept-Language ヘッダーで送り、JavaScript にも見せている言語、ロケール、キーボード配列、読み上げ音声、フォントを調べ、IP の国と合っているかを確認します。","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"サイトはどこから言語を知るのですか？","acceptedAnswer":{"@type":"Answer","text":"リクエストのたびに送られる Accept-Language ヘッダー、JavaScript の navigator.languages からです。さらにロケール、キーボード配列、読み上げ音声、インストール済みのフォントからも間接的に分かります。"}},{"@type":"Question","name":"どう変えればいいですか？","acceptedAnswer":{"@type":"Answer","text":"ブラウザの言語設定で、使いたい言語をいちばん上にします。拡張機能で navigator.languages だけを変えるなど 1 か所だけ変えると、ヘッダーは元のままなので、2 つが食い違ってしまいます。"}},{"@type":"Question","name":"英語だと「参考」扱いになるのはなぜですか？","acceptedAnswer":{"@type":"Answer","text":"英語は世界中で使われているので、居場所の手がかりにはほとんどなりません。ほかの言語は特定の国を指すので、IP と合わなければヒントになります。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="language-check">
       <div class="focus-t"><h1>ブラウザ言語チェック</h1><p>ブラウザが送るリクエストには、あなたが読める言語が毎回書かれています。どのページも JavaScript で同じ一覧を読めるうえ、ロケール、キーボード配列、システムの読み上げ音声やフォントも分かります。サイトはそれを IP の場所と照らし合わせます。あなたの場合はこうです。</p></div>
       <div class="focus-r"><h2>言語と IP</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>直し方</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="langs"><span>ブラウザの言語</span><b>…</b></li><li data-f="h_lang"><span>言語</span><b>…</b></li><li data-f="locale"><span>ロケール</span><b>…</b></li><li data-f="kbd"><span>キーボード配列</span><b>…</b></li><li data-f="voices"><span>読み上げ音声</span><b>…</b></li><li data-f="fonts"><span>インストール済みフォント</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ja","paths":{"en":"/language-check/","zh-CN":"/zh-cn/language-check/","zh-TW":"/zh-tw/language-check/","ja":"/ja/language-check/","ko":"/ko/language-check/","es":"/es/language-check/","fr":"/fr/language-check/","de":"/de/language-check/","pt":"/pt/language-check/","ru":"/ru/language-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"language-check","rows":["langs","h_lang","locale","kbd","voices","fonts"],"check":"lang"}}</script>
-<script src="/assets/l.ja.2692ecaf95.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.ja.f54125f31e.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

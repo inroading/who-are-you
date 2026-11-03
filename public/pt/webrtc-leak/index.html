@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="O WebRTC mostra seu IP real?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Teste de vazamento WebRTC · 1ms.dog","url":"https://who.1ms.dog/pt/webrtc-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Teste grátis de vazamento WebRTC: os endereços IPv4 e IPv6 públicos e os endereços locais que o WebRTC entrega a qualquer site, comparados com o IP que sua VPN ou proxy mostra. Se forem diferentes, o WebRTC está vazando seu IP real. Com o passo a passo para corrigir no Chrome, Firefox, Brave e clientes de proxy.","inLanguage":"pt","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"O que é vazamento de WebRTC?","acceptedAnswer":{"@type":"Answer","text":"Para montar uma chamada, o WebRTC junta todos os endereços em que você pode ser alcançado: os locais, da sua placa de rede, e o público que um servidor STUN vê. Uma página lê esses endereços com poucas linhas de código, sem pedir permissão. Se a VPN ou o proxy leva só as requisições web da página, a requisição STUN sai pela sua conexão normal, e a página descobre seu IP real por trás da VPN."}},{"@type":"Question","name":"Como este teste funciona?","acceptedAnswer":{"@type":"Answer","text":"A página abre uma conexão WebRTC com os servidores STUN da Cloudflare e do Google e lista os endereços que eles informam (candidatos \"server reflexive\"). Depois compara com o endereço que este site, suas outras saídas e o teste de IPv6 veem. Um endereço que não aparece em nenhum deles é vazamento. Os endereços locais vêm dos candidatos \"host\"; nada é salvo nem enviado para lugar nenhum."}},{"@type":"Question","name":"Como corrijo um vazamento de WebRTC?","acceptedAnswer":{"@type":"Answer","text":"Clientes de proxy (Clash, V2Ray e outros): ative o modo TUN para o UDP também passar pelo proxy. Chrome e Edge: a extensão WebRTC Network Limiter, ou a opção do uBlock Origin \"Impedir que o WebRTC vaze endereços IP locais\". Brave: Configurações → Privacidade → Política de tratamento de IP do WebRTC → Desativar UDP sem proxy. Firefox: em about:config, coloque media.peerconnection.ice.default_address_only como true, ou media.peerconnection.enabled como false para desligar o WebRTC. Depois, faça o teste de novo."}},{"@type":"Question","name":"Endereço local ou nome .local é vazamento?","acceptedAnswer":{"@type":"Answer","text":"Um nome terminado em .local é o navegador escondendo seu endereço local (mDNS), que é exatamente o que você quer. Um endereço local real, como 192.168.1.5, não revela onde você está, mas deixa sua impressão digital mais fácil de identificar. Um IPv6 diferente da sua saída IPv4 só é vazamento se não for a sua saída IPv6: o teste compara com o endereço IPv6 que os sites veem."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="webrtc-leak">
       <div class="focus-t"><h1>Teste de vazamento WebRTC</h1><p>As chamadas de vídeo no navegador usam WebRTC, e qualquer página pode iniciá-lo sem perguntar. Ele pergunta a um servidor STUN de qual endereço você veio, por UDP, e muitas VPNs e proxies não levam UDP. Aqui estão os endereços que o WebRTC revela, comparados com o endereço que os sites veem.</p></div>
       <div class="focus-r"><h2>Seus endereços WebRTC</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Como corrigir</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="webrtc"><span>Endereços WebRTC</span><b>…</b></li><li data-f="lan"><span>Endereço local</span><b>…</b></li><li data-f="ip"><span>Endereço IP</span><b>…</b></li><li data-f="stack"><span>IPv4 e IPv6</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>EgressLens<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"pt","paths":{"en":"/webrtc-leak/","zh-CN":"/zh-cn/webrtc-leak/","zh-TW":"/zh-tw/webrtc-leak/","ja":"/ja/webrtc-leak/","ko":"/ko/webrtc-leak/","es":"/es/webrtc-leak/","fr":"/fr/webrtc-leak/","de":"/de/webrtc-leak/","pt":"/pt/webrtc-leak/","ru":"/ru/webrtc-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"webrtc-leak","rows":["webrtc","lan","ip","stack"],"check":"webrtc","go":"egress"}}</script>
-<script src="/assets/l.pt.55bbe9add7.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.pt.87d524108c.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

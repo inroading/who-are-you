@@ -140,13 +140,23 @@ export async function build({ check = false } = {}) {
       // A topic page opens with its own H1, body text and the one result it is about; the portrait follows under
       // its own heading. The main page has no focus panel.
       const P = PAGES[page];
-      const focus = !page ? "" : `<section class="focus card" id="focus" data-page="${page}">
+      const focus = !page ? "" : P.stats ? `<section class="cp" id="crowd" data-page="${page}">
+      <div class="cp-head card"><div class="cp-t"><h1>${esc(T("h1"))}</h1><p>${esc(T("intro"))}</p></div>
+        <div class="cp-n"><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM1 14c.4-2.6 2.2-4 4.5-4s4.1 1.4 4.5 4M11 7.5a2 2 0 1 0 0-4M12 10c1.6.3 2.7 1.6 3 4"/></svg></span><b id="crN"><i class="skl"></i></b><span>${esc(T("cr_n_l"))}</span></div></div>
+      <ul class="cp-facts" id="crFacts">${'<li class="card"><i class="skl"></i></li>'.repeat(5)}</ul>
+      <div class="cp-grid">
+        <div class="card cp-bars"><h2><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8l6.5 11.4H1.5zM8 6v3.4M8 11.3v.2"/></svg></span>${esc(T("cr_bars_h"))}</h2><ul id="crBars"></ul></div>
+        <div class="card cp-top"><h2><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l6.5 3.5L8 8.5 1.5 5zM1.5 8L8 11.5 14.5 8M1.5 11L8 14.5 14.5 11"/></svg></span>${esc(T("cr_top_h"))}</h2><div id="crTop"></div></div>
+      </div>
+      <div class="cp-foot"><p class="cp-note"><span class="cp-i"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg></span>${esc(T("cr_note"))}</p><a class="btn primary" href="${path(slug)}">${esc(T("cr_try"))}</a></div>
+    </section>` : `<section class="focus card" id="focus" data-page="${page}">
       <div class="focus-t"><h1>${esc(T("h1"))}</h1><p>${esc(T("intro"))}</p></div>
       <div class="focus-r"><h2>${esc(T("focus_h"))}</h2>
-        ${P.stats ? `<p class="cr-n" id="crN"><i class="skl"></i></p><ul class="cr-facts" id="crFacts"></ul><p class="cr-note">${esc(T("cr_note"))}</p>` : `<p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>`}
+        <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        ${P.check ? `<div class="focus-fix" id="focusFix" hidden><p>${esc(T("fix"))}</p><ul></ul></div>` : ""}
         <ul class="focus-rows">${P.rows.map(id => `<li data-f="${id}"><span>${esc(T("s_" + id))}</span><b>…</b></li>`).join("")}</ul>
         ${P.go ? `<a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>${esc(T("go_" + P.go))}${EXT}</a>` : ""}
-      </div>${P.stats ? `<div class="crowd" id="crowd"><div class="cr-bars"><h3>${esc(T("cr_bars_h"))}</h3><ul id="crBars"></ul></div><div class="cr-top"><h3>${esc(T("cr_top_h"))}</h3><div id="crTop"></div></div><a class="btn primary cr-try" href="#main">${esc(T("cr_try"))}</a></div>` : ""}
+      </div>
     </section>`;
       const heroTitle = page ? `<h2 class="h1">${esc(base.h1)}</h2>` : `<h1>${esc(T("h1"))}</h1>`;
       // the other pages of this tool, in this language: the topic pages, and the main page from a topic page
@@ -163,7 +173,7 @@ export async function build({ check = false } = {}) {
         .replace(/\{\{a:(\w+)\}\}/g, (m, k) => esc(T(k)))   // translated attribute values (aria-label)
         .replace("{{lang}}", lang).replace("{{pathsAttr}}", esc(JSON.stringify(paths))).replace("{{rootAttr}}", slug ? "" : " data-root")
         .replace("{{prepaint}}", PREPAINT).replace("{{head}}", head).replace("{{css}}", cssName).replace("{{js}}", jsName).replace("{{strings}}", sName)
-        .split("{{homeHref}}").join(path(slug)).replace("{{langOpts}}", langOpts).replace("{{focus}}", focus).replace("{{heroTitle}}", heroTitle)
+        .split("{{homeHref}}").join(path(slug)).replace("{{langOpts}}", langOpts).replace("{{focus}}", focus).replace("{{mainAttr}}", page ? ` class="topic${PAGES[page].stats ? " stats" : ""}"` : "").replace("{{heroTitle}}", heroTitle)
         .replace("{{story}}", storyHtml(T("story"), lang)).replace("{{checks}}", checks).replace("{{segs}}", CHECKS.map(c => `<i data-c="${c}"></i>`).join(""))
         .replace("{{eyebrow}}", esc(T("eyebrow").replace("{n}", SNIFFERS.length))).replace("{{groups}}", groups).replace("{{topics}}", topics)
         .replace("{{helpNav}}", helpNav).replace("{{helpC}}", helpC).replace("{{data}}", JSON.stringify(data).replace(/</g, "\\u003c"));

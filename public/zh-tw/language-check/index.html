@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="網站以為你說什麼語言？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"瀏覽器語言檢測 · 1ms.dog","url":"https://who.1ms.dog/zh-tw/language-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免費瀏覽器語言檢測：看看瀏覽器在請求標頭（Accept-Language）和 JavaScript 裡回報的語言，以及地區設定、鍵盤配置、朗讀語音和字型，它們和 IP 所在國家對不對得上。","inLanguage":"zh-TW","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"網站從哪裡知道我的語言？","acceptedAnswer":{"@type":"Answer","text":"每個請求都附帶的 Accept-Language 請求標頭，JavaScript 裡的 navigator.languages，還有地區設定、鍵盤配置、朗讀語音和系統字型，都會直接或間接透露。"}},{"@type":"Question","name":"要怎麼改？","acceptedAnswer":{"@type":"Answer","text":"在瀏覽器的語言設定裡，把想要的語言排到第一位。只改一處（例如用擴充功能改 navigator.languages），請求標頭還是原樣，兩邊對不上反而更顯眼。"}},{"@type":"Question","name":"為什麼英文只算「提示」？","acceptedAnswer":{"@type":"Answer","text":"英文全世界都在用，看不出你在哪裡。其他語言會指向某個國家，和 IP 對不上時才算破綻。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="language-check">
       <div class="focus-t"><h1>瀏覽器語言檢測</h1><p>瀏覽器每次發出請求，都會順便說明你看得懂哪些語言；任何網頁也能在 JavaScript 裡讀到同一份清單，再加上地區設定、鍵盤配置，以及系統裝了哪些朗讀語音和字型。網站會拿這些和 IP 所在地比對。下面是你的。</p></div>
       <div class="focus-r"><h2>你的語言和 IP</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>怎麼改</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="langs"><span>瀏覽器語言</span><b>…</b></li><li data-f="h_lang"><span>語言</span><b>…</b></li><li data-f="locale"><span>地區設定</span><b>…</b></li><li data-f="kbd"><span>鍵盤配置</span><b>…</b></li><li data-f="voices"><span>朗讀語音</span><b>…</b></li><li data-f="fonts"><span>已安裝字型</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-TW","paths":{"en":"/language-check/","zh-CN":"/zh-cn/language-check/","zh-TW":"/zh-tw/language-check/","ja":"/ja/language-check/","ko":"/ko/language-check/","es":"/es/language-check/","fr":"/fr/language-check/","de":"/de/language-check/","pt":"/pt/language-check/","ru":"/ru/language-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"language-check","rows":["langs","h_lang","locale","kbd","voices","fonts"],"check":"lang"}}</script>
-<script src="/assets/l.zh-tw.fc851edfe3.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.zh-tw.8b3b25f76a.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

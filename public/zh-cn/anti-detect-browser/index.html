@@ -44,7 +44,7 @@
 <meta name="twitter:description" content="每一项都像真的，合在一起对得上吗？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"指纹浏览器检测 · 1ms.dog","url":"https://who.1ms.dog/zh-cn/anti-detect-browser/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免费指纹浏览器检测：看 UA 和内核的真实版本是否一致，Worker 里读到的 navigator 和页面里是否相同，平台、显卡和时区对不对得上。适合检查 AdsPower、比特浏览器、Multilogin 等环境。检测在你的浏览器里进行，不存 IP，只累计匿名计数。","inLanguage":"zh-CN","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"指纹浏览器会在哪里露馅？","acceptedAnswer":{"@type":"Answer","text":"露馅在各项互相对不上：UA 写着 Chrome 156，内核却缺 Chrome 早就有的功能；Worker 里读到的 UA 或语言和页面里不一样；UA 是 Windows，navigator.platform 却是 Mac；WebGL 报的厂商是一家，显卡却是另一家。网站很少去认浏览器本身，它们找的就是这些矛盾。"}},{"@type":"Question","name":"为什么要看内核的真实版本？","acceptedAnswer":{"@type":"Answer","text":"UA 只是一串文字，谁都能改。内核支持哪些 JavaScript 功能却改不了：Chromium 每个版本都会加新函数（128 加了 Promise.try，136 加了 RegExp.escape），看有没有这些函数，就能把内核版本框在一个范围里。UA 写的版本落在范围外，说明这是配出来的环境，不是真浏览器。"}},{"@type":"Question","name":"怎样让环境通过检测？","acceptedAnswer":{"@type":"Answer","text":"UA 的版本选成和内核一致；尽量用内核级修改，别用注入脚本，这样 Worker 读到的也一样；系统、平台、显卡厂商选同一套，别混搭；时区和语言设成代理所在国的。改完回到这里再测一次。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -70,11 +70,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="anti-detect-browser">
       <div class="focus-t"><h1>指纹浏览器检测</h1><p>指纹浏览器会给每个环境配一套 UA、屏幕、时区和显卡。每一项单看都正常，放在一起却可能互相矛盾。这个页面专门读改过的环境最难保持一致的地方，告诉你哪几项对不上。</p></div>
       <div class="focus-r"><h2>你的环境痕迹</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>怎么改</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="engver"><span>引擎真实版本</span><b>…</b></li><li data-f="worker"><span>Worker 里的 navigator</span><b>…</b></li><li data-f="h_ua"><span>User-Agent</span><b>…</b></li><li data-f="browser"><span>浏览器</span><b>…</b></li><li data-f="gpu"><span>显卡</span><b>…</b></li><li data-f="tz"><span>系统时区</span><b>…</b></li></ul>
         
       </div>
@@ -148,7 +149,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-CN","paths":{"en":"/anti-detect-browser/","zh-CN":"/zh-cn/anti-detect-browser/","zh-TW":"/zh-tw/anti-detect-browser/","ja":"/ja/anti-detect-browser/","ko":"/ko/anti-detect-browser/","es":"/es/anti-detect-browser/","fr":"/fr/anti-detect-browser/","de":"/de/anti-detect-browser/","pt":"/pt/anti-detect-browser/","ru":"/ru/anti-detect-browser/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"anti-detect-browser","rows":["engver","worker","h_ua","browser","gpu","tz"],"check":"fpb"}}</script>
-<script src="/assets/l.zh-cn.24b78db73c.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.zh-cn.88f4fee5bc.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

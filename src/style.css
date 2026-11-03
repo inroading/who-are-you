@@ -69,23 +69,49 @@ html[lang="ru"] { --story-p1: 6; }
   background: radial-gradient(120% 90% at 0% 0%, var(--ink-soft), transparent 55%), var(--panel); }
 .focus h1 { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.15; letter-spacing: -.025em; font-weight: 800; margin-bottom: 12px; }
 .focus-t p { color: var(--muted); font-size: 15px; line-height: 1.75; }
-/* the stats page: everyone's numbers in the panel, then what gives people away and the commonest setups */
-.cr-n { font-size: 15px; line-height: 1.5; margin: 4px 0 10px; } .cr-n b { font-size: 26px; font-weight: 800; color: var(--ink); margin-right: 4px; }
-.cr-facts { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13.5px; line-height: 1.45; }
-.cr-facts b { display: inline-block; min-width: 3.2em; font-weight: 800; color: var(--fg); }
-.cr-note { margin-top: 10px; font-size: 12px; color: var(--muted); }
-.crowd { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px 32px; }
-.crowd h3 { font-size: 14px; margin: 0 0 10px; }
-.cr-bars ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
-.cr-bars li { display: grid; grid-template-columns: minmax(0, 9em) minmax(0, 1fr) 3.4em; gap: 10px; align-items: center; font-size: 13px; }
-.cr-bars i { display: block; height: 8px; border-radius: 4px; background: var(--soft); overflow: hidden; } .cr-bars i span { display: block; height: 100%; background: var(--t3); border-radius: 4px; }
-.cr-bars em { font-style: normal; font-weight: 700; text-align: right; }
-.cr-top[hidden] { display: none; }
-.cr-top { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; align-content: start; } .cr-top h3 { grid-column: 1 / -1; }
-.cr-top h4 { font-size: 12.5px; color: var(--muted); margin: 0 0 4px; font-weight: 600; }
-.cr-top ol { margin: 0; padding-left: 1.4em; font-size: 13px; line-height: 1.6; } .cr-top li span { color: var(--muted); margin-left: 4px; }
-.cr-try { grid-column: 1 / -1; justify-self: start; }
-@media (max-width: 720px) { .crowd { grid-template-columns: minmax(0, 1fr); } }
+/* a topic page keeps to its topic: the main page's sections stay out (the check still runs, for its panel) */
+main.topic > .hero, main.topic > .target, main.topic > .probes { display: none; }
+/* the stats page: a head with the count, five fact cards, what gives people away, the commonest setups */
+.cp { display: grid; gap: 14px; }
+.cp-i { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--ink-soft); color: var(--ink); flex: none; }
+.cp-i svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.cp-head { padding: 24px 26px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: center;
+  background: radial-gradient(120% 90% at 0% 0%, var(--ink-soft), transparent 55%), var(--panel); }
+.cp-t h1 { font-size: clamp(24px, 3.2vw, 34px); line-height: 1.15; letter-spacing: -.025em; font-weight: 800; margin-bottom: 10px; }
+.cp-t p { color: var(--muted); font-size: 15px; line-height: 1.7; }
+.cp-n { display: grid; justify-items: start; gap: 6px; padding: 16px 18px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); }
+.cp-n b { font-size: 40px; line-height: 1; font-weight: 800; letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; } .cp-n b .skl { width: 4em; height: 32px; }
+.cp-n > span:last-child { font-size: 13px; color: var(--muted); }
+.cp-facts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.cp-facts li { padding: 14px 14px 16px; display: grid; gap: 8px; align-content: start; }
+.cp-facts li b { font-size: 26px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.cp-facts li p { font-size: 13px; line-height: 1.5; color: var(--muted); margin: 0; }
+.cp-facts .hi b { color: var(--bad); } .cp-facts .mid b { color: var(--t3); }
+.cp-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+.cp-grid > .card { padding: 18px 20px; }
+.cp-grid h2 { display: flex; align-items: center; gap: 10px; font-size: 15px; margin: 0 0 14px; }
+.cp-bars ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.cp-bars li { display: grid; grid-template-columns: minmax(0, 8.5em) minmax(0, 1fr) 3em; gap: 10px; align-items: center; font-size: 13px; }
+.cp-bars li > i { display: block; height: 8px; border-radius: 4px; background: var(--soft); overflow: hidden; }
+.cp-bars li > i span { display: block; height: 100%; border-radius: 4px; background: var(--t3); } .cp-bars li.bad > i span { background: var(--bad); } .cp-bars li.low > i span { background: var(--ok); }
+.cp-bars em { font-style: normal; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+.cp-top[hidden] { display: none; }
+#crTop { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px; }
+#crTop h3 { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 600; margin: 0 0 6px; }
+#crTop h3 .cp-i { width: 24px; height: 24px; border-radius: 7px; } #crTop h3 .cp-i svg { width: 13px; height: 13px; }
+#crTop ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+#crTop li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; font-size: 13px; }
+#crTop li > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } #crTop li > em { font-style: normal; color: var(--muted); font-variant-numeric: tabular-nums; }
+#crTop li > i { grid-column: 1 / -1; height: 4px; border-radius: 2px; background: var(--soft); overflow: hidden; } #crTop li > i span { display: block; height: 100%; background: var(--ink); opacity: .7; }
+.cp-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; padding: 4px 4px 0; }
+.cp-note { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--muted); line-height: 1.5; max-width: 60ch; margin: 0; }
+@media (max-width: 900px) { .cp-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cp-grid, .cp-head { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 420px) { #crTop { grid-template-columns: minmax(0, 1fr); } }
+/* a topic page's fix, under its verdict */
+.focus-fix { margin: 10px 0 4px; padding: 10px 12px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); }
+.focus-fix p { font-size: 12.5px; font-weight: 700; color: var(--ink); margin: 0 0 4px; }
+.focus-fix ul { margin: 0; padding-left: 1.2em; font-size: 13px; line-height: 1.6; }
+.focus-fix[hidden] { display: none; }
 .focus-r { padding: 16px 18px; border-radius: 16px; border: 1px solid var(--line); background: color-mix(in srgb, var(--fg) 2.5%, var(--panel)); }
 .focus-r h2 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px; }
 .focus-v { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; min-height: 1.6em; margin-bottom: 10px; }

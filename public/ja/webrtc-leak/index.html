@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="WebRTC から本当の IP が漏れていませんか？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"WebRTC リークテスト · 1ms.dog","url":"https://who.1ms.dog/ja/webrtc-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"無料の WebRTC リークテスト：WebRTC がどのサイトにも渡してしまう公開 IPv4・IPv6 アドレスとローカルアドレスを一覧にし、VPN やプロキシの IP と比べます。違っていれば、WebRTC から本当の IP が漏れています。Chrome、Firefox、Brave、プロキシのクライアントでの直し方付き。","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"WebRTC リークとは何ですか？","acceptedAnswer":{"@type":"Answer","text":"通話をつなぐため、WebRTC は自分に届く可能性のあるアドレスをすべて集めます。ネットワークカードのローカルアドレスと、STUN サーバーから見た公開アドレスです。ページは数行のスクリプトで、許可なしにそれを読めます。VPN やプロキシがページの通信しか運ばない場合、STUN への問い合わせは自分の回線から直接出ていき、VPN の裏にある本当の IP がページに知られてしまいます。"}},{"@type":"Question","name":"このテストはどういう仕組みですか？","acceptedAnswer":{"@type":"Answer","text":"ページは Cloudflare と Google の STUN サーバーに WebRTC 接続を開き、返ってきたアドレス（srflx 候補）を一覧にします。それを、このサイト、ほかの出口、IPv6 テストから見えるアドレスと比べます。どれとも一致しないアドレスがあれば、それが漏れです。ローカルアドレスは host 候補から取ります。何も保存せず、どこにも送りません。"}},{"@type":"Question","name":"WebRTC リークはどう直しますか？","acceptedAnswer":{"@type":"Answer","text":"プロキシのクライアント（Clash、V2Ray など）：TUN モードをオンにして、UDP もプロキシに通します。Chrome と Edge：拡張機能 WebRTC Network Limiter か、uBlock Origin の「WebRTC によるローカル IP アドレスの漏洩を防ぐ」。Brave：設定 → プライバシー → WebRTC IP 処理ポリシー → プロキシ経由でない UDP を無効にする。Firefox：about:config で media.peerconnection.ice.default_address_only を true に、完全に止めるなら media.peerconnection.enabled を false に。変更したら、もう一度テストしてください。"}},{"@type":"Question","name":"ローカルアドレスや .local の名前は漏れですか？","acceptedAnswer":{"@type":"Answer","text":".local で終わる名前は、ブラウザがローカルアドレスを隠している（mDNS）しるしで、望ましい状態です。192.168.1.5 のような本物のローカルアドレスは居場所を明かしませんが、フィンガープリントをより珍しくします。IPv4 の出口と違う IPv6 アドレスは、それが自分の IPv6 の出口でない場合だけ漏れです。テストはサイトから見える IPv6 アドレスと照らし合わせます。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="webrtc-leak">
       <div class="focus-t"><h1>WebRTC リークテスト</h1><p>ブラウザでのビデオ通話には WebRTC が使われ、どのページも許可なしにこれを起動できます。WebRTC は UDP で STUN サーバーに「自分はどのアドレスから来たか」を尋ねますが、UDP を通さない VPN やプロキシは少なくありません。WebRTC が明かすアドレスを、サイトから見えるアドレスと並べて示します。</p></div>
       <div class="focus-r"><h2>あなたの WebRTC アドレス</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>直し方</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="webrtc"><span>WebRTC のアドレス</span><b>…</b></li><li data-f="lan"><span>ローカルアドレス</span><b>…</b></li><li data-f="ip"><span>IP アドレス</span><b>…</b></li><li data-f="stack"><span>IPv4 と IPv6</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>出口照魔鏡<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ja","paths":{"en":"/webrtc-leak/","zh-CN":"/zh-cn/webrtc-leak/","zh-TW":"/zh-tw/webrtc-leak/","ja":"/ja/webrtc-leak/","ko":"/ko/webrtc-leak/","es":"/es/webrtc-leak/","fr":"/fr/webrtc-leak/","de":"/de/webrtc-leak/","pt":"/pt/webrtc-leak/","ru":"/ru/webrtc-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"webrtc-leak","rows":["webrtc","lan","ip","stack"],"check":"webrtc","go":"egress"}}</script>
-<script src="/assets/l.ja.2692ecaf95.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.ja.f54125f31e.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

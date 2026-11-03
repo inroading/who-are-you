@@ -115,13 +115,13 @@ for (const [lang, slug] of LANGS) {
 for (const topic of Object.keys(PAGES)) for (const [lang, slug] of LANGS) {
   const where = `${lang} ${topic}`;
   const { page, errors } = await open(`${base}/${slug ? slug + "/" : ""}${topic}/`);
-  await page.waitForFunction(() => !document.querySelector("#rerun").disabled, { timeout: 30000 }).catch(() => fail(where, "the run never finished"));
   if (PAGES[topic].stats) {
     await page.waitForFunction(() => /\d/.test(document.querySelector("#crN").textContent) && document.querySelectorAll("#crBars li").length, { timeout: 15000 }).catch(() => fail(where, "the numbers never came"));
     for (const e of errors) fail(where, "script error: " + e);
     await page.close();
     continue;
   }
+  await page.waitForFunction(() => !document.querySelector("#rerun").disabled, { timeout: 30000 }).catch(() => fail(where, "the run never finished"));
   const f = await page.evaluate(() => ({ v: document.querySelector("#focusV").className, rows: [...document.querySelectorAll(".focus-rows [data-f]")].map(x => [x.dataset.f, x.querySelector("b").textContent]) }));
   for (const e of errors) fail(where, "script error: " + e);
   if (!/st-/.test(f.v)) fail(where, "no verdict in the focus panel");

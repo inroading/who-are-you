@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Does your clock match your IP?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Time zone check · 1ms.dog","url":"https://who.1ms.dog/timezone-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Free time zone check: your system time zone and clock format next to the time zone of your IP address. A mismatch is one of the first things sites use to spot a VPN or proxy. Includes fixes for Windows, macOS and phones.","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do sites know my time zone?","acceptedAnswer":{"@type":"Answer","text":"Through JavaScript's Intl and Date, which any page can use without a permission prompt. The IP's time zone comes from the same kind of location database that places your IP in a city."}},{"@type":"Question","name":"How do I fix a mismatch?","acceptedAnswer":{"@type":"Answer","text":"Set the system time zone to one in the country your IP is in: on Windows in Settings → Time & language, on macOS in System Settings → General → Date & Time, on phones in the date and time settings. An extension that only changes JavaScript's time zone is easy to catch; the browser environment check shows why."}},{"@type":"Question","name":"Why is a different zone in the same country only a warning?","acceptedAnswer":{"@type":"Answer","text":"Large countries have several time zones, and an IP is often placed in the right country but the wrong city. A zone in another country is a clear contradiction; a zone in the same country is only a hint."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="timezone-check">
       <div class="focus-t"><h1>Time zone check</h1><p>Any page can read your system's time zone without asking, and every site knows roughly where your IP is. When the two disagree, say an IP in Japan and a clock on China Standard Time, it's one of the first signs sites use to spot a VPN or proxy. Here are both, side by side.</p></div>
       <div class="focus-r"><h2>Your time zone vs your IP</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>How to fix</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="tz"><span>System time zone</span><b>…</b></li><li data-f="tzip"><span>Time zone of the IP</span><b>…</b></li><li data-f="hour"><span>Clock format</span><b>…</b></li><li data-f="geo"><span>Location</span><b>…</b></li><li data-f="clock"><span>Your clock</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"en","paths":{"en":"/timezone-check/","zh-CN":"/zh-cn/timezone-check/","zh-TW":"/zh-tw/timezone-check/","ja":"/ja/timezone-check/","ko":"/ko/timezone-check/","es":"/es/timezone-check/","fr":"/fr/timezone-check/","de":"/de/timezone-check/","pt":"/pt/timezone-check/","ru":"/ru/timezone-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"timezone-check","rows":["tz","tzip","hour","geo","clock"],"check":"tz"}}</script>
-<script src="/assets/l.en.6bd0cb7857.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.en.114859391e.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

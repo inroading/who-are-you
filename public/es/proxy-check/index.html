@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="¿Pueden las webs ver que hay un proxy en medio?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Test de proxy · 1ms.dog","url":"https://who.1ms.dog/es/proxy-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Test gratuito de proxy: el tiempo de ida y vuelta que mide tu navegador frente al que ve Cloudflare en su conexión, si tu IP pertenece a un centro de datos, y tus direcciones DNS y WebRTC. Un proxy añade un tramo que las webs pueden medir, incluso con una IP residencial limpia.","inLanguage":"es","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cómo funciona la prueba de latencia?","acceptedAnswer":{"@type":"Answer","text":"La página pide varias veces una respuesta mínima al servidor más cercano de este sitio y se queda con la más rápida, desde que sale la petición hasta que vuelve el primer byte. Cloudflare informa del tiempo de ida y vuelta que midió en la conexión TCP por la que te atendió. Sin proxy, los dos valores se parecen; con proxy, Cloudflare solo ve el tramo del proxy."}},{"@type":"Question","name":"¿Se puede detectar una IP residencial?","acceptedAnswer":{"@type":"Answer","text":"Sí. Una IP residencial pasa la prueba de centro de datos, pero el tiempo de ida y vuelta extra, un servidor DNS en otro país, una zona horaria que no encaja y las direcciones WebRTC la siguen delatando."}},{"@type":"Question","name":"¿Por qué a veces la prueba dice «no se pudo leer»?","acceptedAnswer":{"@type":"Answer","text":"Con HTTP/3 no hay conexión TCP, así que Cloudflare no tiene tiempo de ida y vuelta que informar, y algunas redes bloquean las peticiones de medición."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="proxy-check">
       <div class="focus-t"><h1>Test de proxy</h1><p>Un proxy oculta tu IP, pero no el tramo extra del camino. Cloudflare mide el tiempo de ida y vuelta en su propia conexión, que termina en el proxy; tu navegador lo mide en todo el recorrido. Si el del navegador es mucho más largo, hay algo en medio, parezca lo que parezca la IP. Aquí tienes los dos, junto con las demás pistas que usan las webs.</p></div>
       <div class="focus-r"><h2>Tu tiempo de ida y vuelta</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Cómo arreglarlo</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="edge"><span>Centro de datos más cercano</span><b>…</b></li><li data-f="ip"><span>Dirección IP</span><b>…</b></li><li data-f="isp"><span>Red (ASN)</span><b>…</b></li><li data-f="dns"><span>Servidor DNS</span><b>…</b></li><li data-f="webrtc"><span>Direcciones WebRTC</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>EgressLens<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"es","paths":{"en":"/proxy-check/","zh-CN":"/zh-cn/proxy-check/","zh-TW":"/zh-tw/proxy-check/","ja":"/ja/proxy-check/","ko":"/ko/proxy-check/","es":"/es/proxy-check/","fr":"/fr/proxy-check/","de":"/de/proxy-check/","pt":"/pt/proxy-check/","ru":"/ru/proxy-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"proxy-check","rows":["edge","ip","isp","dns","webrtc"],"check":"rtt","go":"egress"}}</script>
-<script src="/assets/l.es.5a2fce50c2.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.es.9480ec7b7c.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

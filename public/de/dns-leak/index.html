@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Umgeht dein DNS das VPN?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"DNS-Leak-Test · 1ms.dog","url":"https://who.1ms.dog/de/dns-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Kostenloser DNS-Leak-Test: Finde den DNS-Server, der die Adressen von Websites wirklich für dich nachschlägt, mit Land und Netz, und vergleiche ihn mit der IP, die Websites sehen. Passen sie nicht zusammen, leckt dein VPN oder Proxy DNS. Mit Lösungen für Clash, V2Ray und den Browser.","inLanguage":"de","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Was ist ein DNS-Leck?","acceptedAnswer":{"@type":"Answer","text":"Bevor der Browser eine Website aufruft, übersetzt ein DNS-Server den Namen in eine Adresse. Läuft diese Anfrage am VPN oder Proxy vorbei, landet sie beim DNS-Server deines Providers: Er sieht jede Website, die du besuchst. Und Websites, die deinen DNS-Server mit deiner IP vergleichen, erkennen das VPN und deinen tatsächlichen Standort."}},{"@type":"Question","name":"Wie findet der Test meinen DNS-Server?","acceptedAnswer":{"@type":"Answer","text":"Die Seite fragt nach einem zufälligen Namen unter edns.ip-api.com, nach dem noch nie jemand gefragt hat; kein Cache kennt die Antwort. Dein DNS-Server muss also den Nameserver von ip-api fragen, und der meldet Adresse und Netz deines DNS-Servers, dazu dein Subnetz, falls dein DNS-Server es mitschickt (ECS). Der Test vergleicht dann das Land des DNS-Servers mit dem deiner IP."}},{"@type":"Question","name":"Wie behebe ich ein DNS-Leck?","acceptedAnswer":{"@type":"Answer","text":"Clash / Mihomo: DNS mit enhanced-mode fake-ip einschalten oder den TUN-Modus nutzen, damit alle Anfragen durch ihn laufen. V2Ray / Xray: DNS ebenfalls über den Proxy schicken (oder einen DoH-Server eintragen, der über ihn läuft). Im Browser hält sicheres DNS (DoH) die Anfragen ebenfalls von deinem Provider fern. Danach den Test wiederholen."}},{"@type":"Question","name":"Mein DNS-Server ist Cloudflare oder Google in einer anderen Stadt. Ist das ein Leck?","acceptedAnswer":{"@type":"Answer","text":"Meist nicht. Öffentliche DNS-Server wie 1.1.1.1 und 8.8.8.8 antworten aus dem Rechenzentrum, das der Anfrage am nächsten ist; die Stadt kann also vom VPN-Ausgang abweichen. Verräterisch ist ein DNS-Server deines eigenen Providers oder einer in deinem Heimatland, während deine IP im Ausland liegt."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="dns-leak">
       <div class="focus-t"><h1>DNS-Leak-Test</h1><p>Dein VPN leitet vielleicht deinen Verkehr um, während deine DNS-Anfragen weiter bei deinem Provider landen. Wer diese Server betreibt, sieht dann, wo du wirklich bist. Dieser Test fragt nach einem Namen, nach dem noch nie jemand gefragt hat, und erkundigt sich dann beim zuständigen Nameserver, wer gefragt hat: Das ist dein DNS-Server. Du siehst sein Land und Netz, verglichen mit der Adresse, die Websites sehen.</p></div>
       <div class="focus-r"><h2>Dein DNS-Server</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Lösung</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="dns"><span>DNS-Server</span><b>…</b></li><li data-f="ip"><span>IP-Adresse</span><b>…</b></li><li data-f="ex_cn"><span>Website in Festlandchina</span><b>…</b></li><li data-f="ex_intl"><span>IP-Dienst außerhalb Chinas</span><b>…</b></li><li data-f="stack"><span>IPv4 und IPv6</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>DNS-Test<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"de","paths":{"en":"/dns-leak/","zh-CN":"/zh-cn/dns-leak/","zh-TW":"/zh-tw/dns-leak/","ja":"/ja/dns-leak/","ko":"/ko/dns-leak/","es":"/es/dns-leak/","fr":"/fr/dns-leak/","de":"/de/dns-leak/","pt":"/pt/dns-leak/","ru":"/ru/dns-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"dns-leak","rows":["dns","ip","ex_cn","ex_intl","stack"],"check":"dns","go":"dns"}}</script>
-<script src="/assets/l.de.2cad56dafb.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.de.cc2e2c5e79.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

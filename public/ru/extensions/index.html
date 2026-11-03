@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Какие ваши расширения видят сайты?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Проверка расширений браузера · 1ms.dog","url":"https://who.1ms.dog/ru/extensions/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Бесплатная проверка расширений браузера: расширения, которые оставляют следы, видимые любому сайту (криптокошельки, инструменты разработчика, Grammarly, Dark Reader, переводчики, веб-защита антивирусов), ваш блокировщик рекламы и не переписал ли что-то то, что читают сайты.","inLanguage":"ru","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Как сайт может увидеть мои расширения?","acceptedAnswer":{"@type":"Answer","text":"Получить их список он не может, но видит то, что они оставляют: объекты вроде window.ethereum, атрибуты на странице, вставленные элементы, добавленные скрипты. Некоторые расширения не оставляют ничего и остаются невидимыми."}},{"@type":"Question","name":"Почему это важно?","acceptedAnswer":{"@type":"Answer","text":"Расширения сужают круг: криптокошелёк, инструменты разработчика или определённый переводчик что-то говорят о вас и делают ваш отпечаток уникальнее."}},{"@type":"Question","name":"При чём тут проверка на подмену?","acceptedAnswer":{"@type":"Answer","text":"Расширения, которые меняют User-Agent, язык или часовой пояс либо оборачивают функции рисования, по которым снимают отпечаток, переписывают то, что читают сайты. Именно это и ищет проверка вверху страницы."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="extensions">
       <div class="focus-t"><h1>Проверка расширений браузера</h1><p>Многие расширения меняют страницу, чтобы делать свою работу: кошелёк добавляет объект, тёмная тема — атрибуты, переводчик — элементы, веб-защита антивируса — собственный скрипт. Любой сайт может прочитать эти следы, и они многое о вас говорят. Здесь — те, что нашла эта страница.</p></div>
       <div class="focus-r"><h2>Расширения, которые меняют страницу</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Как исправить</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="ext"><span>Расширения</span><b>…</b></li><li data-f="adblock"><span>Блокировщик рекламы</span><b>…</b></li><li data-f="engine"><span>Движок JS</span><b>…</b></li><li data-f="h_ua"><span>User-Agent</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ru","paths":{"en":"/extensions/","zh-CN":"/zh-cn/extensions/","zh-TW":"/zh-tw/extensions/","ja":"/ja/extensions/","ko":"/ko/extensions/","es":"/es/extensions/","fr":"/fr/extensions/","de":"/de/extensions/","pt":"/pt/extensions/","ru":"/ru/extensions/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"extensions","rows":["ext","adblock","engine","h_ua"],"check":"tamper"}}</script>
-<script src="/assets/l.ru.a5a83b953d.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.ru.b8478a5d88.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

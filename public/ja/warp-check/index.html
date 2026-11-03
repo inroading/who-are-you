@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="WARP はオン？サイトには何が見える？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Cloudflare WARP 検査 · 1ms.dog","url":"https://who.1ms.dog/ja/warp-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"無料の Cloudflare WARP 検査：通信が WARP を通っているか、サイトに見えるアドレスとネットワーク、つながった Cloudflare のデータセンター、使われている鍵交換を確認します。IP は保存せず、残すのは匿名の集計だけです。","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"サイトはどうやって WARP の利用を知るのですか？","acceptedAnswer":{"@type":"Answer","text":"Cloudflare を通して配信しているサイトは Cloudflare の trace を読めて、WARP 経由の通信には warp=on と出ます。それ以外のサイトでも、WARP のアドレスは Cloudflare 自身のネットワーク（AS13335）のものなので、家庭用回線ではなくデータセンターとして扱われます。"}},{"@type":"Question","name":"WARP で居場所は隠せますか？","acceptedAnswer":{"@type":"Answer","text":"ほとんど隠せません。WARP は近くの、たいていは自国の出口から出るので、サイトはおおよその場所をつかめます。WARP はプライバシーと速度のためのもので、別の場所にいるように見せるためのものではありません。サイトに見えるのが、プロバイダーのアドレスではなく Cloudflare のアドレスになるだけです。"}},{"@type":"Question","name":"warp=plus とは何ですか？","acceptedAnswer":{"@type":"Answer","text":"trace の plus は、Cloudflare の速い経路を使う有料版 WARP+ のことです。サイトから見ればどちらも同じで、Cloudflare のアドレスで WARP がオン、というだけです。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="warp-check">
       <div class="focus-t"><h1>Cloudflare WARP 検査</h1><p>WARP は Cloudflare の 1.1.1.1 アプリに入っている VPN で、通信を Cloudflare のネットワークに送ります。Cloudflare を通して配信しているサイトなら、訪問者が WARP 経由かどうかを読み取れます。あなたの結果と、サイトに見えるアドレスとネットワークを示します。</p></div>
       <div class="focus-r"><h2>あなたの WARP</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>直し方</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="warp"><span>Cloudflare WARP</span><b>…</b></li><li data-f="ip"><span>IP アドレス</span><b>…</b></li><li data-f="isp"><span>ネットワーク（ASN）</span><b>…</b></li><li data-f="edge"><span>最寄りのデータセンター</span><b>…</b></li><li data-f="kex"><span>鍵交換</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ja","paths":{"en":"/warp-check/","zh-CN":"/zh-cn/warp-check/","zh-TW":"/zh-tw/warp-check/","ja":"/ja/warp-check/","ko":"/ko/warp-check/","es":"/es/warp-check/","fr":"/fr/warp-check/","de":"/de/warp-check/","pt":"/pt/warp-check/","ru":"/ru/warp-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"warp-check","rows":["warp","ip","isp","edge","kex"],"check":"warp"}}</script>
-<script src="/assets/l.ja.2692ecaf95.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.ja.f54125f31e.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

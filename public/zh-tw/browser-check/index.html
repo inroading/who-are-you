@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="你的瀏覽器前後說法一致嗎？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"瀏覽器環境檢測 · 1ms.dog","url":"https://who.1ms.dog/zh-tw/browser-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免費瀏覽器環境檢測，適合指紋瀏覽器和多帳號環境：檢查 UA、JS 引擎、語言、時區、字型和指紋是否一致，有沒有擴充功能竄改網站讀到的資訊，並給出 A 到 F 的環境等級。","inLanguage":"zh-TW","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"這個檢測看哪些地方？","acceptedAnswer":{"@type":"Answer","text":"看這幾樣：網站常讀的屬性（UA、平台、語言、螢幕）有沒有被重新定義；算指紋用的繪圖和音訊函式有沒有被替換；JS 引擎和 UA 對不對得上；請求標頭（瀏覽器每次發出請求都會附上的資訊）裡的語言和 JS 裡的是否一致；Date 和 Intl 兩個介面回報的時區是否相同。頁面上其他檢測項目也都計入等級。"}},{"@type":"Question","name":"為什麼改 UA 的擴充功能會被識破？","acceptedAnswer":{"@type":"Answer","text":"因為它們只改了 JS 讀到的那一份。瀏覽器送出的請求標頭、底層引擎、被它們包了一層的函式，都還是原樣。每一處對不上，網站都比對得出來。想假裝在別的地方，要直接改系統：系統語言和時區。"}},{"@type":"Question","name":"會儲存什麼嗎？","acceptedAnswer":{"@type":"Answer","text":"不會儲存關於你個人的東西。檢測都在你的瀏覽器裡進行，伺服器只回應它從這次請求本來就看得到的東西，不留紀錄。檢測完，頁面會替匿名計數器加一（各項特徵值和每項檢查結果的計數），不存 IP，不存完整指紋，也沒有單次造訪的紀錄。頁面上的「不參與統計」可以關掉；開了全球隱私控制（GPC）的瀏覽器不會計入。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="browser-check">
       <div class="focus-t"><h1>瀏覽器環境檢測</h1><p>做風險控管的網站不只看 IP，還會核對瀏覽器說的每一件事對不對得上：UA 說是 Safari，引擎卻是 Chromium；語言只在 JS 裡改了，請求標頭還是原樣；兩個介面回報的時區不一樣……每一處都是破綻。下面是這個瀏覽器的各種說法，以及它自相矛盾的地方。</p></div>
       <div class="focus-r"><h2>竄改檢測</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>怎麼改</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="engine"><span>JS 引擎</span><b>…</b></li><li data-f="browser"><span>瀏覽器</span><b>…</b></li><li data-f="h_ua"><span>User-Agent</span><b>…</b></li><li data-f="h_lang"><span>語言</span><b>…</b></li><li data-f="langs"><span>瀏覽器語言</span><b>…</b></li><li data-f="tz"><span>系統時區</span><b>…</b></li><li data-f="fonts"><span>已安裝字型</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-TW","paths":{"en":"/browser-check/","zh-CN":"/zh-cn/browser-check/","zh-TW":"/zh-tw/browser-check/","ja":"/ja/browser-check/","ko":"/ko/browser-check/","es":"/es/browser-check/","fr":"/fr/browser-check/","de":"/de/browser-check/","pt":"/pt/browser-check/","ru":"/ru/browser-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"browser-check","rows":["engine","browser","h_ua","h_lang","langs","tz","fonts"],"check":"tamper"}}</script>
-<script src="/assets/l.zh-tw.fc851edfe3.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.zh-tw.8b3b25f76a.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

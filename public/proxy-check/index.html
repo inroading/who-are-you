@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Can sites tell there's a proxy in between?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Proxy check · 1ms.dog","url":"https://who.1ms.dog/proxy-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Free proxy check: compares the round trip your browser measures with the one Cloudflare sees on its connection, and checks whether your IP belongs to a data center, plus your DNS and WebRTC addresses. A proxy adds a leg sites can measure, even on a clean residential IP.","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the latency check work?","acceptedAnswer":{"@type":"Answer","text":"The page asks this site's nearest Cloudflare server for a tiny response a few times and keeps the fastest, timed from when the request leaves to when the first byte comes back. Cloudflare reports the round trip it measured on the TCP connection it served you on. Without a proxy the two are close; through one, Cloudflare only sees the proxy's part."}},{"@type":"Question","name":"Can a residential IP still be caught?","acceptedAnswer":{"@type":"Answer","text":"Yes. A residential IP passes the data center check, but the extra round trip, a DNS resolver in another country, a time zone that doesn't match and WebRTC addresses can all still give it away."}},{"@type":"Question","name":"Why does the check sometimes say \"couldn't read\"?","acceptedAnswer":{"@type":"Answer","text":"Over HTTP/3 there's no TCP connection, so Cloudflare has no round trip to report. Some networks also block the measuring requests."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="proxy-check">
       <div class="focus-t"><h1>Proxy check</h1><p>A proxy hides your IP, but not the extra leg of the trip. Cloudflare measures the round trip on its own connection, which ends at the proxy; your browser measures the whole way. When the browser's number is much bigger, something sits in between, however clean the IP looks. Here are both, with the other signs sites use.</p></div>
       <div class="focus-r"><h2>Your round trip</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>How to fix</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="edge"><span>Nearest data center</span><b>…</b></li><li data-f="ip"><span>IP address</span><b>…</b></li><li data-f="isp"><span>Network (ASN)</span><b>…</b></li><li data-f="dns"><span>DNS resolver</span><b>…</b></li><li data-f="webrtc"><span>WebRTC addresses</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>EgressLens<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"en","paths":{"en":"/proxy-check/","zh-CN":"/zh-cn/proxy-check/","zh-TW":"/zh-tw/proxy-check/","ja":"/ja/proxy-check/","ko":"/ko/proxy-check/","es":"/es/proxy-check/","fr":"/fr/proxy-check/","de":"/de/proxy-check/","pt":"/pt/proxy-check/","ru":"/ru/proxy-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"proxy-check","rows":["edge","ip","isp","dns","webrtc"],"check":"rtt","go":"egress"}}</script>
-<script src="/assets/l.en.6bd0cb7857.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.en.114859391e.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

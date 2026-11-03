@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="¿WebRTC muestra tu IP real?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Test de fuga WebRTC · 1ms.dog","url":"https://who.1ms.dog/es/webrtc-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Test gratuito de fuga WebRTC: las direcciones IPv4 e IPv6 públicas y las direcciones locales que WebRTC entrega a cualquier web, comparadas con la IP que muestra tu VPN o proxy. Si no coinciden, WebRTC filtra tu IP real. Incluye cómo arreglarlo en Chrome, Firefox, Brave y clientes proxy.","inLanguage":"es","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Qué es una fuga de WebRTC?","acceptedAnswer":{"@type":"Answer","text":"Para montar una llamada, WebRTC reúne todas las direcciones en las que se te podría localizar: las locales de tu tarjeta de red y la pública que ve un servidor STUN. Una página las lee con unas pocas líneas de código, sin pedir permiso. Si tu VPN o proxy solo lleva las peticiones web de la página, la petición STUN sale por tu propia conexión, y la página descubre tu IP real detrás de la VPN."}},{"@type":"Question","name":"¿Cómo funciona este test?","acceptedAnswer":{"@type":"Answer","text":"La página abre una conexión WebRTC con los servidores STUN de Cloudflare y Google y anota las direcciones que devuelven (candidatos «server reflexive»). Luego las compara con la dirección que ven este sitio, tus otras salidas y el test de IPv6. Una dirección que no aparece en ninguno de ellos es una fuga. Las direcciones locales salen de los candidatos «host»; no se guarda ni se envía nada."}},{"@type":"Question","name":"¿Cómo arreglo una fuga de WebRTC?","acceptedAnswer":{"@type":"Answer","text":"Clientes proxy (Clash, V2Ray y otros): activa el modo TUN para que UDP también pase por el proxy. Chrome y Edge: la extensión WebRTC Network Limiter, o la opción de uBlock Origin «Impedir que WebRTC filtre direcciones IP locales». Brave: Configuración → Privacidad → Política de gestión de IP de WebRTC → Desactivar UDP sin proxy. Firefox: en about:config, pon media.peerconnection.ice.default_address_only en true, o media.peerconnection.enabled en false para desactivar WebRTC. Después, repite este test."}},{"@type":"Question","name":"¿Una dirección local o un nombre .local es una fuga?","acceptedAnswer":{"@type":"Answer","text":"Un nombre que termina en .local es el navegador ocultando tu dirección local (mDNS), que es justo lo que quieres. Una dirección local real como 192.168.1.5 no revela dónde estás, pero hace tu huella más reconocible. Una IPv6 distinta de tu salida IPv4 solo es una fuga si no es tu salida IPv6: el test la compara con la dirección IPv6 que ven las webs."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="webrtc-leak">
       <div class="focus-t"><h1>Test de fuga WebRTC</h1><p>Las videollamadas en el navegador usan WebRTC, y cualquier página puede ponerlo en marcha sin preguntarte. WebRTC le pregunta a un servidor STUN desde qué dirección llegas, por UDP, y muchas VPN y proxies no transportan UDP. Aquí tienes las direcciones que WebRTC revela, comparadas con la que ven las webs.</p></div>
       <div class="focus-r"><h2>Tus direcciones WebRTC</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Cómo arreglarlo</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="webrtc"><span>Direcciones WebRTC</span><b>…</b></li><li data-f="lan"><span>Dirección local</span><b>…</b></li><li data-f="ip"><span>Dirección IP</span><b>…</b></li><li data-f="stack"><span>IPv4 e IPv6</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>EgressLens<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"es","paths":{"en":"/webrtc-leak/","zh-CN":"/zh-cn/webrtc-leak/","zh-TW":"/zh-tw/webrtc-leak/","ja":"/ja/webrtc-leak/","ko":"/ko/webrtc-leak/","es":"/es/webrtc-leak/","fr":"/fr/webrtc-leak/","de":"/de/webrtc-leak/","pt":"/pt/webrtc-leak/","ru":"/ru/webrtc-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"webrtc-leak","rows":["webrtc","lan","ip","stack"],"check":"webrtc","go":"egress"}}</script>
-<script src="/assets/l.es.5a2fce50c2.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.es.9480ec7b7c.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

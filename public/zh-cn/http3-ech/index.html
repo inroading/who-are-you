@@ -44,7 +44,7 @@
 <meta name="twitter:description" content="你的连接够新吗？卡在了哪里？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"HTTP/3、ECH 和后量子加密检测 · 1ms.dog","url":"https://who.1ms.dog/zh-cn/http3-ech/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免费连接协议检测：看你的浏览器有没有用上 HTTP/3，有没有用 ECH 隐藏你访问的网站名，有没有协商后量子密钥（X25519MLKEM768）；缺了哪一项，又说明你的网络或代理出了什么问题。检测在你的浏览器里进行，不存 IP，只累计匿名计数。","inLanguage":"zh-CN","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"为什么没用上 HTTP/3？","acceptedAnswer":{"@type":"Answer","text":"HTTP/3 走 UDP 443 端口。浏览器要先通过普通的 TCP 连接收到网站的第一次回应，才知道它支持 HTTP/3，所以第一次访问可能还没切过去。但如果 UDP 哪儿都出不去，就是网络或代理把它拦了，或者压根不转发 UDP。很多代理配置只转发 TCP。"}},{"@type":"Question","name":"ECH 是什么？为什么没开？","acceptedAnswer":{"@type":"Answer","text":"ECH（Encrypted Client Hello）会把你要访问的网站名加密。没有它，TLS 握手会明文发出网站名，路上谁都看得到。浏览器得先从 DNS 的 HTTPS 记录里拿到网站的密钥：Firefox 只在用它自己的 DNS over HTTPS 时才去读；Chrome 需要一台能返回 HTTPS 记录的 DNS 服务器；Safari 目前还不用 ECH。"}},{"@type":"Question","name":"密钥交换显示传统方式，说明什么？","acceptedAnswer":{"@type":"Answer","text":"Chrome 124+、Firefox 132+ 和 Safari 26 默认都会提供 X25519MLKEM768。新版浏览器最后却用了普通的 X25519，说明中间有东西自己另建了 TLS 连接：杀毒软件、公司代理，或者会解开 TLS 的代理客户端。如果是旧版浏览器，那只是版本太老。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -70,11 +70,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="http3-ech">
       <div class="focus-t"><h1>HTTP/3、ECH 和后量子加密检测</h1><p>新版浏览器在畅通的网络上，会用 UDP 跑 HTTP/3，用 ECH 把你要去的网站名加密，再协商一把将来量子计算机也破解不了的密钥。少了哪一项，往往是路上的某个东西造成的。下面是你的连接情况。</p></div>
       <div class="focus-r"><h2>你的连接</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>怎么改</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="proto"><span>HTTP 和 TLS</span><b>…</b></li><li data-f="kex"><span>密钥交换</span><b>…</b></li><li data-f="tlsfp"><span>TLS 指纹</span><b>…</b></li><li data-f="edge"><span>最近的数据中心</span><b>…</b></li></ul>
         
       </div>
@@ -148,7 +149,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-CN","paths":{"en":"/http3-ech/","zh-CN":"/zh-cn/http3-ech/","zh-TW":"/zh-tw/http3-ech/","ja":"/ja/http3-ech/","ko":"/ko/http3-ech/","es":"/es/http3-ech/","fr":"/fr/http3-ech/","de":"/de/http3-ech/","pt":"/pt/http3-ech/","ru":"/ru/http3-ech/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"http3-ech","rows":["proto","kex","tlsfp","edge"],"check":"ech"}}</script>
-<script src="/assets/l.zh-cn.24b78db73c.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.zh-cn.88f4fee5bc.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

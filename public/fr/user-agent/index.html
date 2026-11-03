@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Quel navigateur et quel système les sites vous prêtent-ils ?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Vérification du user agent · 1ms.dog","url":"https://who.1ms.dog/fr/user-agent/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Vérification gratuite du user agent : votre chaîne User-Agent, les client hints (Sec-CH-UA, plateforme), le système et le navigateur qu’ils annoncent, et si le moteur JavaScript, la carte graphique et les client hints sont d’accord avec eux.","inLanguage":"fr","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Qu’est-ce que le user agent ?","acceptedAnswer":{"@type":"Answer","text":"Une ligne de texte que votre navigateur envoie avec chaque requête, qui nomme le navigateur, sa version et votre système. Les navigateurs Chromium envoient aussi des client hints : une version plus récente et mieux structurée des mêmes informations."}},{"@type":"Question","name":"Pourquoi affiche-t-il Windows 10 alors que j’ai Windows 11 ?","acceptedAnswer":{"@type":"Answer","text":"Pour protéger la vie privée, les navigateurs ont figé le user agent sur Windows 10 (et sur macOS 10.15). La vraie version vient des client hints, et c’est elle que montre cette page."}},{"@type":"Question","name":"Puis-je le falsifier ?","acceptedAnswer":{"@type":"Answer","text":"Vous pouvez changer la chaîne, mais le moteur JavaScript, la carte graphique et les client hints racontent souvent une autre histoire ; les contrôles de cette page montrent où."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="user-agent">
       <div class="focus-t"><h1>Vérification du user agent</h1><p>Chaque requête nomme votre navigateur et votre système : une fois dans la chaîne User-Agent, et une seconde fois, dans les navigateurs Chromium, dans les client hints. Les pages peuvent recouper cela avec le moteur JavaScript et la carte graphique. Voici ce qu’annonce le vôtre, et si le reste confirme.</p></div>
       <div class="focus-r"><h2>Votre user agent face à votre système</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Comment corriger</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="h_ua"><span>User agent</span><b>…</b></li><li data-f="os"><span>Système</span><b>…</b></li><li data-f="browser"><span>Navigateur</span><b>…</b></li><li data-f="h_chua"><span>Marques du navigateur</span><b>…</b></li><li data-f="h_plat"><span>Plateforme</span><b>…</b></li><li data-f="engine"><span>Moteur JS</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"fr","paths":{"en":"/user-agent/","zh-CN":"/zh-cn/user-agent/","zh-TW":"/zh-tw/user-agent/","ja":"/ja/user-agent/","ko":"/ko/user-agent/","es":"/es/user-agent/","fr":"/fr/user-agent/","de":"/de/user-agent/","pt":"/pt/user-agent/","ru":"/ru/user-agent/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"user-agent","rows":["h_ua","os","browser","h_chua","h_plat","engine"],"check":"ua"}}</script>
-<script src="/assets/l.fr.70821af93f.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.fr.7047537d32.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

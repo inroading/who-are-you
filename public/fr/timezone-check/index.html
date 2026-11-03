@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Votre horloge correspond-elle à votre IP ?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Vérification du fuseau horaire · 1ms.dog","url":"https://who.1ms.dog/fr/timezone-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Vérification gratuite du fuseau horaire : le fuseau et le format d’heure de votre système, comparés au fuseau de votre adresse IP. Un décalage est l’un des premiers indices qu’utilisent les sites pour repérer un VPN ou un proxy. Avec la marche à suivre sur Windows, macOS et téléphone.","inLanguage":"fr","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Comment les sites connaissent-ils mon fuseau horaire ?","acceptedAnswer":{"@type":"Answer","text":"Grâce à Intl et Date en JavaScript, accessibles à toute page sans demande d’autorisation. Le fuseau de l’IP vient du même genre de base de géolocalisation que celle qui place votre IP dans une ville."}},{"@type":"Question","name":"Comment corriger un décalage ?","acceptedAnswer":{"@type":"Answer","text":"Réglez le fuseau du système sur un fuseau du pays de votre IP : sur Windows dans Paramètres → Heure et langue, sur macOS dans Réglages Système → Général → Date et heure, sur téléphone dans les réglages de date et heure. Une extension qui change seulement le fuseau vu par JavaScript se repère facilement : la vérification de l’environnement du navigateur montre pourquoi."}},{"@type":"Question","name":"Pourquoi un autre fuseau du même pays n’est-il qu’un avertissement ?","acceptedAnswer":{"@type":"Answer","text":"Les grands pays ont plusieurs fuseaux horaires, et une IP est souvent placée dans le bon pays mais dans la mauvaise ville. Un fuseau d’un autre pays est une vraie contradiction ; un fuseau du même pays n’est qu’un indice."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="timezone-check">
       <div class="focus-t"><h1>Vérification du fuseau horaire</h1><p>N’importe quelle page peut lire le fuseau horaire de votre système sans rien demander, et tout site sait à peu près où se trouve votre IP. Quand les deux ne concordent pas, par exemple une IP au Japon et une horloge à l’heure de Pékin, c’est l’un des premiers signes qu’utilisent les sites pour repérer un VPN ou un proxy. Les voici côte à côte.</p></div>
       <div class="focus-r"><h2>Votre fuseau face à votre IP</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Comment corriger</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="tz"><span>Fuseau du système</span><b>…</b></li><li data-f="tzip"><span>Fuseau de l’IP</span><b>…</b></li><li data-f="hour"><span>Format de l’heure</span><b>…</b></li><li data-f="geo"><span>Position</span><b>…</b></li><li data-f="clock"><span>Votre horloge</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"fr","paths":{"en":"/timezone-check/","zh-CN":"/zh-cn/timezone-check/","zh-TW":"/zh-tw/timezone-check/","ja":"/ja/timezone-check/","ko":"/ko/timezone-check/","es":"/es/timezone-check/","fr":"/fr/timezone-check/","de":"/de/timezone-check/","pt":"/pt/timezone-check/","ru":"/ru/timezone-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"timezone-check","rows":["tz","tzip","hour","geo","clock"],"check":"tz"}}</script>
-<script src="/assets/l.fr.70821af93f.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.fr.7047537d32.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

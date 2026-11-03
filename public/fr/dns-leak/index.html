@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Votre DNS passe-t-il à côté du VPN ?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Test de fuite DNS · 1ms.dog","url":"https://who.1ms.dog/fr/dns-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Test gratuit de fuite DNS : trouvez le serveur DNS qui cherche réellement l’adresse des sites pour vous, son pays et son réseau, et comparez-le à l’IP que voient les sites. S’ils ne correspondent pas, votre VPN ou votre proxy laisse fuir le DNS. Avec les corrections pour Clash, V2Ray et le navigateur.","inLanguage":"fr","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Qu’est-ce qu’une fuite DNS ?","acceptedAnswer":{"@type":"Answer","text":"Avant de se connecter à un site, le navigateur demande à un serveur DNS de transformer le nom du site en adresse. Si cette demande passe à côté du VPN ou du proxy, elle part chez le serveur DNS de votre fournisseur d’accès : celui-ci voit chaque site que vous visitez. Et un site qui compare votre serveur DNS à votre IP peut voir que vous utilisez un VPN, et où vous êtes réellement."}},{"@type":"Question","name":"Comment le test trouve-t-il mon serveur DNS ?","acceptedAnswer":{"@type":"Answer","text":"La page demande un nom aléatoire sous edns.ip-api.com que personne n’a jamais demandé : aucun cache ne connaît la réponse. Votre serveur DNS doit donc interroger le serveur de noms d’ip-api, qui note l’adresse et le réseau de votre serveur DNS, ainsi que votre sous-réseau si votre serveur DNS le transmet (ECS). Le test compare ensuite le pays du serveur DNS à celui de votre IP."}},{"@type":"Question","name":"Comment corriger une fuite DNS ?","acceptedAnswer":{"@type":"Answer","text":"Clash / Mihomo : activez son DNS avec enhanced-mode en fake-ip, ou passez en mode TUN pour que toutes les requêtes passent par lui. Clients V2Ray / Xray : faites passer le DNS par le proxy (ou configurez un serveur DoH qui passe par lui). Dans le navigateur, le DNS sécurisé (DoH) tient aussi vos requêtes à l’écart du fournisseur d’accès. Puis relancez ce test."}},{"@type":"Question","name":"Mon serveur DNS est Cloudflare ou Google, mais dans une autre ville. Est-ce une fuite ?","acceptedAnswer":{"@type":"Answer","text":"En général, non. Les DNS publics comme 1.1.1.1 et 8.8.8.8 répondent depuis le centre de données le plus proche de la requête : la ville peut donc différer de la sortie du VPN. Ce qui vous trahit, c’est un serveur DNS de votre fournisseur d’accès, ou un serveur DNS situé dans votre pays alors que votre IP est à l’étranger."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="dns-leak">
       <div class="focus-t"><h1>Test de fuite DNS</h1><p>Votre VPN peut transporter votre trafic alors que vos requêtes DNS partent encore chez votre fournisseur d’accès. Celui qui gère ces serveurs voit alors où vous êtes vraiment. Ce test demande une adresse que personne n’a jamais demandée, puis interroge le serveur qui fait autorité sur ce nom pour savoir qui a posé la question : c’est votre serveur DNS. Vous voyez son pays et son réseau, comparés à l’adresse que voient les sites.</p></div>
       <div class="focus-r"><h2>Votre serveur DNS</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Comment corriger</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="dns"><span>Serveur DNS</span><b>…</b></li><li data-f="ip"><span>Adresse IP</span><b>…</b></li><li data-f="ex_cn"><span>Site en Chine continentale</span><b>…</b></li><li data-f="ex_intl"><span>Service IP hors de Chine</span><b>…</b></li><li data-f="stack"><span>IPv4 et IPv6</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>Test DNS<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"fr","paths":{"en":"/dns-leak/","zh-CN":"/zh-cn/dns-leak/","zh-TW":"/zh-tw/dns-leak/","ja":"/ja/dns-leak/","ko":"/ko/dns-leak/","es":"/es/dns-leak/","fr":"/fr/dns-leak/","de":"/de/dns-leak/","pt":"/pt/dns-leak/","ru":"/ru/dns-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"dns-leak","rows":["dns","ip","ex_cn","ex_intl","stack"],"check":"dns","go":"dns"}}</script>
-<script src="/assets/l.fr.70821af93f.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.fr.7047537d32.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

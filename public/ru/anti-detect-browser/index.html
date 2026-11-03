@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Каждая деталь выглядит правдоподобно — но сходятся ли они?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Проверка антидетект-браузера · 1ms.dog","url":"https://who.1ms.dog/ru/anti-detect-browser/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Бесплатная проверка антидетект-браузера: совпадает ли User-Agent с настоящей версией движка, видит ли Worker тот же navigator, что и страница, согласуются ли платформа, видеокарта и часовой пояс. IP и исходные данные не сохраняются — только анонимные счётчики.","inLanguage":"ru","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Что выдаёт антидетект-браузер?","acceptedAnswer":{"@type":"Answer","text":"Детали, которые не сходятся. User-Agent говорит «Chrome 156», а в движке нет функций, которые Chrome давно добавил; Worker видит другой User-Agent или язык, чем страница; navigator.platform говорит Mac при User-Agent от Windows; WebGL называет одного производителя поставщиком, а другого — у видеокарты. Сайты редко ищут сам браузер — они ищут такие противоречия."}},{"@type":"Question","name":"Почему важна настоящая версия движка?","acceptedAnswer":{"@type":"Answer","text":"User-Agent — это строка, которую может переписать любой браузер. А набор функций JavaScript, которые поддерживает движок, так просто не перепишешь: каждая версия Chromium добавляет новые (Promise.try в 128, RegExp.escape в 136), и по их наличию движок можно отнести к диапазону версий. User-Agent вне этого диапазона — это профиль, а не настоящий браузер."}},{"@type":"Question","name":"Как сделать профиль правдоподобным?","acceptedAnswer":{"@type":"Answer","text":"Выберите версию User-Agent, совпадающую с ядром браузера; предпочитайте правки в самом ядре внедрённым скриптам, чтобы Worker видел те же значения; выбирайте систему, платформу и производителя видеокарты одним согласованным набором; поставьте часовой пояс и язык страны прокси. Потом проверьте здесь ещё раз."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="anti-detect-browser">
       <div class="focus-t"><h1>Проверка антидетект-браузера</h1><p>Антидетект-браузер даёт каждому профилю свой User-Agent, экран, часовой пояс и видеокарту. Каждое значение может выглядеть совершенно обычным и всё же противоречить другому. Эта страница читает то, что переписанному профилю трудно держать согласованным, и показывает, что не сходится.</p></div>
       <div class="focus-r"><h2>Следы вашего профиля</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Как исправить</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="engver"><span>Настоящая версия движка</span><b>…</b></li><li data-f="worker"><span>navigator в Worker</span><b>…</b></li><li data-f="h_ua"><span>User-Agent</span><b>…</b></li><li data-f="browser"><span>Браузер</span><b>…</b></li><li data-f="gpu"><span>Видеокарта</span><b>…</b></li><li data-f="tz"><span>Часовой пояс системы</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ru","paths":{"en":"/anti-detect-browser/","zh-CN":"/zh-cn/anti-detect-browser/","zh-TW":"/zh-tw/anti-detect-browser/","ja":"/ja/anti-detect-browser/","ko":"/ko/anti-detect-browser/","es":"/es/anti-detect-browser/","fr":"/fr/anti-detect-browser/","de":"/de/anti-detect-browser/","pt":"/pt/anti-detect-browser/","ru":"/ru/anti-detect-browser/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"anti-detect-browser","rows":["engver","worker","h_ua","browser","gpu","tz"],"check":"fpb"}}</script>
-<script src="/assets/l.ru.a5a83b953d.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.ru.b8478a5d88.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

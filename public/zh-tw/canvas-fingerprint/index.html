@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="電腦怎麼畫圖，就洩漏了它是哪一台">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Canvas 指紋檢測 · 1ms.dog","url":"https://who.1ms.dog/zh-tw/canvas-fingerprint/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免費 Canvas 指紋檢測：看看你的系統畫 Canvas、繪製 WebGL、處理音訊後算出的指紋，瀏覽器有沒有替它們加入干擾，以及網站不用 Cookie 就能認出你的綜合指紋 ID。","inLanguage":"zh-TW","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Canvas 指紋是什麼？","acceptedAnswer":{"@type":"Answer","text":"網頁在一塊你看不見的畫布上畫文字和圖形，再把像素讀回來，算成一串編碼。同一台機器每次都一樣，不同機器各不相同，所以可以拿來當 ID。"}},{"@type":"Question","name":"要怎麼防？","acceptedAnswer":{"@type":"Answer","text":"改用會替 Canvas、WebGL 和音訊加入隨機干擾的瀏覽器，例如預設就開著的 Brave，或開啟了 resistFingerprinting 的 Firefox。「防指紋」那一列會告訴你，同一張圖畫兩次，結果是不是不一樣。"}},{"@type":"Question","name":"隱私擴充功能有用嗎？","acceptedAnswer":{"@type":"Answer","text":"有些有用，它們替繪圖函式包了一層。但這一層本身也可能被發現：瀏覽器環境檢測會把被替換的函式標出來。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="canvas-fingerprint">
       <div class="focus-t"><h1>Canvas 指紋檢測</h1><p>讓兩台電腦畫同樣的文字和圖形，像素會有細微差異：顯示卡、驅動程式、字型、反鋸齒都會留下痕跡。網站把這張圖算成一串固定的編碼，就是指紋。下面是你的，以及瀏覽器有沒有把它們打亂。</p></div>
       <div class="focus-r"><h2>你的 Canvas 指紋</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>怎麼改</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="canvas"><span>Canvas</span><b>…</b></li><li data-f="webgl"><span>WebGL</span><b>…</b></li><li data-f="audio"><span>音訊</span><b>…</b></li><li data-f="rand"><span>防指紋</span><b>…</b></li><li data-f="fpid"><span>綜合指紋</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-TW","paths":{"en":"/canvas-fingerprint/","zh-CN":"/zh-cn/canvas-fingerprint/","zh-TW":"/zh-tw/canvas-fingerprint/","ja":"/ja/canvas-fingerprint/","ko":"/ko/canvas-fingerprint/","es":"/es/canvas-fingerprint/","fr":"/fr/canvas-fingerprint/","de":"/de/canvas-fingerprint/","pt":"/pt/canvas-fingerprint/","ru":"/ru/canvas-fingerprint/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"canvas-fingerprint","rows":["canvas","webgl","audio","rand","fpid"],"check":"fp"}}</script>
-<script src="/assets/l.zh-tw.fc851edfe3.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.zh-tw.8b3b25f76a.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

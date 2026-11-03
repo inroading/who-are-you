@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="중간에 프록시가 있다는 걸 사이트가 알까?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"프록시 검사 · 1ms.dog","url":"https://who.1ms.dog/ko/proxy-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"무료 프록시 검사: 브라우저가 잰 왕복 시간과 Cloudflare가 자기 연결에서 본 왕복 시간을 비교하고, IP가 데이터센터 것인지, DNS와 WebRTC 주소는 어떤지 확인해요. 깨끗한 가정용 IP라도 프록시는 사이트가 잴 수 있는 구간을 하나 더 만들어요.","inLanguage":"ko","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"지연 시간 검사는 어떻게 하나요?","acceptedAnswer":{"@type":"Answer","text":"페이지는 이 사이트의 가장 가까운 서버에 아주 작은 응답을 몇 번 요청하고, 요청을 보낸 순간부터 첫 바이트가 돌아올 때까지 가장 빨랐던 값을 써요. Cloudflare는 나에게 응답한 TCP 연결에서 잰 왕복 시간을 알려 줘요. 프록시가 없으면 두 값이 비슷하고, 프록시를 거치면 Cloudflare는 프록시까지의 구간만 봐요."}},{"@type":"Question","name":"가정용 IP도 들킬 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"네. 가정용 IP는 데이터센터 IP 검사는 통과하지만, 늘어난 왕복 시간, 다른 나라에 있는 DNS 서버, 맞지 않는 시간대, WebRTC 주소에서 여전히 드러나요."}},{"@type":"Question","name":"검사가 '읽지 못함'으로 나올 때가 있는 이유는?","acceptedAnswer":{"@type":"Answer","text":"HTTP/3에는 TCP 연결이 없어서 Cloudflare가 알려 줄 왕복 시간이 없어요. 측정 요청을 막는 네트워크도 있어요."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="proxy-check">
       <div class="focus-t"><h1>프록시 검사</h1><p>프록시는 IP를 숨겨 주지만, 길이 한 구간 늘어나는 건 숨기지 못해요. Cloudflare는 자기 연결에서 왕복 시간을 재는데, 그 연결의 반대쪽 끝은 프록시예요. 브라우저는 전체 구간을 재요. 브라우저 쪽이 훨씬 길면 IP가 어떻게 보이든 중간에 뭔가 있다는 뜻이에요. 두 값과 함께, 사이트가 보는 다른 단서도 보여 드려요.</p></div>
       <div class="focus-r"><h2>내 왕복 시간</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>해결 방법</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="edge"><span>가장 가까운 데이터센터</span><b>…</b></li><li data-f="ip"><span>IP 주소</span><b>…</b></li><li data-f="isp"><span>네트워크(ASN)</span><b>…</b></li><li data-f="dns"><span>DNS 서버</span><b>…</b></li><li data-f="webrtc"><span>WebRTC 주소</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>출구 IP 돋보기<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ko","paths":{"en":"/proxy-check/","zh-CN":"/zh-cn/proxy-check/","zh-TW":"/zh-tw/proxy-check/","ja":"/ja/proxy-check/","ko":"/ko/proxy-check/","es":"/es/proxy-check/","fr":"/fr/proxy-check/","de":"/de/proxy-check/","pt":"/pt/proxy-check/","ru":"/ru/proxy-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"proxy-check","rows":["edge","ip","isp","dns","webrtc"],"check":"rtt","go":"egress"}}</script>
-<script src="/assets/l.ko.938636920e.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.ko.b5822f7f13.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>

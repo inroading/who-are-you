@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Cada parte parece correcta; ¿encajan entre sí?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Test de navegador antidetección · 1ms.dog","url":"https://who.1ms.dog/es/anti-detect-browser/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Test gratuito de navegador antidetección: comprueba si el user agent coincide con la versión real del motor, si un Worker lee el mismo navigator que la página y si la plataforma, la tarjeta gráfica y la zona horaria encajan. No guarda tu IP ni los datos en bruto, solo recuentos anónimos para saber lo común que eres.","inLanguage":"es","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Qué delata a un navegador antidetección?","acceptedAnswer":{"@type":"Answer","text":"Las partes que no encajan. Un user agent que dice Chrome 156 mientras al motor le faltan funciones que Chrome incluyó hace tiempo; un Worker que lee otro user agent u otro idioma que la página; navigator.platform diciendo Mac con un user agent de Windows; WebGL nombrando a un fabricante como proveedor y a otro como tarjeta. Las webs rara vez buscan el navegador en sí: buscan estas contradicciones."}},{"@type":"Question","name":"¿Por qué importa la versión real del motor?","acceptedAnswer":{"@type":"Answer","text":"El user agent es un texto que cualquier navegador puede reescribir. El JavaScript que admite el motor no se puede reescribir igual: cada versión de Chromium añade funciones (Promise.try en la 128, RegExp.escape en la 136), y su presencia sitúa el motor en un rango. Un user agent fuera de ese rango es un perfil, no un navegador."}},{"@type":"Question","name":"¿Cómo hago que un perfil pase?","acceptedAnswer":{"@type":"Answer","text":"Elige una versión de user agent que encaje con el núcleo del navegador; prefiere los cambios hechos en el núcleo a los scripts inyectados, para que un Worker lea los mismos valores; elige sistema, plataforma y fabricante de la gráfica como un conjunto; y pon la zona horaria y el idioma del país del proxy. Luego vuelve a comprobarlo aquí."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.74c17c3b3b.css">
+<link rel="stylesheet" href="/assets/app.5ca64860b3.css">
 </head>
 <body>
 <div class="app">
@@ -67,11 +67,12 @@
     </div>
   </header>
 
-  <main id="main">
+  <main id="main" class="topic">
     <section class="focus card" id="focus" data-page="anti-detect-browser">
       <div class="focus-t"><h1>Test de navegador antidetección</h1><p>Un navegador antidetección da a cada perfil su propio user agent, pantalla, zona horaria y tarjeta gráfica. Cada valor puede parecer de lo más normal y aun así contradecir a otro. Esta página lee las partes que a un perfil modificado le cuesta mantener alineadas y te dice cuáles no encajan.</p></div>
       <div class="focus-r"><h2>Rastros de tu perfil</h2>
         <p class="focus-v" id="focusV"><i class="st"></i><b><i class="skl"></i></b></p>
+        <div class="focus-fix" id="focusFix" hidden><p>Cómo arreglarlo</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="engver"><span>Versión real del motor</span><b>…</b></li><li data-f="worker"><span>navigator en un Worker</span><b>…</b></li><li data-f="h_ua"><span>User agent</span><b>…</b></li><li data-f="browser"><span>Navegador</span><b>…</b></li><li data-f="gpu"><span>Tarjeta gráfica</span><b>…</b></li><li data-f="tz"><span>Zona horaria del sistema</span><b>…</b></li></ul>
         
       </div>
@@ -145,7 +146,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"es","paths":{"en":"/anti-detect-browser/","zh-CN":"/zh-cn/anti-detect-browser/","zh-TW":"/zh-tw/anti-detect-browser/","ja":"/ja/anti-detect-browser/","ko":"/ko/anti-detect-browser/","es":"/es/anti-detect-browser/","fr":"/fr/anti-detect-browser/","de":"/de/anti-detect-browser/","pt":"/pt/anti-detect-browser/","ru":"/ru/anti-detect-browser/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"anti-detect-browser","rows":["engver","worker","h_ua","browser","gpu","tz"],"check":"fpb"}}</script>
-<script src="/assets/l.es.5a2fce50c2.js"></script>
-<script src="/assets/app.ea74dbf156.js"></script>
+<script src="/assets/l.es.9480ec7b7c.js"></script>
+<script src="/assets/app.a9bab2a3ee.js"></script>
 </body>
 </html>
