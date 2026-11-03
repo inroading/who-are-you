@@ -1031,7 +1031,15 @@ import { TZ_CC } from "./tz.mjs";
         gpu: R.gpuRaw || null, screen: [screen.width, screen.height, devicePixelRatio], hints: { platform: hi.platform, platformVersion: hi.platformVersion, model: hi.model, mobile: hi.mobile },
         engine: R.engine || null, kbd: R.kbd || null, sysFonts: R.sysFonts || [], voices: [...new Set((R.voices || []).map(v => v.split(/[-_]/)[0]))],
         tz: R.tz, langs: R.langs, rtt: [R.rttB == null ? null : Math.round(R.rttB), c.clientTcpRtt || null], http: c.httpProtocol || null } };
-      return { summary, data };
+      // what a visitor most often says is wrong, as "label: value" to pick from when they write nothing else: the graphics
+      // card, the time zone check, the screen, the language check, the system, the system languages, the browser, then
+      // any other check that gave them away (the reports so far, most frequent first)
+      const sep = /^(zh|ja)/.test(LANG) ? "：" : ": ", flagged = id => R.ck[id] && (R.ck[id][0] === "bad" || R.ck[id][0] === "warn");
+      const reading = (id, v) => v ? [t("s_" + id), v] : null, check = id => flagged(id) ? [t("c_" + id), CK[id].querySelector(".ck-v").textContent] : null;
+      const picks = [reading("gpu", R.gpuSoft ? R.gpuRaw : R.gpu || R.gpuRaw), check("tz"), reading("screen", sc), check("lang"), reading("os", R.osTxt), check("syslang"),
+        reading("browser", R.browser), ...CHECKS.filter(id => !["tz", "lang", "syslang"].includes(id)).map(check)]
+        .filter(Boolean).slice(0, 8).map(([k, v]) => (k + sep + v).slice(0, 60));
+      return { summary, data, picks };
     };
   }
 
