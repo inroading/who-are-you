@@ -15,7 +15,7 @@ import { TZ_CC } from "./tz.mjs";
   const t = (k, v) => { let s = L[k] ?? k; if (v) for (const x in v) s = s.split("{" + x + "}").join(v[x]); return s; };
   const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
-  const K = { theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last", prev: "who:prev", target: "who:target", hist: "who:hist" };
+  const K = { scene: "who:scene", theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last", prev: "who:prev", target: "who:target", hist: "who:hist" };
   const dn = type => { try { return new Intl.DisplayNames([LANG], { type }); } catch (e) { return null; } };
   const REG = dn("region"), LNG = dn("language");
   const country = cc => { try { return REG ? REG.of(cc) : cc; } catch (e) { return cc; } };
@@ -1092,9 +1092,9 @@ import { TZ_CC } from "./tz.mjs";
       const r = CK[id], v = res[id];
       if (!v) continue;
       const [lv] = v;
-      if (CHECKS.includes(id)) { if (lv === "bad") bad++; if (lv === "warn") warn++; }
-      r.className = "ckr st-" + lv;
-      const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.className = "st-" + lv;
+      if (CHECKS.includes(id) && counted(id)) { if (lv === "bad") bad++; if (lv === "warn") warn++; }
+      r.className = "ckr st-" + lv + (CHECKS.includes(id) && !counted(id) ? " off" : "");
+      const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.className = "st-" + lv + (!counted(id) ? " off" : "");
       // the whole text on hover only when two lines cut it short; otherwise it would just repeat the row
       const cv = r.querySelector(".ck-v"); cv.textContent = ckText(id, v, ipc);
       if (cv.scrollHeight > cv.clientHeight + 1) r.dataset.why = cv.textContent; else delete r.dataset.why;
@@ -1121,16 +1121,32 @@ import { TZ_CC } from "./tz.mjs";
     $("#vText").textContent = t(n ? "v_found_d" : "v_clean_d");
     $("#vHead").className = "v-h" + (bad ? " bad" : warn ? " warn" : " ok");
     $("#mNum").textContent = n; $("#mNum").className = "m-num " + (bad ? "bad" : warn ? "warn" : "ok");
-    const gr = grade(res, CHECKS.filter(id => res[id]));
+    const gr = grade(res, CHECKS.filter(id => res[id] && counted(id)));
     $("#mGrade").textContent = t("grade_v", { g: gr.grade }); $("#mGrade").className = "m-grade g-" + gr.grade.replace("+", "p"); $("#mGrade").hidden = false;
     $("#mGrade").title = t("grade_why", { s: gr.score });
   }
   // What to fix first: the checks that give you away, a contradiction before a hint, the ones a site weighs most first;
   // each with the first step of its fix. A click opens that check's fix
+  // the scene: every check counts when passing as someone elsewhere; for privacy, only what leaks or tracks you
+  const PRIV = ["webrtc", "dns", "fp", "fpb", "tamper", "bot"];
+  let scene = !EMBED && store.get(K.scene) === "priv" ? "priv" : "all";
+  let shownShared = false;
+  const counted = id => scene !== "priv" || PRIV.includes(id) || shownShared;
+  function paintScene() {
+    $$("#scene [data-sc]").forEach(b => b.setAttribute("aria-checked", b.dataset.sc === scene));
+    for (const id of CHECKS) { CK[id].classList.toggle("off", !counted(id)); const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.classList.toggle("off", !counted(id)); }
+  }
+  $("#scene").onclick = e => {
+    const b = e.target.closest("[data-sc]");
+    if (!b || b.dataset.sc === scene) return;
+    scene = b.dataset.sc; store.set(K.scene, scene);
+    if (R.ck) { paintChecks(R.ck, R.srv && R.srv.cf && R.srv.cf.country, true); todo(); }
+    paintScene();
+  };
   const WEIGHT = { bot: 9, webrtc: 9, dns: 8, tz: 8, tamper: 7, fpb: 7, ua: 6, rtt: 6, split: 5, dc: 5, lang: 4, syslang: 3, fp: 2 };
   function todo() {
     const res = R.ck || {}, lvOf = id => res[id] && res[id][0];
-    const top = CHECKS.filter(id => lvOf(id) === "bad" || lvOf(id) === "warn")
+    const top = CHECKS.filter(id => counted(id) && (lvOf(id) === "bad" || lvOf(id) === "warn"))
       .sort((a, b) => (lvOf(a) === "bad" ? 0 : 1) - (lvOf(b) === "bad" ? 0 : 1) || (WEIGHT[b] || 0) - (WEIGHT[a] || 0)).slice(0, 3);
     $("#todo").hidden = !top.length;
     $("#todoL").innerHTML = top.map(id => {
@@ -1177,7 +1193,7 @@ import { TZ_CC } from "./tz.mjs";
     if (PHONE.matches && i > 0) g.classList.add("fold");
     g.querySelector("h3").onclick = e => { if (!e.target.closest("a")) g.classList.toggle("fold"); };
   });
-  phone();
+  phone(); paintScene();
   if (PHONE.addEventListener) PHONE.addEventListener("change", phone); else PHONE.addListener(phone);
   $$(".ck-fix").forEach(btn => {
     btn.onclick = e => {
@@ -1266,8 +1282,8 @@ import { TZ_CC } from "./tz.mjs";
       const k = n.dataset && n.dataset.b;
       return [(k === "city" || k === "isp") && !show ? t("masked") : n.textContent, k !== "age"];
     }));
-    const res = R.ck || {}, n = CHECKS.filter(id => res[id] && (res[id][0] === "bad" || res[id][0] === "warn")).length;
-    const gr = grade(res, CHECKS.filter(id => res[id])), GC = /^A|^B/.test(gr.grade) ? LV.ok : gr.grade === "C" ? LV.warn : LV.bad;
+    const res = R.ck || {}, n = CHECKS.filter(id => counted(id) && res[id] && (res[id][0] === "bad" || res[id][0] === "warn")).length;
+    const gr = grade(res, CHECKS.filter(id => res[id] && counted(id))), GC = /^A|^B/.test(gr.grade) ? LV.ok : gr.grade === "C" ? LV.warn : LV.bad;
     c.textBaseline = "alphabetic"; c.textAlign = "left";
     // first, large: the count, the verdict and the grade (a link preview shrinks the whole card into 1200×630)
     let y = kit.top + 116;
@@ -1331,6 +1347,7 @@ import { TZ_CC } from "./tz.mjs";
   // Someone else's portrait: from /r/<code> (or an older #p=<code> link), drawn from the link with nothing sniffed;
   // the sniffers card and the run controls step aside.
   function showShared(code) {
+    shownShared = true;
     const P = decode(code);
     if (!P) return false;
     P.langs = P.langs || []; P.jobs = P.jobs || []; P.x = {};
