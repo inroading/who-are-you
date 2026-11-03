@@ -44,7 +44,7 @@
 <meta name="twitter:description" content="你的浏览器前后说法一致吗？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"浏览器环境检测 · 1ms.dog","url":"https://who.1ms.dog/zh-cn/browser-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免费浏览器环境检测，适合指纹浏览器和多账号环境：检查 UA、JS 引擎、语言、时区、字体和指纹是否一致，有没有插件篡改网站读到的信息，并给出 A 到 F 的环境等级。","inLanguage":"zh-CN","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"这个检测看哪些地方？","acceptedAnswer":{"@type":"Answer","text":"看这几样：网站常读的属性（UA、平台、语言、屏幕）有没有被重新定义；算指纹用的画图和音频函数有没有被替换；JS 引擎和 UA 对不对得上；请求头（浏览器每次请求都会附带的信息）里的语言和 JS 里的是否一致；Date 和 Intl 两个接口报的时区是否相同。页面上其他检测项也都计入等级。"}},{"@type":"Question","name":"为什么改 UA 的插件会被识破？","acceptedAnswer":{"@type":"Answer","text":"因为它们只改了 JS 读到的那一份。浏览器发出的请求头、底层引擎、被它们包了一层的函数，都还是原样。每一处对不上，网站都比得出来。想装成在别处，要在系统里改：系统语言和时区。"}},{"@type":"Question","name":"会保存什么吗？","acceptedAnswer":{"@type":"Answer","text":"不会保存关于你个人的东西。检测都在你的浏览器里进行，服务器只回答它从这次请求里本来就看得到的东西，不记日志。检测完，页面会给匿名计数器加一（各项特征值和每项检查结果的计数），不存 IP，不存完整指纹，也没有单次访问的记录。页面上的「不参与统计」可以关掉；开了全局隐私控制（GPC）的浏览器不会计入。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.6ca42ae65c.css">
+<link rel="stylesheet" href="/assets/app.c4cdeedb39.css">
 </head>
 <body>
 <div class="app">

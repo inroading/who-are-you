@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="網站看得出中間隔著代理嗎？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"代理偵測 · 1ms.dog","url":"https://who.1ms.dog/zh-tw/proxy-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免費代理偵測：比對瀏覽器測到的往返延遲和 Cloudflare 在自己那條連線上測到的延遲，再看 IP 是不是機房 IP、DNS 和 WebRTC 漏了什麼。代理會多出一段網站量得出來的路程，換成住宅 IP 也藏不住。","inLanguage":"zh-TW","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"延遲是怎麼測的？","acceptedAnswer":{"@type":"Answer","text":"頁面向本站最近的 Cloudflare 機房要幾次很小的回應，取最快的一次：從送出請求到收到第一個位元組。Cloudflare 則回報它在服務你的那條 TCP 連線上測到的往返時間。沒走代理時，兩個數字差不多；走代理時，Cloudflare 只看到從代理到它的那一段。"}},{"@type":"Question","name":"住宅 IP 也會被識破嗎？","acceptedAnswer":{"@type":"Answer","text":"會。住宅 IP 過得了「機房 IP」這一關，但多出來的延遲、在別國的 DNS 伺服器、對不上的時區和 WebRTC 漏出來的位址，照樣會讓你露餡。"}},{"@type":"Question","name":"為什麼有時候測不出來？","acceptedAnswer":{"@type":"Answer","text":"走 HTTP/3 時沒有 TCP 連線，Cloudflare 就沒有往返時間可以回報；有些網路也會擋下測量請求。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.6ca42ae65c.css">
+<link rel="stylesheet" href="/assets/app.c4cdeedb39.css">
 </head>
 <body>
 <div class="app">

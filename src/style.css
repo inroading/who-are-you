@@ -362,6 +362,9 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 }
 @media (max-width: 720px) {
   .bar { margin: 0 -16px; padding: 12px 16px 14px; }
+  /* on a phone the buttons take their own full row, evenly, lined up with the edge above */
+  .bar .acts { flex: 1 1 100%; margin-left: 0; }
+  .bar .acts .btn { flex: 1 1 auto; justify-content: center; }
   .probes { padding: 16px 16px 12px; }
   .story { font-size: 16px; line-height: 1.85; }
   .hero { padding: 20px 16px 0; }
