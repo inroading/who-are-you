@@ -864,6 +864,7 @@ import { TZ_CC } from "./tz.mjs";
 
   /* ---------- the paragraph ---------- */
   const BL = Object.fromEntries($$("#story .bl[data-b]").map(b => [b.dataset.b, b]));
+  const BL0 = Object.fromEntries(Object.entries(BL).map(([k, b]) => [k, b.innerHTML]));   // each blank's filler, for a rerun
   const rowName = id => t("s_" + id);
   // a destination in the exits: the page's own request is "this site"
   const exitName = id => id === "ip" ? t("ex_self") : rowName(id);
@@ -1278,6 +1279,8 @@ import { TZ_CC } from "./tz.mjs";
     g.querySelector("h3").onclick = e => { if (!e.target.closest("a")) g.classList.toggle("fold"); };
   });
   phone(); paintScene();
+  // a resized window lays the paragraph out anew: the heights kept for its filling no longer apply
+  addEventListener("resize", () => $$("#story p").forEach(p => { p.style.minHeight = ""; }));
   if (PHONE.addEventListener) PHONE.addEventListener("change", phone); else PHONE.addListener(phone);
   // How common the visitor is. After a check the page sends its trait values and results to /api/seen, which counts
   // them (once a day per browser and fingerprint) and answers how many checks had each value. Not counted: an embedded
@@ -1524,9 +1527,9 @@ import { TZ_CC } from "./tz.mjs";
     for (const r of Object.values(PR)) { r.classList.add("wait"); r.classList.remove("na"); r.querySelector(".pa").textContent = "…"; delete r.dataset.why; }
     for (const r of Object.values(FR)) { r.classList.remove("na"); r.querySelector("b").textContent = "…"; }
     if ($("#focusV")) { $("#focusV").className = "focus-v"; $("#focusV b").innerHTML = '<i class="skl"></i>'; $("#focusV .st").textContent = ""; }
-    // the paragraph stays invisible (its skeleton on top) until every blank is in, so its text never reflows on screen
+    // the paragraph shows at once, its blanks as placeholders that fill in place
     $("#story").classList.add("wait"); $("#storySk").hidden = false;
-    for (const b of Object.values(BL)) { b.classList.add("wait"); b.innerHTML = '<i class="skl"></i>'; delete b.dataset.why; b.removeAttribute("tabindex"); }
+    for (const b of Object.values(BL)) { b.classList.add("wait"); b.innerHTML = BL0[b.dataset.b]; delete b.dataset.why; b.removeAttribute("tabindex"); }
     for (const r of Object.values(CK)) {
       r.className = "ckr"; delete r.dataset.why; r.querySelector(".ck-v").innerHTML = '<i class="skl"></i>'; r.querySelector(".st").textContent = "";
       r.querySelector(".ck-fix").hidden = true; r.querySelector(".ck-tip").hidden = true;
@@ -1537,6 +1540,9 @@ import { TZ_CC } from "./tz.mjs";
     $("#fpId").innerHTML = '<i class="skl"></i>'; $("#fpArt").innerHTML = ""; $("#fpNote").textContent = t("id_note"); $("#vText").innerHTML = "&nbsp;";
     $("#rerun").disabled = true; $("#share").disabled = true; $("#copyTxt").disabled = true; progress();
 
+    // on a wide screen each paragraph keeps the height it first had: its blanks wait a little long, so filling them
+    // only shortens lines, and the page below doesn't move (on a phone the first paragraph has its own, from the stylesheet)
+    if (!PHONE.matches) $$("#story p").forEach(p => { p.style.minHeight = ""; p.style.minHeight = p.getBoundingClientRect().height + "px"; });
     referrer(); locale(); prefs(); engine();
     const glInfo = gpu();
     fonts();

@@ -13,6 +13,7 @@ import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { build as bundle, transform } from "esbuild";
 import { GROUPS, COLUMNS, SNIFFERS, BLANKS, CHECKS, PROTO } from "../src/sniffers.mjs";
+import { BLANK_W } from "../src/blank-widths.mjs";
 import { PAGES, TEXT } from "../src/pages.mjs";
 
 const SITE = (process.env.SITE_URL || "https://who.1ms.dog").replace(/\/+$/, "");
@@ -55,7 +56,12 @@ export function storyHtml(s, lang) {
   const want = Object.keys(BLANKS);
   const odd = [...used.filter(k => !want.includes(k)), ...want.filter(k => !used.includes(k))];
   if (odd.length || new Set(used).size !== used.length) throw new Error(`i18n/${lang}.mjs story: blanks ${odd.join(", ") || "repeated"}`);
-  const line = l => l.split(/(\{\w+\})/).map(p => /^\{\w+\}$/.test(p) ? `<span class="bl wait" data-b="${p.slice(1, -1)}"><i class="skl"></i></span>` : esc(p)).join("");
+  // each blank waits as filler about as long as its answer (CJK: one character per em; others: "xxxx " per 2.6 em, as the blank's bold font draws it),
+  // transparent on a skeleton background, so it wraps like the words that will replace it
+  const cjk = /^(zh|ja|ko)/.test(lang), w = BLANK_W[lang] || {};
+  const filler = b => { const n = Math.round((w && w[b]) || 7);
+    return cjk ? "口".repeat(n) : "xxxx ".repeat(Math.max(1, Math.round(n / 2.6))).trim(); };
+  const line = l => l.split(/(\{\w+\})/).map(p => /^\{\w+\}$/.test(p) ? `<span class="bl wait" data-b="${p.slice(1, -1)}"><i class="skt">${filler(p.slice(1, -1))}</i></span>` : esc(p)).join("");
   return s.split("\n").map(l => `<p>${line(l)}</p>`).join("");
 }
 

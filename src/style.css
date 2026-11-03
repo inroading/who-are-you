@@ -38,14 +38,27 @@ h2 { font-size: 15px; font-weight: 700; }
 .bl:hover, .bl:focus-visible { background: var(--ink-soft); }
 .bl[data-b="age"] { color: var(--muted); font-weight: 500; background: none; }
 /* a waiting blank is about as wide as a typical answer, so the invisible paragraph takes about the height it will have */
-.bl.wait { display: inline-block; width: 7em; height: 1em; padding: 0; }
-.bl.wait[data-b="nat"], .bl.wait[data-b="clock"], .bl.wait[data-b="theme"], .bl.wait[data-b="screen"], .bl.wait[data-b="dns"] { width: 5em; }
-.bl.wait[data-b="gpu"] { width: 15em; }
-.bl.wait[data-b="isp"], .bl.wait[data-b="nettype"] { width: 9em; }
-.bl.wait[data-b="city"], .bl.wait[data-b="device"] { width: 10em; }
-/* until it is filled, the paragraph is laid out but invisible, with skeleton lines on top */
+.bl.wait { padding: 0; }
+/* a blank waiting: filler text as long as the answer, invisible on a skeleton background, wrapping like words */
+.skt { color: transparent; background: var(--soft); border-radius: 4px; -webkit-box-decoration-break: clone; box-decoration-break: clone; animation: blink 1.4s ease-in-out infinite; user-select: none; }
+/* the paragraph shows from the first paint, each blank a placeholder about as wide as its answer (the largest text
+   on the page: hiding it until the slowest probe answered made that the page's largest paint) */
 .story-w { position: relative; }
-.story.wait { visibility: hidden; }
+.story-sk { display: none !important; }
+/* on a phone, where the rest is folded, the first paragraph keeps the height it will have once filled (measured per
+   language); on a wider screen each paragraph keeps the height it first had (the page script), so filling a blank
+   shortens a line at most and pushes nothing down */
+html[lang="en"] { --story-p1: 5; }
+html[lang="zh-CN"] { --story-p1: 4; }
+html[lang="zh-TW"] { --story-p1: 4; }
+html[lang="ja"] { --story-p1: 4; }
+html[lang="ko"] { --story-p1: 5; }
+html[lang="es"] { --story-p1: 5; }
+html[lang="fr"] { --story-p1: 6; }
+html[lang="de"] { --story-p1: 6; }
+html[lang="pt"] { --story-p1: 5; }
+html[lang="ru"] { --story-p1: 6; }
+@media (max-width: 720px) { .story.fold p:first-child { min-height: calc(var(--story-p1, 4) * 1.85em); } }
 .story-sk { position: absolute; inset: 0 0 auto; display: flex; flex-direction: column; gap: 17px; padding-top: 9px; }
 .story-sk .skl { height: 15px; width: 100%; }
 .story-sk .skl:nth-child(odd) { width: 88%; } .story-sk .skl:last-child { width: 45%; }
@@ -93,7 +106,9 @@ h2 { font-size: 15px; font-weight: 700; }
 /* the visit before this one (kept in this browser only), and a button that forgets it */
 .idc { position: relative; }
 /* the labels a site would file the visitor under */
-.lbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 14px 0 4px; }
+.lbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin: 14px 0 4px; min-height: 64px; align-content: flex-start; }   /* two rows kept from the start, filled when the readings are in */
+@media (min-width: 721px) { .lbs { min-height: 30px; } }
+@media (max-width: 720px) { .m-slot .v-d { min-height: 4.35em; } .m-slot .v-top { min-height: 46px; align-items: flex-start; } }   /* three lines: the verdict's line fills in after the checks, above the portrait */
 .lbs-h { font-size: 13.5px; color: var(--muted); margin-right: 2px; }
 .lbs-l { display: contents; }
 .lb { padding: 4px 11px; border-radius: 999px; background: var(--ink-soft); color: var(--ink); font: 600 13.5px/1.3 var(--f-ui); cursor: help; }
