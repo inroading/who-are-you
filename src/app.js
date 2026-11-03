@@ -1382,6 +1382,21 @@ import { TZ_CC } from "./tz.mjs";
     $(".cp-top").hidden = !$("#crTop").children.length;   // (nothing shared by enough checks yet)
   }
   if (D.focus && D.focus.stats) crowd();
+  // the main page's pill: the last 7 days' checks, and what gave people away most, once the page has drawn
+  async function live() {
+    let s = null;
+    try { const r = await within(fetch("/api/stats"), 6000, null); s = r && r.ok ? await r.json() : null; } catch (e) {}
+    const el = $("#live");
+    if (!s || !s.days) { el.hidden = true; return; }
+    const since = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10), sum = {};
+    for (const [d, per] of Object.entries(s.days)) if (d >= since) for (const [id, lv] of Object.entries(per)) { const o = sum[id] ||= {}; for (const [k, c] of Object.entries(lv)) o[k] = (o[k] || 0) + c; }
+    const all = id => Object.values(sum[id] || {}).reduce((a, b) => a + b, 0), bad = id => all(id) ? ((sum[id].warn || 0) + (sum[id].bad || 0)) / all(id) : 0;
+    const n = Math.max(0, ...COUNTED.map(all)), top = COUNTED.filter(all).sort((a, b) => bad(b) - bad(a))[0];
+    if (!n || !top) { el.hidden = true; return; }
+    let nf; try { nf = new Intl.NumberFormat(LANG, { notation: "compact", maximumFractionDigits: 1 }).format(n); } catch (e) { nf = n.toLocaleString(LANG); }
+    el.querySelector(".live-t").innerHTML = t("lv_bar", { n: `<b>${esc(nf)}</b>`, top: esc(t("c_" + top)), p: `<b>${Math.round(bad(top) * 100)}%</b>` });
+  }
+  if (!D.focus && !EMBED && $("#live")) (window.requestIdleCallback || (f => setTimeout(f, 1500)))(() => live());
   $$(".ck-fix").forEach(btn => {
     btn.onclick = e => {
       e.stopPropagation();

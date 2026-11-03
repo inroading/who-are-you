@@ -91,8 +91,13 @@ async function tally(request, env, url) {
   const stub = env.TALLY.get(env.TALLY.idFromName("all"));
   if (url.pathname === "/api/stats") {
     if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET" } });
+    // kept a minute at the edge: the main page asks on every visit, the counter needn't answer each one
+    const key = new Request(url.origin + "/api/stats"), cache = caches.default, hit = await cache.match(key);
+    if (hit) return hit;
     const r = await stub.fetch("https://tally/stats");
-    return new Response(r.body, { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=300", "Access-Control-Allow-Origin": "*" } });
+    const res = new Response(await r.text(), { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=60", "Access-Control-Allow-Origin": "*" } });
+    await cache.put(key, res.clone());
+    return res;
   }
   if (request.method !== "POST") return new Response(null, { status: 405, headers: { Allow: "POST" } });
   if (request.headers.get("Origin") !== url.origin) return new Response(null, { status: 403 });

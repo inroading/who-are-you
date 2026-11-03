@@ -20,6 +20,15 @@ h2 { font-size: 15px; font-weight: 700; }
 .col { min-width: 0; display: flex; flex-direction: column; }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-bottom: 10px; padding: 3px 10px 3px 8px; border-radius: 999px;
   font-size: 12px; font-weight: 600; color: var(--ink); background: var(--ink-soft); }
+/* beside it, everyone's numbers: a pill to the stats page, its room kept until the numbers come */
+.eb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-bottom: 10px; } .eb-row .eyebrow { margin-bottom: 0; }
+.live { display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--fg);
+  background: var(--panel); border: 1px solid var(--line); text-decoration: none; min-width: 16em; }
+.live:hover { border-color: var(--ink); color: var(--ink); }
+.live .skl { width: 13em; height: 9px; } .live[hidden] { display: none; }
+.live b { color: var(--ink); font-weight: 700; }
+html.shared .live, html[data-who-embed] .live { display: none; }
+@media (pointer: coarse) { .live { min-height: 32px; } }
 .eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 22%, transparent); animation: pulse 2s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: .35; } }
 .hero h1 { font-size: clamp(24px, 3.2vw, 34px); line-height: 1.15; letter-spacing: -.025em; font-weight: 800; margin-bottom: 14px; }
