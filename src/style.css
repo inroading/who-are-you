@@ -23,7 +23,7 @@ h2 { font-size: 15px; font-weight: 700; }
 .eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 22%, transparent); animation: pulse 2s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: .35; } }
 .hero h1 { font-size: clamp(24px, 3.2vw, 34px); line-height: 1.15; letter-spacing: -.025em; font-weight: 800; margin-bottom: 14px; }
-.sec-h { display: flex; align-items: center; gap: 8px; height: 22px; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 6px; }
+.sec-h { display: flex; align-items: center; gap: 8px; height: 22px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 6px; }
 
 /* The paragraph, set like a filled-in form: the printed words quiet, every answer in full ink with a highlighter
    stroke. Hovering an answer lights up the rows it came from. */
@@ -57,7 +57,7 @@ h2 { font-size: 15px; font-weight: 700; }
 .focus h1 { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.15; letter-spacing: -.025em; font-weight: 800; margin-bottom: 12px; }
 .focus-t p { color: var(--muted); font-size: 15px; line-height: 1.75; }
 .focus-r { padding: 16px 18px; border-radius: 16px; border: 1px solid var(--line); background: color-mix(in srgb, var(--fg) 2.5%, var(--panel)); }
-.focus-r h2 { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px; }
+.focus-r h2 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px; }
 .focus-v { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; min-height: 1.6em; margin-bottom: 10px; }
 .focus-v.st-ok b { color: var(--t1); } .focus-v.st-warn b { color: var(--t3); } .focus-v.st-bad b { color: var(--t5); }
 .focus-v b .skl { width: 12em; }
@@ -85,7 +85,7 @@ h2 { font-size: 15px; font-weight: 700; }
 .fp-art path { fill: none; }
 .idc.rand .fp-art { background: repeating-conic-gradient(var(--ink-soft) 0 10deg, transparent 10deg 20deg); border-radius: 50%; }
 .idc-t { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.idc-h { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+.idc-h { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
 .idc-v { font: 700 19px/1.35 var(--f-num); letter-spacing: .02em; color: var(--fg); min-height: 1.35em; overflow-wrap: anywhere; }
 .idc-v .skl { width: 11em; height: 12px; }
 .idc.rand .idc-v { font: 600 15px/1.4 var(--f-ui); }
@@ -149,14 +149,14 @@ html.shared #share, html[data-who-embed] #share { display: none; }
 /* "how to fix" under a check that gives you away, and the tip it opens across the whole row */
 .ck-acts { display: flex; flex-wrap: wrap; gap: 0 10px; }
 .ck-acts:empty, .ck-acts:not(:has(:not([hidden]))) { display: none; }
-.ck-go { font: 500 11.5px var(--f-ui); color: var(--muted); text-decoration: none; }
+.ck-go { font: 500 12px var(--f-ui); color: var(--muted); text-decoration: none; }
 .ck-go:hover { color: var(--ink); text-decoration: underline; }
-.ck-fix { border: 0; background: none; padding: 0; font: 500 11.5px var(--f-ui); color: var(--ink); cursor: pointer; }
+.ck-fix { border: 0; background: none; padding: 0; font: 500 12px var(--f-ui); color: var(--ink); cursor: pointer; }
 .ck-fix::after { content: " ▾"; font-size: 9px; }
 .ck-fix[aria-expanded="true"]::after { content: " ▴"; }
 .ck-fix:hover { text-decoration: underline; }
 /* check one again, without the rest */
-.ck-re { border: 0; background: none; padding: 0; font: 500 11.5px var(--f-ui); color: var(--muted); cursor: pointer; }
+.ck-re { border: 0; background: none; padding: 0; font: 500 12px var(--f-ui); color: var(--muted); cursor: pointer; }
 .ck-re:hover { color: var(--ink); text-decoration: underline; }
 .ck-re:disabled { cursor: default; text-decoration: none; opacity: .7; }
 .ckr.re-done { animation: reDone 1.2s ease-out; }
@@ -206,7 +206,7 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 .pg { padding-top: 4px; }
 .pg h3 { font-size: 12px; font-weight: 700; color: var(--fg); letter-spacing: .01em; height: 30px; display: flex; align-items: center; gap: 8px; margin: 0; }
 .pg h3::before { content: ""; width: 3px; height: 14px; border-radius: 2px; background: var(--ink); }
-.pg-n { font: 500 11.5px var(--f-num); color: var(--muted); }
+.pg-n { font: 500 12px var(--f-num); color: var(--muted); }
 .pg-a { margin-left: auto; font: 500 12px var(--f-ui); color: var(--ink); text-decoration: none; }
 .pg-a:hover { text-decoration: underline; }
 .pr { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 13fr) minmax(0, 7fr); align-items: center; gap: 10px; height: 34px; border-top: 1px solid var(--line); font-size: 13px; transition: background-color .15s; }
@@ -278,6 +278,30 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
   .help-nav { display: none; }
   .help-b .help-pick { display: flex; }
 }
+/* Phones: the verdict moves up under the title (#mSlot), the portrait shows its first paragraph, the sniffer groups
+   fold to their headings; addresses wrap instead of running past the edge */
+.m-slot:empty { display: none; }
+.story-more { display: none; }
+@media (max-width: 720px) {
+  .m-slot { margin: 2px 0 14px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); }
+  .m-slot .meter { min-height: 0; }
+  .story.fold p:not(:first-child) { display: none; }
+  .story-more:not([hidden]) { display: inline-flex; align-items: center; min-height: 36px; margin-top: 2px; padding: 0; border: 0; background: none; font: 600 13.5px var(--f-ui); color: var(--ink); cursor: pointer; }
+  .story-more::after { content: " ▾"; font-size: 10px; margin-left: 4px; }
+  .story-w:has(.story.fold) .story-sk .skl:nth-child(n+4) { display: none; }
+  .pg h3 { cursor: pointer; height: 40px; }
+  .pg h3::after { content: "▾"; margin-left: 4px; font-size: 10px; color: var(--muted); }
+  .pg:not(.fold) h3::after { content: "▴"; }
+  .pg h3 .pg-a + .pg-n, .pg h3 .pg-a { order: 0; }
+  .pg.fold .pr { display: none; }
+  .pa { white-space: normal; overflow-wrap: anywhere; text-overflow: clip; }
+}
+/* touch: links and small buttons on their own get a finger-sized target, looking the same */
+@media (pointer: coarse) {
+  .ck-fix, .ck-go, .ck-re, .rp-btn, .v-go, .pg-a, .focus-go { min-height: 32px; display: inline-flex; align-items: center; }
+  .ck-acts { gap: 0 16px; }
+  .topics a { min-height: 32px; display: inline-flex; align-items: center; }
+}
 @media (max-width: 420px) {
   .bar .btn span { display: none; }
   .bar .btn { padding: 0 10px; }
@@ -317,7 +341,7 @@ html.shared .idc, html.shared #copyTxt, html.shared #mine { display: none; }
 .tg-sum.ok { color: var(--t1); } .tg-sum.bad { color: var(--t5); }
 .tg-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
 .tg-list li { display: flex; gap: 8px; align-items: flex-start; padding: 9px 11px; border-radius: 11px; border: 1px solid var(--line); font-size: 13px; line-height: 1.45; min-height: 56px; }
-.tg-i { flex: none; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; background: var(--line); margin-top: 1px; }
+.tg-i { flex: none; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff; background: var(--line); margin-top: 1px; }
 .tg-list .ok .tg-i { background: var(--t1); } .tg-list .bad .tg-i { background: var(--t5); }
 .tg-list .bad { border-color: color-mix(in srgb, var(--t5) 40%, var(--line)); }
 .tg-b { display: flex; flex-direction: column; min-width: 0; }

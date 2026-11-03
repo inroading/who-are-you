@@ -1162,6 +1162,23 @@ import { TZ_CC } from "./tz.mjs";
       const r = CK[id]; r.classList.remove("re-done"); void r.offsetWidth; r.classList.add("re-done");
     };
   });
+  // Phones: the verdict (count, grade, share) right under the title, the portrait from its first paragraph, the
+  // sniffer groups folded to their headings but the first; a wider window puts everything back
+  const PHONE = matchMedia("(max-width: 720px)"), meter = $(".meter"), meterHome = meter.parentNode, meterNext = meter.nextElementSibling;
+  let storyOpen = false;
+  function phone() {
+    if (PHONE.matches) { if (meter.parentNode !== $("#mSlot")) $("#mSlot").appendChild(meter); }
+    else if (meter.parentNode !== meterHome) meterHome.insertBefore(meter, meterNext);
+    const many = $$("#story p").length > 1, fold = PHONE.matches && many && !storyOpen;
+    $("#story").classList.toggle("fold", fold); $("#storyMore").hidden = !fold;
+  }
+  $("#storyMore").onclick = () => { storyOpen = true; phone(); };
+  $$(".pg").forEach((g, i) => {
+    if (PHONE.matches && i > 0) g.classList.add("fold");
+    g.querySelector("h3").onclick = e => { if (!e.target.closest("a")) g.classList.toggle("fold"); };
+  });
+  phone();
+  if (PHONE.addEventListener) PHONE.addEventListener("change", phone); else PHONE.addListener(phone);
   $$(".ck-fix").forEach(btn => {
     btn.onclick = e => {
       e.stopPropagation();
@@ -1300,7 +1317,7 @@ import { TZ_CC } from "./tz.mjs";
   }
 
   $("#share").onclick = async () => {
-    const { share } = await import("/assets/share/share.js?v=3");
+    const { share } = await import("/assets/share/share.js?v=4");
     const link = show => location.origin + linkPath(LANG, encode(sharedPortrait(show)));
     share({
       lang: LANG, name: t("app_name"), file: "who-1ms-dog", show: ["city", "isp"], never: ["ip"], ts: Date.now(),
@@ -1325,7 +1342,7 @@ import { TZ_CC } from "./tz.mjs";
     for (const id of CHECKS) if (!(P.ck || {})[id]) { CK[id].hidden = true; const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.hidden = true; }
     paintChecks(P.ck || {}, P.cc, true);
     readings(P, P.ck || {});
-    import("/assets/share/share.js?v=3").then(({ received }) => received({ lang: LANG, ts: P.t || undefined, at: $(".hero"), test: () => { location.href = D.paths[LANG] || "/"; } })).catch(() => {});
+    import("/assets/share/share.js?v=4").then(({ received }) => received({ lang: LANG, ts: P.t || undefined, at: $(".hero"), test: () => { location.href = D.paths[LANG] || "/"; } })).catch(() => {});
     return true;
   }
   const sharedCode = (parsePath(location.pathname) || {}).code || (/^#p=/.test(location.hash) ? location.hash.slice(3) : null);
