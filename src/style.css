@@ -283,12 +283,12 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 :root[data-theme="dark"] .st-info .st, :root[data-theme="dark"] .ckr:not([class*="st-"]) .st { color: var(--muted); }
 
 /* action bar along the bottom of the hero; the progress line sits on its top border */
-.bar { position: relative; display: flex; align-items: center; gap: 12px; margin: 0 -26px; padding: 12px 26px 14px; border-top: 1px solid var(--line); }
+.bar { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin: 0 -26px; padding: 12px 26px 14px; border-top: 1px solid var(--line); }
 .prog { position: absolute; left: 0; right: 0; top: -1px; height: 2px; overflow: hidden; }
 .prog i { display: block; height: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .25s, opacity .4s .3s; }
 .prog.end i { opacity: 0; }
 .prog-t { font: 12.5px var(--f-num); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 12ch; }
-.acts { margin-left: auto; display: flex; gap: 8px; }
+.acts { margin-left: auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; min-width: 0; }   /* wraps rather than running past the edge (a 430px phone, a long language) */
 
 /* every sniffer: rows keep their size from the first paint; only the text inside changes */
 .probes { padding: 18px 22px 14px; display: flex; flex-direction: column; gap: 12px; }
@@ -390,6 +390,7 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
   .pg h3 .pg-a + .pg-n, .pg h3 .pg-a { order: 0; }
   .pg.fold .pr { display: none; }
   .pa, .pa .nw { white-space: normal; overflow-wrap: anywhere; text-overflow: clip; }
+  .pr { height: auto; min-height: 34px; padding-top: 7px; padding-bottom: 7px; line-height: 1.45; }   /* a wrapped value makes its row taller instead of running into the next */
 }
 /* touch: links and small buttons on their own get a finger-sized target, looking the same */
 @media (pointer: coarse) {

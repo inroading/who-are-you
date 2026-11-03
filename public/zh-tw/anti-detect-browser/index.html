@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="每一項都像真的，合在一起對得上嗎？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"指紋瀏覽器檢測 · 1ms.dog","url":"https://who.1ms.dog/zh-tw/anti-detect-browser/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免費指紋瀏覽器檢測：看 UA 和核心的真實版本是否一致，Worker 裡讀到的 navigator 和頁面裡是否相同，平台、顯示卡和時區對不對得上。適合檢查 AdsPower、Multilogin 等環境。檢測在你的瀏覽器裡進行，不存 IP，只累計匿名計數。","inLanguage":"zh-TW","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"指紋瀏覽器會在哪裡露餡？","acceptedAnswer":{"@type":"Answer","text":"露餡在各項互相對不上：UA 寫著 Chrome 156，核心卻缺少 Chrome 早就有的功能；Worker 裡讀到的 UA 或語言和頁面裡不一樣；UA 是 Windows，navigator.platform 卻是 Mac；WebGL 回報的廠商是一家，顯示卡卻是另一家。網站很少去認瀏覽器本身，它們找的就是這些矛盾。"}},{"@type":"Question","name":"為什麼要看核心的真實版本？","acceptedAnswer":{"@type":"Answer","text":"UA 只是一串文字，誰都能改。核心支援哪些 JavaScript 功能卻改不了：Chromium 每個版本都會加入新函式（128 加了 Promise.try，136 加了 RegExp.escape），看有沒有這些函式，就能把核心版本框在一個範圍裡。UA 寫的版本落在範圍外，代表這是設定出來的環境，不是真的瀏覽器。"}},{"@type":"Question","name":"怎麼讓環境通過檢測？","acceptedAnswer":{"@type":"Answer","text":"UA 的版本選成和核心一致；盡量用核心層級的修改，別用注入腳本，這樣 Worker 讀到的也會一樣；系統、平台、顯示卡廠商選同一套，別混搭；時區和語言設成代理所在國的。改完回到這裡再測一次。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.d2fa98406e.css">
+<link rel="stylesheet" href="/assets/app.6ca42ae65c.css">
 </head>
 <body>
 <div class="app">
