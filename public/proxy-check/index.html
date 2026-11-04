@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Can sites tell there's a proxy in between?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Proxy check · 1ms.dog","url":"https://who.1ms.dog/proxy-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Free proxy check: compares the round trip your browser measures with the one Cloudflare sees on its connection, and checks whether your IP belongs to a data center, plus your DNS and WebRTC addresses. A proxy adds a leg sites can measure, even on a clean residential IP.","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the latency check work?","acceptedAnswer":{"@type":"Answer","text":"The page asks this site's nearest Cloudflare server for a tiny response a few times and keeps the fastest, timed from when the request leaves to when the first byte comes back. Cloudflare reports the round trip it measured on the TCP connection it served you on. Without a proxy the two are close; through one, Cloudflare only sees the proxy's part."}},{"@type":"Question","name":"Can a residential IP still be caught?","acceptedAnswer":{"@type":"Answer","text":"Yes. A residential IP passes the data center check, but the extra round trip, a DNS resolver in another country, a time zone that doesn't match and WebRTC addresses can all still give it away."}},{"@type":"Question","name":"Why does the check sometimes say \"couldn't read\"?","acceptedAnswer":{"@type":"Answer","text":"Over HTTP/3 there's no TCP connection, so Cloudflare has no round trip to report. Some networks also block the measuring requests."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.12214cc51c.css">
+<link rel="stylesheet" href="/assets/app.2df9b67455.css">
 </head>
 <body>
 <div class="app">
@@ -149,7 +149,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"en","paths":{"en":"/proxy-check/","zh-CN":"/zh-cn/proxy-check/","zh-TW":"/zh-tw/proxy-check/","ja":"/ja/proxy-check/","ko":"/ko/proxy-check/","es":"/es/proxy-check/","fr":"/fr/proxy-check/","de":"/de/proxy-check/","pt":"/pt/proxy-check/","ru":"/ru/proxy-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"proxy-check","rows":["edge","ip","isp","dns","webrtc"],"check":"rtt","go":"egress","needs":["server","rtt","dns","webrtc"]}}</script>
-<script src="/assets/l.en.b1108be460.js"></script>
-<script src="/assets/app.12e20a444d.js"></script>
+<script src="/assets/l.en.f5af6a5ed9.js"></script>
+<script src="/assets/app.e501e3c1a6.js"></script>
 </body>
 </html>

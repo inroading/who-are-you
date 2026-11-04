@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="중간에 프록시가 있다는 걸 사이트가 알까?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"프록시 검사 · 1ms.dog","url":"https://who.1ms.dog/ko/proxy-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"무료 프록시 검사: 브라우저가 잰 왕복 시간과 Cloudflare가 자기 연결에서 본 왕복 시간을 비교하고, IP가 데이터센터 것인지, DNS와 WebRTC 주소는 어떤지 확인해요. 깨끗한 가정용 IP라도 프록시는 사이트가 잴 수 있는 구간을 하나 더 만들어요.","inLanguage":"ko","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"지연 시간 검사는 어떻게 하나요?","acceptedAnswer":{"@type":"Answer","text":"페이지는 이 사이트의 가장 가까운 서버에 아주 작은 응답을 몇 번 요청하고, 요청을 보낸 순간부터 첫 바이트가 돌아올 때까지 가장 빨랐던 값을 써요. Cloudflare는 나에게 응답한 TCP 연결에서 잰 왕복 시간을 알려 줘요. 프록시가 없으면 두 값이 비슷하고, 프록시를 거치면 Cloudflare는 프록시까지의 구간만 봐요."}},{"@type":"Question","name":"가정용 IP도 들킬 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"네. 가정용 IP는 데이터센터 IP 검사는 통과하지만, 늘어난 왕복 시간, 다른 나라에 있는 DNS 서버, 맞지 않는 시간대, WebRTC 주소에서 여전히 드러나요."}},{"@type":"Question","name":"검사가 '읽지 못함'으로 나올 때가 있는 이유는?","acceptedAnswer":{"@type":"Answer","text":"HTTP/3에는 TCP 연결이 없어서 Cloudflare가 알려 줄 왕복 시간이 없어요. 측정 요청을 막는 네트워크도 있어요."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.12214cc51c.css">
+<link rel="stylesheet" href="/assets/app.2df9b67455.css">
 </head>
 <body>
 <div class="app">
@@ -149,7 +149,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ko","paths":{"en":"/proxy-check/","zh-CN":"/zh-cn/proxy-check/","zh-TW":"/zh-tw/proxy-check/","ja":"/ja/proxy-check/","ko":"/ko/proxy-check/","es":"/es/proxy-check/","fr":"/fr/proxy-check/","de":"/de/proxy-check/","pt":"/pt/proxy-check/","ru":"/ru/proxy-check/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"proxy-check","rows":["edge","ip","isp","dns","webrtc"],"check":"rtt","go":"egress","needs":["server","rtt","dns","webrtc"]}}</script>
-<script src="/assets/l.ko.64d4a7c82a.js"></script>
-<script src="/assets/app.12e20a444d.js"></script>
+<script src="/assets/l.ko.4ff508bd1e.js"></script>
+<script src="/assets/app.e501e3c1a6.js"></script>
 </body>
 </html>

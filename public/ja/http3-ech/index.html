@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="あなたの接続はどれだけ新しい？何が邪魔している？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"HTTP/3・ECH・耐量子暗号の検査 · 1ms.dog","url":"https://who.1ms.dog/ja/http3-ech/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"無料の接続検査：ブラウザが HTTP/3 を使っているか、ECH（Encrypted Client Hello）で接続先のサイト名を隠しているか、耐量子の鍵（X25519MLKEM768）で合意しているか、欠けているならネットワークやプロキシについて何が分かるかを確認します。IP は保存せず、残すのは匿名の集計だけです。","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"HTTP/3 が使われないのはなぜですか？","acceptedAnswer":{"@type":"Answer","text":"HTTP/3 は UDP の 443 番ポートを使います。ブラウザはサイトが HTTP/3 に対応していることを TCP での最初の応答で知るので、初回の訪問ではまだ切り替わらないことがあります。ただ、UDP がどこにも出られないなら、ネットワークかプロキシが遮断しているか、UDP を通していません。TCP しか通さないプロキシ設定はよくあります。"}},{"@type":"Question","name":"ECH とは何ですか？オフなのはなぜですか？","acceptedAnswer":{"@type":"Answer","text":"Encrypted Client Hello は、接続先のサイト名を暗号化する仕組みです。これがないと TLS はサイト名を暗号化せずに送るので、経路上の誰でも読めてしまいます。ブラウザは DNS の HTTPS レコードからサイトの鍵を得る必要があります。Firefox は自身の DNS over HTTPS を使うときだけ読み、Chrome は HTTPS レコードを返す DNS サーバーが必要で、Safari はまだ ECH を使っていません。"}},{"@type":"Question","name":"従来型の鍵交換になっているのはどういう意味ですか？","acceptedAnswer":{"@type":"Answer","text":"Chrome 124 以降、Firefox 132 以降、Safari 26 は、標準で X25519MLKEM768 を提示します。最新のブラウザなのに普通の X25519 になっているなら、途中で独自に TLS 接続を張り直すもの（ウイルス対策ソフト、社内プロキシ、TLS を終端するプロキシのクライアント）があると考えられます。古いブラウザなら、単に古いだけです。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.12214cc51c.css">
+<link rel="stylesheet" href="/assets/app.2df9b67455.css">
 </head>
 <body>
 <div class="app">
@@ -149,7 +149,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ja","paths":{"en":"/http3-ech/","zh-CN":"/zh-cn/http3-ech/","zh-TW":"/zh-tw/http3-ech/","ja":"/ja/http3-ech/","ko":"/ko/http3-ech/","es":"/es/http3-ech/","fr":"/fr/http3-ech/","de":"/de/http3-ech/","pt":"/pt/http3-ech/","ru":"/ru/http3-ech/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"http3-ech","rows":["proto","kex","tlsfp","edge"],"check":"ech","needs":["server","http3","trace"]}}</script>
-<script src="/assets/l.ja.e6405a2633.js"></script>
-<script src="/assets/app.12e20a444d.js"></script>
+<script src="/assets/l.ja.60081f4373.js"></script>
+<script src="/assets/app.e501e3c1a6.js"></script>
 </body>
 </html>

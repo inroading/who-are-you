@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="¿Tu DNS se salta la VPN?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Test de fuga de DNS · 1ms.dog","url":"https://who.1ms.dog/es/dns-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Test gratuito de fuga de DNS: encuentra el servidor DNS que de verdad busca las webs por ti, su país y su red, y compáralo con la IP que ven las webs. Si no coinciden, tu VPN o proxy filtra el DNS. Incluye cómo arreglarlo en Clash, V2Ray y el navegador.","inLanguage":"es","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Qué es una fuga de DNS?","acceptedAnswer":{"@type":"Answer","text":"Antes de conectarse a una web, tu navegador le pide a un servidor DNS que convierta el nombre en una dirección. Si esa consulta se salta la VPN o el proxy, va al servidor DNS de tu proveedor: tu proveedor ve cada web que visitas, y las webs que comparan tu servidor DNS con tu IP pueden saber que usas una VPN y dónde estás de verdad."}},{"@type":"Question","name":"¿Cómo encuentra el test mi servidor DNS?","acceptedAnswer":{"@type":"Answer","text":"La página consulta un nombre aleatorio bajo edns.ip-api.com que nadie ha pedido nunca, así que ninguna caché puede responder: tu servidor DNS tiene que preguntar al servidor de nombres de ip-api, que informa de la dirección y la red de tu servidor DNS, y también de tu subred si tu servidor la transmite (ECS). El test compara el país de tu servidor DNS con el de tu IP."}},{"@type":"Question","name":"¿Cómo arreglo una fuga de DNS?","acceptedAnswer":{"@type":"Answer","text":"Clash / Mihomo: activa su DNS con enhanced-mode en fake-ip, o usa el modo TUN para que todas las consultas pasen por él. Clientes V2Ray / Xray: manda el DNS por el proxy (o configura un servidor DoH que pase por él). En el navegador, el DNS seguro (DoH) también aparta las consultas de tu proveedor. Después, repite este test."}},{"@type":"Question","name":"Mi servidor DNS es Cloudflare o Google en otra ciudad. ¿Es una fuga?","acceptedAnswer":{"@type":"Answer","text":"Normalmente no. Los DNS públicos como 1.1.1.1 y 8.8.8.8 responden desde el centro de datos más cercano a la consulta, así que la ciudad puede no coincidir con la salida de tu VPN. Lo que te delata es un servidor DNS de tu proveedor de casa, o uno en tu país cuando tu IP está en el extranjero."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.12214cc51c.css">
+<link rel="stylesheet" href="/assets/app.2df9b67455.css">
 </head>
 <body>
 <div class="app">
@@ -149,7 +149,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"es","paths":{"en":"/dns-leak/","zh-CN":"/zh-cn/dns-leak/","zh-TW":"/zh-tw/dns-leak/","ja":"/ja/dns-leak/","ko":"/ko/dns-leak/","es":"/es/dns-leak/","fr":"/fr/dns-leak/","de":"/de/dns-leak/","pt":"/pt/dns-leak/","ru":"/ru/dns-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"dns-leak","rows":["dns","ip","ex_cn","ex_intl","stack"],"check":"dns","go":"dns","needs":["server","dns","exits","stack"]}}</script>
-<script src="/assets/l.es.d8c400b567.js"></script>
-<script src="/assets/app.12e20a444d.js"></script>
+<script src="/assets/l.es.6da486944d.js"></script>
+<script src="/assets/app.e501e3c1a6.js"></script>
 </body>
 </html>

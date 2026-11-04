@@ -184,6 +184,8 @@ main.topic > .hero, main.topic > .target, main.topic > .probes { display: none; 
 /* on a wide screen the portrait says how much you stand out; the card's line is for the folded phone portrait */
 @media (min-width: 721px) { .idc-u { display: none; } }
 /* how common the fingerprint is, and what the counting keeps */
+/* the stats page: a check's change against the week before, in percentage points (more caught: up, red) */
+.wk { margin-left: 4px; font: 600 11px var(--f-num); color: var(--muted); } .wk.up { color: var(--bad); } .wk.down { color: var(--t1); }
 /* how common each reading is: a bar per reading, as many bits as it tells a site, the whole fingerprint last */
 .rar-d { margin: 10px 0 0; font-size: 13px; }
 .rar-d summary { cursor: pointer; font-weight: 600; color: var(--ink); }

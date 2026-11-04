@@ -1731,11 +1731,21 @@ import { TZ_CC } from "./tz.mjs";
     for (const [d, per] of Object.entries(s.days)) if (d >= since) for (const [id, lv] of Object.entries(per)) { const o = sum[id] ||= {}; for (const [k, c] of Object.entries(lv)) o[k] = (o[k] || 0) + c; }
     const all = id => Object.values(sum[id] || {}).reduce((a, b) => a + b, 0), share = (id, lvs) => all(id) ? lvs.reduce((a, l) => a + ((sum[id] || {})[l] || 0), 0) / all(id) : 0;
     const n = Math.max(0, ...COUNTED.map(all)), pc = x => Math.round(x * 100) + "%";
+    // the week before, for each check's change (shown once that week has enough checks of it)
+    const before = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10), prev = {};
+    for (const [d, per] of Object.entries(s.days)) if (d >= before && d < since) for (const [id, lv] of Object.entries(per)) { const o = prev[id] ||= {}; for (const [k, c] of Object.entries(lv)) o[k] = (o[k] || 0) + c; }
+    const pAll = id => Object.values(prev[id] || {}).reduce((a, b) => a + b, 0), pShare = id => pAll(id) ? (((prev[id] || {}).warn || 0) + ((prev[id] || {}).bad || 0)) / pAll(id) : 0;
+    const wk = (id, p) => {
+      if (pAll(id) < 200) return "";
+      const d = Math.round((p - pShare(id)) * 1000) / 10;
+      return Math.abs(d) < 0.5 ? `<small class="wk" title="${esc(t("cr_wk_same"))}">=</small>`
+        : `<small class="wk ${d > 0 ? "up" : "down"}" title="${esc(t("cr_wk", { d: (d > 0 ? "+" : "") + d.toLocaleString(LANG) }))}">${d > 0 ? "↑" : "↓"}${Math.abs(d).toLocaleString(LANG)}</small>`;
+    };
     $("#crN").textContent = n.toLocaleString(LANG);
     $("#crFacts").innerHTML = [["split", ["warn"], "cr_f_split"], ["tz", ["bad"], "cr_f_tz"], ["dns", ["bad"], "cr_f_dns"], ["webrtc", ["bad"], "cr_f_rtc"], ["dc", ["warn", "bad"], "cr_f_dc"]]
       .map(([id, lvs, k]) => { const p = share(id, lvs); return `<li class="card ${p >= .3 ? "hi" : p >= .15 ? "mid" : ""}">${ic(id)}<b>${pc(p)}</b><p>${esc(t(k))}</p></li>`; }).join("");
     $("#crBars").innerHTML = COUNTED.filter(id => all(id)).map(id => [id, share(id, ["warn", "bad"]), share(id, ["bad"])]).sort((a, b) => b[1] - a[1])
-      .map(([id, p, bad]) => `<li class="${bad >= p / 2 && p ? "bad" : p < .05 ? "low" : ""}"><span>${esc(t("c_" + id))}</span><i><span style="width:${Math.max(1, Math.round(p * 100))}%"></span></i><em>${pc(p)}</em></li>`).join("");
+      .map(([id, p, bad]) => `<li class="${bad >= p / 2 && p ? "bad" : p < .05 ? "low" : ""}"><span>${esc(t("c_" + id))}</span><i><span style="width:${Math.max(1, Math.round(p * 100))}%"></span></i><em>${pc(p)}${wk(id, p)}</em></li>`).join("");
     const shown = { os: v => v, browser: v => v, screen: v => v, gpu: v => v, tz: v => tzLabel(v), langs: v => language(v) }, T0 = s.total || 1;
     $("#crTop").innerHTML = Object.keys(shown).filter(f => (s.top || {})[f] && s.top[f].length).map(f => `<div><h3>${ic(f === "tz" ? "tz" : f)}${esc(t("s_" + f))}</h3><ol>` +
       s.top[f].slice(0, 5).map(([v, c]) => `<li><span title="${esc(shown[f](v))}">${esc(shown[f](v))}</span><em>${pc(c / T0)}</em><i><span style="width:${Math.max(2, Math.round(c / s.top[f][0][1] * 100))}%"></span></i></li>`).join("") + "</ol></div>").join("");
