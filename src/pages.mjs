@@ -7,7 +7,7 @@
 //   needs  the sniffers the page runs, beside the local ones every check rests on (the language, the clock, the system
 //          and the browser): only these, not the main page's whole set (src/app.js run())
 export const PAGES = {
-  fingerprint: { rows: ["fpid", "canvas", "webgl", "audio", "fontfp", "rand"], check: "fp", needs: ["gpu", "fonts", "prints"] },
+  fingerprint: { rows: ["fpid", "canvas", "webgl", "audio", "fontfp", "rand", "traces"], check: "fp", needs: ["gpu", "fonts", "prints", "traces"] },
   "dns-leak": { rows: ["dns", "ip", "ex_cn", "ex_intl", "stack"], check: "dns", go: "dns", needs: ["server", "dns", "exits", "stack"] },
   "webrtc-leak": { rows: ["webrtc", "lan", "ip", "stack"], check: "webrtc", go: "egress", needs: ["server", "webrtc", "stack"] },
   "browser-check": { rows: ["engine", "browser", "h_ua", "h_lang", "langs", "tz", "fonts"], check: "tamper", needs: ["server", "fonts"] },

@@ -422,7 +422,7 @@ import { TZ_CC } from "./tz.mjs";
     const held = await tries(s => s.get());
     const kept = STORES.filter((_, i) => got[i] === tag).map(([k]) => k), lost = first ? [] : STORES.filter((_, i) => got[i] !== tag).map(([k]) => k);
     const now = STORES.filter((_, i) => held[i] === tag).map(([k]) => k), nm = ks => list(ks.map(k => t("tr_" + k)));
-    R.traces = { first, kept, lost };
+    R.traces = { first, kept, lost, blocked: first && !now.length };
     txt("traces", first ? (now.length ? tn("tr_first", now.length, { n: now.length, list: nm(now) }) : t("tr_none")) : lost.length ? t("tr_some", { kept: nm(kept), lost: nm(lost) }) : t("tr_all", { list: nm(kept) }),
       { why: t("tr_why") });
   }
@@ -874,7 +874,7 @@ import { TZ_CC } from "./tz.mjs";
       tz: R.tz || null, rf: rfp() || undefined, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, browser: R.browser || null,
       screen: R.screen || null, gpu: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) || R.gpu || null, gi: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) ? R.gpu : undefined, gl: /or similar$/.test(R.gpuRaw || "") || undefined, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
       nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
-      dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, app: inApp() || undefined, fz: !!R.noise || undefined, hz: R.hz || null,
+      dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, app: inApp() || undefined, fz: !!R.noise || undefined, tb: (R.traces && R.traces.blocked) || undefined, hz: R.hz || null,
       cpu: navigator.hardwareConcurrency || null, multi: R.multi === true || undefined, fs: R.fontPx || null, rm: R.rm || undefined, hc: R.hc || undefined,
       bat: !R.battery ? undefined : R.battery.level === 1 && R.battery.charging && R.battery.chargingTime === 0 ? "ac" : (R.battery.charging ? "c" : "b") + Math.round(R.battery.level * 100),
       x: { split, fullOrg: [c.asn ? "AS" + c.asn : "", c.asOrganization].filter(Boolean).join(" · "), dnsOrg: R.dnsOrg || "", fpHex: R.fpHex } };
@@ -1054,7 +1054,8 @@ import { TZ_CC } from "./tz.mjs";
       [!!P.multi, "lb_multi", ["screens"]],
       [hour != null && hour < 5, "lb_night", ["tz"]],
     ].filter(([on]) => on).slice(0, 5);
-    L.push([true, P.rand || P.fz || P.rf ? "lb_priv_hi" : P.ab ? "lb_priv_mid" : "lb_priv_lo", ["rand", "adblock"]]);
+    // (a browser that keeps no store at all, as strict settings do, counts as careful too)
+    L.push([true, P.rand || P.fz || P.rf || P.tb ? "lb_priv_hi" : P.ab ? "lb_priv_mid" : "lb_priv_lo", ["rand", "adblock", "traces"]]);
     if (R) R.labels = L.map(([, k]) => k);
     $("#lbsL").innerHTML = L.map(([, k, from]) => `<span class="lb" tabindex="0" title="${esc(t("from", { list: list(from.map(rowName)) }))}">${esc(t(k))}</span>`).join("");
     $("#lbs").hidden = false;
@@ -1744,7 +1745,7 @@ import { TZ_CC } from "./tz.mjs";
       ["traces", "traces", traces], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
     await Promise.all([
       srv, guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
-      ...S.filter(([k]) => on(k)).map(([, ids, f]) => guard(ids, f)), ...probes,
+      ...S.filter(([k]) => on(k) && !(EMBED && k === "traces")).map(([, ids, f]) => guard(ids, f)), ...probes,
     ]);
     if (g !== gen) return;
     judge(false);
