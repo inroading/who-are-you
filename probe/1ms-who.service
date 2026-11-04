@@ -1,18 +1,19 @@
-# /etc/systemd/system/probe.service: probe.1ms.dog (see probe/main.go)
+# /etc/systemd/system/1ms-who.service: probe.1ms.dog (see probe/main.go). Directory, ports and service name are as
+# registered in 1ms-shell docs/processes.md, "VPS": /opt/1ms/who/, 443/tcp and 443/udp, 1ms-who
 [Unit]
 Description=probe.1ms.dog: connection readings for who.1ms.dog
 After=network-online.target
 Wants=network-online.target
 
 [Service]
-ExecStart=/opt/probe/probe -addr :443 -domain probe.1ms.dog -certs /var/lib/probe/certs
+ExecStart=/opt/1ms/who/probe -addr :443 -domain probe.1ms.dog -certs /var/lib/1ms-who
 Restart=always
 RestartSec=2
 # (only what it needs: port 443 and a raw socket for the SYN capture; its own output is startup and errors only)
 AmbientCapabilities=CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN
 CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN
 DynamicUser=yes
-StateDirectory=probe
+StateDirectory=1ms-who
 NoNewPrivileges=yes
 ProtectSystem=strict
 ProtectHome=yes

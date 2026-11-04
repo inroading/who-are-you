@@ -49,7 +49,9 @@ A VPS only for 1ms.dog: AWS Lightsail Tokyo, Debian 13, 16.76.79.94 (Netcatty ho
 to probe.1ms.dog directly (DNS only, not through Cloudflare), so it sees what a Worker can't: the TCP SYN (initial
 TTL, window, options, MSS: the OS and a tunnel's MTU, JA4T), the TLS ClientHello (JA3, JA4), the HTTP/2 preface
 (SETTINGS, window update, priorities, pseudo-header order: the Akamai fingerprint), later QUIC. Nothing is logged.
-Source in probe/. Later: probes in more regions, for round-trip triangulation of the exit.
+Source in probe/. The machine is shared by the 1ms.dog tools: its ports, directories and services are given out
+and recorded by 🏠 Public in 1ms-shell docs/processes.md, "VPS" (who: 443/tcp and 443/udp, /opt/1ms/who/, service
+1ms-who). Later: probes in more regions, for round-trip triangulation of the exit.
 
 Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
 
