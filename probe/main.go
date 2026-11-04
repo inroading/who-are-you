@@ -61,11 +61,13 @@ func main() {
 		tcfg.NextProtos = append(tcfg.NextProtos, "acme-tls/1")
 	}
 
+	h := handler()
+	// HTTP/3 on the same port over UDP (quic.go)
+	go serveQUIC(*addr, tcfg, h)
 	ln, err := net.Listen("tcp", *addr)
 	if err != nil {
 		log.Fatal(err)
 	}
-	h := handler()
 	h2s := &http2.Server{}
 	h1s := &http.Server{Handler: h, ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 30 * time.Second,
 		ConnContext: func(ctx context.Context, c net.Conn) context.Context {
@@ -120,6 +122,13 @@ func handler() http.Handler {
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Content-Type", "application/json")
 		out := map[string]any{"ip": hostOf(r.RemoteAddr), "proto": r.Proto}
+		altSvc(w, r)
+		// (over HTTP/3: the QUIC handshake's hello)
+		if r.ProtoMajor == 3 {
+			if hh := hellos3.get(r.RemoteAddr); hh != nil {
+				out["tls"] = hh.report()
+			}
+		}
 		if info != nil {
 			if info.syn != nil {
 				out["tcp"] = info.syn.report()
@@ -150,6 +159,7 @@ func handler() http.Handler {
 			fam = 6
 		}
 		out := map[string]any{"ip": ip, "family": fam}
+		altSvc(w, r)
 		if info != nil && info.syn != nil {
 			rep := info.syn.report()
 			for _, k := range []string{"mss", "ttl", "initial_ttl", "window"} {
@@ -229,6 +239,13 @@ func (l *chanListener) push(c net.Conn)            { l.ch <- c }
 func (l *chanListener) Accept() (net.Conn, error)   { return <-l.ch, nil }
 func (l *chanListener) Close() error               { return nil }
 func (l *chanListener) Addr() net.Addr             { return l.addr }
+
+// over TCP, the offer of HTTP/3 on the same port, which a browser takes up on its next connections
+func altSvc(w http.ResponseWriter, r *http.Request) {
+	if r.ProtoMajor < 3 {
+		w.Header().Set("Alt-Svc", `h3=":443"; ma=86400`)
+	}
+}
 
 func hostOf(a string) string {
 	h, _, err := net.SplitHostPort(a)

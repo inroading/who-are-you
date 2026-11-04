@@ -454,6 +454,17 @@ import { TZ_CC } from "./tz.mjs";
     else na("ja4", j ? "v_empty" : "v_fail");
     if (h2) txt("h2fp", t("h2_v", { e: t("h2e_" + h2Engine(h2.pseudo)), p: h2.pseudo || "?" }), { why: t("h2_why") + "\n" + h2.akamai });
     else na("h2fp", j ? (j.proto === "HTTP/2.0" ? "v_empty" : "v_unsup") : "v_fail");
+    // HTTP/3: the probe offers it with its answer; asked again a little later, a browser that takes the offer
+    // comes back over QUIC (a firewall that drops UDP keeps it on TCP)
+    if (!j) return na("quicfp", "v_fail");
+    let q = null;
+    for (let i = 0; i < 3 && !(q && q.proto === "HTTP/3.0"); i++) {
+      await new Promise(r => setTimeout(r, 700));
+      try { const r = await within(fetch(PROBE + "?h3", { cache: "no-store" }), 4000, null); q = r && r.ok ? await r.json() : q; } catch (e) {}
+    }
+    R.quic = q && q.proto === "HTTP/3.0" ? (q.tls || {}) : null;
+    if (R.quic && R.quic.ja4) txt("quicfp", "HTTP/3 · " + R.quic.ja4, { why: t("qf_why") });
+    else txt("quicfp", t(q && q.proto === "HTTP/3.0" ? "qf_noja4" : "qf_tcp"), { why: t("qf_why") });
   }
 
   // Lies: the APIs a spoofer rewrites (what navigator and screen say, how canvas, WebGL and audio draw, the clock,

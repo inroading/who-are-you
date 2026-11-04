@@ -20,6 +20,7 @@ export const GROUPS = [
     { id: "tcpfp", m: "probe.1ms.dog · TCP SYN" },
     { id: "ja4", m: "probe.1ms.dog · JA4" },
     { id: "h2fp", m: "probe.1ms.dog · HTTP/2 SETTINGS" },
+    { id: "quicfp", m: "probe.1ms.dog · HTTP/3 · QUIC JA4" },
     { id: "clock", m: "Date.now()" },
     { id: "webrtc", m: "RTCPeerConnection · STUN", s: 1 },
     { id: "lan", m: "WebRTC host candidate" },

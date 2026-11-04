@@ -30,6 +30,7 @@ type helloInfo struct {
 	versions   []uint16 // supported_versions
 	sni        bool
 	keyShares  []uint16
+	quic       bool // read from a QUIC handshake (JA4's "q")
 }
 
 func grease(v uint16) bool { return v&0x0f0f == 0x0a0a && v>>8 == v&0xff }
@@ -172,7 +173,11 @@ func (h *helloInfo) ja4() string {
 		}
 		return fmt.Sprintf("%02d", n)
 	}
-	a := "t" + vs + d + cnt(len(h.ciphers)) + cnt(len(h.exts)) + al
+	p := "t"
+	if h.quic {
+		p = "q"
+	}
+	a := p + vs + d + cnt(len(h.ciphers)) + cnt(len(h.exts)) + al
 	cs := append([]uint16(nil), h.ciphers...)
 	sort.Slice(cs, func(i, j int) bool { return cs[i] < cs[j] })
 	var es []uint16
