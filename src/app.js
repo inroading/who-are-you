@@ -655,6 +655,48 @@ import { TZ_CC } from "./tz.mjs";
     } catch (e) { na("etag", "v_fail"); }
   }
 
+  // Two readings that need the visitor's yes, each behind its own button, kept in the page (nothing sent): where the
+  // device says it is, against where the address puts it; and the motion sensors, whose noise and rate differ from
+  // one phone to the next (their calibration is a fingerprint of its own)
+  const km = (a, b, c, d) => { const r = x => x * Math.PI / 180, h = Math.sin(r(c - a) / 2) ** 2 + Math.cos(r(a)) * Math.cos(r(c)) * Math.sin(r(d - b) / 2) ** 2; return 12742 * Math.asin(Math.sqrt(h)); };
+  function geoloc() {
+    if (!navigator.geolocation) return na("geoloc");
+    row("geoloc", `<button type="button" class="pa-go gl-go">${esc(t("gl_btn"))}</button>`, { why: t("gl_why") });
+    $('.pr[data-s="geoloc"] .gl-go').onclick = e => {
+      e.target.disabled = true; e.target.textContent = t("re_wait");
+      const a = $('.pr[data-s="geoloc"] .pa');
+      navigator.geolocation.getCurrentPosition(p => {
+        const c = (R.srv && R.srv.cf) || {}, { latitude: la, longitude: lo, accuracy: ac } = p.coords;
+        const d = c.latitude != null ? km(+c.latitude, +c.longitude, la, lo) : null;
+        a.textContent = t("gl_v", { acc: Math.round(ac) }) + (d == null ? "" : " · " + t(d < 25 ? "gl_near" : "gl_far", { km: Math.round(d).toLocaleString(LANG) }));
+      }, err => { a.textContent = t(err.code === 1 ? "gl_denied" : "gl_fail"); }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+    };
+  }
+  function sensors() {
+    if (!window.DeviceMotionEvent || !matchMedia("(pointer: coarse)").matches) return na("sensors");
+    row("sensors", `<button type="button" class="pa-go sn-go">${esc(t("sn_btn"))}</button>`, { why: t("sn_why") });
+    $('.pr[data-s="sensors"] .sn-go').onclick = async e => {
+      const a = $('.pr[data-s="sensors"] .pa');
+      e.target.disabled = true;
+      // (iOS asks first)
+      if (typeof DeviceMotionEvent.requestPermission === "function") {
+        try { if (await DeviceMotionEvent.requestPermission() !== "granted") { a.textContent = t("gl_denied"); return; } } catch (x) { a.textContent = t("gl_denied"); return; }
+      }
+      e.target.textContent = t("sn_hold");
+      const s = [], on = ev => { const g = ev.accelerationIncludingGravity || {}, r = ev.rotationRate || {}; s.push([g.x, g.y, g.z, r.alpha, r.beta, r.gamma, ev.interval]); };
+      addEventListener("devicemotion", on);
+      await new Promise(r => setTimeout(r, 1500));
+      removeEventListener("devicemotion", on);
+      if (s.length < 5) { a.textContent = t("sn_none"); return; }
+      const col = i => s.map(x => +x[i] || 0), mean = v => v.reduce((p, q) => p + q, 0) / v.length;
+      const sd = v => { const m = mean(v); return Math.sqrt(mean(v.map(x => (x - m) ** 2))); };
+      const hz = Math.round(1000 / (mean(col(6)) || (1500 / s.length)) ) || Math.round(s.length / 1.5);
+      const noise = mean([0, 1, 2].map(i => sd(col(i))));
+      const id = await hhex([0, 1, 2, 3, 4, 5].map(i => mean(col(i)).toFixed(3)).join(","));
+      a.textContent = t("sn_v", { hz, n: noise.toFixed(4) }) + " · " + id;
+    };
+  }
+
   async function storage() {
     if (!navigator.storage || !navigator.storage.estimate) return na("storage");
     const e = await within(navigator.storage.estimate(), 1500, null);
@@ -1963,7 +2005,7 @@ import { TZ_CC } from "./tz.mjs";
       ["bio", "bio", biometric], ["bt", "bt", bluetooth], ["storage", "storage", storage], ["adblock", "adblock", adblock], ["ext", "ext", extensions],
       ["prints", ["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)], ["trace", ["kex", "warp"], trace],
       ["webgpu", "webgpu", webgpu], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
-      ["traces", "traces", traces], ["lies", "lies", lies], ["etag", "etag", etagId], ["trackers", "trackers", trackers],
+      ["traces", "traces", traces], ["lies", "lies", lies], ["geoloc", "geoloc", geoloc], ["sensors", "sensors", sensors], ["etag", "etag", etagId], ["trackers", "trackers", trackers],
       ["domrect", "domrect", domRect], ["svgrect", "svgrect", svgRect], ["textm", "textm", textMetrics], ["glimg", "glimg", glImage], ["gpulim", "gpulim", gpuLimits],
       ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
     await Promise.all([

@@ -69,6 +69,8 @@ export const GROUPS = [
     { id: "heap", m: "performance.memory" },
     { id: "touch", m: "maxTouchPoints · pointer" },
     { id: "battery", m: "navigator.getBattery" },
+    { id: "geoloc", m: "geolocation (on request)", s: 1 },
+    { id: "sensors", m: "devicemotion (on request)" },
     { id: "conn", m: "navigator.connection" },
     { id: "media", m: "enumerateDevices" },
     { id: "audiohw", m: "AudioContext.sampleRate" },
