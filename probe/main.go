@@ -136,6 +136,31 @@ func handler() http.Handler {
 		out["ua"] = r.UserAgent()
 		json.NewEncoder(w).Encode(out)
 	})
+	// /conn: this connection's SYN only, for the other 1ms.dog tools (ipqs, egress, check) reading it from the
+	// browser: the address and its family, MSS, TTL and the initial TTL it rounds up to, window, window scale. Without
+	// a SYN (not captured) the SYN's fields are left out, not null
+	mux.HandleFunc("/conn", func(w http.ResponseWriter, r *http.Request) {
+		info, _ := r.Context().Value(ctxKey{}).(*connInfo)
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Cache-Control", "no-store")
+		w.Header().Set("Content-Type", "application/json")
+		ip := hostOf(r.RemoteAddr)
+		fam := 4
+		if strings.Contains(ip, ":") {
+			fam = 6
+		}
+		out := map[string]any{"ip": ip, "family": fam}
+		if info != nil && info.syn != nil {
+			rep := info.syn.report()
+			for _, k := range []string{"mss", "ttl", "initial_ttl", "window"} {
+				out[k] = rep[k]
+			}
+			if info.syn.wscale >= 0 {
+				out["wscale"] = info.syn.wscale
+			}
+		}
+		json.NewEncoder(w).Encode(out)
+	})
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		w.Write([]byte("probe.1ms.dog: the connection readings of https://who.1ms.dog (GET /fp). Nothing is logged.\n"))

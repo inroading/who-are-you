@@ -6,7 +6,7 @@ import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO, COUNTED, TODO_SK } from "./sni
 import { TRAITS, rarity, MIN_TOTAL, durOf, STUCK_MS } from "./traits.mjs";
 import { TW, flagCode } from "./regions.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
 
 (function () {
@@ -2081,6 +2081,10 @@ import { TZ_CC } from "./tz.mjs";
     if (ck.webrtc) facts.webrtcLeak = lv("webrtc") === "bad";
     if (R.dnsCC) facts.dnsCountry = R.dnsCC;
     if (ck.dc && lv("dc") !== "info") facts.dc = lv("dc") !== "ok";
+    // the line, as the probe saw this connection's SYN (1ms-shell docs/checkup.md): left out when not read
+    const syn = R.probe && R.probe.tcp;
+    if (syn && syn.mss) { const tu = tunnelOf(syn.mss, String(R.probe.ip || "").includes(":")); if (tu !== null) facts.tunnel = tu; facts.mss = syn.mss; }
+    if (syn && syn.ttl) facts.ttl = syn.ttl;
     if (ck.fp) facts.fpSame = ck.fp[1] === "c_fp_same";
     if (ck.rtt && lv("rtt") !== "info") facts.rttGap = lv("rtt") !== "ok";
     if (ck.syslang && lv("syslang") !== "info") facts.sysLangMismatch = lv("syslang") !== "ok";

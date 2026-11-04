@@ -200,6 +200,21 @@ export function splitOf(exits) {
   return null;
 }
 
+// The tunnel a connection's MSS points to (probe.1ms.dog): the path's MTU is the MSS plus the headers (40 bytes on
+// IPv4, 60 on IPv6). 1500 is a plain line, 1492 or 1480 PPPoE (home broadband, not a tunnel), 1420 or 1280 WireGuard
+// (its default, and WARP's), 1450 OpenVPN (its default mssfix), 1400 or 1438 IPsec; another value under 1500 some
+// other tunnel or a network that clamps. A guess from defaults: null when there is no MSS
+export function tunnelOf(mss, v6) {
+  if (!mss) return null;
+  const mtu = mss + (v6 ? 60 : 40);
+  if (mtu >= 1500) return false;
+  if (mtu === 1492 || mtu === 1480) return "pppoe";
+  if (mtu === 1420 || mtu === 1280) return "wireguard";
+  if (mtu === 1450) return "openvpn";
+  if (mtu === 1400 || mtu === 1438) return "ipsec";
+  return "other";
+}
+
 // The disguise checks. Each returns [level, key, vars]: "ok" (nothing gives you away), "warn" (a site could notice),
 // "bad" (a clear contradiction), "info" (says nothing either way), or null while its inputs are still coming in.
 const fam = ip => ip && ip.includes(":") ? 6 : 4;

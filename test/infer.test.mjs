@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
+import { tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
 import { cleanSeen, rarity, durOf } from "../src/traits.mjs";
 import { regionName, flagCode } from "../src/regions.mjs";
 
@@ -283,6 +283,9 @@ test("split routing: different networks over the same IP version", () => {
   assert.equal(cn({ os: "apple", pseudo: "m,s,p,a", engine: "JavaScriptCore" }, "iOS 18.7")[1], "c_conn_ok");
   assert.equal(cn({ os: "unix", pseudo: null, engine: "V8" }, "Android 15")[1], "c_conn_ok");
   assert.deepEqual(cn(null), ["info", "c_conn_na", {}]);
+  // the tunnel an MSS points to
+  assert.equal(tunnelOf(1460), false); assert.equal(tunnelOf(1452), "pppoe"); assert.equal(tunnelOf(1380), "wireguard"); assert.equal(tunnelOf(1220, true), "wireguard");
+  assert.equal(tunnelOf(1410), "openvpn"); assert.equal(tunnelOf(1360), "ipsec"); assert.equal(tunnelOf(1300), "other"); assert.equal(tunnelOf(null), null);
   // a phone network's NAT gives Radar's IPv4 test another address: no split (1ms-shell#63)
   assert.equal(splitOf([["ip", "172.58.1.1"], ["ex_intl", "172.58.1.1"], ["stack", "100.40.2.2"], ["stack", "2607:fb90::1"]]), null);   // same /16, and IPv6 beside IPv4
   assert.deepEqual(splitOf([["ip", "45.76.1.1"], ["ex_cn", "114.254.73.157"], ["ex_gpt", "45.76.1.1"]]), { a: "ip", b: "ex_cn", ipA: "45.76.1.1", ipB: "114.254.73.157", n: 2 });
