@@ -135,7 +135,8 @@ const SAMPLE = [...Object.keys(PAGES).flatMap(topic => LANGS.filter(([l]) => l =
 await pool(quick ? [] : SAMPLE, 3, async ([topic, lang, slug], base) => {
   const where = `${lang} ${topic}`;
   const t0 = Date.now();
-  const { page, errors } = await open(`${base}/${slug ? slug + "/" : ""}${topic}/`);
+  // (?lang: the root language's pages would otherwise follow the language another page of this host remembered)
+  const { page, errors } = await open(`${base}/${slug ? slug + "/" : ""}${topic}/?lang=${lang}`);
   if (PAGES[topic].stats) {
     await page.waitForFunction(() => /\d/.test(document.querySelector("#crN").textContent) && document.querySelectorAll("#crBars li").length, { timeout: 15000 }).catch(() => fail(where, "the numbers never came"));
     for (const e of errors) fail(where, "script error: " + e);
@@ -151,6 +152,12 @@ await pool(quick ? [] : SAMPLE, 3, async ([topic, lang, slug], base) => {
   for (const e of errors) fail(where, "script error: " + e);
   if (!/st-/.test(f.v)) fail(where, "no verdict in the focus panel");
   for (const [id, v] of f.rows) if (!v.trim() || v === "…") fail(where, `focus row ${id} not filled`);
+  // only its own topic: the way to the main page for the whole test, and none of the main page's other sniffers run
+  const own = await page.evaluate(() => ({ all: (document.querySelector(".focus-all") || {}).pathname || null,
+    ran: [...document.querySelectorAll(".pr[data-s]:not(.wait)")].map(r => r.dataset.s).filter(s => !document.querySelector(`.focus-rows [data-f="${s}"]`)) }));
+  if (!own.all || own.all !== new URL(base + "/" + (slug ? slug + "/" : "")).pathname) fail(where, `no link to the whole test on the main page (${own.all})`);
+  const extra = own.ran.filter(s => ["battery", "media", "codecs", "drm", "perms", "webgpu", "mathfp", "emoji", "heap", "sysui", "bt", "bio"].includes(s));
+  if (extra.length) fail(where, "ran sniffers it doesn't need: " + extra.join(", "));
   await page.close();
 });
 await browser.close();

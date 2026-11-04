@@ -44,7 +44,7 @@
 <meta name="twitter:description" content="你的 DNS 有没有绕过 VPN？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"DNS 泄露检测 · 1ms.dog","url":"https://who.1ms.dog/zh-cn/dns-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免费 DNS 泄露检测：找出真正替你解析网址的 DNS 服务器，看它在哪个国家、属于哪家运营商，再和网站看到的 IP 对比。两边对不上，就是 VPN 或代理漏了 DNS。附 Clash、V2Ray 和浏览器里的修复方法。","inLanguage":"zh-CN","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"什么是 DNS 泄露？","acceptedAnswer":{"@type":"Answer","text":"浏览器连网站之前，要先让 DNS 服务器把网址换成 IP 地址。如果这一步没走 VPN 或代理，查询就发给了本地运营商的 DNS 服务器。结果是：运营商能看到你访问的每个网站；网站把 DNS 服务器和你的 IP 一对比，也能看出你在用 VPN，以及你实际在哪。"}},{"@type":"Question","name":"这个检测怎么找到我的 DNS 服务器？","acceptedAnswer":{"@type":"Answer","text":"页面会去查 edns.ip-api.com 下面一个随机的、从没人查过的域名。没有缓存能直接回答，你的 DNS 服务器只能去问 ip-api 负责这个域名的服务器，于是 ip-api 就知道了它的地址和运营商；如果查询里带上了你所在的网段（ECS），也会一起报出来。检测再拿 DNS 服务器所在的国家和你 IP 的国家比较。"}},{"@type":"Question","name":"DNS 泄露怎么修？","acceptedAnswer":{"@type":"Answer","text":"Clash / Mihomo：打开 DNS，把 enhanced-mode 设成 fake-ip，或者开 TUN 模式，让所有查询都经过它。V2Ray / Xray 客户端：让 DNS 也走代理（或者设一个走代理的 DoH 服务器）。浏览器里打开「安全 DNS」（DoH，加密的 DNS）也能让查询绕开运营商。改完再测一次。"}},{"@type":"Question","name":"显示的 DNS 服务器是 Cloudflare 或 Google，但城市不一样，算泄露吗？","acceptedAnswer":{"@type":"Answer","text":"一般不算。1.1.1.1、8.8.8.8 这类公共 DNS 由离请求最近的机房来回答，所以城市可能和 VPN 出口不同。真正会暴露你的，是本地运营商的 DNS 服务器，或者 IP 在国外、DNS 服务器却在国内。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.af50fd06e0.css">
+<link rel="stylesheet" href="/assets/app.356fed0db0.css">
 </head>
 <body>
 <div class="app">
@@ -78,6 +78,7 @@
         <div class="focus-fix" id="focusFix" hidden><p>怎么改</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="dns"><span>DNS 服务器</span><b>…</b></li><li data-f="ip"><span>IP 地址</span><b>…</b></li><li data-f="ex_cn"><span>国内网站</span><b>…</b></li><li data-f="ex_intl"><span>国外 IP 服务</span><b>…</b></li><li data-f="stack"><span>IPv4 和 IPv6</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>DNS 测试<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
+        <a class="btn ink focus-all" href="/zh-cn/">看网站眼里的完整画像（86 项）</a>
       </div>
     </section>
     <section class="hero card">
@@ -149,8 +150,8 @@
 </div>
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
-<script type="application/json" id="data">{"lang":"zh-CN","paths":{"en":"/dns-leak/","zh-CN":"/zh-cn/dns-leak/","zh-TW":"/zh-tw/dns-leak/","ja":"/ja/dns-leak/","ko":"/ko/dns-leak/","es":"/es/dns-leak/","fr":"/fr/dns-leak/","de":"/de/dns-leak/","pt":"/pt/dns-leak/","ru":"/ru/dns-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"dns-leak","rows":["dns","ip","ex_cn","ex_intl","stack"],"check":"dns","go":"dns"}}</script>
-<script src="/assets/l.zh-cn.113b282543.js"></script>
-<script src="/assets/app.3ad4a4be7d.js"></script>
+<script type="application/json" id="data">{"lang":"zh-CN","paths":{"en":"/dns-leak/","zh-CN":"/zh-cn/dns-leak/","zh-TW":"/zh-tw/dns-leak/","ja":"/ja/dns-leak/","ko":"/ko/dns-leak/","es":"/es/dns-leak/","fr":"/fr/dns-leak/","de":"/de/dns-leak/","pt":"/pt/dns-leak/","ru":"/ru/dns-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"dns-leak","rows":["dns","ip","ex_cn","ex_intl","stack"],"check":"dns","go":"dns","needs":["server","dns","exits","stack"]}}</script>
+<script src="/assets/l.zh-cn.b950a1d72d.js"></script>
+<script src="/assets/app.5ba9101d1b.js"></script>
 </body>
 </html>

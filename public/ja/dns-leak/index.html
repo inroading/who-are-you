@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="DNS が VPN を素通りしていませんか？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"DNS リークテスト · 1ms.dog","url":"https://who.1ms.dog/ja/dns-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"無料の DNS リークテスト：実際にサイト名を調べている DNS サーバーを見つけ、その国とネットワークを、サイトから見える IP と比べます。食い違っていれば、VPN やプロキシから DNS が漏れています。Clash、V2Ray、ブラウザでの直し方付き。","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"DNS リークとは何ですか？","acceptedAnswer":{"@type":"Answer","text":"ブラウザがサイトにつなぐ前に、DNS サーバーがサイト名をアドレスに変換します。この問い合わせが VPN やプロキシを通らないと、手元のプロバイダーの DNS サーバーに届きます。するとプロバイダーには訪れたサイトがすべて見え、DNS サーバーと IP を比べるサイトには、VPN を使っていることと本当の居場所が分かってしまいます。"}},{"@type":"Question","name":"どうやって DNS サーバーを見つけるのですか？","acceptedAnswer":{"@type":"Answer","text":"ページは edns.ip-api.com の下にある、誰も問い合わせたことのないランダムな名前を引きます。キャッシュでは答えられないので、あなたの DNS サーバーは ip-api のネームサーバーに聞くしかありません。ネームサーバーはその DNS サーバーのアドレスとネットワーク、さらに DNS サーバーが付けていればクライアントのサブネット（ECS）を報告します。テストはその国と IP の国を比べます。"}},{"@type":"Question","name":"DNS リークはどう直しますか？","acceptedAnswer":{"@type":"Answer","text":"Clash / Mihomo：DNS を有効にして enhanced-mode を fake-ip にするか、TUN モードですべての問い合わせを通します。V2Ray / Xray：DNS もプロキシ経由にします（プロキシを通る DoH サーバーを設定）。ブラウザの「セキュア DNS」（DoH）でも、プロバイダーへの問い合わせを避けられます。直したら、もう一度テストしてください。"}},{"@type":"Question","name":"DNS サーバーが別の都市の Cloudflare や Google です。これは漏れ？","acceptedAnswer":{"@type":"Answer","text":"たいていは違います。1.1.1.1 や 8.8.8.8 のような公開 DNS は問い合わせにいちばん近いデータセンターから答えるので、都市が VPN の出口と違うことがあります。正体がばれるのは、自宅のプロバイダーの DNS サーバーが使われている場合や、IP は海外なのに DNS サーバーが自国にある場合です。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.af50fd06e0.css">
+<link rel="stylesheet" href="/assets/app.356fed0db0.css">
 </head>
 <body>
 <div class="app">
@@ -75,6 +75,7 @@
         <div class="focus-fix" id="focusFix" hidden><p>直し方</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="dns"><span>DNS サーバー</span><b>…</b></li><li data-f="ip"><span>IP アドレス</span><b>…</b></li><li data-f="ex_cn"><span>中国本土のサイト</span><b>…</b></li><li data-f="ex_intl"><span>海外の IP 確認サービス</span><b>…</b></li><li data-f="stack"><span>IPv4 と IPv6</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>DNS テスト<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
+        <a class="btn ink focus-all" href="/ja/">サイトから見たあなたの全体像を見る（86 項目）</a>
       </div>
     </section>
     <section class="hero card">
@@ -146,8 +147,8 @@
 </div>
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
-<script type="application/json" id="data">{"lang":"ja","paths":{"en":"/dns-leak/","zh-CN":"/zh-cn/dns-leak/","zh-TW":"/zh-tw/dns-leak/","ja":"/ja/dns-leak/","ko":"/ko/dns-leak/","es":"/es/dns-leak/","fr":"/fr/dns-leak/","de":"/de/dns-leak/","pt":"/pt/dns-leak/","ru":"/ru/dns-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"dns-leak","rows":["dns","ip","ex_cn","ex_intl","stack"],"check":"dns","go":"dns"}}</script>
-<script src="/assets/l.ja.881e0c660f.js"></script>
-<script src="/assets/app.3ad4a4be7d.js"></script>
+<script type="application/json" id="data">{"lang":"ja","paths":{"en":"/dns-leak/","zh-CN":"/zh-cn/dns-leak/","zh-TW":"/zh-tw/dns-leak/","ja":"/ja/dns-leak/","ko":"/ko/dns-leak/","es":"/es/dns-leak/","fr":"/fr/dns-leak/","de":"/de/dns-leak/","pt":"/pt/dns-leak/","ru":"/ru/dns-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"dns-leak","rows":["dns","ip","ex_cn","ex_intl","stack"],"check":"dns","go":"dns","needs":["server","dns","exits","stack"]}}</script>
+<script src="/assets/l.ja.43beffb854.js"></script>
+<script src="/assets/app.5ba9101d1b.js"></script>
 </body>
 </html>

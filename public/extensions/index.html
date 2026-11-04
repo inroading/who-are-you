@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Which of your extensions can sites see?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Browser extension check · 1ms.dog","url":"https://who.1ms.dog/extensions/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Free browser extension check: the extensions that leave a mark any site can read (crypto wallets, developer tools, Grammarly, Dark Reader, translators, antivirus web protection), your ad blocker, and whether something rewrote what sites read.","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How can a site see my extensions?","acceptedAnswer":{"@type":"Answer","text":"It can't list them, but it can see what they leave behind: objects like window.ethereum, attributes on the page, elements they insert, scripts they add. Extensions that leave nothing behind stay invisible."}},{"@type":"Question","name":"Why does it matter?","acceptedAnswer":{"@type":"Answer","text":"Extensions narrow you down. A crypto wallet, developer tools or a particular translator says something about who you are, and makes your fingerprint more unique."}},{"@type":"Question","name":"What does the tampering check have to do with it?","acceptedAnswer":{"@type":"Answer","text":"Extensions that change your user agent, language or time zone, or wrap the drawing functions used for fingerprints, rewrite what sites read. That's what the check at the top looks for."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.af50fd06e0.css">
+<link rel="stylesheet" href="/assets/app.356fed0db0.css">
 </head>
 <body>
 <div class="app">
@@ -75,6 +75,7 @@
         <div class="focus-fix" id="focusFix" hidden><p>How to fix</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="ext"><span>Extensions</span><b>…</b></li><li data-f="adblock"><span>Ad blocker</span><b>…</b></li><li data-f="engine"><span>JS engine</span><b>…</b></li><li data-f="h_ua"><span>User agent</span><b>…</b></li></ul>
         
+        <a class="btn ink focus-all" href="/">See your full portrait (86 signals)</a>
       </div>
     </section>
     <section class="hero card">
@@ -146,8 +147,8 @@
 </div>
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
-<script type="application/json" id="data">{"lang":"en","paths":{"en":"/extensions/","zh-CN":"/zh-cn/extensions/","zh-TW":"/zh-tw/extensions/","ja":"/ja/extensions/","ko":"/ko/extensions/","es":"/es/extensions/","fr":"/fr/extensions/","de":"/de/extensions/","pt":"/pt/extensions/","ru":"/ru/extensions/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"extensions","rows":["ext","adblock","engine","h_ua"],"check":"tamper"}}</script>
-<script src="/assets/l.en.d0c8b64ff4.js"></script>
-<script src="/assets/app.3ad4a4be7d.js"></script>
+<script type="application/json" id="data">{"lang":"en","paths":{"en":"/extensions/","zh-CN":"/zh-cn/extensions/","zh-TW":"/zh-tw/extensions/","ja":"/ja/extensions/","ko":"/ko/extensions/","es":"/es/extensions/","fr":"/fr/extensions/","de":"/de/extensions/","pt":"/pt/extensions/","ru":"/ru/extensions/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"extensions","rows":["ext","adblock","engine","h_ua"],"check":"tamper","needs":["server","ext","adblock"]}}</script>
+<script src="/assets/l.en.25ffd60897.js"></script>
+<script src="/assets/app.5ba9101d1b.js"></script>
 </body>
 </html>

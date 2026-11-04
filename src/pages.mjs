@@ -4,21 +4,23 @@
 //   rows   the sniffer rows the focus panel shows
 //   check  the disguise check whose verdict heads it
 //   go     what to link to when the host announces it: "dns" DNS Test, "egress" EgressLens
+//   needs  the sniffers the page runs, beside the local ones every check rests on (the language, the clock, the system
+//          and the browser): only these, not the main page's whole set (src/app.js run())
 export const PAGES = {
-  fingerprint: { rows: ["fpid", "canvas", "webgl", "audio", "fontfp", "rand"], check: "fp" },
-  "dns-leak": { rows: ["dns", "ip", "ex_cn", "ex_intl", "stack"], check: "dns", go: "dns" },
-  "webrtc-leak": { rows: ["webrtc", "lan", "ip", "stack"], check: "webrtc", go: "egress" },
-  "browser-check": { rows: ["engine", "browser", "h_ua", "h_lang", "langs", "tz", "fonts"], check: "tamper" },
-  "timezone-check": { rows: ["tz", "tzip", "hour", "geo", "clock"], check: "tz" },
-  "proxy-check": { rows: ["edge", "ip", "isp", "dns", "webrtc"], check: "rtt", go: "egress" },
-  "language-check": { rows: ["langs", "h_lang", "locale", "kbd", "voices", "fonts"], check: "lang" },
-  "canvas-fingerprint": { rows: ["canvas", "webgl", "audio", "rand", "fpid"], check: "fp" },
-  "user-agent": { rows: ["h_ua", "os", "browser", "h_chua", "h_plat", "engine"], check: "ua" },
-  "extensions": { rows: ["ext", "adblock", "engine", "h_ua"], check: "tamper" },
-  "anti-detect-browser": { rows: ["engver", "worker", "h_ua", "browser", "gpu", "tz"], check: "fpb" },
-  "icloud-private-relay": { rows: ["ip", "isp", "geo", "webrtc", "ex_intl"], check: "dc" },
-  "warp-check": { rows: ["warp", "ip", "isp", "edge", "kex"], check: "warp" },
-  "http3-ech": { rows: ["proto", "kex", "tlsfp", "edge"], check: "ech" },
+  fingerprint: { rows: ["fpid", "canvas", "webgl", "audio", "fontfp", "rand"], check: "fp", needs: ["gpu", "fonts", "prints"] },
+  "dns-leak": { rows: ["dns", "ip", "ex_cn", "ex_intl", "stack"], check: "dns", go: "dns", needs: ["server", "dns", "exits", "stack"] },
+  "webrtc-leak": { rows: ["webrtc", "lan", "ip", "stack"], check: "webrtc", go: "egress", needs: ["server", "webrtc", "stack"] },
+  "browser-check": { rows: ["engine", "browser", "h_ua", "h_lang", "langs", "tz", "fonts"], check: "tamper", needs: ["server", "fonts"] },
+  "timezone-check": { rows: ["tz", "tzip", "hour", "geo", "clock"], check: "tz", needs: ["server"] },
+  "proxy-check": { rows: ["edge", "ip", "isp", "dns", "webrtc"], check: "rtt", go: "egress", needs: ["server", "rtt", "dns", "webrtc"] },
+  "language-check": { rows: ["langs", "h_lang", "locale", "kbd", "voices", "fonts"], check: "lang", needs: ["server", "kbd", "voices", "fonts"] },
+  "canvas-fingerprint": { rows: ["canvas", "webgl", "audio", "rand", "fpid"], check: "fp", needs: ["gpu", "fonts", "prints"] },
+  "user-agent": { rows: ["h_ua", "os", "browser", "h_chua", "h_plat", "engine"], check: "ua", needs: ["server", "gpu"] },
+  "extensions": { rows: ["ext", "adblock", "engine", "h_ua"], check: "tamper", needs: ["server", "ext", "adblock"] },
+  "anti-detect-browser": { rows: ["engver", "worker", "h_ua", "browser", "gpu", "tz"], check: "fpb", needs: ["server", "gpu", "engver", "worker"] },
+  "icloud-private-relay": { rows: ["ip", "isp", "geo", "webrtc", "ex_intl"], check: "dc", needs: ["server", "webrtc", "exits"] },
+  "warp-check": { rows: ["warp", "ip", "isp", "edge", "kex"], check: "warp", needs: ["server", "trace"] },
+  "http3-ech": { rows: ["proto", "kex", "tlsfp", "edge"], check: "ech", needs: ["server", "http3", "trace"] },
   // everyone counted, not the visitor: its panel is filled from /api/stats
   stats: { rows: [], stats: true },
 };

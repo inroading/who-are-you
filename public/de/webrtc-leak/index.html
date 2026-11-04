@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Zeigt WebRTC deine echte IP?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"WebRTC-Leak-Test · 1ms.dog","url":"https://who.1ms.dog/de/webrtc-leak/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Kostenloser WebRTC-Leak-Test: die öffentlichen IPv4- und IPv6-Adressen und die lokalen Adressen, die WebRTC jeder Website verrät, verglichen mit der IP, die dein VPN oder Proxy zeigt. Weichen sie ab, verrät WebRTC deine echte IP. Mit Lösungen für Chrome, Firefox, Brave und Proxy-Clients.","inLanguage":"de","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Was ist ein WebRTC-Leck?","acceptedAnswer":{"@type":"Answer","text":"Um einen Anruf aufzubauen, sammelt WebRTC jede Adresse, unter der du erreichbar sein könntest: die lokalen deiner Netzwerkkarte und die öffentliche, die ein STUN-Server sieht. Eine Seite liest sie mit ein paar Zeilen Skript, ganz ohne Berechtigung. Leitet dein VPN oder Proxy nur die Webanfragen der Seite weiter, geht die STUN-Anfrage über deine eigene Leitung raus, und die Seite erfährt deine echte IP hinter dem VPN."}},{"@type":"Question","name":"Wie funktioniert dieser Test?","acceptedAnswer":{"@type":"Answer","text":"Die Seite baut eine WebRTC-Verbindung zu den STUN-Servern von Cloudflare und Google auf und listet die Adressen, die sie melden („server reflexive“-Kandidaten). Dann vergleicht sie sie mit der Adresse, die diese Website, deine anderen Ausgänge und der IPv6-Test sehen. Eine Adresse, die keiner davon zeigt, ist ein Leck. Die lokalen Adressen stammen aus den „host“-Kandidaten; nichts wird gespeichert oder irgendwohin geschickt."}},{"@type":"Question","name":"Wie behebe ich ein WebRTC-Leck?","acceptedAnswer":{"@type":"Answer","text":"Proxy-Clients (Clash, V2Ray und andere): TUN-Modus einschalten, damit auch UDP über den Proxy läuft. Chrome und Edge: die Erweiterung WebRTC Network Limiter oder in uBlock Origin „Prevent WebRTC from leaking local IP addresses“. Brave: Einstellungen → Datenschutz → WebRTC-IP-Verarbeitungsrichtlinie → Nicht über Proxy geleitetes UDP deaktivieren. Firefox: in about:config media.peerconnection.ice.default_address_only auf true setzen, oder media.peerconnection.enabled auf false, um WebRTC ganz abzuschalten. Danach den Test wiederholen."}},{"@type":"Question","name":"Ist eine lokale Adresse oder ein .local-Name ein Leck?","acceptedAnswer":{"@type":"Answer","text":"Ein Name, der auf .local endet, bedeutet: Der Browser versteckt deine lokale Adresse (mDNS). Genau das willst du. Eine echte lokale Adresse wie 192.168.1.5 verrät nicht, wo du bist, macht deinen Fingerabdruck aber einmaliger. Eine IPv6-Adresse, die von deinem IPv4-Ausgang abweicht, ist nur dann ein Leck, wenn sie nicht dein IPv6-Ausgang ist: Der Test vergleicht sie mit der IPv6-Adresse, die Websites sehen."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.af50fd06e0.css">
+<link rel="stylesheet" href="/assets/app.356fed0db0.css">
 </head>
 <body>
 <div class="app">
@@ -75,6 +75,7 @@
         <div class="focus-fix" id="focusFix" hidden><p>Lösung</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="webrtc"><span>WebRTC-Adressen</span><b>…</b></li><li data-f="lan"><span>Lokale Adresse</span><b>…</b></li><li data-f="ip"><span>IP-Adresse</span><b>…</b></li><li data-f="stack"><span>IPv4 und IPv6</span><b>…</b></li></ul>
         <a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>IP-Lupe<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg></a>
+        <a class="btn ink focus-all" href="/de/">Dein vollständiges Porträt ansehen (86 Signale)</a>
       </div>
     </section>
     <section class="hero card">
@@ -146,8 +147,8 @@
 </div>
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
-<script type="application/json" id="data">{"lang":"de","paths":{"en":"/webrtc-leak/","zh-CN":"/zh-cn/webrtc-leak/","zh-TW":"/zh-tw/webrtc-leak/","ja":"/ja/webrtc-leak/","ko":"/ko/webrtc-leak/","es":"/es/webrtc-leak/","fr":"/fr/webrtc-leak/","de":"/de/webrtc-leak/","pt":"/pt/webrtc-leak/","ru":"/ru/webrtc-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"webrtc-leak","rows":["webrtc","lan","ip","stack"],"check":"webrtc","go":"egress"}}</script>
-<script src="/assets/l.de.a201d9416f.js"></script>
-<script src="/assets/app.3ad4a4be7d.js"></script>
+<script type="application/json" id="data">{"lang":"de","paths":{"en":"/webrtc-leak/","zh-CN":"/zh-cn/webrtc-leak/","zh-TW":"/zh-tw/webrtc-leak/","ja":"/ja/webrtc-leak/","ko":"/ko/webrtc-leak/","es":"/es/webrtc-leak/","fr":"/fr/webrtc-leak/","de":"/de/webrtc-leak/","pt":"/pt/webrtc-leak/","ru":"/ru/webrtc-leak/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"webrtc-leak","rows":["webrtc","lan","ip","stack"],"check":"webrtc","go":"egress","needs":["server","webrtc","stack"]}}</script>
+<script src="/assets/l.de.90c0db6fe7.js"></script>
+<script src="/assets/app.5ba9101d1b.js"></script>
 </body>
 </html>

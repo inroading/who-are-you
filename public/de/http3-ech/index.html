@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Wie modern ist deine Verbindung, und was steht im Weg?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"HTTP/3-, ECH- und Post-Quanten-Test · 1ms.dog","url":"https://who.1ms.dog/de/http3-ech/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Kostenloser Verbindungstest: ob dein Browser HTTP/3 nutzt, den Namen der Website mit Encrypted Client Hello (ECH) verbirgt und einen Post-Quanten-Schlüssel (X25519MLKEM768) aushandelt, und was es über dein Netz oder deinen Proxy sagt, wenn eins davon fehlt. IP und Rohdaten werden nicht gespeichert, nur anonyme Zähler.","inLanguage":"de","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Warum wird HTTP/3 nicht genutzt?","acceptedAnswer":{"@type":"Answer","text":"HTTP/3 läuft über UDP-Port 443. Dass eine Website es spricht, erfährt der Browser aus einer ersten Antwort über TCP; beim ersten Besuch schaltet er also womöglich noch nicht um. Kommt UDP aber nirgends raus, blockiert ein Netz oder ein Proxy es oder leitet UDP gar nicht weiter. Viele Proxy-Setups leiten nur TCP weiter."}},{"@type":"Question","name":"Was ist ECH, und warum ist es aus?","acceptedAnswer":{"@type":"Answer","text":"Encrypted Client Hello verschlüsselt den Namen der Website, den TLS sonst im Klartext sendet, lesbar für jeden auf dem Weg. Der Browser braucht dafür die Schlüssel der Website aus einem DNS-Eintrag vom Typ HTTPS: Firefox liest sie nur über sein eigenes DNS over HTTPS; Chrome braucht einen DNS-Server, der HTTPS-Einträge liefert; Safari nutzt ECH noch nicht."}},{"@type":"Question","name":"Was bedeutet ein klassischer Schlüsselaustausch?","acceptedAnswer":{"@type":"Answer","text":"Chrome 124+, Firefox 132+ und Safari 26 bieten standardmäßig X25519MLKEM768 an. Landet ein aktueller Browser bei einfachem X25519, deutet das auf etwas dazwischen hin, das eine eigene TLS-Verbindung aufbaut: einen Virenscanner, einen Firmenproxy oder einen Proxy-Client, der TLS terminiert. Bei älteren Browsern liegt es einfach am Alter."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.af50fd06e0.css">
+<link rel="stylesheet" href="/assets/app.356fed0db0.css">
 </head>
 <body>
 <div class="app">
@@ -75,6 +75,7 @@
         <div class="focus-fix" id="focusFix" hidden><p>Lösung</p><ul></ul></div>
         <ul class="focus-rows"><li data-f="proto"><span>HTTP und TLS</span><b>…</b></li><li data-f="kex"><span>Schlüsselaustausch</span><b>…</b></li><li data-f="tlsfp"><span>TLS-Fingerabdruck</span><b>…</b></li><li data-f="edge"><span>Nächstes Rechenzentrum</span><b>…</b></li></ul>
         
+        <a class="btn ink focus-all" href="/de/">Dein vollständiges Porträt ansehen (86 Signale)</a>
       </div>
     </section>
     <section class="hero card">
@@ -146,8 +147,8 @@
 </div>
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
-<script type="application/json" id="data">{"lang":"de","paths":{"en":"/http3-ech/","zh-CN":"/zh-cn/http3-ech/","zh-TW":"/zh-tw/http3-ech/","ja":"/ja/http3-ech/","ko":"/ko/http3-ech/","es":"/es/http3-ech/","fr":"/fr/http3-ech/","de":"/de/http3-ech/","pt":"/pt/http3-ech/","ru":"/ru/http3-ech/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"http3-ech","rows":["proto","kex","tlsfp","edge"],"check":"ech"}}</script>
-<script src="/assets/l.de.a201d9416f.js"></script>
-<script src="/assets/app.3ad4a4be7d.js"></script>
+<script type="application/json" id="data">{"lang":"de","paths":{"en":"/http3-ech/","zh-CN":"/zh-cn/http3-ech/","zh-TW":"/zh-tw/http3-ech/","ja":"/ja/http3-ech/","ko":"/ko/http3-ech/","es":"/es/http3-ech/","fr":"/fr/http3-ech/","de":"/de/http3-ech/","pt":"/pt/http3-ech/","ru":"/ru/http3-ech/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"http3-ech","rows":["proto","kex","tlsfp","edge"],"check":"ech","needs":["server","http3","trace"]}}</script>
+<script src="/assets/l.de.90c0db6fe7.js"></script>
+<script src="/assets/app.5ba9101d1b.js"></script>
 </body>
 </html>

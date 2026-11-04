@@ -161,6 +161,7 @@ export async function build({ check = false } = {}) {
         ${P.check ? `<div class="focus-fix" id="focusFix" hidden><p>${esc(T("fix"))}</p><ul></ul></div>` : ""}
         <ul class="focus-rows">${P.rows.map(id => `<li data-f="${id}"><span>${esc(T("s_" + id))}</span><b>…</b></li>`).join("")}</ul>
         ${P.go ? `<a class="focus-go" id="focusGo" target="_blank" rel="noopener" hidden>${esc(T("go_" + P.go))}${EXT}</a>` : ""}
+        <a class="btn ink focus-all" href="${path(slug)}">${esc(T("go_all").replace("{n}", SNIFFERS.length))}</a>
       </div>
     </section>`;
       const heroTitle = page ? `<h2 class="h1">${esc(base.h1)}</h2>` : `<h1>${esc(T("h1"))}</h1>`;

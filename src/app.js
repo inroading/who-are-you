@@ -15,6 +15,8 @@ import { TZ_CC } from "./tz.mjs";
   const D = JSON.parse($("#data").textContent);
   const L = window.L1MS || {}, LANG = D.lang;
   const t = (k, v) => { let s = L[k] ?? k; if (v) for (const x in v) s = s.split("{" + x + "}").join(v[x]); return s; };
+  // a count in the language's own form: k_one, k_few, k_many as Intl.PluralRules says, k_other otherwise
+  const tn = (k, n, v) => { let c = "other"; try { c = new Intl.PluralRules(LANG).select(n); } catch (e) {} return t(L[k + "_" + c] != null ? k + "_" + c : k + "_other", v); };
   const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
   const K = { seen: "who:seen", optout: "who:optout", scene: "who:scene", theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last", prev: "who:prev", target: "who:target", hist: "who:hist" };
@@ -245,16 +247,21 @@ import { TZ_CC } from "./tz.mjs";
     try { tzName = new Intl.DateTimeFormat(LANG, { timeZone: R.tz, timeZoneName: "longGeneric" }).formatToParts(new Date()).find(x => x.type === "timeZoneName").value; } catch (e) {}
     R.tzName = tzName || R.tz;
     txt("tz", R.tz + " · UTC" + offTxt(R.tzOff), { why: tzName });
-    const hc = new Intl.DateTimeFormat(undefined, { hour: "numeric" }).resolvedOptions().hourCycle;
+    // (each Intl call on its own: a browser with trimmed ICU data throws on some of them)
+    let hc, now;
+    try { hc = new Intl.DateTimeFormat(undefined, { hour: "numeric" }).resolvedOptions().hourCycle; } catch (e) {}
+    try { now = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(new Date()); } catch (e) { now = new Date().toTimeString().slice(0, 5); }
     R.h12 = hc === "h11" || hc === "h12";
-    txt("hour", t(R.h12 ? "ck_12" : "ck_24") + " · " + new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(new Date()), { why: t("hour_why") });
+    txt("hour", t(R.h12 ? "ck_12" : "ck_24") + " · " + now, { why: t("hour_why") });
     try {
       const loc = new Intl.Locale(langs[0] || ro.locale), wi = loc.getWeekInfo ? loc.getWeekInfo() : loc.weekInfo;
       if (!wi) throw 0;
       // 2024-01-01 was a Monday: day d (1 = Monday … 7 = Sunday) is January d
       txt("week", t("week_v", { d: new Intl.DateTimeFormat(LANG, { weekday: "long" }).format(new Date(2024, 0, wi.firstDay)) }));
     } catch (e) { na("week"); }
-    txt("fmt", new Intl.NumberFormat().format(1234567.89) + " · " + new Intl.DateTimeFormat().format(new Date()));
+    let fmt = null;
+    try { fmt = new Intl.NumberFormat().format(1234567.89) + " · " + new Intl.DateTimeFormat().format(new Date()); } catch (e) {}
+    if (fmt) txt("fmt", fmt); else na("fmt");
   }
 
   async function keyboard() {
@@ -551,7 +558,8 @@ import { TZ_CC } from "./tz.mjs";
   ];
   async function exits() {
     R.ex = {};
-    await Promise.all(EXITS.map(async ([id, get]) => {
+    // (a topic page asks only the exits it shows)
+    await Promise.all(EXITS.filter(([id]) => !D.focus || FR[id]).map(async ([id, get]) => {
       let r = null;
       try { r = await get(); } catch (e) {}
       if (!r || !r.ip) { R.ex[id] = null; return na(id, "v_fail"); }
@@ -1005,7 +1013,7 @@ import { TZ_CC } from "./tz.mjs";
   const rarest = n => READABLE.filter(k => n[k]).sort((a, b) => n[a] - n[b]).slice(0, 2);
   function standText(m, k, top) {
     const others = Math.max(0, k - 1), v = { m: m.toLocaleString(LANG), n: others.toLocaleString(LANG), top: list((top || []).map(rowName)) };
-    const s = t(!others ? "st_only" : others <= 20 ? "st_few" : "st_many", v);
+    const s = !others ? t("st_only", v) : tn(others <= 20 ? "st_few" : "st_many", others, v);
     // (Chinese puts a space between Chinese and Latin: "显眼的是 WebGL")
     return /^zh/.test(LANG) ? s.replace(/([\u3400-\u9fff])([A-Za-z0-9])/g, "$1 $2").replace(/([A-Za-z0-9])([\u3400-\u9fff])/g, "$1 $2") : s;
   }
@@ -1125,11 +1133,12 @@ import { TZ_CC } from "./tz.mjs";
   /* ---------- a country to pass for ---------- */
   // By default the one the address is in; pick another to see what still gives you away: the address, the system's
   // time zone, the browser's language, the DNS resolver, WebRTC
-  const CCS = [...new Set(Object.values(TZ_CC))].map(cc => [cc, country(cc)]).filter(([cc, n]) => n && n !== cc).sort((a, b) => a[1].localeCompare(b[1], LANG));
+  const CCS = [...new Set(Object.values(TZ_CC))].map(cc => [cc, country(cc)]).filter(([cc, n]) => n && n !== cc).sort((a, b) => { try { return a[1].localeCompare(b[1], LANG); } catch (e) { return a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0; } });
   // typed into, not scrolled: the name in the page's language or in English, or the code, narrows the list
   // ("jp", "japan", "日本"); names starting with what's typed come first
   const tgIn = $("#tgIn"), tgOpts = $("#tgOpts");
-  const fold = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  // (accents dropped for matching; a browser with trimmed ICU data, as Quark ships, throws on normalize: then as typed)
+  const fold = s => { s = String(s || ""); try { s = s.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); } catch (e) {} return s.toLowerCase(); };
   let EN = null; try { EN = new Intl.DisplayNames(["en"], { type: "region" }); } catch (e) {}
   const OPTS = [{ cc: "", n: t("tg_auto"), k: [fold(t("tg_auto"))] }, ...CCS.map(([cc, n]) => ({ cc, n, k: [fold(n), fold(EN && EN.of(cc)), cc.toLowerCase()] }))];
   let tgVal = (!EMBED && store.get(K.target)) || "", tgHit = OPTS, tgAt = 0;
@@ -1272,7 +1281,7 @@ import { TZ_CC } from "./tz.mjs";
     $("#todo").hidden = !top.length;
     $("#todoL").innerHTML = top.map(id => {
       const step = (CK[id].querySelector(".ck-tip li") || {}).textContent || "";
-      return `<li class="${lvOf(id)}"><button type="button" data-go="${id}"><b>${esc(t("c_" + id))}</b><span>${esc(step)}</span></button></li>`;
+      return `<li class="${lvOf(id)}"><button type="button" data-go="${id}" title="${esc(step)}"><b>${esc(t("c_" + id))}</b><span>${esc(step)}</span></button></li>`;
     }).join("");
   }
   $("#todoL").onclick = e => {
@@ -1364,7 +1373,7 @@ import { TZ_CC } from "./tz.mjs";
     if (u.total < MIN_TOTAL) { f.textContent = t("tl_wait", { m: u.total.toLocaleString(LANG) }); blank("stand", esc(t("st_wait"))); return; }
     blank("stand", esc(standText(u.total, u.n.fpid || 1, rarest(u.n))));
     const others = Math.max(0, (u.n.fpid || 1) - 1);
-    f.textContent = others ? t("tl_same", { m: u.total.toLocaleString(LANG), n: others.toLocaleString(LANG) }) : t("tl_only", { m: u.total.toLocaleString(LANG) });
+    f.textContent = others ? tn("tl_same", others, { m: u.total.toLocaleString(LANG), n: others.toLocaleString(LANG) }) : t("tl_only", { m: u.total.toLocaleString(LANG) });
     for (const k of TRAITS) {
       const lv = rarity(u.n[k], u.total), r = PR[k];
       if (!lv || !r) continue;
@@ -1622,7 +1631,10 @@ import { TZ_CC } from "./tz.mjs";
   async function run() {
     const g = ++gen;
     R = { t0: performance.now() }; done = new Set();
-    setTimeout(() => { if (g === gen && !R.end) stuck(); }, STUCK_MS);
+    // A topic page runs what its own check and rows need (src/pages.mjs "needs") beside the local readings every check
+    // rests on; the main page runs every sniffer
+    const NEED = D.focus ? new Set(D.focus.needs || []) : null, on = k => !NEED || NEED.has(k);
+    if (!NEED) setTimeout(() => { if (g === gen && !R.end) stuck(); }, STUCK_MS);
     for (const r of Object.values(PR)) { r.classList.add("wait"); r.classList.remove("na"); r.querySelector(".pa").textContent = "…"; delete r.dataset.why; }
     for (const r of Object.values(FR)) { r.classList.remove("na"); r.querySelector("b").textContent = "…"; }
     if ($("#focusV")) { $("#focusV").className = "focus-v"; $("#focusV b").innerHTML = '<i class="skl"></i>'; $("#focusV .st").textContent = ""; }
@@ -1643,15 +1655,18 @@ import { TZ_CC } from "./tz.mjs";
     // on a wide screen each paragraph keeps the height it first had: its blanks wait a little long, so filling them
     // only shortens lines, and the page below doesn't move (on a phone the first paragraph has its own, from the stylesheet)
     if (!PHONE.matches) $$("#story p").forEach(p => { p.style.minHeight = ""; p.style.minHeight = p.getBoundingClientRect().height + "px"; });
-    referrer(); locale(); prefs(); engine();
-    const glInfo = gpu();
-    fonts();
-    const rtc = webrtc().then(() => g === gen && judge(false));
-    const h3 = http3().then(() => { R.h3done = true; });
+    if (on("referrer")) referrer();
+    locale(); prefs(); engine();
+    const glInfo = on("gpu") ? gpu() : null;
+    if (on("fonts")) fonts();
+    const rtc = on("webrtc") ? webrtc().then(() => g === gen && judge(false)) : null;
+    const h3 = on("http3") ? http3().then(() => { R.h3done = true; }) : null;
     // the page's own request, and the probes that ask other sites who you are
-    const srv = server(), probes = [guard("stack", stack), guard(EXITS.map(([id]) => id), exits), guard("dns", () => dnsResolver().catch(e => { R.dnsCC = null; throw e; }))];
+    const srv = on("server") ? server() : Promise.resolve();
+    const probes = [on("stack") && guard("stack", stack), on("exits") && guard(EXITS.map(([id]) => id), exits),
+      on("dns") && guard("dns", () => dnsResolver().catch(e => { R.dnsCC = null; throw e; }))].filter(Boolean);
     // the round trip, measured once the connection is open
-    const lat = srv.then(latency).then(() => { R.latDone = true; });
+    const lat = on("rtt") ? srv.then(latency).then(() => { R.latDone = true; }) : null;
     // Embedded, a run with no answer from this site's server, or none from any other site (an ad blocker drops the
     // probes all together, at once), has nothing to report: say so as soon as that's clear, not when the slowest
     // sniffer gives up
@@ -1659,20 +1674,25 @@ import { TZ_CC } from "./tz.mjs";
       srv.then(() => { if (g === gen && !R.srv.ip) fail(); });
       Promise.all(probes).then(() => { if (g === gen && !R.dnsCC && !(R.stack || []).length && !Object.values(R.ex || {}).some(Boolean)) fail(); });
     }
+    const S = [["kbd", "kbd", keyboard], ["voices", "voices", voices], ["battery", "battery", battery], ["media", "media", media], ["audiohw", "audiohw", audioHw],
+      ["bio", "bio", biometric], ["bt", "bt", bluetooth], ["storage", "storage", storage], ["adblock", "adblock", adblock], ["ext", "ext", extensions],
+      ["prints", ["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)], ["trace", ["kex", "warp"], trace],
+      ["webgpu", "webgpu", webgpu], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
+      ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
     await Promise.all([
-      srv, guard("kbd", keyboard), guard("voices", voices), guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
-      guard("battery", battery), guard("media", media), guard("audiohw", audioHw), guard("bio", biometric), guard("bt", bluetooth), guard("storage", storage), guard("adblock", adblock), guard("ext", extensions),
-      guard(["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)),
-      ...probes, guard(["kex", "warp"], trace),
-      guard("webgpu", webgpu), guard("hz", refresh), guard("screens", screens), guard("codecs", codecs), guard("drm", drm), guard("perms", perms),
-      guard("engver", engineVer), guard("mathfp", mathPrint), guard("emoji", emoji), guard("hwdec", hwdec), guard("heap", heap), guard("sysui", sysui), guard("worker", workerNav),
+      srv, guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
+      ...S.filter(([k]) => on(k)).map(([, ids, f]) => guard(ids, f)), ...probes,
     ]);
     if (g !== gen) return;
-    judge(false); paint(portrait(), false); readings(portrait(), R.ck);
+    judge(false);
+    if (!NEED) { paint(portrait(), false); readings(portrait(), R.ck); }
     await rtc; await h3; await lat;
     if (g !== gen) return;
-    for (const id of Object.keys(PR)) if (!done.has(id)) na(id);   // anything a sniffer couldn't reach
+    // anything a sniffer couldn't reach (on a topic page, only its own: the rest wasn't asked)
+    for (const id of Object.keys(PR)) if (!done.has(id) && (!NEED || FR[id])) na(id);
     judge(true);
+    // a topic page ends at its verdict: no portrait, no comparison with the last visit, nothing counted
+    if (NEED) { focusFix(); R.end = true; $("#rerun").disabled = false; return; }
     readings(portrait(), R.ck);
     paintTarget(); osTips(); todo(); focusFix();
     R.end = true;

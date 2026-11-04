@@ -35,7 +35,7 @@ html[data-inapp="LINE"] .ia-n::before { content: "LINE"; } html[data-inapp="TikT
    the count on a line of its own on a phone from the first paint */
 .eb-row { display: flex; align-items: center; gap: 6px 8px; margin-bottom: 10px; } .eb-row .eyebrow { margin-bottom: 0; flex: none; }
 .eb-row .live { min-width: 0; } .live-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-@media (max-width: 720px) { .eb-row { flex-direction: column; align-items: flex-start; } .eb-row .live { max-width: 100%; } }
+@media (max-width: 720px) { .eb-row { flex-direction: column; align-items: flex-start; } .eb-row .live { max-width: 100%; } .live-t { white-space: normal; } }
 .live { display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--fg);
   background: var(--panel); border: 1px solid var(--line); text-decoration: none; min-width: 16em; }
 .live:hover { border-color: var(--ink); color: var(--ink); }
@@ -149,6 +149,8 @@ main.topic > .hero, main.topic > .target, main.topic > .probes { display: none; 
 .focus-rows a { color: inherit; }
 .focus-go { display: inline-block; margin-top: 10px; font-size: 13px; font-weight: 600; color: var(--ink); text-decoration: none; }
 .focus-go:hover { text-decoration: underline; }
+/* the way to the whole test, on the main page */
+.focus-all { display: flex; width: fit-content; max-width: 100%; height: auto; min-height: 36px; margin-top: 14px; text-decoration: none; text-align: center; }
 /* on a topic page the portrait's title is an h2 that looks like the main page's h1 */
 .hero h2.h1 { font-size: clamp(22px, 2.8vw, 30px); line-height: 1.15; letter-spacing: -.025em; font-weight: 800; margin-bottom: 14px; }
 /* the tool's other pages */
@@ -284,6 +286,13 @@ html.shared .scene, html[data-who-embed] .scene { display: none; }
 .todo b, .todo span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .todo b { font-weight: 600; }
 .todo span { color: var(--muted); font-size: 12.5px; }
+/* a phone: each fix in full, up to three lines, under its title (the list is below the fold there, so it may grow) */
+@media (max-width: 720px) {
+  .todo ol { grid-auto-rows: auto; }
+  .todo button { height: auto; }
+  .todo b { white-space: normal; }
+  .todo span { white-space: normal; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+}
 html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: none; }
 .ck-tip { grid-column: 1 / -1; margin: 6px 0 4px 28px; padding: 8px 12px 8px 26px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); font-size: 12.5px; line-height: 1.6; color: var(--fg); }
 .ck-tip li::marker { color: var(--ink); }
