@@ -2174,6 +2174,8 @@ import { TZ_CC } from "./tz.mjs";
     // a topic page ends at its verdict: no portrait, no comparison with the last visit, nothing counted
     if (NEED) { focusFix(); R.end = true; $("#rerun").disabled = false; return; }
     readings(portrait(), R.ck);
+    // (every blank is in: a paragraph kept taller than its words for the wait lets go, so no gap stays between them)
+    if (!PHONE.matches) $$("#story p").forEach(p => { p.style.minHeight = ""; });
     paintTarget(); osTips(); todo(); focusFix();
     R.end = true;
     if (!EMBED) { compare(); history(); seen(); versus(); }
