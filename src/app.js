@@ -283,6 +283,16 @@ import { TZ_CC } from "./tz.mjs";
     txt("voices", t("voices_v", { n: v.length, list: list(langs.slice(0, 6).map(language)) + (langs.length > 6 ? "…" : "") }), { why: langs.map(language).join(", ") });
   }
 
+  function winByFonts() {
+    const c = document.createElement("canvas").getContext("2d");
+    if (!c) return null;
+    const W = "mmmmmmmmmlli1WO@", base = ["monospace", "sans-serif", "serif"];
+    const w = f => { c.font = "72px " + f; return c.measureText(W).width; }, b = base.map(w);
+    const has = f => base.some((g, i) => w(`"${f}", ${g}`) !== b[i]);
+    if (!has("Segoe UI")) return null;   // (fonts hidden or unreadable: nothing to go by)
+    return has("Segoe UI Variable Text") || has("Segoe UI Variable Display") ? "11" : has("Bahnschrift") || has("Segoe UI Historic") || has("Ink Free") ? "10"
+      : has("Segoe UI Emoji") ? "8" : "7";
+  }
   // the system, the browser, the hardware
   async function hardware() {
     const ua = navigator.userAgent, uad = navigator.userAgentData;
@@ -294,8 +304,13 @@ import { TZ_CC } from "./tz.mjs";
     R.hi = hi;
     const dv = device(ua, hi, navigator.maxTouchPoints || 0);
     R.dev = dv;
+    // A Windows 11 the hints claim, checked against the fonts each Windows ships: 11 has Segoe UI Variable, 10
+    // Bahnschrift, Segoe UI Historic and Ink Free, 8 Segoe UI Emoji, 7 only Segoe UI. A browser on an older Windows that reports
+    // 11 to sites (Supermium on 7) is read for what the fonts say; Brave, which hides fonts, is left alone
+    const claim = dv.os === "Windows" && dv.osv === "11" && !navigator.brave ? winByFonts() : null;
+    if (claim && claim !== "11") { R.osClaim = "Windows 11"; dv.osv = claim; }
     R.osTxt = [dv.os, dv.osv].filter(Boolean).join(" ");
-    txt("os", R.osTxt || navigator.platform || "–");
+    txt("os", R.osClaim ? t("os_claim", { os: R.osTxt, claim: R.osClaim }) : R.osTxt || navigator.platform || "–");
     const b = browser(ua, hi.fullVersionList || hi.brands || []);
     R.br = b;
     R.browser = [b.name, b.v].filter(Boolean).join(" ");
@@ -1952,6 +1967,7 @@ import { TZ_CC } from "./tz.mjs";
     const hl = ((R.srv && R.srv.h && R.srv.h["accept-language"]) || "").split(",")[0].split(";")[0].trim().toLowerCase();
     if (hl && R.langs && R.langs[0] && hl !== R.langs[0].toLowerCase()) out.push("tp_hdr");
     if (R.tzOff != null && -new Date().getTimezoneOffset() !== R.tzOff) out.push("tp_tz");
+    if (R.osClaim) out.push("tp_os");
     // (noise in what canvas or audio read back, where the browser adds none of its own: an extension put it there)
     if (want === "V8" && name !== "Brave" && !navigator.brave && (R.pxNoise || R.auNoise)) out.push("tp_noise");
     // (the lie check's findings: an API that isn't the browser's own, a frame that reads otherwise)
