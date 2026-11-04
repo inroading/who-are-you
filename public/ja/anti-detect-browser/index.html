@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="一つひとつは本物らしい。でも、互いに合っている？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"アンチディテクトブラウザ検査 · 1ms.dog","url":"https://who.1ms.dog/ja/anti-detect-browser/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"無料のアンチディテクトブラウザ検査：ユーザーエージェントとエンジンの実際のバージョンが合っているか、Worker が読む navigator がページと同じか、プラットフォーム・GPU・タイムゾーンが噛み合っているかを確認します。IP は保存せず、残すのは匿名の集計だけです。","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"アンチディテクトブラウザはどこでばれるのですか？","acceptedAnswer":{"@type":"Answer","text":"値どうしが合わないところです。Chrome 156 を名乗っているのに、Chrome がずっと前に入れた機能がエンジンにない。Worker が読むユーザーエージェントや言語がページと違う。Windows の UA なのに navigator.platform が Mac。WebGL のベンダーと GPU 名でメーカーが違う。サイトはブラウザそのものより、こうした矛盾を探しています。"}},{"@type":"Question","name":"エンジンの実際のバージョンがなぜ大事なのですか？","acceptedAnswer":{"@type":"Answer","text":"ユーザーエージェントはただの文字列なので、どのブラウザでも書き換えられます。でも、エンジンが備える JavaScript の機能は同じようには書き換えられません。Chromium はバージョンごとに関数を追加するので（128 で Promise.try、136 で RegExp.escape）、どの関数があるかでエンジンのバージョンの範囲が絞れます。その範囲から外れた UA は、本物のブラウザではなく作られたプロファイルです。"}},{"@type":"Question","name":"プロファイルを見破られないようにするには？","acceptedAnswer":{"@type":"Answer","text":"UA のバージョンをブラウザ本体に合わせる。Worker でも同じ値になるよう、スクリプト注入ではなくブラウザ本体側で変更する。システム・プラットフォーム・GPU ベンダーは一揃いで選ぶ。タイムゾーンと言語はプロキシの国に合わせる。そのうえで、ここでもう一度確認してください。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.b341067ca2.css">
+<link rel="stylesheet" href="/assets/app.ce6bf8c6bd.css">
 </head>
 <body>
 <div class="app">

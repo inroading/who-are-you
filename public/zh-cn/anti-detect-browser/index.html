@@ -44,7 +44,7 @@
 <meta name="twitter:description" content="每一项都像真的，合在一起对得上吗？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"指纹浏览器检测 · 1ms.dog","url":"https://who.1ms.dog/zh-cn/anti-detect-browser/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免费指纹浏览器检测：看 UA 和内核的真实版本是否一致，Worker 里读到的 navigator 和页面里是否相同，平台、显卡和时区对不对得上。适合检查 AdsPower、比特浏览器、Multilogin 等环境。检测在你的浏览器里进行，不存 IP，只累计匿名计数。","inLanguage":"zh-CN","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"指纹浏览器会在哪里露馅？","acceptedAnswer":{"@type":"Answer","text":"露馅在各项互相对不上：UA 写着 Chrome 156，内核却缺 Chrome 早就有的功能；Worker 里读到的 UA 或语言和页面里不一样；UA 是 Windows，navigator.platform 却是 Mac；WebGL 报的厂商是一家，显卡却是另一家。网站很少去认浏览器本身，它们找的就是这些矛盾。"}},{"@type":"Question","name":"为什么要看内核的真实版本？","acceptedAnswer":{"@type":"Answer","text":"UA 只是一串文字，谁都能改。内核支持哪些 JavaScript 功能却改不了：Chromium 每个版本都会加新函数（128 加了 Promise.try，136 加了 RegExp.escape），看有没有这些函数，就能把内核版本框在一个范围里。UA 写的版本落在范围外，说明这是配出来的环境，不是真浏览器。"}},{"@type":"Question","name":"怎样让环境通过检测？","acceptedAnswer":{"@type":"Answer","text":"UA 的版本选成和内核一致；尽量用内核级修改，别用注入脚本，这样 Worker 读到的也一样；系统、平台、显卡厂商选同一套，别混搭；时区和语言设成代理所在国的。改完回到这里再测一次。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.b341067ca2.css">
+<link rel="stylesheet" href="/assets/app.ce6bf8c6bd.css">
 </head>
 <body>
 <div class="app">

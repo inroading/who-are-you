@@ -350,14 +350,15 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 .pg-n { font: 500 12px var(--f-num); color: var(--muted); }
 .pg-a { margin-left: auto; font: 500 12px var(--f-ui); color: var(--ink); text-decoration: none; }
 .pg-a:hover { text-decoration: underline; }
-.pr { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 13fr) minmax(0, 7fr); align-items: center; gap: 10px; height: 34px; border-top: 1px solid var(--line); font-size: 13px; transition: background-color .15s; }
-.pn { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pa { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font: 12.5px var(--f-num); }
+/* a row as tall as its value: long readings wrap instead of ending in "…" (the method on the right stays one line) */
+.pr { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 13fr) minmax(0, 7fr); align-items: center; gap: 10px; min-height: 34px; padding: 7px 0; line-height: 1.45; border-top: 1px solid var(--line); font-size: 13px; transition: background-color .15s; }
+.pn { min-width: 0; overflow-wrap: anywhere; }
+.pa { min-width: 0; overflow-wrap: anywhere; font: 12.5px/1.45 var(--f-num); } .pa .nw { white-space: normal; }
 .pa a { color: inherit; text-decoration: underline dotted color-mix(in srgb, var(--fg) 40%, transparent); text-underline-offset: 3px; }
 .pa a:hover { color: var(--ink); }
 /* a value with a link after it: the value gives way, the link stays */
 .pa:has(.pa-go), .focus-rows b:has(.pa-go) { display: flex; gap: 8px; }
-.pa-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.pa-t { min-width: 0; }
 .pa .pa-go, .focus-rows .pa-go { flex: none; font: 500 12px var(--f-ui); color: var(--ink); text-decoration: none; }
 .pa .pa-go:hover { text-decoration: underline; }
 .bl a { color: inherit; text-decoration: underline dotted color-mix(in srgb, var(--fg) 40%, transparent); text-underline-offset: 3px; }
@@ -370,7 +371,7 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 .pr.wait .pa { color: var(--muted); animation: blink 1.2s ease-in-out infinite; }
 .pr.na .pa { color: var(--muted); font-family: var(--f-ui); }
 .pr[data-why] { cursor: help; outline: none; }
-.pr.lit { margin: 0 -8px; padding: 0 8px; border-radius: 6px; background: var(--ink-soft); }
+.pr.lit { margin: 0 -8px; padding-left: 8px; padding-right: 8px; border-radius: 6px; background: var(--ink-soft); }
 .pr.lit + .pr, .pr.lit { border-top-color: transparent; }
 .masked .pr[data-sens] .pa, .masked .bl[data-b="city"], .masked .ckr[data-c="webrtc"] .ck-v { filter: blur(6px); }
 .tip { position: fixed; z-index: 50; white-space: pre-line; max-width: min(360px, calc(100vw - 16px)); overflow-wrap: anywhere; background: var(--fg); color: var(--bg); font: 500 12.5px/1.45 var(--f-ui); padding: 6px 10px; border-radius: 7px; pointer-events: none; opacity: 0; transition: opacity .12s; }
