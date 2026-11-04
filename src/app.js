@@ -519,6 +519,97 @@ import { TZ_CC } from "./tz.mjs";
     txt("shield", t(k), { why: t("sh_why") });
   }
 
+  // Rendering and engine fingerprints (as CreepJS and BrowserLeaks read them): how this system lays out and draws
+  // text and shapes, what its graphics and media stacks offer, what its engine exposes and how fine its clock is.
+  // Each varies with the system, its fonts and card, or the browser version; none goes into the fingerprint ID,
+  // which stays comparable with earlier visits
+  const hhex = async s => { const h = await sha(s); return h.slice(0, 8) + "·" + h.slice(8, 16); };
+  async function domRect() {
+    const d = document.createElement("div");
+    d.style.cssText = "position:absolute;left:-9999px;top:0;font:16px serif;width:max-content";
+    d.innerHTML = '<span style="display:inline-block;transform:rotate(7.3deg) skewX(3deg)">Who are you 你是谁 😃</span><span style="font:italic 13px monospace;letter-spacing:.37px">0.123 WWW</span>';
+    document.body.appendChild(d);
+    const v = [...d.querySelectorAll("span")].flatMap(s => [...s.getClientRects()].map(r => [r.x, r.y, r.width, r.height].map(x => x.toFixed(6)).join(",")));
+    const rg = document.createRange(); rg.selectNodeContents(d); const rr = rg.getBoundingClientRect();
+    v.push(rr.width.toFixed(6) + "," + rr.height.toFixed(6));
+    d.remove();
+    txt("domrect", await hhex(v.join("|")), { why: t("dr_why") });
+  }
+  async function svgRect() {
+    const ns = "http://www.w3.org/2000/svg", s = document.createElementNS(ns, "svg"), tx = document.createElementNS(ns, "text");
+    s.setAttribute("style", "position:absolute;left:-9999px;top:0"); tx.setAttribute("x", "0"); tx.setAttribute("y", "20"); tx.setAttribute("font-size", "17");
+    tx.textContent = "Cwm fjordbank glyphs vext quiz 你是谁 😃";
+    s.appendChild(tx); document.body.appendChild(s);
+    const b = tx.getBBox(), v = [b.width, b.height, tx.getComputedTextLength(), tx.getSubStringLength(0, 10)].map(x => x.toFixed(6)).join(",");
+    s.remove();
+    txt("svgrect", await hhex(v), { why: t("dr_why") });
+  }
+  async function textMetrics() {
+    const c = document.createElement("canvas").getContext("2d");
+    if (!c) return na("textm");
+    const v = ["16px serif", "16px sans-serif", "16px monospace", "italic 15px cursive"].map(f => {
+      c.font = f; const m = c.measureText("Who are you? 你是谁 😃 1ms");
+      return [m.width, m.actualBoundingBoxAscent, m.actualBoundingBoxDescent, m.actualBoundingBoxLeft, m.actualBoundingBoxRight].map(x => (+x || 0).toFixed(5)).join(",");
+    });
+    txt("textm", await hhex(v.join("|")), { why: t("tm_why") });
+  }
+  // a triangle shaded by the card, read back pixel by pixel
+  async function glImage() {
+    const cv = document.createElement("canvas"); cv.width = cv.height = 64;
+    const gl = cv.getContext("webgl", { preserveDrawingBuffer: true });
+    if (!gl) return na("glimg");
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+    const p = gl.createProgram();
+    gl.attachShader(p, sh(gl.VERTEX_SHADER, "attribute vec2 a;varying vec2 v;void main(){v=a;gl_Position=vec4(a,0.,1.);}"));
+    gl.attachShader(p, sh(gl.FRAGMENT_SHADER, "precision mediump float;varying vec2 v;void main(){gl_FragColor=vec4(sin(v.x*9.7)*.5+.5,cos(v.y*7.3)*.5+.5,fract(v.x*v.y*37.1),1.);}"));
+    gl.linkProgram(p); gl.useProgram(p);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-.9, -.8, .85, -.7, -.1, .95]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(p, "a"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    const px = new Uint8Array(64 * 64 * 4); gl.readPixels(0, 0, 64, 64, gl.RGBA, gl.UNSIGNED_BYTE, px);
+    const e = gl.getExtension("WEBGL_lose_context"); if (e) e.loseContext();
+    txt("glimg", await hhex(Array.from(px).join(",")), { why: t("gi_why") });
+  }
+  async function gpuLimits() {
+    if (!navigator.gpu) return na("gpulim");
+    const a = await within(navigator.gpu.requestAdapter().catch(() => null), 2000, null);
+    if (!a) return na("gpulim", "v_empty");
+    const lim = []; for (const k in a.limits) lim.push(k + "=" + a.limits[k]);
+    const f = [...a.features].sort();
+    txt("gpulim", t("gl_v", { n: f.length }) + " · " + await hhex(lim.sort().join(",") + "|" + f.join(",")), { why: t("gpl_why") + (f.length ? "\n" + f.join(" · ") : "") });
+  }
+  function rtcCodecs() {
+    const cap = k => { try { return (RTCRtpSender.getCapabilities(k) || {}).codecs || []; } catch (e) { return []; } };
+    if (!window.RTCRtpSender || !RTCRtpSender.getCapabilities) return na("rtccodecs");
+    const a = cap("audio"), v = cap("video");
+    const names = [...new Set([...a, ...v].map(c => c.mimeType.split("/")[1]))].filter(x => !/^(rtx|red|ulpfec|flexfec-03|CN|telephone-event)$/i.test(x));
+    txt("rtccodecs", t("rc_v", { a: a.length, v: v.length }) + " · " + names.join(" "), { why: [...a, ...v].map(c => c.mimeType + (c.sdpFmtpLine ? " " + c.sdpFmtpLine : "")).join("\n") });
+  }
+  function recMime() {
+    if (!window.MediaRecorder || !MediaRecorder.isTypeSupported) return na("recmime");
+    const L = ["video/webm;codecs=vp8", "video/webm;codecs=vp9", "video/webm;codecs=av1", "video/webm;codecs=h264", "video/mp4;codecs=avc1", "video/mp4;codecs=hvc1",
+      "video/mp4;codecs=av01", "video/x-matroska;codecs=avc1", "audio/webm;codecs=opus", "audio/mp4;codecs=mp4a.40.2", "audio/ogg;codecs=opus", "audio/mpeg"];
+    const ok = L.filter(x => { try { return MediaRecorder.isTypeSupported(x); } catch (e) { return false; } });
+    txt("recmime", t("rm_v", { n: ok.length, of: L.length }), { why: ok.join("\n") });
+  }
+  // the engine's surface: how many names the window, an element and the computed style have (each browser version
+  // adds some), the clock's step and how deep a function can call itself
+  function engineKeys() {
+    const w = Object.getOwnPropertyNames(window).length, h = Object.getOwnPropertyNames(HTMLElement.prototype).length, c = getComputedStyle(document.documentElement).length;
+    txt("keys", "window " + w + " · HTMLElement " + h + " · CSS " + c, { why: t("ky_why") });
+  }
+  function timerRes() {
+    let m = Infinity, a = performance.now();
+    for (let i = 0; i < 20000; i++) { const b = performance.now(); if (b > a) { m = Math.min(m, b - a); a = b; } }
+    txt("timer", m === Infinity ? t("v_unknown") : t("ti_v", { v: +m.toFixed(4) }), { why: t("ti_why") });
+  }
+  function stackDepth() {
+    let n = 0; const f = () => { n++; f(); };
+    try { f(); } catch (e) {}
+    txt("callstack", n.toLocaleString(LANG), { why: t("sk_why") });
+  }
+
   async function storage() {
     if (!navigator.storage || !navigator.storage.estimate) return na("storage");
     const e = await within(navigator.storage.estimate(), 1500, null);
@@ -1827,7 +1918,9 @@ import { TZ_CC } from "./tz.mjs";
       ["bio", "bio", biometric], ["bt", "bt", bluetooth], ["storage", "storage", storage], ["adblock", "adblock", adblock], ["ext", "ext", extensions],
       ["prints", ["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)], ["trace", ["kex", "warp"], trace],
       ["webgpu", "webgpu", webgpu], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
-      ["traces", "traces", traces], ["lies", "lies", lies], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
+      ["traces", "traces", traces], ["lies", "lies", lies],
+      ["domrect", "domrect", domRect], ["svgrect", "svgrect", svgRect], ["textm", "textm", textMetrics], ["glimg", "glimg", glImage], ["gpulim", "gpulim", gpuLimits],
+      ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
     await Promise.all([
       srv, guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
       ...S.filter(([k]) => on(k) && !(EMBED && k === "traces")).map(([, ids, f]) => guard(ids, f)), ...probes,

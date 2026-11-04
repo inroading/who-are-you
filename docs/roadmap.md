@@ -66,6 +66,9 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
   against the page's; feeds the tampering check.
 - 2026-11-04: whose protection (1.2): Brave (farbling, navigator.brave), Firefox resistFingerprinting (Tor, Mullvad),
   Firefox FPP, Safari ATFP, a fingerprint extension, a user-agent switcher, or none.
+- 2026-11-04: rendering and engine fingerprints (1.3): DOMRect, SVG text sizes, text metrics, WebGL image, WebGPU
+  limits and features, WebRTC codecs, MediaRecorder formats, engine key counts, timer step, call stack depth (shown,
+  not in the fingerprint ID).
 
 ## Research (2026-11-04)
 - BrowserLeaks: IP, JavaScript, WebRTC, Canvas, WebGL, fonts, Geolocation, feature detection, TLS (JA3 / JA4, ECH),
