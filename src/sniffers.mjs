@@ -120,6 +120,8 @@ export const GROUPS = [
     { id: "timer", m: "performance.now() resolution" },
     { id: "callstack", m: "recursion depth" },
     { id: "fpid", m: "SHA-256" },
+    { id: "hwid", m: "screen · cores · GPU · fonts → SHA-256" },
+    { id: "etag", m: "HTTP cache · ETag / If-None-Match" },
     { id: "rand", m: "canvas × 2" },
     { id: "shield", m: "navigator.brave · noise · lies" },
   ]],

@@ -71,6 +71,7 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
   not in the fingerprint ID).
 - 2026-11-04: tracker blocking (1.4), behind a button: seven common trackers' scripts, without cookies or referrer;
   refused within 50 ms counts as blocked, slower failures as the network.
+- 2026-11-04: hardware ID across browsers (1.5) and the ETag cache ID (1.6): roadmap part 1 done.
 
 ## Research (2026-11-04)
 - BrowserLeaks: IP, JavaScript, WebRTC, Canvas, WebGL, fonts, Geolocation, feature detection, TLS (JA3 / JA4, ECH),

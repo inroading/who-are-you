@@ -633,6 +633,28 @@ import { TZ_CC } from "./tz.mjs";
     };
   }
 
+  // A hardware ID: only what the machine decides (the system family, the screen in physical pixels and its colors,
+  // the cores, the graphics card, the time zone, the installed fonts), so another browser on this machine gets about
+  // the same; what the browser decides (its engine's maths, its audio, canvas noise) is left out
+  async function hwid() {
+    const fam = ((R.dev && R.dev.os) || "").split(" ")[0], gpu = (R.gpu || "").replace(/,? or similar$/, "");
+    const parts = [fam, R.screen, screen.colorDepth + "-bit", navigator.hardwareConcurrency, gpu, R.tz, (R.fonts || []).length + " fonts"];
+    const h = await sha([fam, R.screen, screen.colorDepth, navigator.hardwareConcurrency, gpu, R.tz, (R.fonts || []).slice().sort().join(",")].join("|"));
+    R.hwid = h.slice(0, 8);
+    txt("hwid", h.slice(0, 4) + "·" + h.slice(4, 8) + " · " + t("hw_v"), { why: t("hw_why") + "\n" + parts.filter(Boolean).join(" · ") });
+  }
+  // The cache as an ID: the site hands out a random ID as the answer's ETag; the browser sends it back by itself next
+  // time (If-None-Match), past cleared cookies and storage, until the cache itself is cleared (src/worker.js etag())
+  async function etagId() {
+    try {
+      const r = await within(fetch("/api/etag"), 4000, null);
+      if (!r || !r.ok) return na("etag", "v_fail");
+      const id = (await r.text()).slice(0, 16), seen = r.headers.get("X-Etag-Seen") === "1";
+      R.etag = { id, seen };
+      txt("etag", id.slice(0, 4) + "·" + id.slice(4, 8) + " · " + t(seen ? "et_seen" : "et_new"), { why: t("et_why") });
+    } catch (e) { na("etag", "v_fail"); }
+  }
+
   async function storage() {
     if (!navigator.storage || !navigator.storage.estimate) return na("storage");
     const e = await within(navigator.storage.estimate(), 1500, null);
@@ -1941,16 +1963,17 @@ import { TZ_CC } from "./tz.mjs";
       ["bio", "bio", biometric], ["bt", "bt", bluetooth], ["storage", "storage", storage], ["adblock", "adblock", adblock], ["ext", "ext", extensions],
       ["prints", ["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)], ["trace", ["kex", "warp"], trace],
       ["webgpu", "webgpu", webgpu], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
-      ["traces", "traces", traces], ["lies", "lies", lies], ["trackers", "trackers", trackers],
+      ["traces", "traces", traces], ["lies", "lies", lies], ["etag", "etag", etagId], ["trackers", "trackers", trackers],
       ["domrect", "domrect", domRect], ["svgrect", "svgrect", svgRect], ["textm", "textm", textMetrics], ["glimg", "glimg", glImage], ["gpulim", "gpulim", gpuLimits],
       ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
     await Promise.all([
       srv, guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
-      ...S.filter(([k]) => on(k) && !(EMBED && k === "traces")).map(([, ids, f]) => guard(ids, f)), ...probes,
+      ...S.filter(([k]) => on(k) && !(EMBED && (k === "traces" || k === "etag"))).map(([, ids, f]) => guard(ids, f)), ...probes,
     ]);
     if (g !== gen) return;
     // (once the drawings and the lie check are in)
     if (on("prints") && on("lies")) shield();
+    if (on("fonts") && on("gpu")) await hwid();
     judge(false);
     if (!NEED) { paint(portrait(), false); readings(portrait(), R.ck); }
     await rtc; await h3; await lat;

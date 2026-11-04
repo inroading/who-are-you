@@ -110,12 +110,24 @@ async function tally(request, env, url) {
   return new Response(r.body, { status: r.status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
 }
 
+// The cache as an ID (no cookie, no storage): the first answer carries a random ID as its ETag and asks to be
+// checked every time; the browser then sends it back in If-None-Match on its own, and is told it still holds. Nothing
+// is kept here: the ID exists only in that browser's HTTP cache, and clearing the cache ends it.
+function etag(request) {
+  const h = { "Cache-Control": "private, no-cache", "Content-Type": "text/plain", "X-Content-Type-Options": "nosniff" };
+  const sent = (request.headers.get("If-None-Match") || "").replace(/^W\//, "").replace(/"/g, "");
+  if (/^[0-9a-f]{16}$/.test(sent)) return new Response(null, { status: 304, headers: { ...h, ETag: `"${sent}"`, "X-Etag-Seen": "1" } });
+  const id = [...crypto.getRandomValues(new Uint8Array(8))].map(b => b.toString(16).padStart(2, "0")).join("");
+  return new Response(id, { headers: { ...h, ETag: `"${id}"`, "X-Etag-Seen": "0" } });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const r = parsePath(url.pathname);
     if (r && request.method === "GET") return result(request, env, r, url);
     if (url.pathname === "/api/seen" || url.pathname === "/api/stats") return tally(request, env, url);
+    if (url.pathname === "/api/etag") return etag(request);
     if (url.pathname !== "/api/me") return new Response(null, { status: 404 });
     if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET" } });
     const at = Date.now();
