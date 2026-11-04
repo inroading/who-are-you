@@ -866,6 +866,14 @@ import { TZ_CC } from "./tz.mjs";
     for (let i = 4500; i < 5000; i++) s += Math.abs(d[i]);
     return s.toString();
   }
+  async function audioNoise() {
+    const O = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    if (!O || !window.ConstantSourceNode) return false;
+    const c = new O(1, 4096, 44100), s = c.createConstantSource();
+    s.offset.value = 0.5; s.connect(c.destination); s.start();
+    const b = await c.startRendering(), d = b.getChannelData(0);
+    return d.some(v => v !== 0.5);
+  }
   async function prints(glInfo) {
     const short = h => h.slice(0, 8) + "·" + h.slice(8, 16);
     const c1 = canvasPrint(), c2 = canvasPrint();
@@ -888,6 +896,18 @@ import { TZ_CC } from "./tz.mjs";
       const px = x.getImageData(0, 0, 32, 32).data, want = (i, k) => (((i >> 2) % 32) < 16 ? [100, 150, 200, 255] : [200, 90, 40, 255])[k];
       R.noise = px.some((v, i) => v !== want(i, i % 4));
     } catch (e) { R.noise = false; }
+    // A checkerboard of single pixels read back: an extension that marks only the pixels unlike all four neighbours
+    // (my-fingerprint) leaves the square alone but not this; and a constant sound rendered and read back, which an
+    // extension nudging every so many non-zero samples gives back changed
+    try {
+      const cv = document.createElement("canvas"); cv.width = cv.height = 16;
+      const x = cv.getContext("2d"), A = [30, 160, 90], B = [220, 60, 140];
+      for (let y = 0; y < 16; y++) for (let i = 0; i < 16; i++) { x.fillStyle = "rgb(" + ((i + y) % 2 ? B : A) + ")"; x.fillRect(i, y, 1, 1); }
+      const px = x.getImageData(0, 0, 16, 16).data;
+      R.pxNoise = px.some((v, i) => { const p = i >> 2, k = i % 4; return v !== (k === 3 ? 255 : (((p % 16) + (p >> 4)) % 2 ? B : A)[k]); });
+      if (R.pxNoise) R.noise = true;
+    } catch (e) { R.pxNoise = false; }
+    R.auNoise = await audioNoise().catch(() => false);
     txt("rand", t(R.rand ? "rand_yes" : "rand_no"));
     // everything that stays put on this device and browser; the address is left out, so it survives a VPN
     const all = [ch, gh, ah, fh, screen.width + "x" + screen.height + "x" + screen.colorDepth, devicePixelRatio, R.tz, (R.langs || []).join(), navigator.hardwareConcurrency,
@@ -1932,6 +1952,8 @@ import { TZ_CC } from "./tz.mjs";
     const hl = ((R.srv && R.srv.h && R.srv.h["accept-language"]) || "").split(",")[0].split(";")[0].trim().toLowerCase();
     if (hl && R.langs && R.langs[0] && hl !== R.langs[0].toLowerCase()) out.push("tp_hdr");
     if (R.tzOff != null && -new Date().getTimezoneOffset() !== R.tzOff) out.push("tp_tz");
+    // (noise in what canvas or audio read back, where the browser adds none of its own: an extension put it there)
+    if (want === "V8" && name !== "Brave" && !navigator.brave && (R.pxNoise || R.auNoise)) out.push("tp_noise");
     // (the lie check's findings: an API that isn't the browser's own, a frame that reads otherwise)
     if (R.lies && R.lies.list.length) out.push("tp_lies");
     if (R.lies && R.lies.frame.length) out.push("tp_frame");
