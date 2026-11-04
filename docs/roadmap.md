@@ -57,6 +57,9 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
 
 ## Done
 - 2026-11-04: stored traces (four stores), sensitive APIs, how common each reading is (kuber.studio/cookie).
+- 2026-11-04: probe.1ms.dog live (IPv4); on the page: TCP/IP (OS family, TTL, hops, MTU, JA4T), JA4 / JA3, HTTP/2
+  (engine, pseudo-header order, Akamai) and the "connection fingerprint" check (TCP OS against the user agent's,
+  HTTP/2 against the engine's). Open: IPv6 443 in Lightsail's IPv6 firewall; QUIC (443/udp, reserved).
 
 ## Research (2026-11-04)
 - BrowserLeaks: IP, JavaScript, WebRTC, Canvas, WebGL, fonts, Geolocation, feature detection, TLS (JA3 / JA4, ECH),
