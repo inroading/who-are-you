@@ -41,13 +41,17 @@ Behind the field:
 
 ### 2. Most fun
 1. Compare with a friend: open a shared portrait and see where yours differs.
-2. Guess first: before the portrait, the visitor guesses what a site can tell; then the reveal.
-3. Opt-in, one button each: precise location against the IP's guess; phone motion sensors.
-4. Weekly "most common giveaways" from the counts, on the stats page.
+2. Opt-in, one button each: precise location against the IP's guess; phone motion sensors.
+3. Weekly "most common giveaways" from the counts, on the stats page.
 
-### 3. Needs a decision: a small server of our own
-TCP/IP, HTTP/2, QUIC and JA4 fingerprints need a machine that terminates TLS and sees packets (a small VPS beside
-Cloudflare). It is the last gap only a server can close; cost and upkeep are the owner's call.
+### 3. Our own server: probe.1ms.dog
+A VPS only for 1ms.dog: AWS Lightsail Tokyo, Debian 13, 16.76.79.94 (Netcatty host "🇯🇵 1ms.dog"). Browsers connect
+to probe.1ms.dog directly (DNS only, not through Cloudflare), so it sees what a Worker can't: the TCP SYN (initial
+TTL, window, options, MSS: the OS and a tunnel's MTU, JA4T), the TLS ClientHello (JA3, JA4), the HTTP/2 preface
+(SETTINGS, window update, priorities, pseudo-header order: the Akamai fingerprint), later QUIC. Nothing is logged.
+Source in probe/. Later: probes in more regions, for round-trip triangulation of the exit.
+
+Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
 
 ## Done
 - 2026-11-04: stored traces (four stores), sensitive APIs, how common each reading is (kuber.studio/cookie).
