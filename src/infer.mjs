@@ -230,6 +230,22 @@ export function checks(x) {
   if (!x.exits) out.split = null;
   else if (x.exits.filter(([, ip]) => ip).length < 2) out.split = ["info", "c_na", {}];
   else { const s = splitOf(x.exits); out.split = s ? ["warn", "c_split_warn", { a: s.a, b: s.b }] : ["ok", "c_split_ok", {}]; }
+  // The connection itself, as the probe read it (probe.1ms.dog, reached directly): an HTTP/2 preface unlike the
+  // browser engine's own means something re-made the HTTPS on the way (a capture tool, a company gateway, antivirus);
+  // a SYN from another OS family than the user agent's, that another machine opened the connection (a proxy or VPN
+  // server). The system writes the SYN, so no user agent switch or anti-detect browser changes it
+  if (x.conn === undefined) out.conn = null;
+  else if (!x.conn) out.conn = ["info", "c_conn_na", {}];
+  else {
+    const { os, pseudo, engine } = x.conn;
+    const want = { V8: ["m,a,s,p"], SpiderMonkey: ["m,p,a,s"], JavaScriptCore: ["m,s,p,a", "m,s,a,p"] }[engine];
+    const fam = /^Windows/.test(x.uaOS || "") ? "windows" : /^(macOS|iOS|iPadOS)/.test(x.uaOS || "") ? "apple" : /^(Android|Linux|ChromeOS|HarmonyOS)/.test(x.uaOS || "") ? "linux" : null;
+    const off = fam && os && os !== "other" && (fam === "windows" ? os !== "windows" : fam === "apple" ? os === "windows" || os === "linux" : os === "windows" || os === "apple");
+    if (want && pseudo && !want.includes(pseudo)) out.conn = ["bad", "c_conn_mitm", { b: x.brName || engine }];
+    else if (off) out.conn = ["warn", "c_conn_os", { a: os, b: x.uaOS }];
+    else if (os || pseudo) out.conn = ["ok", "c_conn_ok", {}];
+    else out.conn = ["info", "c_conn_na", {}];
+  }
   // WebRTC: addresses the STUN servers saw that a site doesn't already see, over IPv4 or IPv6. The IPv4 / IPv6 test's
   // addresses count only when one of them is the page's own (otherwise they took another route, and the page's is the
   // one a site gets); another destination's exit never does. One of the page's family leaks; one of the other family

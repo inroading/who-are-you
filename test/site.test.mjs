@@ -19,7 +19,8 @@ test("every language page keeps the shell contract", async () => {
     assert.match(h, /<div class="scrim" id="help" hidden>/, lang + ": help dialog hidden by default");
     assert.match(h, /class="logo-light" src="\/assets\/logo-light.svg" width="90" height="36"/);
     assert.ok(!/\{\{\w+\}\}/.test(h), lang + ": unfilled placeholder");
-    assert.ok(h.length < 60000, lang + ": page is " + h.length + " bytes");
+    // (91 sniffers and 14 checks, every row in the HTML from the start, in the longest language)
+    assert.ok(h.length < 64000, lang + ": page is " + h.length + " bytes");
     assert.equal((h.match(/<script>/g) || []).length, 1, lang + ": the only inline script is the pre-paint one");
   }
 });

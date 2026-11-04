@@ -50,7 +50,14 @@ func main() {
 		tcfg.Certificates = []tls.Certificate{selfSigned(*domain)}
 	} else {
 		m := &autocert.Manager{Prompt: autocert.AcceptTOS, HostPolicy: autocert.HostWhitelist(*domain), Cache: autocert.DirCache(*cache)}
-		tcfg.GetCertificate = m.GetCertificate
+		// (a certificate that can't be had is logged, its reason only: nothing about who asked)
+		tcfg.GetCertificate = func(h *tls.ClientHelloInfo) (*tls.Certificate, error) {
+			c, err := m.GetCertificate(h)
+			if err != nil && h.ServerName == *domain {
+				log.Printf("certificate: %v", err)
+			}
+			return c, err
+		}
 		tcfg.NextProtos = append(tcfg.NextProtos, "acme-tls/1")
 	}
 

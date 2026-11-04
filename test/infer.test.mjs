@@ -118,10 +118,10 @@ test("fonts: only ones the system doesn't bring say something", () => {
 test("disguise checks", () => {
   const base = { tz: "Asia/Shanghai", tzOff: "+08:00", ipTzOff: "+08:00", ipcc: "CN", langs: ["zh-CN"], rtc: ["1.2.3.4"], ip: "1.2.3.4",
     asn: 4134, org: "Chinanet", uaOS: "Windows", real: true, hintOS: "Windows", gpuOS: "Windows", rand: false, webdriver: false,
-    dnsCC: "CN", exits: [["ip", "1.2.3.4"], ["ex_cn", "1.2.3.4"]], rttB: 30, rttCf: 25, sys: { cc: ["CN"], from: ["fonts"] }, tamper: [], fpb: [] };
+    dnsCC: "CN", exits: [["ip", "1.2.3.4"], ["ex_cn", "1.2.3.4"]], rttB: 30, rttCf: 25, sys: { cc: ["CN"], from: ["fonts"] }, tamper: [], fpb: [], conn: { os: "windows", pseudo: "m,a,s,p", engine: "V8" } };
   const c = checks(base);
   assert.deepEqual(Object.fromEntries(Object.entries(c).map(([k, v]) => [k, v[0]])),
-    { tz: "ok", lang: "ok", dns: "ok", split: "ok", webrtc: "ok", dc: "ok", ua: "ok", fp: "warn", bot: "ok", rtt: "ok", syslang: "ok", tamper: "ok", fpb: "ok" });
+    { tz: "ok", lang: "ok", dns: "ok", split: "ok", webrtc: "ok", dc: "ok", ua: "ok", fp: "warn", bot: "ok", rtt: "ok", syslang: "ok", tamper: "ok", fpb: "ok", conn: "ok" });
   // through a proxy, Cloudflare only sees the proxy's leg of the round trip
   assert.deepEqual(checks({ ...base, rttB: 190, rttCf: 12 }).rtt, ["bad", "c_rtt_bad", { a: 12, b: 190 }]);
   assert.equal(checks({ ...base, rttB: 80, rttCf: 20 }).rtt[0], "warn");
@@ -275,6 +275,14 @@ test("UTC offsets", () => {
 
 test("split routing: different networks over the same IP version", () => {
   assert.equal(splitOf([["ip", "1.2.3.4"], ["ex_cn", "1.2.9.9"], ["stack", "2001:db8::1"]]), null);
+  // the connection: an engine's own HTTP/2 preface, a SYN of the user agent's OS family
+  const cn = (conn, uaOS = "Windows 11") => checks({ ipcc: "JP", conn, uaOS }).conn;
+  assert.deepEqual(cn({ os: "windows", pseudo: "m,a,s,p", engine: "V8" }), ["ok", "c_conn_ok", {}]);
+  assert.deepEqual(cn({ os: "linux", pseudo: "m,a,s,p", engine: "V8" }), ["warn", "c_conn_os", { a: "linux", b: "Windows 11" }]);
+  assert.equal(cn({ os: "windows", pseudo: "m,p,s,a", engine: "V8" })[1], "c_conn_mitm");
+  assert.equal(cn({ os: "apple", pseudo: "m,s,p,a", engine: "JavaScriptCore" }, "iOS 18.7")[1], "c_conn_ok");
+  assert.equal(cn({ os: "unix", pseudo: null, engine: "V8" }, "Android 15")[1], "c_conn_ok");
+  assert.deepEqual(cn(null), ["info", "c_conn_na", {}]);
   // a phone network's NAT gives Radar's IPv4 test another address: no split (1ms-shell#63)
   assert.equal(splitOf([["ip", "172.58.1.1"], ["ex_intl", "172.58.1.1"], ["stack", "100.40.2.2"], ["stack", "2607:fb90::1"]]), null);   // same /16, and IPv6 beside IPv4
   assert.deepEqual(splitOf([["ip", "45.76.1.1"], ["ex_cn", "114.254.73.157"], ["ex_gpt", "45.76.1.1"]]), { a: "ip", b: "ex_cn", ipA: "45.76.1.1", ipB: "114.254.73.157", n: 2 });

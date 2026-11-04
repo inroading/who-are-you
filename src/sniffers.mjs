@@ -17,6 +17,9 @@ export const GROUPS = [
     { id: "kex", m: "/cdn-cgi/trace · kex, sni" },
     { id: "warp", m: "/cdn-cgi/trace · warp" },
     { id: "tlsfp", m: "TLS ClientHello" },
+    { id: "tcpfp", m: "probe.1ms.dog · TCP SYN" },
+    { id: "ja4", m: "probe.1ms.dog · JA4" },
+    { id: "h2fp", m: "probe.1ms.dog · HTTP/2 SETTINGS" },
     { id: "clock", m: "Date.now()" },
     { id: "webrtc", m: "RTCPeerConnection · STUN", s: 1 },
     { id: "lan", m: "WebRTC host candidate" },
@@ -121,7 +124,7 @@ export const BLANKS = {
 };
 
 // the disguise checks, one row each
-export const CHECKS = ["tz", "lang", "syslang", "dns", "split", "webrtc", "rtt", "dc", "ua", "tamper", "fpb", "fp", "bot"];
+export const CHECKS = ["tz", "lang", "syslang", "dns", "split", "webrtc", "rtt", "conn", "dc", "ua", "tamper", "fpb", "fp", "bot"];
 // what the verdict counts by default (passing as elsewhere): every check but the fingerprint's, which says nothing
 // about where someone is (the privacy scene counts it)
 export const COUNTED = CHECKS.filter(id => id !== "fp");

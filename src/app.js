@@ -439,6 +439,23 @@ import { TZ_CC } from "./tz.mjs";
     txt("apis", on.length ? t("api_v", { n: on.length, of: APIS.length, list: on.join(" · ") }) : t("api_none"), { why: t("api_why") });
   }
 
+  // The probe: this browser's own connection, read whole by a server Cloudflare doesn't stand in front of
+  // (probe.1ms.dog, DNS only): the SYN the system opened it with, the TLS ClientHello, the HTTP/2 preface
+  const PROBE = "https://probe.1ms.dog/fp";
+  const h2Engine = p => ({ "m,a,s,p": "blink", "m,p,a,s": "gecko", "m,s,p,a": "webkit", "m,s,a,p": "webkit" })[p] || (p ? "tool" : null);
+  async function probe() {
+    let j = null;
+    try { const r = await within(fetch(PROBE, { cache: "no-store" }), 6000, null); j = r && r.ok ? await r.json() : null; } catch (e) {}
+    R.probe = j;
+    const tc = j && j.tcp, tl = j && j.tls, h2 = j && j.http2;
+    if (tc) txt("tcpfp", t("tcp_v", { os: t("tos_" + (tc.os || "unix")), ttl: tc.initial_ttl, hops: tc.hops, mtu: tc.mtu || "?" }), { why: t("tcp_why") + "\nJA4T " + tc.ja4t });
+    else na("tcpfp", j ? "v_empty" : "v_fail");
+    if (tl) txt("ja4", tl.ja4, { why: t("ja4_why") + "\nJA3 " + tl.ja3 });
+    else na("ja4", j ? "v_empty" : "v_fail");
+    if (h2) txt("h2fp", t("h2_v", { e: t("h2e_" + h2Engine(h2.pseudo)), p: h2.pseudo || "?" }), { why: t("h2_why") + "\n" + h2.akamai });
+    else na("h2fp", j ? (j.proto === "HTTP/2.0" ? "v_empty" : "v_unsup") : "v_fail");
+  }
+
   async function storage() {
     if (!navigator.storage || !navigator.storage.estimate) return na("storage");
     const e = await within(navigator.storage.estimate(), 1500, null);
@@ -1247,7 +1264,7 @@ import { TZ_CC } from "./tz.mjs";
   const CK = Object.fromEntries($$(".ckr[data-c]").map(r => [r.dataset.c, r]));
   // a check's result as text: [level, key, vars]; ipc: the address's country
   function ckText(id, [, key, vars], ipc) {
-    const vv = Object.fromEntries(Object.entries(vars).map(([k, x]) => [k, k === "cc" ? country(x) : id === "split" ? exitName(x) : x]));
+    const vv = Object.fromEntries(Object.entries(vars).map(([k, x]) => [k, k === "cc" ? country(x) : id === "split" ? exitName(x) : id === "conn" && k === "a" ? t("tos_" + x) : x]));
     if (id === "tz" || id === "lang" || id === "dns" || id === "syslang") vv.ipc = ipc ? country(ipc) : "?";
     if (id === "syslang" && vars.from) vv.from = list(String(vars.from).split(",").map(rowName));
     if ((id === "tamper" || id === "fpb") && vars.list) vv.list = list(String(vars.list).split(",").map(k => t(k)));
@@ -1325,7 +1342,7 @@ import { TZ_CC } from "./tz.mjs";
     if (R.ck) { paintChecks(R.ck, R.srv && R.srv.cf && R.srv.cf.country, true); todo(); }
     paintScene();
   };
-  const WEIGHT = { bot: 9, webrtc: 9, dns: 8, tz: 8, tamper: 7, fpb: 7, ua: 6, rtt: 6, split: 5, dc: 5, lang: 4, syslang: 3, fp: 2 };
+  const WEIGHT = { bot: 9, webrtc: 9, dns: 8, tz: 8, tamper: 7, fpb: 7, conn: 7, ua: 6, rtt: 6, split: 5, dc: 5, lang: 4, syslang: 3, fp: 2 };
   function todo() {
     const res = R.ck || {}, lvOf = id => res[id] && res[id][0];
     const top = CHECKS.filter(id => counted(id) && (lvOf(id) === "bad" || lvOf(id) === "warn"))
@@ -1346,7 +1363,7 @@ import { TZ_CC } from "./tz.mjs";
   // Checking one again: the readings a check rests on, taken again without reloading (a time zone, DNS or proxy change
   // shows at once). Checks that rest on what the page read as it loaded (a rewritten environment) need the whole test
   const RETEST = { tz: [locale], lang: [locale], syslang: [fonts, voices, keyboard], dns: [dnsResolver], split: [server, exits], webrtc: [webrtc],
-    rtt: [server, latency], dc: [server] };
+    rtt: [server, latency], dc: [server], conn: [probe] };
   $$(".ck-re").forEach(btn => {
     const id = btn.closest(".ckr").dataset.c;
     if (!RETEST[id]) return btn.remove();
@@ -1555,6 +1572,8 @@ import { TZ_CC } from "./tz.mjs";
       langs: R.langs, dnsCC: R.dnsCC, exits: allExits(), rtc: R.rtc, ip: R.srv && R.srv.ip, asn: c.asn, org: orgName(c.asOrganization, c.asn),
       uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, noise: R.noise, webdriver: R.webdriver,
       rttB: R.latDone ? R.rttB : null, coarse: R.latDone ? !!R.coarse : false, rttCf: c.clientTcpRtt || null, sys: final || R.voices ? sysOf() : undefined, tamper: R.dev && R.srv ? tampered() : null, fpb: fpbTraces(),
+      conn: R.probe === undefined ? undefined : R.probe && (R.probe.tcp || R.probe.http2) ? { os: R.probe.tcp && R.probe.tcp.os, pseudo: R.probe.http2 && R.probe.http2.pseudo, engine: R.engine } : null,
+      brName: R.br && R.br.name,
     });
     if (res.dc === null && R.srv && !c.asn) res.dc = ["info", "c_na", {}];
     const tr = R.tr || {};
@@ -1742,7 +1761,7 @@ import { TZ_CC } from "./tz.mjs";
       ["bio", "bio", biometric], ["bt", "bt", bluetooth], ["storage", "storage", storage], ["adblock", "adblock", adblock], ["ext", "ext", extensions],
       ["prints", ["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)], ["trace", ["kex", "warp"], trace],
       ["webgpu", "webgpu", webgpu], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
-      ["traces", "traces", traces], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
+      ["traces", "traces", traces], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
     await Promise.all([
       srv, guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
       ...S.filter(([k]) => on(k) && !(EMBED && k === "traces")).map(([, ids, f]) => guard(ids, f)), ...probes,
