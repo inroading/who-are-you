@@ -59,7 +59,8 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
 - 2026-11-04: stored traces (four stores), sensitive APIs, how common each reading is (kuber.studio/cookie).
 - 2026-11-04: probe.1ms.dog live (IPv4); on the page: TCP/IP (OS family, TTL, hops, MTU, JA4T), JA4 / JA3, HTTP/2
   (engine, pseudo-header order, Akamai) and the "connection fingerprint" check (TCP OS against the user agent's,
-  HTTP/2 against the engine's). Open: IPv6 443 in Lightsail's IPv6 firewall; QUIC (443/udp, reserved).
+  HTTP/2 against the engine's). IPv6 open since 2026-11-04 (dual stack, SYN captured over both). Open: QUIC (443/udp, open in the firewall,
+  not served yet).
 - 2026-11-04: lie detection (1.1): 54 APIs checked for being the browser's own (source by a fresh iframe's toString,
   no own prototype, getters that refuse a stranger), own properties on navigator / screen, a fresh iframe's readings
   against the page's; feeds the tampering check.
