@@ -183,6 +183,15 @@ const v6g = a => {
   const [h, tl = ""] = a.toLowerCase().split("::"), H = h ? h.split(":") : [], T = tl ? tl.split(":") : [];
   return [...H, ...Array(Math.max(0, 8 - H.length - T.length)).fill("0"), ...T].map(g => g.padStart(4, "0"));
 };
+// The MAC an IPv6 address was built from (EUI-64: its interface ID is the card's MAC with "ff:fe" in the middle and
+// the universal bit flipped), as some systems and routers still build them; null for a random or temporary one
+export function macOf(ip) {
+  if (!ip || !ip.includes(":")) return null;
+  const g = v6g(ip).map(x => parseInt(x, 16));
+  if ((g[5] & 0xff) !== 0xff || g[6] >> 8 !== 0xfe) return null;
+  const b = [(g[4] >> 8) ^ 0x02, g[4] & 0xff, g[5] >> 8, g[6] & 0xff, g[7] >> 8, g[7] & 0xff];
+  return b.map(x => x.toString(16).padStart(2, "0")).join(":");
+}
 export const netOf = ip => ip.includes(":") ? v6g(ip).slice(0, 4).join(":") : ip.split(".").slice(0, 2).join(".");
 // Split routing: two destinations that saw different networks over the same IP version. IPv4 next to IPv6 is just a
 // dual-stack connection. exits: [[row id, address]] in the order the rows are drawn; the first pair that differs.

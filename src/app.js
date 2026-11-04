@@ -6,7 +6,7 @@ import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO, COUNTED, TODO_SK } from "./sni
 import { TRAITS, rarity, MIN_TOTAL, durOf, STUCK_MS } from "./traits.mjs";
 import { TW, flagCode } from "./regions.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
 
 (function () {
@@ -697,6 +697,78 @@ import { TZ_CC } from "./tz.mjs";
     };
   }
 
+  // An IPv6 address of this browser's (the page's, Radar's, WebRTC's) built from the network card's MAC: then the
+  // address carries the card's hardware ID, the same on every network it joins
+  function v6mac() {
+    const ips = [R.srv && R.srv.ip, ...(R.stack || []), ...(Array.isArray(R.rtc) ? R.rtc : [])].filter(ip => ip && String(ip).includes(":"));
+    if (!ips.length) return na("v6mac", "v_empty");
+    const mac = ips.map(macOf).find(Boolean);
+    R.v6mac = mac || null;
+    txt("v6mac", mac ? t("mac_v", { mac }) : t("mac_none"), { why: t("mac_why") });
+  }
+  // The ICU data the browser carries: how many time zones, currencies, units and calendars Intl knows. Each version
+  // of each engine has its own counts; a browser that trims them (to be smaller) shows it
+  function icu() {
+    if (!Intl.supportedValuesOf) return na("icu");
+    const K = ["timeZone", "currency", "unit", "calendar", "collation", "numberingSystem"];
+    const c = K.map(k => { try { return Intl.supportedValuesOf(k).length; } catch (e) { return 0; } });
+    txt("icu", t("icu_v", { tz: c[0], cur: c[1], u: c[2], cal: c[3] }), { why: t("icu_why") + "\n" + K.map((k, i) => k + " " + c[i]).join(" · ") });
+  }
+  // How wide the system draws a scrollbar: Windows and most Linux a classic one, macOS, iOS and Android an overlay one
+  function scrollbar() {
+    const d = document.createElement("div");
+    d.style.cssText = "position:absolute;top:-999px;left:0;width:100px;height:100px;overflow:scroll;scrollbar-width:auto";
+    document.body.appendChild(d);
+    const w = d.offsetWidth - d.clientWidth;
+    d.remove();
+    R.sbw = w;
+    txt("scrollbar", w ? t("sb_v", { w }) : t("sb_overlay"), { why: t("sb_why") });
+  }
+  // Extensions found by a file they let pages load (Chromium only: Firefox gives each install its own random address)
+  const EXTS = [["MetaMask", "nkbihfbeogaeaoehlefnkodbefgpgknn", ["scripts/inpage.js", "inpage.js"]], ["Phantom", "bfnaelmomeimhlpmgjnjophhpkkoljpa", ["injected.js"]],
+    ["LastPass", "hdokiejnpimakedhajhdlcegeplioahd", ["overlay.html", "images/icon48.png"]], ["Bitwarden", "nngceckbapebfimnlniiiahkandclblb", ["notification/bar.html", "overlay/menu-list.html"]],
+    ["1Password", "aeblfdkhhhdcdjpifhhbdiojplfjncoa", ["inline/injected.js"]], ["Google Translate", "aapbdbdomjkkjkaonfhkkikfgjllcleb", ["popup_css_compiled.css"]],
+    ["Honey", "bmnlcjabgnpnenekpadlanbbkooimhnj", ["icons/icon48.png"]], ["AdBlock", "gighmmpiobklfepjocnamgkkbiglidom", ["icons/icon24.png"]],
+    ["Adblock Plus", "cfhdojbkjhnklbpkdaibdccddilifddb", ["icons/abp-16.png"]], ["Tampermonkey", "dhdgffkkebhmkfjojejmpbldmpobfkfo", ["images/icon.png"]],
+    ["Wappalyzer", "gppongmhjkpfnbhagpmjfkannfbllamg", ["images/icons/default.svg"]], ["Proxy SwitchyOmega", "padekgcemlokbadohgkifijomclgjgif", ["img/icons/omega-48.png"]],
+    ["ZeroOmega", "pfnededegaaopdmhkdmcofjmoldfiped", ["img/icons/omega-48.png"]], ["Immersive Translate", "bpoadfkcbjbfhfodiogcnhhhpibjhbnh", ["styles/inject.css"]],
+    ["ColorZilla", "bhlhnicpbhignbdhedgjhgdocnmhomnp", ["html/content-script-iframe.html"]]];
+  async function extFiles() {
+    if (R.engine !== "V8" || /Firefox/.test(navigator.userAgent)) return na("extwar", "xw_na");
+    const hit = await Promise.all(EXTS.map(async ([name, id, files]) => {
+      for (const f of files) { const r = await within(fetch(`chrome-extension://${id}/${f}`, { cache: "no-store" }).then(x => x.ok, () => false), 1500, false); if (r) return name; }
+      return null;
+    }));
+    const found = hit.filter(Boolean);
+    R.extwar = found;
+    txt("extwar", found.length ? t("xw_v", { n: EXTS.length, list: found.join(" · ") }) : t("xw_none", { n: EXTS.length }), { why: t("xw_why") });
+  }
+  // The newest CSS features this engine has, each with the Chromium version that brought it: the level the engine
+  // really is, set against the version the user agent claims
+  const CSSV = [[105, "selector(:has(*))"], [111, "color: color-mix(in srgb, red, blue)"], [114, "text-wrap: balance"], [115, "animation-timeline: scroll()"],
+    [117, "transition-behavior: allow-discrete"], [123, "field-sizing: content"], [125, "anchor-name: --a"], [129, "interpolate-size: allow-keywords"],
+    [133, "text-box: trim-both cap alphabetic"], [137, "reading-flow: flex-visual"]];
+  function cssLevel() {
+    if (R.engine !== "V8" || !window.CSS || !CSS.supports) return na("cssv", "xw_na");
+    let v = 0, miss = null;
+    for (const [ver, q] of CSSV) { let ok = false; try { ok = CSS.supports(q); } catch (e) {} if (ok) v = ver; else if (miss == null) miss = ver; }
+    R.cssv = { v, miss };
+    txt("cssv", v ? t("cv_v", { v }) : t("v_unknown"), { why: t("cv_why") });
+  }
+  // How the system smooths text: subpixel (colored fringes, as ClearType), grayscale, or not at all
+  function smoothing() {
+    const c = document.createElement("canvas"); c.width = 140; c.height = 30;
+    const x = c.getContext("2d", { alpha: false });
+    if (!x) return na("smooth");
+    x.fillStyle = "#fff"; x.fillRect(0, 0, 140, 30); x.fillStyle = "#000"; x.font = "16px sans-serif"; x.fillText("Wwg ii 你好 Ma", 2, 21);
+    const d = x.getImageData(0, 0, 140, 30).data; let gray = 0, color = 0;
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i + 1], b = d[i + 2];
+      if (Math.max(Math.abs(r - g), Math.abs(g - b), Math.abs(r - b)) > 8) color++; else if (r > 0 && r < 255) gray++;
+    }
+    txt("smooth", t(color > 10 ? "sm_sub" : gray > 10 ? "sm_gray" : "sm_off"), { why: t("sm_why") });
+  }
+
   async function storage() {
     if (!navigator.storage || !navigator.storage.estimate) return na("storage");
     const e = await within(navigator.storage.estimate(), 1500, null);
@@ -720,7 +792,7 @@ import { TZ_CC } from "./tz.mjs";
     txt("webdriver", t(R.webdriver ? "wd_yes" : "wd_no"));
     // the window, and what the system's bar (taskbar, Dock) takes off the screen
     txt("win", t("win_v", { w: innerWidth, h: innerHeight, tb: Math.max(0, screen.height - screen.availHeight) }));
-    const a11y = [["(prefers-contrast: more)", "a11y_contrast"], ["(forced-colors: active)", "a11y_forced"], ["(prefers-reduced-transparency: reduce)", "a11y_transp"], ["(inverted-colors: inverted)", "a11y_invert"]]
+    const a11y = [["(prefers-contrast: more)", "a11y_contrast"], ["(forced-colors: active)", "a11y_forced"], ["(prefers-reduced-transparency: reduce)", "a11y_transp"], ["(inverted-colors: inverted)", "a11y_invert"], ["(prefers-reduced-data: reduce)", "a11y_data"]]
       .filter(([q]) => mq(q)).map(([, k]) => t(k));
     txt("a11y", a11y.length ? list(a11y) : t("a11y_none"));
     const dm = ["fullscreen", "standalone", "minimal-ui"].find(m => mq(`(display-mode: ${m})`));
@@ -1042,6 +1114,8 @@ import { TZ_CC } from "./tz.mjs";
     if (R.wdiff === undefined || !R.dev) return null;
     const out = [], cv = +((/Chrome\/(\d+)/.exec(navigator.userAgent) || [])[1]) || 0;
     if (R.engine === "V8" && engineOff(cv, R.engVer)) out.push("fb_ver");
+    // (a CSS feature the claimed version has, missing: the engine is older than it says)
+    else if (R.engine === "V8" && R.cssv && R.cssv.miss && cv >= R.cssv.miss + 2) out.push("fb_css");
     if (R.wdiff && R.wdiff.length) out.push("fb_worker");
     if (platformOff(navigator.platform, R.dev.os)) out.push("fb_plat");
     if (glVendorOff(R.gpuVen, R.gpuRaw)) out.push("fb_gl");
@@ -2034,7 +2108,8 @@ import { TZ_CC } from "./tz.mjs";
       ["bio", "bio", biometric], ["bt", "bt", bluetooth], ["storage", "storage", storage], ["adblock", "adblock", adblock], ["ext", "ext", extensions],
       ["prints", ["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)], ["trace", ["kex", "warp"], trace],
       ["webgpu", "webgpu", webgpu], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
-      ["traces", "traces", traces], ["lies", "lies", lies], ["geoloc", "geoloc", geoloc], ["sensors", "sensors", sensors], ["etag", "etag", etagId], ["trackers", "trackers", trackers],
+      ["traces", "traces", traces], ["lies", "lies", lies], ["icu", "icu", icu], ["scrollbar", "scrollbar", scrollbar], ["extwar", "extwar", extFiles],
+      ["cssv", "cssv", cssLevel], ["smooth", "smooth", smoothing], ["geoloc", "geoloc", geoloc], ["sensors", "sensors", sensors], ["etag", "etag", etagId], ["trackers", "trackers", trackers],
       ["domrect", "domrect", domRect], ["svgrect", "svgrect", svgRect], ["textm", "textm", textMetrics], ["glimg", "glimg", glImage], ["gpulim", "gpulim", gpuLimits],
       ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
     await Promise.all([
@@ -2044,6 +2119,7 @@ import { TZ_CC } from "./tz.mjs";
     if (g !== gen) return;
     // (once the drawings and the lie check are in)
     if (on("prints") && on("lies")) shield();
+    if (on("stack")) v6mac();
     if (on("fonts") && on("gpu")) await hwid();
     judge(false);
     if (!NEED) { paint(portrait(), false); readings(portrait(), R.ck); }

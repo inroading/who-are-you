@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
+import { macOf, tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
 import { cleanSeen, rarity, durOf } from "../src/traits.mjs";
 import { regionName, flagCode } from "../src/regions.mjs";
 
@@ -284,6 +284,10 @@ test("split routing: different networks over the same IP version", () => {
   assert.equal(cn({ os: "unix", pseudo: null, engine: "V8" }, "Android 15")[1], "c_conn_ok");
   assert.deepEqual(cn(null), ["info", "c_conn_na", {}]);
   assert.deepEqual(cn({ os: "windows", pseudo: "m,a,s,p", engine: "V8", mtu: 9001 }), ["warn", "c_conn_cloud", { m: 9001 }]);
+  // an IPv6 address built from the card's MAC, and a random one
+  assert.equal(macOf("2001:db8::211:22ff:fe33:4455"), "00:11:22:33:44:55");
+  assert.equal(macOf("2408:8207:2653:1af0:3c8e:ae84:162f:b0dc"), null);
+  assert.equal(macOf("1.2.3.4"), null);
   // the tunnel an MSS points to
   assert.equal(tunnelOf(1460), false); assert.equal(tunnelOf(1452), "pppoe"); assert.equal(tunnelOf(1380), "wireguard"); assert.equal(tunnelOf(1220, true), "wireguard");
   assert.equal(tunnelOf(1410), "openvpn"); assert.equal(tunnelOf(1360), "ipsec"); assert.equal(tunnelOf(1300), "other"); assert.equal(tunnelOf(null), null);
