@@ -186,8 +186,11 @@ const v6g = a => {
 export const netOf = ip => ip.includes(":") ? v6g(ip).slice(0, 4).join(":") : ip.split(".").slice(0, 2).join(".");
 // Split routing: two destinations that saw different networks over the same IP version. IPv4 next to IPv6 is just a
 // dual-stack connection. exits: [[row id, address]] in the order the rows are drawn; the first pair that differs.
+// (Cloudflare Radar's IPv4 address isn't compared: a phone network's NAT (464XLAT, carrier-grade NAT) can give each
+// connection another IPv4 address from its pool, and no split tunnel sends Radar its own way)
 export function splitOf(exits) {
   const seen = [];
+  exits = exits.filter(([id, ip]) => !(id === "stack" && ip && !ip.includes(":")));
   for (const [id, ip] of exits) {
     if (!ip) continue;
     const other = seen.find(([, x]) => (x.includes(":") === ip.includes(":")) && netOf(x) !== netOf(ip));
@@ -367,6 +370,9 @@ const near = (w, h) => SIZES.find(([a, b]) => (Math.abs(a - w) <= a * 0.01 && Ma
 export function physicalScreen(w, h, dpr = 1) {
   const pw = Math.round(w * dpr), ph = Math.round(h * dpr), hit = near(pw, ph);
   if (hit) return w >= h === hit[0] >= hit[1] ? [hit[0], hit[1]] : [hit[1], hit[0]];
+  // a whole ratio of 2 or 3 is the screen's own (a Mac's or a phone's), not a zoomed page: a Mac set to a scaled
+  // resolution ("looks like 1680×1050") draws at twice that, whatever the panel is
+  if (dpr > 1 && Number.isInteger(dpr)) return [pw, ph];
   // a page is more often zoomed in than out: the scales just under the ratio first, then the rest
   const S = [1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 3], under = S.filter(s => s < dpr).reverse(), over = S.filter(s => s > dpr);
   for (const s of [...under, ...over]) {

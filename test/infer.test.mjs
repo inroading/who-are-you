@@ -274,7 +274,9 @@ test("UTC offsets", () => {
 });
 
 test("split routing: different networks over the same IP version", () => {
-  assert.equal(splitOf([["ip", "1.2.3.4"], ["ex_cn", "1.2.9.9"], ["stack", "2001:db8::1"]]), null);   // same /16, and IPv6 beside IPv4
+  assert.equal(splitOf([["ip", "1.2.3.4"], ["ex_cn", "1.2.9.9"], ["stack", "2001:db8::1"]]), null);
+  // a phone network's NAT gives Radar's IPv4 test another address: no split (1ms-shell#63)
+  assert.equal(splitOf([["ip", "172.58.1.1"], ["ex_intl", "172.58.1.1"], ["stack", "100.40.2.2"], ["stack", "2607:fb90::1"]]), null);   // same /16, and IPv6 beside IPv4
   assert.deepEqual(splitOf([["ip", "45.76.1.1"], ["ex_cn", "114.254.73.157"], ["ex_gpt", "45.76.1.1"]]), { a: "ip", b: "ex_cn", ipA: "45.76.1.1", ipB: "114.254.73.157", n: 2 });
   assert.equal(netOf("2406:da14:3c2:6400:f4b7:e910:7738:7af1"), "2406:da14:03c2:6400");
   const base = { ipcc: "JP" };
@@ -339,7 +341,8 @@ test("the screen in physical pixels", () => {
   assert.deepEqual(physicalScreen(2560, 1440, 1.875), [3840, 2160]);  // the same, with the page zoomed to 125%
   assert.deepEqual(physicalScreen(2560, 1440, 1), [2560, 1440]);
   assert.deepEqual(physicalScreen(1512, 982, 2), [3024, 1964]);       // a 14-inch MacBook Pro
-  assert.deepEqual(physicalScreen(390, 844, 3), [1170, 2532]);        // a phone keeps the plain product
+  assert.deepEqual(physicalScreen(390, 844, 3), [1170, 2532]);
+  assert.deepEqual(physicalScreen(1680, 1050, 2), [3360, 2100]);      // a Mac at a scaled resolution, not 1x (1ms-shell#61)        // a phone keeps the plain product
   assert.deepEqual(physicalScreen(1080, 1920, 1), [1080, 1920]);      // a monitor turned upright
 });
 

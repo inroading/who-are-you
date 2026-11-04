@@ -328,7 +328,7 @@ import { TZ_CC } from "./tz.mjs";
       R.gpuHiRaw = he ? hg.getParameter(he.UNMASKED_RENDERER_WEBGL) : null; R.gpuHi = gpuName(R.gpuHiRaw);
     } catch (e) { R.gpuHi = null; }
     const dg = discreteGpu(R.gpu, R.gpuHi, null);
-    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : ren === "Mozilla" ? "Mozilla · " + t("gpu_rfp") : /or similar$/.test(ren || "") && R.gpu ? t("gpu_like", { g: R.gpu }) : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
+    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : ren === "Mozilla" ? "Mozilla · " + t("gpu_rfp") : ren === "Brave" ? t("gpu_brave") : /or similar$/.test(ren || "") && R.gpu ? t("gpu_like", { g: R.gpu }) : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
       { why: (/or similar$/.test(ren || "") ? t("gpu_like_why") + "\n" : "") + [ven, ren, R.gpuHiRaw && R.gpuHiRaw !== ren ? R.gpuHiRaw : ""].filter(Boolean).join(" · ") });
     const gl2 = !!document.createElement("canvas").getContext("webgl2");
     txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }));
@@ -486,13 +486,14 @@ import { TZ_CC } from "./tz.mjs";
     txt("fontfp", short(fh));
     // a browser that adds noise to protect the visitor draws the same picture differently each time
     R.rand = !!(c1 && c2 && c1 !== c2);
-    // A solid square read back pixel for pixel: exact everywhere, unless the browser adds noise to what pages read
-    // (Brave per site and session, Firefox's resistFingerprinting): then the fingerprint changes from site to site
+    // A square of two colours read back pixel for pixel: exact everywhere, unless the browser adds noise to what pages
+    // read (Brave per site and session; Firefox's fingerprinting protection per session, which leaves a picture of a
+    // single colour alone): then the fingerprint changes from site to site, or from one session to the next
     try {
-      const cv = document.createElement("canvas"); cv.width = cv.height = 16;
-      const x = cv.getContext("2d"); x.fillStyle = "rgb(100,150,200)"; x.fillRect(0, 0, 16, 16);
-      const px = x.getImageData(0, 0, 16, 16).data;
-      R.noise = px.some((v, i) => v !== [100, 150, 200, 255][i % 4]);
+      const cv = document.createElement("canvas"); cv.width = cv.height = 32;
+      const x = cv.getContext("2d"); x.fillStyle = "rgb(100,150,200)"; x.fillRect(0, 0, 16, 32); x.fillStyle = "rgb(200,90,40)"; x.fillRect(16, 0, 16, 32);
+      const px = x.getImageData(0, 0, 32, 32).data, want = (i, k) => (((i >> 2) % 32) < 16 ? [100, 150, 200, 255] : [200, 90, 40, 255])[k];
+      R.noise = px.some((v, i) => v !== want(i, i % 4));
     } catch (e) { R.noise = false; }
     txt("rand", t(R.rand ? "rand_yes" : "rand_no"));
     // everything that stays put on this device and browser; the address is left out, so it survives a VPN
@@ -556,7 +557,8 @@ import { TZ_CC } from "./tz.mjs";
       if (!r || !r.ip) { R.ex[id] = null; return na(id, "v_fail"); }
       R.ex[id] = r.ip;
       const cc = /^[A-Z]{2}$/.test(r.cc || "") && r.cc !== "XX" ? r.cc : null;
-      row(id, flagged(cc, [r.ip, r.note].filter(Boolean).join(" · "), ipqsOf(r.ip)));
+      const geo = id === "ex_cn" && r.note;
+      row(id, flagged(cc, [r.ip, geo ? r.note + t("ex_geo") : r.note].filter(Boolean).join(" · "), ipqsOf(r.ip)), geo ? { why: t("ex_geo_why") } : undefined);
     }));
     R.exDone = true;
   }
@@ -900,7 +902,7 @@ import { TZ_CC } from "./tz.mjs";
     blank("device", esc(!P.os ? t("dv_unknown") : (P.kind === "phone" || P.kind === "tablet") && P.model ? t("dv_model", { model: P.model, os: P.os }) : t("dv_" + (P.kind || "pc"), { os: P.os })));
     blank("browser", P.browser ? esc(P.browser) : U);
     blank("screen", P.screen ? esc(P.screen + (P.hz ? " · " + P.hz + " Hz" : "")) : U);
-    blank("gpu", esc(P.gs ? t("gpu_soft") : P.rf && !P.gpu ? t("gpu_rfp") : P.gl && P.gpu ? t("gpu_like", { g: P.gpu }) : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")),
+    blank("gpu", esc(P.gs ? t("gpu_soft") : P.rf && !P.gpu ? t("gpu_rfp") : !P.gpu && /^Brave\b/.test(P.browser || "") ? t("gpu_brave") : P.gl && P.gpu ? t("gpu_like", { g: P.gpu }) : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")),
       BLANKS.gpu, P.gl ? t("gpu_like_why") : "");
     blank("isp", P.org ? (!shared && asnOf(P.asn) ? `<a href="${esc(asnOf(P.asn))}" target="_blank" rel="noopener" title="${esc(t("go_asn"))}">${esc(P.org)}</a>` : esc(P.org)) : shared ? esc(t("masked")) : U, BLANKS.isp, X.fullOrg || (shared && !P.org ? t("masked_why") : ""));
     blank("dns", P.dns ? flagged(P.dns, country(P.dns)) : esc(t("dns_na")), BLANKS.dns, X.dnsOrg || "");
