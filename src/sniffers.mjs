@@ -143,6 +143,7 @@ export const SNIFFERS = GROUPS.flatMap(([, l]) => l);
 export const BLANKS = {
   nat: ["langs", "tz", "geo"], city: ["geo"], lang: ["langs"], tz: ["tz"], clock: ["hour"],
   device: ["os", "screen", "touch"], browser: ["browser"], screen: ["screen", "hz"], gpu: ["gpu"], rig: ["gpu", "hz", "cpu"],
+  wow: ["v6mac", "tcpfp", "h2fp", "etag", "lies"], conn: ["tcpfp", "h2fp"], shield: ["shield", "lies"],
   isp: ["isp"], nettype: ["isp", "ex_cn", "ex_intl", "ex_gpt", "ex_claude", "ex_cf"], dns: ["dns"], read: ["geo", "tz", "dns", "langs", "isp"], age: [],
   tier: ["gpu", "screen", "hz", "cpu", "screens"], fresh: ["browser"], when: ["tz"], power: ["battery"], prefs: ["sysui", "motion", "a11y"], stand: ["fpid"], theme: ["scheme"], adblock: ["adblock"], track: ["fpid", "rand"], job: ["fonts", "ext"],
 };

@@ -1206,8 +1206,19 @@ import { TZ_CC } from "./tz.mjs";
   // Firefox's resistFingerprinting: the clock and the graphics card are stand-ins
   const rfp = () => rfpClock(/Firefox\//.test(navigator.userAgent), R.tz, R.gpuRaw);
   function jobsOf() {
-    const out = [...fontHints(R.fonts || [], R.dev && R.dev.os), ...(R.ext || []).filter(([k]) => k)];
+    // (extensions found by their files count too: wallets for crypto, web developer tools for development)
+    const war = (R.extwar || []).map(n => /MetaMask|Phantom/.test(n) ? ["crypto", n] : /Wappalyzer|ColorZilla/.test(n) ? ["dev", n] : null).filter(Boolean);
+    const out = [...fontHints(R.fonts || [], R.dev && R.dev.os), ...(R.ext || []).filter(([k]) => k), ...war];
     return out.filter(([k], i) => out.findIndex(([x]) => x === k) === i);
+  }
+  // the connection, as the probe read it: the TCP's OS family, a tunnel, a cloud's inside, HTTPS re-made on the way
+  function connOf() {
+    const p = R.probe, tc = p && p.tcp;
+    if (p === undefined) return {};
+    if (!p || !tc) return { cna: true };
+    const v6 = String(p.ip || "").includes(":"), cn = R.ck && R.ck.conn;
+    return { tos: tc.os || undefined, tun: tunnelOf(tc.mss, v6) || undefined, mtu: tc.mtu || undefined, cloud: tc.mtu > 1500 || undefined,
+      mitm: (cn && cn[1] === "c_conn_mitm") || undefined, cos: (cn && cn[1] === "c_conn_os") || undefined };
   }
   function portrait() {
     const c = (R.srv && R.srv.cf) || {}, d = R.dev || {};
@@ -1218,6 +1229,9 @@ import { TZ_CC } from "./tz.mjs";
       screen: R.screen || null, gpu: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) || R.gpu || null, gi: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) ? R.gpu : undefined, gl: /or similar$/.test(R.gpuRaw || "") || undefined, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
       nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
       dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, app: inApp() || undefined, fz: !!R.noise || undefined, tb: (R.traces && R.traces.blocked) || undefined, hz: R.hz || null,
+      ...connOf(), sh: R.shield || undefined, ln: R.lies ? (R.lies.list.length + R.lies.frame.length) || undefined : undefined,
+      et: (R.etag && R.etag.seen) || undefined, lost: R.traces && R.traces.lost.length ? R.traces.lost : undefined, kept: R.traces && !R.traces.first ? R.traces.kept : undefined,
+      hw: R.hwid || undefined, mc: R.v6mac || undefined,
       cpu: navigator.hardwareConcurrency || null, multi: R.multi === true || undefined, fs: R.fontPx || null, rm: R.rm || undefined, hc: R.hc || undefined,
       bat: !R.battery ? undefined : R.battery.level === 1 && R.battery.charging && R.battery.chargingTime === 0 ? "ac" : (R.battery.charging ? "c" : "b") + Math.round(R.battery.level * 100),
       x: { split, fullOrg: [c.asn ? "AS" + c.asn : "", c.asOrganization].filter(Boolean).join(" · "), dnsOrg: R.dnsOrg || "", fpHex: R.fpHex } };
@@ -1292,7 +1306,8 @@ import { TZ_CC } from "./tz.mjs";
   }
   function paint(P, shared) {
     const X = P.x || {}, U = esc(t("v_unknown"));
-    blank("nat", P.nat ? flagged(P.nat, country(P.nat)) : U, P.natFrom || BLANKS.nat);
+    const soft = P.nat && (P.natFrom || []).length === 1 && P.natFrom[0] === "langs";
+    blank("nat", P.nat ? t(soft ? "pt_nat_soft" : "pt_nat_sure", { c: flagged(P.nat, country(P.nat)) }) : esc(t("pt_nat_na")), P.natFrom || BLANKS.nat, soft ? t("pt_nat_soft_why") : "");
     // (the city is the address's, from an IP database: said so in the sentence, the reason on hover or tap)
     blank("city", shared && !P.city ? esc(t("masked")) : P.cc ? flagged(P.cc, [P.city, country(P.cc)].filter(Boolean).join(", ") + t("ex_geo")) : U, BLANKS.city,
       shared && !P.city ? t("masked_why") : P.cc ? t("ex_geo_why") : "");
@@ -1314,6 +1329,16 @@ import { TZ_CC } from "./tz.mjs";
     blank("age", esc(t("age_v")), [], t("age_why"));
     blank("theme", esc(P.app ? t("pt_app", { m: t(P.dark ? "pt_dark" : "pt_light"), app: P.app === "wv" ? t("pt_app_any") : P.app }) : t(P.dark ? "pt_dark" : "pt_light")));
     blank("adblock", esc(t(P.ab ? "pt_ab" : "pt_noab")));
+    // who protects the fingerprint, from the protection row (and how much of a disguise was caught)
+    blank("shield", esc(P.sh ? tn("pt_sh_" + P.sh.replace(/^sh_/, ""), P.ln || 0, { n: P.ln || 0 }) : t("pt_sh_none")));
+    // who opened the connection: HTTPS re-made on the way, another machine, a cloud's inside, a tunnel, or your own
+    const ua = String(P.os || "").split(" ")[0] || "?";
+    blank("conn", esc(P.cna ? t("cn_na") : P.mitm ? t("cn_mitm") : P.cos ? t("cn_os", { os: t("tos_" + P.tos), ua }) : P.cloud ? t("cn_cloud")
+      : P.tun && P.tun !== "pppoe" ? (P.tun === "other" ? t("cn_tun2", { m: P.mtu }) : t("cn_tun", { t: { wireguard: "WireGuard", openvpn: "OpenVPN", ipsec: "IPsec" }[P.tun], m: P.mtu }))
+      : P.tos || P.mtu ? t("cn_self", { ua }) : t("cn_na")));
+    // the worst of it, in a sentence of its own (good news when there is none)
+    blank("wow", esc(P.mc ? t("pt_wow_mac", { mac: P.mc }) : P.mitm ? t("pt_wow_mitm") : P.cos ? t("pt_wow_os", { os: t("tos_" + P.tos), ua })
+      : P.et && (P.lost || []).includes("ls") ? t("pt_wow_etag") : P.ln >= 3 ? tn("pt_wow_lies", P.ln, { n: P.ln }) : t("pt_wow_none")), BLANKS.wow);
     blank("job", esc(P.jobs.length ? list(P.jobs.map(([k]) => t("jb_" + k))) : t("jb_none")), BLANKS.job, P.jobs.length ? t("from", { list: P.jobs.map(([, f]) => f).join(", ") }) : "");
     $("#story").classList.remove("wait"); $("#storySk").hidden = true;
     idCard(P, shared);
@@ -1338,7 +1363,10 @@ import { TZ_CC } from "./tz.mjs";
     const g = P.gpu || "", hi = !!P.gi || /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);
     const low = /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g), pc = P.kind === "pc" || P.kind === "mac";
     blank("rig", esc(t(P.gs ? "rg_soft" : pc && hi && P.hz >= 120 ? "rg_game" : pc && hi ? "rg_power" : pc && low ? "rg_basic" : "rg_none")));
-    blank("track", esc(t(P.rand ? "tk_rand" : P.fz ? "tk_site" : "tk_same")));
+    // how a site recognizes you anyway: scrambled (it can't), the cache's ID, a store that survived, the hardware ID
+    const kept = (P.kept || []).filter(k => k !== "ls");
+    blank("track", esc(P.rand ? t("tk_rand") : P.fz ? t("tk_site") : P.et ? t("tk_etag") : (P.lost || []).includes("ls") && kept.length ? t("tk_revive", { list: list(kept.map(k => t("tr_" + k))) })
+      : P.hw ? t("tk_hw", { id: P.hw.slice(0, 4) + "·" + P.hw.slice(4, 8) }) : t("tk_same")), BLANKS.track);
     // the paragraphs after: what the machine is worth, updates, when, power, settings; then the labels and standing out
     const tier = tierOf(P);
     blank("tier", esc(tier.text));
@@ -1396,9 +1424,12 @@ import { TZ_CC } from "./tz.mjs";
       [/^(macOS|iOS|iPadOS)/.test(P.os || ""), "lb_apple", ["os"]],
       [!!P.multi, "lb_multi", ["screens"]],
       [hour != null && hour < 5, "lb_night", ["tz"]],
+      [!!P.tun && P.tun !== "pppoe", "lb_tunnel", ["tcpfp"]],
+      [!!P.et, "lb_back", ["etag"]],
+      [((R && R.extwar) || []).some(n => /LastPass|Bitwarden|1Password/.test(n)), "lb_pw", ["extwar"]],
     ].filter(([on]) => on).slice(0, 5);
     // (a browser that keeps no store at all, as strict settings do, counts as careful too)
-    L.push([true, P.rand || P.fz || P.rf || P.tb ? "lb_priv_hi" : P.ab ? "lb_priv_mid" : "lb_priv_lo", ["rand", "adblock", "traces"]]);
+    L.push([true, P.rand || P.fz || P.rf || P.tb || /^sh_(brave|rfp|fpp|atfp|ext)$/.test(P.sh || "") ? "lb_priv_hi" : P.ab ? "lb_priv_mid" : "lb_priv_lo", ["rand", "adblock", "traces"]]);
     if (R) R.labels = L.map(([, k]) => k);
     $("#lbsL").innerHTML = L.map(([, k, from]) => `<span class="lb" tabindex="0" title="${esc(t("from", { list: list(from.map(rowName)) }))}">${esc(t(k))}</span>`).join("");
     $("#lbs").hidden = false;
@@ -1948,7 +1979,8 @@ import { TZ_CC } from "./tz.mjs";
   const maskIp = ip => ip.includes(":") ? ip.split(":").slice(0, 2).join(":") + ":…" : ip.split(".").slice(0, 2).join(".") + ".•.•";
   function sharedPortrait(show) {
     const P = portrait();
-    delete P.x; delete P.fp;
+    delete P.x; delete P.fp; delete P.hw;
+    if (P.mc) P.mc = "•";
     if (!show) { P.city = null; P.org = null; }
     delete P.asn;
     P.l = LANG; P.t = Date.now();

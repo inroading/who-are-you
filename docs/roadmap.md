@@ -79,6 +79,10 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
 - 2026-11-04: /conn for the other tools; checkup facts tunnel, mss, ttl; an MTU over 1500 as a cloud's inside.
 - 2026-11-04: IPv6 leaking the MAC, ICU data, scrollbar width, an extension scan, the CSS feature level, font
   smoothing, data saver; the probe's QUIC JA4 over HTTP/3 (part 3 done). 115 sniffers, 14 checks.
+- 2026-11-04: the portrait tells the new readings: the worst of it (or good news) after the first paragraph, who
+  opened the connection, who protects the fingerprint, how a site recognizes you anyway (cache ID, a surviving store,
+  the hardware ID), labels for tunnels, returning visitors and password managers, a softer origin when only the
+  language says it.
 
 ## Research (2026-11-04)
 - BrowserLeaks: IP, JavaScript, WebRTC, Canvas, WebGL, fonts, Geolocation, feature detection, TLS (JA3 / JA4, ECH),
