@@ -2,7 +2,9 @@ package main
 
 import (
 	"crypto/tls"
+	"io"
 	"log"
+	"log/slog"
 	"net"
 	"net/http"
 	"sync"
@@ -83,7 +85,7 @@ func serveQUIC(addr string, base *tls.Config, handler http.Handler) {
 		return nil, nil
 	}
 	cfg.GetCertificate = get
-	s := &http3.Server{Addr: addr, Handler: handler, TLSConfig: http3.ConfigureTLSConfig(cfg)}
+	s := &http3.Server{Addr: addr, Handler: handler, TLSConfig: http3.ConfigureTLSConfig(cfg), Logger: slog.New(slog.NewTextHandler(io.Discard, nil))}
 	if err := s.ListenAndServe(); err != nil {
 		log.Printf("QUIC off: %v", err)
 	}

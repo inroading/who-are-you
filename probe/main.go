@@ -10,6 +10,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"flag"
+	"io"
 	"log"
 	"net"
 	"net/http"
@@ -69,7 +70,9 @@ func main() {
 		log.Fatal(err)
 	}
 	h2s := &http2.Server{}
-	h1s := &http.Server{Handler: h, ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 30 * time.Second,
+	// (the HTTP libraries' own error lines name the client's address: they go nowhere, nothing about a visitor is logged)
+	quiet := log.New(io.Discard, "", 0)
+	h1s := &http.Server{Handler: h, ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 30 * time.Second, ErrorLog: quiet,
 		ConnContext: func(ctx context.Context, c net.Conn) context.Context {
 			if pc, ok := c.(*plainConn); ok {
 				return context.WithValue(ctx, ctxKey{}, pc.info)
@@ -84,11 +87,11 @@ func main() {
 		if err != nil {
 			continue
 		}
-		go serve(c, tcfg, syns, h1, h2s, h)
+		go serve(c, tcfg, syns, h1, h2s, h, quiet)
 	}
 }
 
-func serve(c net.Conn, tcfg *tls.Config, syns *synTable, h1 *chanListener, h2s *http2.Server, h http.Handler) {
+func serve(c net.Conn, tcfg *tls.Config, syns *synTable, h1 *chanListener, h2s *http2.Server, h http.Handler, quiet *log.Logger) {
 	info := &connInfo{}
 	if ta, ok := c.RemoteAddr().(*net.TCPAddr); ok {
 		info.syn = syns.take(ta.IP, ta.Port)
@@ -108,7 +111,7 @@ func serve(c net.Conn, tcfg *tls.Config, syns *synTable, h1 *chanListener, h2s *
 	case "acme-tls/1":
 		c.Close()
 	case "h2":
-		h2s.ServeConn(pc, &http2.ServeConnOpts{Handler: h, Context: context.WithValue(context.Background(), ctxKey{}, info)})
+		h2s.ServeConn(pc, &http2.ServeConnOpts{Handler: h, Context: context.WithValue(context.Background(), ctxKey{}, info), BaseConfig: &http.Server{ErrorLog: quiet}})
 	default:
 		h1.push(pc)
 	}
