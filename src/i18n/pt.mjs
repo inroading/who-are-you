@@ -128,7 +128,7 @@ export default {
   ex_more: "Teste completo",
   share: "Compartilhar",
   sh_eyebrow: "Alguém compartilhou o próprio retrato",
-  mine: "Ver o meu",
+  mine: "Ver o meu e comparar",
   masked: "•••",
   masked_why: "A cidade não é compartilhada.",
 

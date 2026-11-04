@@ -129,7 +129,7 @@ export default {
   ex_more: "Full check",
   share: "Share",
   sh_eyebrow: "Someone shared their portrait",
-  mine: "Check mine",
+  mine: "Check mine and compare",
   masked: "•••",
   masked_why: "The city isn't shared.",
 

@@ -128,7 +128,7 @@ export default {
   ex_more: "完整检测",
   share: "分享",
   sh_eyebrow: "这是别人分享的画像",
-  mine: "测测我自己",
+  mine: "测测我自己，和 TA 比一比",
   masked: "•••",
   masked_why: "城市不会分享出去。",
 

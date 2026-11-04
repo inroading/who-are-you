@@ -1527,6 +1527,7 @@ import { TZ_CC } from "./tz.mjs";
     $("#vsT").innerHTML = `<thead><tr><th></th><th>${esc(t("vs_me"))}</th><th>${esc(t("vs_them"))}</th><td class="mk"></td></tr></thead><tbody>` +
       rows.map(([k, a, b]) => `<tr class="${a === b ? "same" : ""}"><th>${esc(k.startsWith("s_") ? t(k) : t(k))}</th><td>${esc(a)}</td><td>${esc(b)}</td><td class="mk">${a === b ? "=" : "≠"}</td></tr>`).join("") + "</tbody>";
     $("#vs").hidden = false;
+    $("#vs").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
   }
 
   /* ---------- the portrait as text, to paste into a post ---------- */
@@ -2089,13 +2090,14 @@ import { TZ_CC } from "./tz.mjs";
     document.documentElement.classList.add("shared");
     $("#mine").hidden = false; $("#share").hidden = true; $("#rerun").hidden = true; $("#copyTxt").hidden = true;
     // (testing oneself from a friend's portrait brings it along, for the comparison after the run)
-    $("#mine").onclick = () => { location.href = (D.paths[LANG] || "/") + "?vs=" + encodeURIComponent(code); };
+    const mine = () => { location.href = (D.paths[LANG] || "/") + "?vs=" + encodeURIComponent(code); };
+    $("#mine").onclick = mine;
     $("#progTxt").textContent = " "; $("#todo").hidden = true;
     paint(P, true);
     for (const id of CHECKS) if (!(P.ck || {})[id]) { CK[id].hidden = true; const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.hidden = true; }
     paintChecks(P.ck || {}, P.cc, true);
     readings(P, P.ck || {});
-    import("/assets/share/share.js?v=8").then(({ received }) => received({ lang: LANG, ts: P.t || undefined, at: $(".hero"), test: () => { location.href = D.paths[LANG] || "/"; } })).catch(() => {});
+    import("/assets/share/share.js?v=8").then(({ received }) => received({ lang: LANG, ts: P.t || undefined, at: $(".hero"), test: mine })).catch(() => {});
     return true;
   }
   const sharedCode = (parsePath(location.pathname) || {}).code || (/^#p=/.test(location.hash) ? location.hash.slice(3) : null);

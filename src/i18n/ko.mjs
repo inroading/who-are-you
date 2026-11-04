@@ -128,7 +128,7 @@ export default {
   ex_more: "전체 검사",
   share: "공유",
   sh_eyebrow: "누군가 공유한 프로필",
-  mine: "내 것도 확인",
+  mine: "내 것도 확인하고 비교",
   masked: "•••",
   masked_why: "도시는 공유되지 않아요.",
 

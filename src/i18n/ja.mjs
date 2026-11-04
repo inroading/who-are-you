@@ -128,7 +128,7 @@ export default {
   ex_more: "詳しく調べる",
   share: "共有",
   sh_eyebrow: "誰かが共有した人物像",
-  mine: "自分も調べる",
+  mine: "自分も調べて比べる",
   masked: "•••",
   masked_why: "都市は共有されません。",
 

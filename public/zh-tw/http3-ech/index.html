@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="你的連線夠新嗎？卡在哪裡？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"HTTP/3、ECH 與後量子加密檢測 · 1ms.dog","url":"https://who.1ms.dog/zh-tw/http3-ech/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"免費連線協定檢測：看你的瀏覽器有沒有用上 HTTP/3，有沒有用 ECH 隱藏你造訪的網站名稱，有沒有協商後量子金鑰（X25519MLKEM768）；缺了哪一項，又代表你的網路或代理出了什麼問題。檢測在你的瀏覽器裡進行，不存 IP，只累計匿名計數。","inLanguage":"zh-TW","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"為什麼沒用上 HTTP/3？","acceptedAnswer":{"@type":"Answer","text":"HTTP/3 走 UDP 443 連接埠。瀏覽器要先透過一般的 TCP 連線收到網站的第一次回應，才知道它支援 HTTP/3，所以第一次造訪可能還沒切過去。但如果 UDP 哪裡都出不去，就是網路或代理把它擋了，或根本不轉送 UDP。很多代理設定只轉送 TCP。"}},{"@type":"Question","name":"ECH 是什麼？為什麼沒開？","acceptedAnswer":{"@type":"Answer","text":"ECH（Encrypted Client Hello）會把你要造訪的網站名稱加密。沒有它，TLS 交握會以明文送出網站名稱，路上誰都看得到。瀏覽器得先從 DNS 的 HTTPS 紀錄拿到網站的金鑰：Firefox 只在使用它自己的 DNS over HTTPS 時才會去讀；Chrome 需要一台能回傳 HTTPS 紀錄的 DNS 伺服器；Safari 目前還不使用 ECH。"}},{"@type":"Question","name":"金鑰交換顯示傳統方式，代表什麼？","acceptedAnswer":{"@type":"Answer","text":"Chrome 124+、Firefox 132+ 和 Safari 26 預設都會提供 X25519MLKEM768。新版瀏覽器最後卻用了一般的 X25519，代表中間有東西另外建立了 TLS 連線：防毒軟體、公司代理，或是會解開 TLS 的代理用戶端。如果是舊版瀏覽器，那只是版本太舊。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.ce6bf8c6bd.css">
+<link rel="stylesheet" href="/assets/app.b32f91f648.css">
 </head>
 <body>
 <div class="app">
@@ -87,6 +87,7 @@
           <div class="m-slot" id="mSlot"></div>
           <div class="story-w"><div class="story wait" id="story"><p><span class="bl wait" data-b="nat"><i class="skt">口口口口口口口口口口口</i></span>，現在人在<span class="bl wait" data-b="city"><i class="skt">口口口口口口口口口口口口口口口口口口口口</i></span>。你說<span class="bl wait" data-b="lang"><i class="skt">口口口口口口口</i></span>，電腦的時區是<span class="bl wait" data-b="tz"><i class="skt">口口口口口口口</i></span>，時鐘用<span class="bl wait" data-b="clock"><i class="skt">口口口口口口</i></span>。</p><p><span class="bl wait" data-b="wow"><i class="skt">口口口口口口口口口口口口口口口口口口口口口口</i></span></p><p>你用的是<span class="bl wait" data-b="device"><i class="skt">口口口口口口口口口口</i></span>，瀏覽器是<span class="bl wait" data-b="browser"><i class="skt">口口口口口口口口口口口口</i></span>，螢幕<span class="bl wait" data-b="screen"><i class="skt">口口口口口口口口口口口</i></span>，顯示卡是<span class="bl wait" data-b="gpu"><i class="skt">口口口口口</i></span>：<span class="bl wait" data-b="rig"><i class="skt">口口口口口口口口口口口口口口口口口口口口口口口口口口</i></span>。</p><p>你透過<span class="bl wait" data-b="isp"><i class="skt">口口口口口口口口</i></span>上網，<span class="bl wait" data-b="nettype"><i class="skt">口口口口口口口口</i></span>，<span class="bl wait" data-b="conn"><i class="skt">口口口口口口口口口口口口口口口口口</i></span>；幫你把網址換成 IP 位址的 DNS 伺服器在<span class="bl wait" data-b="dns"><i class="skt">口口口口口</i></span>。<span class="bl wait" data-b="read"><i class="skt">口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口</i></span>。</p><p>你喜歡<span class="bl wait" data-b="theme"><i class="skt">口口口口口</i></span>，<span class="bl wait" data-b="adblock"><i class="skt">口口口口口口口口口口口口</i></span>，<span class="bl wait" data-b="shield"><i class="skt">口口口口口口口口口口口口口口</i></span>。<span class="bl wait" data-b="track"><i class="skt">口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口口</i></span>。裝的字型透露了一點：<span class="bl wait" data-b="job"><i class="skt">口口口口口口</i></span>。至於年齡，<span class="bl wait" data-b="age"><i class="skt">口口口口口口口口口口口口口口</i></span>。</p><p>在網站眼裡，這是<span class="bl wait" data-b="tier"><i class="skt">口口口口口口口口口口口口口口口口口口口口口口口口口口</i></span>。<span class="bl wait" data-b="fresh"><i class="skt">口口口口口口口口口口口口</i></span>。你在<span class="bl wait" data-b="when"><i class="skt">口口口口口口口口口口口口口</i></span>打開了這個頁面，<span class="bl wait" data-b="power"><i class="skt">口口口口口</i></span>，<span class="bl wait" data-b="prefs"><i class="skt">口口口口口口口口口口口</i></span>。</p><p>放在人群裡，<span class="bl wait" data-b="stand"><i class="skt">口口口口口口口口口口口口口口口口口口口口口口口</i></span>。</p></div><button class="story-more" id="storyMore" type="button" hidden data-i="story_more">展開完整畫像</button><div class="story-sk" id="storySk" aria-hidden="true"><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i><i class="skl"></i></div></div>
           <div class="lbs" id="lbs"><span class="lbs-h" data-i="lb_h">網站會替你貼上</span><span class="lbs-l" id="lbsL"></span></div>
+          <div class="vs" id="vs" hidden><h2 data-i="vs_h">你和朋友比一比</h2><p class="vs-n" id="vsN"></p><table class="vs-t" id="vsT"></table></div>
           <div class="idc" id="idc">
             <svg class="fp-art" id="fpArt" viewBox="0 0 64 64" aria-hidden="true"></svg>
             <div class="idc-t"><span class="idc-h" data-i="id_h">瀏覽器指紋 ID</span><b class="idc-v" id="fpId"><i class="skl"></i></b><span class="idc-n" id="fpNote" data-i="id_note">換網站、開無痕、開 VPN，它都不會變</span><span class="idc-r" id="fpRet">&nbsp;</span><span class="idc-u" id="fpUniq" hidden></span></div>
@@ -109,15 +110,13 @@
         <div class="prog" id="prog"><i></i></div>
         <span class="prog-t" id="progTxt">&nbsp;</span>
         <div class="acts">
-          <button class="btn" id="mine" type="button" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.5" r="3"/><path d="M2.5 14.5c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/></svg><span data-i="mine">測測我自己</span></button>
+          <button class="btn" id="mine" type="button" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.5" r="3"/><path d="M2.5 14.5c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/></svg><span data-i="mine">測測我自己，和 TA 比一比</span></button>
           <button class="btn" id="copyTxt" type="button" disabled><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="9" height="9" rx="1.5"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></svg><span id="copyT" data-i="copy_txt">複製成文字</span></button>
           <button class="btn" id="eye" type="button" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 8s2.4-4.5 6.5-4.5S14.5 8 14.5 8s-2.4 4.5-6.5 4.5S1.5 8 1.5 8z"/><circle cx="8" cy="8" r="2"/></svg><span id="eyeT" data-i="hide">模糊位置</span></button>
           <button class="btn" id="rerun" type="button" disabled><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2v3h-3"/></svg><span data-i="rerun">重新檢測</span></button>
         </div>
       </div>
     </section>
-
-    <section class="card vs" id="vs" hidden><h2 data-i="vs_h">你和朋友比一比</h2><p class="vs-n" id="vsN"></p><table class="vs-t" id="vsT"></table></section>
 
     <section class="target card" id="target">
       <div class="tg-h"><h2 data-i="tg_h">想假裝在哪裡上網？</h2><div class="tg-sel"><label class="sr" for="tgIn" data-i="tg_label">目標地區</label><input id="tgIn" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tgOpts" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><ul id="tgOpts" role="listbox" hidden></ul></div><p class="tg-sum" id="tgSum">&nbsp;</p></div>
@@ -151,7 +150,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"zh-TW","paths":{"en":"/http3-ech/","zh-CN":"/zh-cn/http3-ech/","zh-TW":"/zh-tw/http3-ech/","ja":"/ja/http3-ech/","ko":"/ko/http3-ech/","es":"/es/http3-ech/","fr":"/fr/http3-ech/","de":"/de/http3-ech/","pt":"/pt/http3-ech/","ru":"/ru/http3-ech/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"http3-ech","rows":["proto","kex","tlsfp","edge"],"check":"ech","needs":["server","http3","trace"]}}</script>
-<script src="/assets/l.zh-tw.8536aa12e3.js"></script>
-<script src="/assets/app.bafe4afc79.js"></script>
+<script src="/assets/l.zh-tw.1587365892.js"></script>
+<script src="/assets/app.50e3a22a11.js"></script>
 </body>
 </html>

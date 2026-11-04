@@ -128,7 +128,7 @@ export default {
   ex_more: "Kompletter Check",
   share: "Teilen",
   sh_eyebrow: "Jemand hat sein Porträt geteilt",
-  mine: "Mich prüfen",
+  mine: "Mich prüfen und vergleichen",
   masked: "•••",
   masked_why: "Die Stadt wird nicht geteilt.",
 
