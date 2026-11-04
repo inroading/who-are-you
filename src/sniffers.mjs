@@ -110,6 +110,7 @@ export const GROUPS = [
     { id: "fontfp", m: "fonts → SHA-256" },
     { id: "fpid", m: "SHA-256" },
     { id: "rand", m: "canvas × 2" },
+    { id: "shield", m: "navigator.brave · noise · lies" },
   ]],
 ];
 // the two columns of the sniffers card

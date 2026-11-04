@@ -64,6 +64,8 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
 - 2026-11-04: lie detection (1.1): 54 APIs checked for being the browser's own (source by a fresh iframe's toString,
   no own prototype, getters that refuse a stranger), own properties on navigator / screen, a fresh iframe's readings
   against the page's; feeds the tampering check.
+- 2026-11-04: whose protection (1.2): Brave (farbling, navigator.brave), Firefox resistFingerprinting (Tor, Mullvad),
+  Firefox FPP, Safari ATFP, a fingerprint extension, a user-agent switcher, or none.
 
 ## Research (2026-11-04)
 - BrowserLeaks: IP, JavaScript, WebRTC, Canvas, WebGL, fonts, Geolocation, feature detection, TLS (JA3 / JA4, ECH),

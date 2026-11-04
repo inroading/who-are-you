@@ -505,6 +505,20 @@ import { TZ_CC } from "./tz.mjs";
       { why: t("ls_why") + (k ? "\n" + [...R.lies.list, ...frame.map(x => "iframe ≠ " + x)].join("\n") : "") });
   }
 
+  // Whose protection scrambles or hides the readings, told by how it does it: Brave's farbling (noise, and
+  // navigator.brave), Firefox's resistFingerprinting (a stand-in clock and card), Firefox's fingerprinting protection
+  // (noise per session), Safari's advanced fingerprinting protection (noise), an extension (the drawing functions
+  // rewritten), a user-agent switcher (the user agent's getter rewritten)
+  function shield() {
+    const name = (R.br && R.br.name) || "", L = (R.lies && R.lies.list) || [], noisy = !!(R.noise || R.rand);
+    const ext = L.some(x => /Canvas|WebGL|AudioBuffer|Analyser|OfflineAudio/.test(x)), ua = L.some(x => /userAgent|platform|appVersion/.test(x));
+    const apple = name === "Safari" || /^(iOS|iPadOS)/.test((R.dev && R.dev.os) || "");
+    const k = navigator.brave ? (noisy ? "sh_brave" : "sh_brave_off") : rfp() ? "sh_rfp" : /Firefox/.test(name) && noisy ? "sh_fpp"
+      : apple && noisy ? "sh_atfp" : ext ? "sh_ext" : ua ? "sh_ua" : noisy ? "sh_noise" : "sh_none";
+    R.shield = k;
+    txt("shield", t(k), { why: t("sh_why") });
+  }
+
   async function storage() {
     if (!navigator.storage || !navigator.storage.estimate) return na("storage");
     const e = await within(navigator.storage.estimate(), 1500, null);
@@ -1819,6 +1833,8 @@ import { TZ_CC } from "./tz.mjs";
       ...S.filter(([k]) => on(k) && !(EMBED && k === "traces")).map(([, ids, f]) => guard(ids, f)), ...probes,
     ]);
     if (g !== gen) return;
+    // (once the drawings and the lie check are in)
+    if (on("prints") && on("lies")) shield();
     judge(false);
     if (!NEED) { paint(portrait(), false); readings(portrait(), R.ck); }
     await rtc; await h3; await lat;
