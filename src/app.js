@@ -232,7 +232,7 @@ import { TZ_CC } from "./tz.mjs";
 
   function referrer() {
     txt("h_ref", document.referrer || t("v_none"), { na: !document.referrer });
-    txt("history", t("hist_v", { n: history.length }));
+    txt("history", tn("hist_v", history.length, { n: history.length }));
   }
 
   // language, region and formats
@@ -310,7 +310,7 @@ import { TZ_CC } from "./tz.mjs";
     R.screen = s.width ? pw + "×" + ph : t("v_unknown");
     if (!s.width) na("screen");
     else txt("screen", t("scr_v", { w: pw, h: ph, dpr, d: s.colorDepth }), { why: t("scr_which") + "\n" + t("scr_css", { w: s.width, h: s.height }) + "\n" + t("scr_avail", { w: s.availWidth, h: s.availHeight, iw: innerWidth, ih: innerHeight }) });
-    if (navigator.hardwareConcurrency) txt("cpu", t("cores", { n: navigator.hardwareConcurrency })); else na("cpu");
+    if (navigator.hardwareConcurrency) txt("cpu", tn("cores", navigator.hardwareConcurrency, { n: navigator.hardwareConcurrency })); else na("cpu");
     if (navigator.deviceMemory) txt("mem", t("mem_v", { n: navigator.deviceMemory })); else na("mem");
     txt("touch", [t("touch_v", { n: navigator.maxTouchPoints || 0 }), t(mq("(pointer: coarse)") ? "ptr_coarse" : "ptr_fine")].join(" · "));
     const c = navigator.connection;
@@ -949,7 +949,7 @@ import { TZ_CC } from "./tz.mjs";
     const tier = tierOf(P);
     blank("tier", esc(tier.text));
     const b = behind(P);
-    blank("fresh", esc(b == null ? t("fr_na") : b <= 2 ? t("fr_new") : t("fr_old", { n: b })), BLANKS.fresh, P.browser || "");
+    blank("fresh", esc(b == null ? t("fr_na") : b <= 2 ? t("fr_new") : tn("fr_old", b, { n: b })), BLANKS.fresh, P.browser || "");
     blank("when", esc(whenOf(P)));
     blank("power", esc(!P.bat ? t("pw_na") : P.bat === "ac" ? t("pw_ac") : t(P.bat[0] === "c" ? "pw_chg" : "pw_bat", { p: P.bat.slice(1) })));
     const pf = [P.fs && P.fs !== 16 && t("pf_font", { n: P.fs }), P.rm && t("pf_motion"), P.hc && t("pf_contrast")].filter(Boolean);
@@ -967,7 +967,7 @@ import { TZ_CC } from "./tz.mjs";
     const score = (hiG ? 2 : lowG ? 0 : 1) + (big >= 3840 ? 1 : 0) + (P.hz >= 120 ? 1 : 0) + (P.cpu >= 16 ? 1 : 0);
     const lv = score >= 3 ? "high" : score >= 2 ? "mid" : "low";
     const spec = list([{ 7680: "8K", 6016: "6K", 5120: "5K", 3840: "4K", 2560: "2K", 1920: "1080p" }[big] || P.screen,   // (2880×1800 is no "2K")
-      P.hz >= 90 ? P.hz + " Hz" : "", g, P.cpu ? t("cores", { n: P.cpu }) : ""].filter(Boolean));
+      P.hz >= 90 ? P.hz + " Hz" : "", g, P.cpu ? tn("cores", P.cpu, { n: P.cpu }) : ""].filter(Boolean));
     return { lv, text: t("tr_" + lv, { spec }) + (P.multi ? t("tr_multi") : "") };
   }
   // how many versions behind the browser is: a recent release of each, and one every four weeks since
@@ -1243,7 +1243,7 @@ import { TZ_CC } from "./tz.mjs";
     // a portrait shared before the protocols were judged has none: their rows step aside
     $("#protoBox").hidden = !PROTO.some(id => res[id]);
     const n = bad + warn;
-    $("#vHead").textContent = n ? t("v_found", { n }) : t("v_clean");
+    $("#vHead").textContent = n ? tn("v_found", n, { n }) : t("v_clean");
     $("#vText").textContent = t(n ? "v_found_d" : "v_clean_d");
     $("#vHead").className = "v-h" + (bad ? " bad" : warn ? " warn" : " ok");
     $("#mNum").textContent = n; $("#mNum").className = "m-num " + (bad ? "bad" : warn ? "warn" : "ok");
@@ -1544,7 +1544,7 @@ import { TZ_CC } from "./tz.mjs";
       c.fillStyle = "#fff"; c.textAlign = "center"; c.fillText(gt, W - P - gw / 2, y - 41); c.textAlign = "left";
     }
     // the verdict between the two, as large as the room allows
-    const head = n ? t("v_found", { n }) : t("v_clean"), room = W - 2 * P - nw - 30 - gw - 24;
+    const head = n ? tn("v_found", n, { n }) : t("v_clean"), room = W - 2 * P - nw - 30 - gw - 24;
     let hs = 52; c.font = `800 ${hs}px ${F}`;
     while (hs > 30 && c.measureText(head).width > room) { hs -= 2; c.font = `800 ${hs}px ${F}`; }
     c.fillStyle = FG; if (paint) c.fillText(head, P + nw + 30, y - 40);

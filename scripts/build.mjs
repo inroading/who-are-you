@@ -73,7 +73,8 @@ export function storyHtml(s, lang) {
 export async function build({ check = false } = {}) {
   const I = await loadI18n(), en = I.en;
   const langs = LANGS.filter(([l]) => I[l]);
-  for (const [l] of langs) for (const k of Object.keys(en)) if (!(k in I[l])) throw new Error(`i18n/${l}.mjs is missing "${k}"`);
+  // (a plural form beside key_other only where the language needs it: 1ms-shell docs/translation.md §2)
+  for (const [l] of langs) for (const k of Object.keys(en)) if (!(/_(zero|one|two|few|many)$/.test(k) && k.replace(/_(zero|one|two|few|many)$/, "_other") in en) && !(k in I[l])) throw new Error(`i18n/${l}.mjs is missing "${k}"`);
   const tpl = await readFile(new URL("page.html", src), "utf8");
 
   const root = fileURLToPath(new URL("..", import.meta.url));

@@ -58,8 +58,13 @@ test("every key the page uses exists in every language, with the same placeholde
     const d = (await import(`../src/i18n/${lang}.mjs`)).default;
     const missing = [...keys].filter(k => !(k in d));
     assert.deepEqual(missing, [], `${lang} lacks ${missing.join(", ")}`);
-    for (const k of Object.keys(en)) assert.ok(k in d, `${lang}: ${k}`);
-    for (const k of Object.keys(en)) if (typeof en[k] === "string") assert.equal(vars(d[k]), vars(en[k]), `${lang}: ${k} placeholders`);
+    // (a plural form beside key_other, as key_one, key_few, key_many, only where the language needs it:
+    // 1ms-shell docs/translation.md §2)
+    const FORM = /_(zero|one|two|few|many)$/, form = k => FORM.test(k) && k.replace(FORM, "_other") in en, other = k => k.replace(FORM, "_other");
+    for (const k of Object.keys(en)) assert.ok(form(k) || k in d, `${lang}: ${k}`);
+    for (const k of Object.keys(d)) if (form(k)) assert.ok(other(k) in d, `${lang}: ${k} without its _other`);
+    for (const k of Object.keys(en)) if (typeof en[k] === "string" && k in d) assert.equal(vars(d[k]), vars(en[k]), `${lang}: ${k} placeholders`);
+    for (const k of Object.keys(d)) if (form(k) && typeof d[k] === "string") assert.equal(vars(d[k]), vars(en[other(k)]), `${lang}: ${k} placeholders`);
     assert.equal(d.docs.length, en.docs.length, lang + ": help entries");
     assert.ok(d.seo_desc.includes(String(SNIFFERS.length)), lang + ": the description counts " + SNIFFERS.length + " sniffers");
   }

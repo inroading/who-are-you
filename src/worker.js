@@ -54,6 +54,8 @@ async function ptr(ip) {
 // it. The language: ?lang, else the path's folder, else the sharer's (older links have no folder).
 const I18N = { en, "zh-CN": zhCN, "zh-TW": zhTW, ja, ko, es, fr, de, pt, ru };
 const fill = (s, v) => { for (const k in v) s = s.split("{" + k + "}").join(v[k]); return s; };
+// a count's own form in a language: k_one, k_few, k_many as Intl.PluralRules says, k_other otherwise (as the page does)
+const plural = (d, lang, k, n) => { let c = "other"; try { c = new Intl.PluralRules(lang).select(n); } catch (e) {} return d[k + "_" + c] ?? d[k + "_other"]; };
 const attr = (name, value) => ({ element(el) { el.setAttribute(name, value); } });
 async function result(request, env, { code, lang: dir }, url) {
   const P = decode(code);
@@ -65,7 +67,7 @@ async function result(request, env, { code, lang: dir }, url) {
   let nat = P.nat || "";
   if (nat) nat = regionName(nat, lang);
   const n = findings(P);
-  const title = n ? fill(d.r_title, { n }) : d.r_title_clean;
+  const title = n ? fill(plural(d, lang, "r_title", n), { n }) : d.r_title_clean;
   const desc = fill(d.r_desc, { nat: nat || "?", os: P.os || "?", browser: P.browser || "?" });
   const img = `${url.origin}/og/r${tier(n)}-${lang.toLowerCase()}.png`;
   const res = new HTMLRewriter()
