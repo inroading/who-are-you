@@ -252,12 +252,14 @@ export function checks(x) {
   if (x.conn === undefined) out.conn = null;
   else if (!x.conn) out.conn = ["info", "c_conn_na", {}];
   else {
-    const { os, pseudo, engine } = x.conn;
+    const { os, pseudo, engine, mtu } = x.conn;
     const want = { V8: ["m,a,s,p"], SpiderMonkey: ["m,p,a,s"], JavaScriptCore: ["m,s,p,a", "m,s,a,p"] }[engine];
     const fam = /^Windows/.test(x.uaOS || "") ? "windows" : /^(macOS|iOS|iPadOS)/.test(x.uaOS || "") ? "apple" : /^(Android|Linux|ChromeOS|HarmonyOS)/.test(x.uaOS || "") ? "linux" : null;
     const off = fam && os && os !== "other" && (fam === "windows" ? os !== "windows" : fam === "apple" ? os === "windows" || os === "linux" : os === "windows" || os === "apple");
     if (want && pseudo && !want.includes(pseudo)) out.conn = ["bad", "c_conn_mitm", { b: x.brName || engine }];
     else if (off) out.conn = ["warn", "c_conn_os", { a: os, b: x.uaOS }];
+    // (a path wider than 1500 bytes is a cloud's inside: jumbo frames, as AWS's 9001, so a cloud server opened it)
+    else if (mtu > 1500) out.conn = ["warn", "c_conn_cloud", { m: mtu }];
     else if (os || pseudo) out.conn = ["ok", "c_conn_ok", {}];
     else out.conn = ["info", "c_conn_na", {}];
   }

@@ -283,6 +283,7 @@ test("split routing: different networks over the same IP version", () => {
   assert.equal(cn({ os: "apple", pseudo: "m,s,p,a", engine: "JavaScriptCore" }, "iOS 18.7")[1], "c_conn_ok");
   assert.equal(cn({ os: "unix", pseudo: null, engine: "V8" }, "Android 15")[1], "c_conn_ok");
   assert.deepEqual(cn(null), ["info", "c_conn_na", {}]);
+  assert.deepEqual(cn({ os: "windows", pseudo: "m,a,s,p", engine: "V8", mtu: 9001 }), ["warn", "c_conn_cloud", { m: 9001 }]);
   // the tunnel an MSS points to
   assert.equal(tunnelOf(1460), false); assert.equal(tunnelOf(1452), "pppoe"); assert.equal(tunnelOf(1380), "wireguard"); assert.equal(tunnelOf(1220, true), "wireguard");
   assert.equal(tunnelOf(1410), "openvpn"); assert.equal(tunnelOf(1360), "ipsec"); assert.equal(tunnelOf(1300), "other"); assert.equal(tunnelOf(null), null);

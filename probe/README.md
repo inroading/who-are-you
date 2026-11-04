@@ -5,6 +5,10 @@ MSS: the OS family and a tunnel's MTU, JA4T), the TLS ClientHello (JA3, JA4) and
 fingerprint). who.1ms.dog asks `GET https://probe.1ms.dog/fp` and gets its own connection's readings back as JSON.
 Nothing is logged or kept.
 
+Other tools read it too, so these names stay as they are (changes are told to them first): `/fp` ip, tcp.os,
+tcp.mtu, tcp.mss, tcp.initial_ttl (ipqs); `/conn` ip, family, mss, ttl, initial_ttl, window, wscale (egress, the
+checkup). A field the probe couldn't read is left out, never null.
+
 - Host: AWS Lightsail Tokyo, Debian 13, 16.76.79.94 (Netcatty "🇯🇵 1ms.dog"), only for 1ms.dog.
 - DNS: `probe.1ms.dog` A 16.76.79.94 and AAAA 2406:da14:3c2:6400:d2e5:c654:ae70:30c5, DNS only (not proxied):
   the browser has to reach this machine itself.
