@@ -184,6 +184,17 @@ main.topic > .hero, main.topic > .target, main.topic > .probes { display: none; 
 /* on a wide screen the portrait says how much you stand out; the card's line is for the folded phone portrait */
 @media (min-width: 721px) { .idc-u { display: none; } }
 /* how common the fingerprint is, and what the counting keeps */
+/* how common each reading is: a bar per reading, as many bits as it tells a site, the whole fingerprint last */
+.rar-d { margin: 10px 0 0; font-size: 13px; }
+.rar-d summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+.rar-l { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.rar-l li { display: grid; grid-template-columns: minmax(0, 7.5em) minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.rar-l li > span:first-child { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rar-l i { display: block; height: 8px; border-radius: 4px; background: var(--ink); opacity: .75; min-width: 2px; }
+.rar-l b { font: 500 12px var(--f-num); white-space: nowrap; }
+.rar-l li.all { border-top: 1px solid var(--line); padding-top: 6px; } .rar-l li.all > span:first-child { color: var(--fg); font-weight: 700; } .rar-l li.all i { opacity: 1; }
+.rar-n { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+html.shared .rar-d, html[data-who-embed] .rar-d { display: none !important; }
 .idc-u { display: block; font-size: 12.5px; font-weight: 600; color: var(--ink); margin-top: 3px; line-height: 1.5; }
 .tally { margin: 8px 2px 0; font-size: 12px; line-height: 1.6; color: var(--muted); }
 .tally button { border: 0; background: none; padding: 0; font: inherit; color: var(--ink); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }

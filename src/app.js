@@ -395,6 +395,50 @@ import { TZ_CC } from "./tz.mjs";
     txt("media", t("med_v", { c: n("videoinput"), m: n("audioinput"), s: n("audiooutput") }));
   }
 
+  // Traces: one random tag in four of the browser's stores, read back on the next visit. A store the browser empties
+  // when it closes (or a private window) loses it; any one that keeps it lets a site recognize the visitor even after
+  // the others were cleared. The tag stays in this browser, never sent; the fingerprint card's × removes it everywhere.
+  const TAG = "who:tag", CACHE = "who-tag";
+  const idb = (mode, f) => new Promise((res, rej) => {
+    const o = indexedDB.open("who", 1);
+    o.onupgradeneeded = () => o.result.createObjectStore("kv");
+    o.onerror = () => rej(o.error);
+    o.onsuccess = () => { const db = o.result, tx = db.transaction("kv", mode), r = f(tx.objectStore("kv")); tx.oncomplete = () => { db.close(); res(r.result); }; tx.onerror = () => rej(tx.error); };
+  });
+  const STORES = [
+    ["ls", { get: async () => localStorage.getItem(TAG), set: async v => localStorage.setItem(TAG, v), del: async () => localStorage.removeItem(TAG) }],
+    ["idb", { get: () => idb("readonly", s => s.get("tag")), set: v => idb("readwrite", s => s.put(v, "tag")), del: async () => indexedDB.deleteDatabase("who") }],
+    ["cache", { get: async () => { const r = await (await caches.open(CACHE)).match("/__who_tag"); return r ? r.text() : null; },
+      set: async v => (await caches.open(CACHE)).put("/__who_tag", new Response(v)), del: () => caches.delete(CACHE) }],
+    // (only a name this page set: another page's own window.name is left alone)
+    ["wname", { get: async () => /^who:/.test(window.name) ? window.name.slice(4) : null, set: async v => { if (!window.name || /^who:/.test(window.name)) window.name = "who:" + v; },
+      del: async () => { if (/^who:/.test(window.name)) window.name = ""; } }],
+  ];
+  const tries = f => Promise.all(STORES.map(([, s]) => within(Promise.resolve().then(() => f(s)).catch(() => null), 1500, null)));
+  async function traces() {
+    const got = await tries(s => s.get());
+    const tag = got.find(Boolean) || Math.random().toString(36).slice(2, 10), first = !got.some(Boolean);
+    await tries(s => s.set(tag));
+    const held = await tries(s => s.get());
+    const kept = STORES.filter((_, i) => got[i] === tag).map(([k]) => k), lost = first ? [] : STORES.filter((_, i) => got[i] !== tag).map(([k]) => k);
+    const now = STORES.filter((_, i) => held[i] === tag).map(([k]) => k), nm = ks => list(ks.map(k => t("tr_" + k)));
+    R.traces = { first, kept, lost };
+    txt("traces", first ? (now.length ? tn("tr_first", now.length, { n: now.length, list: nm(now) }) : t("tr_none")) : lost.length ? t("tr_some", { kept: nm(kept), lost: nm(lost) }) : t("tr_all", { list: nm(kept) }),
+      { why: t("tr_why") });
+  }
+  const forgetTraces = () => tries(s => s.del());
+  // The APIs that reach the machine's hardware and apps, each behind a prompt when used: only whether this browser
+  // has them (Chrome ships most, Firefox and Safari refused most), which tells browsers apart before anyone asks
+  const APIS = [["WebUSB", () => "usb" in navigator], ["Web Serial", () => "serial" in navigator], ["WebHID", () => "hid" in navigator],
+    ["Web MIDI", () => "requestMIDIAccess" in navigator], ["Web NFC", () => "NDEFReader" in window], ["Idle Detection", () => "IdleDetector" in window],
+    ["Compute Pressure", () => "PressureObserver" in window], ["Local Font Access", () => "queryLocalFonts" in window], ["Window Management", () => "getScreenDetails" in window],
+    ["Contact Picker", () => "contacts" in navigator], ["Installed Related Apps", () => "getInstalledRelatedApps" in navigator], ["File System Access", () => "showOpenFilePicker" in window]];
+  function apis() {
+    const on = APIS.filter(([, f]) => { try { return f(); } catch (e) { return false; } }).map(([n]) => n);
+    R.apis = on;
+    txt("apis", on.length ? t("api_v", { n: on.length, of: APIS.length, list: on.join(" · ") }) : t("api_none"), { why: t("api_why") });
+  }
+
   async function storage() {
     if (!navigator.storage || !navigator.storage.estimate) return na("storage");
     const e = await within(navigator.storage.estimate(), 1500, null);
@@ -866,6 +910,8 @@ import { TZ_CC } from "./tz.mjs";
     store.set(K.last, JSON.stringify({ at: Date.now(), fp: P.rand ? null : P.fp, where, br: R.browser || "", parts }));
     $("#forget").hidden = false;
     if (P.rand) return t("rv_rand");
+    const other = R.traces && !R.traces.first ? R.traces.kept.filter(k => k !== "ls") : [];
+    if ((!last || !last.at) && other.length) return t("rv_revived", { list: list(other.map(k => t("tr_" + k))) });
     if (!last || !last.at) return t("rv_first");
     const said = t(last.fp === P.fp ? "rv_same" : "rv_diff", { ago: ago(last.at), where: last.where || "?" });
     if (last.fp === P.fp || !last.parts) return said;
@@ -874,7 +920,7 @@ import { TZ_CC } from "./tz.mjs";
     const why = last.br && R.browser && last.br !== R.browser ? t("rv_why_br", { a: last.br, b: R.browser }) : moved.length ? t("rv_why", { list: list(moved.map(rowName)) }) : "";
     return said + (why ? (/^(zh|ja)/.test(LANG) ? "" : " ") + why : "");
   }
-  $("#forget").onclick = () => { try { localStorage.removeItem(K.last); localStorage.removeItem(K.prev); localStorage.removeItem(K.hist); } catch (e) {} $("#vHist").hidden = true; $("#fpRet").textContent = t("rv_forgot"); $("#forget").hidden = true; };
+  $("#forget").onclick = () => { forgetTraces(); try { localStorage.removeItem(K.last); localStorage.removeItem(K.prev); localStorage.removeItem(K.hist); } catch (e) {} $("#vHist").hidden = true; $("#fpRet").textContent = t("rv_forgot"); $("#forget").hidden = true; };
   function idCard(P, shared) {
     $("#fpId").textContent = P.rand ? t("fp_rand") : P.fp || t("masked");
     $("#fpNote").textContent = t(shared ? "sh_fp" : P.rand ? "id_note_rand" : P.fz ? "id_note_site" : "id_note");
@@ -1379,11 +1425,23 @@ import { TZ_CC } from "./tz.mjs";
     blank("stand", esc(standText(u.total, u.n.fpid || 1, rarest(u.n))));
     const others = Math.max(0, (u.n.fpid || 1) - 1);
     f.textContent = others ? tn("tl_same", others, { m: u.total.toLocaleString(LANG), n: others.toLocaleString(LANG) }) : t("tl_only", { m: u.total.toLocaleString(LANG) });
+    rareList(u);
     for (const k of TRAITS) {
       const lv = rarity(u.n[k], u.total), r = PR[k];
       if (!lv || !r) continue;
       r.querySelector(".pn").insertAdjacentHTML("beforeend", `<span class="rar ${lv}">${esc(t("rr_" + lv))}</span>`);
     }
+  }
+  // Each reading's share of all the checks here, in bits (each one halves the people like you), the rarest first, and
+  // the whole fingerprint last from its own count: the readings go together, so it is not their product
+  function rareList(u) {
+    const bits = n => Math.log2(u.total / Math.max(1, n)), one = n => u.total / Math.max(1, n) < 2 ? t("rr_pct", { p: Math.round(100 * n / u.total) })
+      : t("rr_one", { r: Math.round(u.total / Math.max(1, n)).toLocaleString(LANG) });
+    const ks = READABLE.filter(k => u.n[k]).sort((a, b) => bits(u.n[b]) - bits(u.n[a])), top = Math.log2(u.total) || 1;
+    const li = (name, n, cls) => `<li${cls ? ` class="${cls}"` : ""}><span>${esc(name)}</span><i style="width:${(100 * bits(n) / top).toFixed(1)}%"></i><b>${esc(one(n))} · ${esc(t("rr_bits", { b: bits(n).toFixed(1) }))}</b></li>`;
+    $("#rarS").textContent = t("rr_sum", { m: u.total.toLocaleString(LANG) });
+    $("#rarL").innerHTML = ks.map(k => li(rowName(k), u.n[k])).join("") + li(t("rr_all"), u.n.fpid || 1, "all");
+    $("#rarD").hidden = false;
   }
   // the share card's line about it
   const uniqLine = () => {
@@ -1683,7 +1741,7 @@ import { TZ_CC } from "./tz.mjs";
       ["bio", "bio", biometric], ["bt", "bt", bluetooth], ["storage", "storage", storage], ["adblock", "adblock", adblock], ["ext", "ext", extensions],
       ["prints", ["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)], ["trace", ["kex", "warp"], trace],
       ["webgpu", "webgpu", webgpu], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
-      ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
+      ["traces", "traces", traces], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
     await Promise.all([
       srv, guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
       ...S.filter(([k]) => on(k)).map(([, ids, f]) => guard(ids, f)), ...probes,
