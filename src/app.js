@@ -1546,10 +1546,17 @@ import { TZ_CC } from "./tz.mjs";
     const ul = uniqLine();
     if (ul) { c.font = `600 28px ${F}`; c.fillStyle = INK; if (paint) c.fillText(ul, P, y + 30); y += 42; }
     if ((R.labels || []).length) {
-      const lt = t("card_tags", { list: R.labels.map(k => t(k)).join(" · ") });
-      let fz = 28; c.font = `600 ${fz}px ${F}`;
-      while (fz > 20 && c.measureText(lt).width > W - 2 * P) { fz -= 1; c.font = `600 ${fz}px ${F}`; }
-      c.fillStyle = FG; if (paint) c.fillText(lt, P, y + fz + 2); y += fz + 14;
+      // (on as many lines as it takes, broken between labels: six in French or Russian run past the card's width even at 20px)
+      const [pre, post = ""] = t("card_tags", { list: "\0" }).split("\0"), out = [];
+      c.font = `600 28px ${F}`; c.fillStyle = FG;
+      let cur = pre;
+      R.labels.forEach((k, i) => {
+        const it = t(k), more = (i ? " · " : "") + it;
+        if (i && c.measureText(cur + more + " ·").width > W - 2 * P) { out.push(cur + " ·"); cur = it; } else cur += more;
+      });
+      out.push(cur + post);
+      for (const l of out) { if (paint) c.fillText(kit.clip(c, l, W - 2 * P), P, y + 30); y += 40; }
+      y += 2;
     }
     // wrapped word by word (character by character for CJK)
     const size = 28, lh = 48;
