@@ -30,7 +30,7 @@ It then checks those readings against each other the way a site would to spot a 
 - **Fixes for your system**: the DNS and WebRTC fixes name the clients and settings of Windows, macOS, iPhone or Android, whichever you're on.
 - **HarmonyOS**: its browsers (ArkWeb) claim Windows or Android in the user agent for compatibility; the OpenHarmony, HarmonyOS or ArkWeb token tells it apart.
 - **Where to seem to be**: pick a target region (by default the one the IP is in) and see, item by item, whether the IP, the system time zone, the browser language, the DNS resolver and WebRTC match it, and how to fix what doesn't.
-- **The disguise check**, twelve rows that matter when you want to hide, and an A–F grade for the environment:
+- **The disguise check**, fourteen rows that matter when you want to hide, and an A–F grade for the environment:
   - system time zone vs. the IP's time zone
   - browser language vs. the IP's country
   - System language vs IP: the language packs a Windows system installed, from its supplemental fonts, local voices and keyboard layout (other systems ship every language's fonts and voices)
@@ -43,6 +43,9 @@ It then checks those readings against each other the way a site would to spot a 
   - Tampered environment: navigator properties redefined, drawing or audio functions replaced, a JS engine that isn't the user agent's, a language in JavaScript the request header doesn't have, Date and Intl disagreeing on the time zone
   - whether the fingerprint is stable (trackable) or randomized
   - automation (`navigator.webdriver`)
+  - Connection fingerprint: the TCP packets' OS (from probe.1ms.dog) against the user agent's, an HTTP/2 opening unlike the browser engine's (HTTPS re-made on the way), an MTU over 1500 (a cloud server opened the connection)
+  - Anti-detect browser traces: an engine older than the user agent says (JS and CSS features), a worker that reads otherwise, a platform or WebGL vendor that doesn't fit
+  - Tampered environment also counts **lie detection**: 54 APIs checked for being the browser's own, and a fresh iframe read against the page
 
   Every check that gives you away has a **How to fix** tip (Clash fake-ip / TUN for DNS leaks, limiting WebRTC, matching the time zone…), and a link to the 1ms.dog tool that looks deeper when the host announces it (`<meta name="dns">`, `"egress"`, `"ipqs"`).
 - **Connection protocols**, under the checks: judged the same way but not counted, since they say how the connection is made, not who you are:
@@ -62,9 +65,18 @@ It then checks those readings against each other the way a site would to spot a 
   - *Browser settings*: color scheme, reduced motion, color gamut and HDR, DNT/GPC, cookies, permissions already granted or blocked, PDF viewer, webdriver, ad blocker, extensions that leave a mark (crypto wallets, developer tools, Grammarly, Dark Reader, Immersive Translate), tab history, installed fonts; new: accessibility preferences (high contrast, forced colors, reduced transparency, inverted colors), how the page was opened (tab, installed app, full screen)
   - *Fingerprints*: canvas, WebGL, audio, font list, the combined fingerprint, and whether the browser randomizes them; new: the JavaScript engine (V8, SpiderMonkey or JavaScriptCore, from the wording of an error, which changing the user agent doesn't change)
 
+- *Connection, read by the site's own probe* (probe.1ms.dog, a small server reached directly, see `probe/`): the TCP SYN (OS family, initial TTL, hops, the path's MTU, JA4T), the TLS JA4 / JA3, the HTTP/2 opening (Akamai), the QUIC JA4 over HTTP/3; and an IPv6 address built from the card's MAC
+  - *Rendering and engine*: element and SVG text sizes, text metrics, a WebGL image, WebGPU limits, WebRTC codecs, recording formats, the engine's API counts, timer step, call stack depth, ICU data, scrollbar width, CSS feature level, font smoothing
+  - *Protection*: whose shield scrambles the readings (Brave, Firefox resistFingerprinting or fingerprinting protection, Safari, an extension, a user-agent switcher), sensitive APIs the browser exposes, an extension scan by their files (Chromium)
+  - *Being recognized*: stored traces in four stores, an ETag cache ID, a hardware ID that stays across browsers, and how common each reading is from the real counts
+  - *On request only*: a tracker blocking test (7 trackers), the precise location against the IP's guess, a phone's motion sensors
+- **Compare with a friend**: "test myself" from a shared portrait sets your readings beside your friend's afterwards.
+
 Rows are drawn before anything is read and filled the moment each sniffer answers; the paragraph is filled once, when every blank is in, so the page doesn't jump. A button blurs the address and location for screenshots.
 
 ## Privacy
+
+The site's own probe, probe.1ms.dog, sees this connection (TCP, TLS, HTTP/2 and HTTP/3 openings) and answers with its readings, keeping nothing. Three tests run only on a button: the tracker test (7 tracking companies then see your address), the precise location and the motion sensors (both worked out in the page).
 
 To find your exits and DNS resolver the page asks a few outside services directly (named in each row: IPIP.NET, IP.SB, the Cloudflare trace on chatgpt.com, claude.ai and www.cloudflare.com, Cloudflare Radar, ip-api's DNS server, two STUN servers); they see your address as any site does. Everything else is read in the browser and stays there. The Worker answers one request, `GET /api/me`, with what it already sees in that request: the address, Cloudflare's `request.cf` data for it, the headers (cookies and Cloudflare's own left out), the address's PTR record and the server's clock, and keeps no log. After a check the page also sends its trait values (system, browser, screen, graphics card, time zone, first language, the first 8 characters of each fingerprint hash) and results to `POST /api/seen`, which adds one to anonymous counters (src/tally.mjs) and answers how many checks had each value: no address, no full fingerprint, no record of a single visit. "Don't count me" on the page turns it off; Global Privacy Control is honoured.
 

@@ -76,6 +76,9 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
   geolocation=(self)); a phone's motion sensors (rate, noise, offsets as an ID).
 - 2026-11-04: the stats page's week-over-week change (2.3); compare with a friend (2.1): a shared portrait's "test
   myself" carries it (?vs=), and after the run a card sets the two side by side. Roadmap part 2 done.
+- 2026-11-04: /conn for the other tools; checkup facts tunnel, mss, ttl; an MTU over 1500 as a cloud's inside.
+- 2026-11-04: IPv6 leaking the MAC, ICU data, scrollbar width, an extension scan, the CSS feature level, font
+  smoothing, data saver; the probe's QUIC JA4 over HTTP/3 (part 3 done). 115 sniffers, 14 checks.
 
 ## Research (2026-11-04)
 - BrowserLeaks: IP, JavaScript, WebRTC, Canvas, WebGL, fonts, Geolocation, feature detection, TLS (JA3 / JA4, ECH),

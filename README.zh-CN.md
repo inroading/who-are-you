@@ -4,7 +4,9 @@
 
 网站眼中的你是谁？[你是谁](https://who.1ms.dog) 运行任何网站在你打开它的那一刻都能运行的嗅探器，全程不弹任何授权提示，然后把结果写成一段填空的话：你可能的国籍、所在城市、语言和时区、设备、浏览器、屏幕和显卡、网络、偏好、从字体看出的职业，以及浏览器指纹。
 
-接着它像网站识别伪装那样，把这些信息互相对比；并列出全部 79 个嗅探器、每个的读取方式和读到的结果。
+接着它像网站识别伪装那样，把这些信息互相对比；并列出全部 115 个嗅探器、每个的读取方式和读到的结果。
+
+另外几组读数：本站探针 probe.1ms.dog 直接读你的连接（TCP 包的系统、MTU 和 JA4T，TLS 的 JA4/JA3，HTTP/2 和 HTTP/3 的开头），IPv6 是否泄露网卡 MAC；谎言检测（54 个接口有没有被改写、iframe 对照）和「防护是谁」；渲染与引擎指纹（元素尺寸、WebGL 图像、WebGPU、编解码器、ICU、滚动条、CSS 版本、字体平滑等）；存储留痕、ETag 缓存编号、跨浏览器硬件编号，以及每一项有多常见；要点按钮才做的追踪拦截实测、精确定位和运动传感器；还能和朋友的分享画像逐项对比。
 
 **在线使用：** https://who.1ms.dog · 专题页：[浏览器指纹检测](https://who.1ms.dog/zh-cn/fingerprint/)、[DNS 泄露检测](https://who.1ms.dog/zh-cn/dns-leak/)、[浏览器环境检测](https://who.1ms.dog/zh-cn/browser-check/)、[时区检测](https://who.1ms.dog/zh-cn/timezone-check/)、[代理检测](https://who.1ms.dog/zh-cn/proxy-check/)、[浏览器语言检测](https://who.1ms.dog/zh-cn/language-check/)、[Canvas 指纹检测](https://who.1ms.dog/zh-cn/canvas-fingerprint/)、[UA 检测](https://who.1ms.dog/zh-cn/user-agent/)、[浏览器扩展检测](https://who.1ms.dog/zh-cn/extensions/)、[WebRTC 泄漏检测](https://who.1ms.dog/zh-cn/webrtc-leak/)（同一个工具，把那一项结果放在最前面；文案在 `src/pages.mjs`）
 
