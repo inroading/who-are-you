@@ -74,6 +74,8 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
 - 2026-11-04: hardware ID across browsers (1.5) and the ETag cache ID (1.6): roadmap part 1 done.
 - 2026-11-04: behind a button each (2.2): the precise location against the IP's guess (Permissions-Policy
   geolocation=(self)); a phone's motion sensors (rate, noise, offsets as an ID).
+- 2026-11-04: the stats page's week-over-week change (2.3); compare with a friend (2.1): a shared portrait's "test
+  myself" carries it (?vs=), and after the run a card sets the two side by side. Roadmap part 2 done.
 
 ## Research (2026-11-04)
 - BrowserLeaks: IP, JavaScript, WebRTC, Canvas, WebGL, fonts, Geolocation, feature detection, TLS (JA3 / JA4, ECH),

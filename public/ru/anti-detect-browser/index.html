@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Каждая деталь выглядит правдоподобно — но сходятся ли они?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Проверка антидетект-браузера · 1ms.dog","url":"https://who.1ms.dog/ru/anti-detect-browser/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Бесплатная проверка антидетект-браузера: совпадает ли User-Agent с настоящей версией движка, видит ли Worker тот же navigator, что и страница, согласуются ли платформа, видеокарта и часовой пояс. IP и исходные данные не сохраняются — только анонимные счётчики.","inLanguage":"ru","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Что выдаёт антидетект-браузер?","acceptedAnswer":{"@type":"Answer","text":"Детали, которые не сходятся. User-Agent говорит «Chrome 156», а в движке нет функций, которые Chrome давно добавил; Worker видит другой User-Agent или язык, чем страница; navigator.platform говорит Mac при User-Agent от Windows; WebGL называет одного производителя поставщиком, а другого — у видеокарты. Сайты редко ищут сам браузер — они ищут такие противоречия."}},{"@type":"Question","name":"Почему важна настоящая версия движка?","acceptedAnswer":{"@type":"Answer","text":"User-Agent — это строка, которую может переписать любой браузер. А набор функций JavaScript, которые поддерживает движок, так просто не перепишешь: каждая версия Chromium добавляет новые (Promise.try в 128, RegExp.escape в 136), и по их наличию движок можно отнести к диапазону версий. User-Agent вне этого диапазона — это профиль, а не настоящий браузер."}},{"@type":"Question","name":"Как сделать профиль правдоподобным?","acceptedAnswer":{"@type":"Answer","text":"Выберите версию User-Agent, совпадающую с ядром браузера; предпочитайте правки в самом ядре внедрённым скриптам, чтобы Worker видел те же значения; выбирайте систему, платформу и производителя видеокарты одним согласованным набором; поставьте часовой пояс и язык страны прокси. Потом проверьте здесь ещё раз."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.2df9b67455.css">
+<link rel="stylesheet" href="/assets/app.b341067ca2.css">
 </head>
 <body>
 <div class="app">
@@ -117,6 +117,8 @@
       </div>
     </section>
 
+    <section class="card vs" id="vs" hidden><h2 data-i="vs_h">Вы и друг рядом</h2><p class="vs-n" id="vsN"></p><table class="vs-t" id="vsT"></table></section>
+
     <section class="target card" id="target">
       <div class="tg-h"><h2 data-i="tg_h">Где вы хотите оказаться для сайтов?</h2><div class="tg-sel"><label class="sr" for="tgIn" data-i="tg_label">Целевой регион</label><input id="tgIn" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tgOpts" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><ul id="tgOpts" role="listbox" hidden></ul></div><p class="tg-sum" id="tgSum">&nbsp;</p></div>
       <ul class="tg-list" id="tgList"><li data-t="ip"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="tz"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="lang"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="dns"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="rtc"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li></ul>
@@ -149,7 +151,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ru","paths":{"en":"/anti-detect-browser/","zh-CN":"/zh-cn/anti-detect-browser/","zh-TW":"/zh-tw/anti-detect-browser/","ja":"/ja/anti-detect-browser/","ko":"/ko/anti-detect-browser/","es":"/es/anti-detect-browser/","fr":"/fr/anti-detect-browser/","de":"/de/anti-detect-browser/","pt":"/pt/anti-detect-browser/","ru":"/ru/anti-detect-browser/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"anti-detect-browser","rows":["engver","worker","h_ua","browser","gpu","tz"],"check":"fpb","needs":["server","gpu","engver","worker"]}}</script>
-<script src="/assets/l.ru.45006700f0.js"></script>
-<script src="/assets/app.e501e3c1a6.js"></script>
+<script src="/assets/l.ru.ec95166dc5.js"></script>
+<script src="/assets/app.f3df325988.js"></script>
 </body>
 </html>

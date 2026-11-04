@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="어디서 가장 자주 들통날까">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"모두의 검사 결과 · 1ms.dog","url":"https://who.1ms.dog/ko/stats/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"who.1ms.dog의 익명 통계: 지난 7일 동안 브라우저 지문과 IP를 검사한 횟수, 분할 라우팅·시계와 IP 불일치·DNS 유출·WebRTC 유출 비율, 가장 흔한 시스템·브라우저·화면·그래픽카드. IP와 원본 데이터는 저장하지 않고 익명 집계만 남깁니다.","inLanguage":"ko","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"이 숫자는 어디서 오나요?","acceptedAnswer":{"@type":"Answer","text":"누군가 여기서 검사를 마칠 때마다 페이지는 익명 카운터에 1을 더해요. 각 검사 결과와 시스템·브라우저·화면 같은 읽은 값이에요. IP와 방문 한 건의 기록은 저장하지 않아서 여기엔 합계만 있어요."}},{"@type":"Question","name":"왜 이렇게 많은 사람이 들통나나요?","acceptedAnswer":{"@type":"Answer","text":"여기서 검사하는 사람 상당수는 이미 프록시나 VPN을 쓰면서 잘 숨었는지 확인하려는 사람이에요. 그래서 분할 라우팅, 시계 불일치, DNS 유출 비율이 일반 사용자보다 훨씬 높아요."}},{"@type":"Question","name":"얼마나 자주 업데이트되나요?","acceptedAnswer":{"@type":"Answer","text":"페이지를 열 때마다 최신 숫자를 읽고, 집계는 1분마다 갱신돼요. '가장 흔한' 목록은 20번 이상의 검사가 공유한 값만 보여 줘서 드문 값은 여기 나오지 않아요."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.2df9b67455.css">
+<link rel="stylesheet" href="/assets/app.b341067ca2.css">
 </head>
 <body>
 <div class="app">
@@ -117,6 +117,8 @@
       </div>
     </section>
 
+    <section class="card vs" id="vs" hidden><h2 data-i="vs_h">친구와 비교하기</h2><p class="vs-n" id="vsN"></p><table class="vs-t" id="vsT"></table></section>
+
     <section class="target card" id="target">
       <div class="tg-h"><h2 data-i="tg_h">어디에 있는 것처럼 보이고 싶나요?</h2><div class="tg-sel"><label class="sr" for="tgIn" data-i="tg_label">목표 지역</label><input id="tgIn" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="tgOpts" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><ul id="tgOpts" role="listbox" hidden></ul></div><p class="tg-sum" id="tgSum">&nbsp;</p></div>
       <ul class="tg-list" id="tgList"><li data-t="ip"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="tz"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="lang"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="dns"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li><li data-t="rtc"><span class="tg-i"></span><span class="tg-b"><span class="tg-l"><i class="skl"></i></span><span class="tg-x"></span></span></li></ul>
@@ -149,7 +151,7 @@
 <div class="adsbox ad-banner ad-placement" id="ad-slot" aria-hidden="true"></div>
 
 <script type="application/json" id="data">{"lang":"ko","paths":{"en":"/stats/","zh-CN":"/zh-cn/stats/","zh-TW":"/zh-tw/stats/","ja":"/ja/stats/","ko":"/ko/stats/","es":"/es/stats/","fr":"/fr/stats/","de":"/de/stats/","pt":"/pt/stats/","ru":"/ru/stats/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"stats","rows":[],"stats":true}}</script>
-<script src="/assets/l.ko.4ff508bd1e.js"></script>
-<script src="/assets/app.e501e3c1a6.js"></script>
+<script src="/assets/l.ko.7578f2fdd8.js"></script>
+<script src="/assets/app.f3df325988.js"></script>
 </body>
 </html>

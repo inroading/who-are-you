@@ -93,7 +93,14 @@ html[lang="ru"] { --story-p1: 6; }
 .focus h1 { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.15; letter-spacing: -.025em; font-weight: 800; margin-bottom: 12px; }
 .focus-t p { color: var(--muted); font-size: 15px; line-height: 1.75; }
 /* a topic page keeps to its topic: the main page's sections stay out (the check still runs, for its panel) */
-main.topic > .hero, main.topic > .target, main.topic > .probes { display: none; }
+main.topic > .hero, main.topic > .target, main.topic > .probes, main.topic > .vs { display: none; }
+/* compare with a friend: the visitor's readings beside a shared portrait's, the matching ones marked */
+.vs { padding: 20px 22px; } .vs h2 { font-size: 18px; font-weight: 800; margin-bottom: 4px; } .vs-n { color: var(--muted); font-size: 13.5px; margin-bottom: 12px; }
+.vs-t { width: 100%; border-collapse: collapse; font-size: 13.5px; table-layout: fixed; }
+.vs-t th, .vs-t td { text-align: left; padding: 7px 8px; border-top: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; }
+.vs-t th { color: var(--muted); font-weight: 600; width: 26%; } .vs-t thead th { border-top: 0; color: var(--fg); }
+.vs-t tr.same td { color: var(--t1); } .vs-t td.mk { width: 2.2em; text-align: center; }
+@media (max-width: 720px) { .vs { padding: 16px; } .vs-t { font-size: 12.5px; } }
 /* the stats page: a head with the count, five fact cards, what gives people away, the commonest setups */
 .cp { display: grid; gap: 14px; }
 .cp-i { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--ink-soft); color: var(--ink); flex: none; }

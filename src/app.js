@@ -668,7 +668,7 @@ import { TZ_CC } from "./tz.mjs";
       navigator.geolocation.getCurrentPosition(p => {
         const c = (R.srv && R.srv.cf) || {}, { latitude: la, longitude: lo, accuracy: ac } = p.coords;
         const d = c.latitude != null ? km(+c.latitude, +c.longitude, la, lo) : null;
-        a.textContent = t("gl_v", { acc: Math.round(ac) }) + (d == null ? "" : " · " + t(d < 25 ? "gl_near" : "gl_far", { km: Math.round(d).toLocaleString(LANG) }));
+        a.textContent = t("geo_v", { acc: Math.round(ac) }) + (d == null ? "" : " · " + t(d < 25 ? "gl_near" : "gl_far", { km: Math.round(d).toLocaleString(LANG) }));
       }, err => { a.textContent = t(err.code === 1 ? "gl_denied" : "gl_fail"); }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
     };
   }
@@ -1395,6 +1395,24 @@ import { TZ_CC } from "./tz.mjs";
     el.hidden = false; $("#vMeta").hidden = false;
   }
 
+  // Compare with a friend: the portrait a shared link carried here (?vs=), beside the visitor's own, field by field
+  function versus() {
+    const code = new URLSearchParams(location.search).get("vs"), Q = code && decode(code);
+    if (!Q) return;
+    const P = sharedPortrait(false), gP = grade(P.ck || {}, COUNTED.filter(id => (P.ck || {})[id])), gQ = grade(Q.ck || {}, COUNTED.filter(id => (Q.ck || {})[id]));
+    const found = X => COUNTED.filter(id => X.ck && X.ck[id] && (X.ck[id][0] === "bad" || X.ck[id][0] === "warn")).length;
+    const F = [["s_geo", X => X.cc ? country(X.cc) : ""], ["s_os", X => X.os], ["s_browser", X => X.browser], ["s_screen", X => X.screen], ["s_gpu", X => X.gpu],
+      ["s_langs", X => (X.langs || [])[0] ? language(X.langs[0]) : ""], ["s_tz", X => X.tz], ["s_dns", X => X.dns ? country(X.dns) : ""],
+      ["vs_net", X => X.nt ? t("nt_" + X.nt, { n: X.nx || 0 }) : ""], ["s_scheme", X => t(X.dark ? "pt_dark" : "pt_light")], ["s_adblock", X => t(X.ab ? "vs_yes" : "vs_no")],
+      ["vs_grade", X => X === Q ? gQ.grade : gP.grade], ["vs_found", X => String(found(X))]];
+    const rows = F.map(([k, f]) => [k, f(P) || "–", f(Q) || "–"]).filter(([, a, b]) => a !== "–" || b !== "–");
+    const same = rows.filter(([, a, b]) => a === b).length;
+    $("#vsN").textContent = t("vs_n", { n: same, m: rows.length });
+    $("#vsT").innerHTML = `<thead><tr><th></th><th>${esc(t("vs_me"))}</th><th>${esc(t("vs_them"))}</th><td class="mk"></td></tr></thead><tbody>` +
+      rows.map(([k, a, b]) => `<tr class="${a === b ? "same" : ""}"><th>${esc(k.startsWith("s_") ? t(k) : t(k))}</th><td>${esc(a)}</td><td>${esc(b)}</td><td class="mk">${a === b ? "=" : "≠"}</td></tr>`).join("") + "</tbody>";
+    $("#vs").hidden = false;
+  }
+
   /* ---------- the portrait as text, to paste into a post ---------- */
   // The paragraph with the city and the network masked, every check with addresses cut to their network (as in a
   // shared link), the grade, and the page's own address to try it (the text is the result; a result link is long)
@@ -1953,7 +1971,8 @@ import { TZ_CC } from "./tz.mjs";
     P.langs = P.langs || []; P.jobs = P.jobs || []; P.x = {};
     document.documentElement.classList.add("shared");
     $("#mine").hidden = false; $("#share").hidden = true; $("#rerun").hidden = true; $("#copyTxt").hidden = true;
-    $("#mine").onclick = () => { location.href = D.paths[LANG] || "/"; };
+    // (testing oneself from a friend's portrait brings it along, for the comparison after the run)
+    $("#mine").onclick = () => { location.href = (D.paths[LANG] || "/") + "?vs=" + encodeURIComponent(code); };
     $("#progTxt").textContent = " "; $("#todo").hidden = true;
     paint(P, true);
     for (const id of CHECKS) if (!(P.ck || {})[id]) { CK[id].hidden = true; const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.hidden = true; }
@@ -2038,7 +2057,7 @@ import { TZ_CC } from "./tz.mjs";
     readings(portrait(), R.ck);
     paintTarget(); osTips(); todo(); focusFix();
     R.end = true;
-    if (!EMBED) { compare(); history(); seen(); }
+    if (!EMBED) { compare(); history(); seen(); versus(); }
     $("#rerun").disabled = false; $("#share").disabled = false; $("#copyTxt").disabled = false;
     if (EMBED && !failed) post(embedResult());
   }

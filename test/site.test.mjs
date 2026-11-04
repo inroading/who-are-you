@@ -95,3 +95,22 @@ test("every topic page is its own page in every language", async () => {
   }
 });
 const page0 = slug => read(`public/${slug ? slug + "/" : ""}index.html`);
+
+// a key written twice in a language file silently keeps the last one (two features reusing a name, say)
+test("no language file defines a key twice", async () => {
+  for (const [lang] of LANGS) {
+    const s = await read(`src/i18n/${lang}.mjs`), seen = new Map();
+    let depth = 0, q = null;
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i];
+      if (q) { if (c === "\\") i++; else if (c === q) q = null; continue; }
+      if (c === '"' || c === "'" || c === "`") { q = c; continue; }
+      if (c === "{" || c === "[" || c === "(") depth++;
+      else if (c === "}" || c === "]" || c === ")") depth--;
+      else if (depth === 1 && /[A-Za-z_]/.test(c) && /[\s{,]/.test(s[i - 1])) {
+        const m = /^([A-Za-z_]\w*)\s*:/.exec(s.slice(i, i + 80));
+        if (m) { assert.ok(!seen.has(m[1]), `${lang}: "${m[1]}" twice`); seen.set(m[1], 1); i += m[1].length - 1; }
+      }
+    }
+  }
+});
