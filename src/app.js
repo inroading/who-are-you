@@ -610,6 +610,29 @@ import { TZ_CC } from "./tz.mjs";
     txt("callstack", n.toLocaleString(LANG), { why: t("sk_why") });
   }
 
+  // Tracker blocking, as Cover Your Tracks tests it: seven common trackers' scripts, asked for only when the visitor
+  // presses the button (each of these companies then sees the address, as on any page that uses them), without
+  // cookies or referrer. Refused at once (under 50 ms) is a blocker's doing, an extension or DNS filter; slower is the
+  // network (a firewall, a dead route), not counted as blocked; loaded is let through
+  const LIST_SEP = () => /^(zh|ja)/.test(LANG) ? "、" : ", ";
+  const TRACKERS = [["Google Analytics","https://www.google-analytics.com/analytics.js"],["Google Ads","https://securepubads.g.doubleclick.net/tag/js/gpt.js"],["Meta Pixel","https://connect.facebook.net/en_US/fbevents.js"],["Microsoft Ads","https://bat.bing.com/bat.js"],["TikTok Pixel","https://analytics.tiktok.com/i18n/pixel/events.js"],["百度统计","https://hm.baidu.com/hm.js"],["Hotjar","https://static.hotjar.com/c/hotjar-0.js?sv=6"]];
+  function trackers() {
+    row("trackers", `<button type="button" class="pa-go tr-go">${esc(t("tk_btn"))}</button>`, { why: t("tk_why") });
+    $('.pr[data-s="trackers"] .tr-go').onclick = async e => {
+      e.target.disabled = true; e.target.textContent = t("re_wait");
+      const res = await Promise.all(TRACKERS.map(async ([name, url]) => {
+        const t0 = performance.now();
+        try { return [name, await within(fetch(url, { mode: "no-cors", credentials: "omit", cache: "no-store", referrerPolicy: "no-referrer" }).then(() => "ok"), 6000, "net")]; }
+        catch (x) { return [name, performance.now() - t0 < 50 ? "blocked" : "net"]; }
+      }));
+      const by = k => res.filter(([, v]) => v === k).map(([n]) => n === "百度统计" ? t("tk_baidu") : n);
+      const b = by("blocked"), ok = by("ok"), net = by("net");
+      const a = $('.pr[data-s="trackers"] .pa');
+      a.textContent = t("tk_v", { b: b.length, n: TRACKERS.length }) + (ok.length ? " · " + t("tk_ok", { list: ok.join(LIST_SEP()) }) : "") + (net.length ? " · " + t("tk_net", { list: net.join(LIST_SEP()) }) : "");
+      $('.pr[data-s="trackers"]').dataset.why = t("tk_why") + (b.length ? "\n" + t("tk_blocked", { list: b.join(LIST_SEP()) }) : "");
+    };
+  }
+
   async function storage() {
     if (!navigator.storage || !navigator.storage.estimate) return na("storage");
     const e = await within(navigator.storage.estimate(), 1500, null);
@@ -1918,7 +1941,7 @@ import { TZ_CC } from "./tz.mjs";
       ["bio", "bio", biometric], ["bt", "bt", bluetooth], ["storage", "storage", storage], ["adblock", "adblock", adblock], ["ext", "ext", extensions],
       ["prints", ["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)], ["trace", ["kex", "warp"], trace],
       ["webgpu", "webgpu", webgpu], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
-      ["traces", "traces", traces], ["lies", "lies", lies],
+      ["traces", "traces", traces], ["lies", "lies", lies], ["trackers", "trackers", trackers],
       ["domrect", "domrect", domRect], ["svgrect", "svgrect", svgRect], ["textm", "textm", textMetrics], ["glimg", "glimg", glImage], ["gpulim", "gpulim", gpuLimits],
       ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
     await Promise.all([

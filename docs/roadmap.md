@@ -69,6 +69,8 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
 - 2026-11-04: rendering and engine fingerprints (1.3): DOMRect, SVG text sizes, text metrics, WebGL image, WebGPU
   limits and features, WebRTC codecs, MediaRecorder formats, engine key counts, timer step, call stack depth (shown,
   not in the fingerprint ID).
+- 2026-11-04: tracker blocking (1.4), behind a button: seven common trackers' scripts, without cookies or referrer;
+  refused within 50 ms counts as blocked, slower failures as the network.
 
 ## Research (2026-11-04)
 - BrowserLeaks: IP, JavaScript, WebRTC, Canvas, WebGL, fonts, Geolocation, feature detection, TLS (JA3 / JA4, ECH),

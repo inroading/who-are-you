@@ -96,6 +96,7 @@ export const GROUPS = [
     { id: "webdriver", m: "navigator.webdriver" },
     { id: "worker", m: "Worker · navigator" },
     { id: "adblock", m: "bait element" },
+    { id: "trackers", m: "7 tracker scripts (on request)" },
     { id: "ext", m: "window.ethereum · DOM marks" },
     { id: "history", m: "history.length" },
     { id: "traces", m: "localStorage · IndexedDB · Cache · window.name" },
