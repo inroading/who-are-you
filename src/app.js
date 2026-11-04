@@ -194,10 +194,11 @@ import { TZ_CC } from "./tz.mjs";
     const c = j.cf || {}, h = j.h || {};
     R.srv = j;
     row("ip", flagged(null, j.ip + " · IPv" + j.v, ipqsOf(j.ip)));
-    row("geo", c.country ? flagged(c.country, [c.city, c.region, country(c.country)].filter(Boolean).join(", ")) : esc(t("v_empty")), { na: !c.country });
-    if (c.latitude != null) txt("coords", [(+c.latitude).toFixed(2) + ", " + (+c.longitude).toFixed(2), c.postalCode].filter(Boolean).join(" · ")); else na("coords", "v_empty");
+    // (the place and the point are an IP database's guess for the address, said so on the row itself)
+    row("geo", c.country ? flagged(c.country, [c.city, c.region, country(c.country)].filter(Boolean).join(", ") + t("ex_geo")) : esc(t("v_empty")), c.country ? { why: t("ex_geo_why") } : { na: true });
+    if (c.latitude != null) txt("coords", [(+c.latitude).toFixed(2) + ", " + (+c.longitude).toFixed(2), c.postalCode].filter(Boolean).join(" · ") + t("ex_geo"), { why: t("ex_geo_why") }); else na("coords", "v_empty");
     if (c.asn) row("isp", asnLink(c.asn) + esc(" · " + (c.asOrganization || ""))); else na("isp", "v_empty");
-    if (c.timezone) txt("tzip", c.timezone + " · UTC" + offTxt(tzOffset(c.timezone))); else na("tzip", "v_empty");
+    if (c.timezone) txt("tzip", c.timezone + " · UTC" + offTxt(tzOffset(c.timezone)) + tzNote(c.timezone)); else na("tzip", "v_empty");
     if (j.ptr) txt("ptr", j.ptr); else na("ptr", "v_empty");
     if (c.colo) txt("edge", c.colo + (c.clientTcpRtt ? " · RTT " + c.clientTcpRtt + " ms" : "")); else na("edge", "v_empty");
     txt("proto", [c.httpProtocol, c.tlsVersion, c.tlsCipher].filter(Boolean).join(" · ") || "–");
@@ -246,7 +247,7 @@ import { TZ_CC } from "./tz.mjs";
     let tzName = "";
     try { tzName = new Intl.DateTimeFormat(LANG, { timeZone: R.tz, timeZoneName: "longGeneric" }).formatToParts(new Date()).find(x => x.type === "timeZoneName").value; } catch (e) {}
     R.tzName = tzName || R.tz;
-    txt("tz", R.tz + " · UTC" + offTxt(R.tzOff), { why: tzName });
+    txt("tz", R.tz + " · UTC" + offTxt(R.tzOff) + tzNote(R.tz), { why: tzName });
     // (each Intl call on its own: a browser with trimmed ICU data throws on some of them)
     let hc, now;
     try { hc = new Intl.DateTimeFormat(undefined, { hour: "numeric" }).resolvedOptions().hourCycle; } catch (e) {}
@@ -895,13 +896,17 @@ import { TZ_CC } from "./tz.mjs";
     b.dataset.why = why || (from.length ? t("from", { list: list(from.map(rowName)) }) : "");
     b.tabIndex = 0;
   }
+  // Asia/Shanghai is the zone all of China is named by: said so, so it doesn't read as "in Shanghai"
+  function tzNote(tz) { return tz === "Asia/Shanghai" ? t("tz_cn") : ""; }
   function tzLabel(tz) {
     try { return new Intl.DateTimeFormat(LANG, { timeZone: tz, timeZoneName: "longGeneric" }).formatToParts(new Date()).find(x => x.type === "timeZoneName").value; } catch (e) { return tz; }
   }
   function paint(P, shared) {
     const X = P.x || {}, U = esc(t("v_unknown"));
     blank("nat", P.nat ? flagged(P.nat, country(P.nat)) : U, P.natFrom || BLANKS.nat);
-    blank("city", shared && !P.city ? esc(t("masked")) : P.cc ? flagged(P.cc, [P.city, country(P.cc)].filter(Boolean).join(", ")) : U, BLANKS.city, shared ? t("masked_why") : "");
+    // (the city is the address's, from an IP database: said so in the sentence, the reason on hover or tap)
+    blank("city", shared && !P.city ? esc(t("masked")) : P.cc ? flagged(P.cc, [P.city, country(P.cc)].filter(Boolean).join(", ") + t("ex_geo")) : U, BLANKS.city,
+      shared && !P.city ? t("masked_why") : P.cc ? t("ex_geo_why") : "");
     BL.city.classList.toggle("hid", shared && !P.city);
     BL.isp.classList.toggle("hid", shared && !P.org);
     blank("lang", P.langs.length ? esc(language(P.langs[0])) : U, BLANKS.lang, P.langs.map(language).join(", "));
