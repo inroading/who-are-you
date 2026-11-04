@@ -456,6 +456,55 @@ import { TZ_CC } from "./tz.mjs";
     else na("h2fp", j ? (j.proto === "HTTP/2.0" ? "v_empty" : "v_unsup") : "v_fail");
   }
 
+  // Lies: the APIs a spoofer rewrites (what navigator and screen say, how canvas, WebGL and audio draw, the clock,
+  // the element sizes), each checked for being the browser's own: its source "[native code]" by a fresh iframe's
+  // Function.prototype.toString (the page's own may be rewritten too), no prototype of its own (a native method has
+  // none), a getter that refuses a stranger (a native one throws). Then a fresh iframe's readings against the page's:
+  // a spoofer that patched the page only leaves the frame telling the truth.
+  const LIE_GET = [["Navigator", ["userAgent", "appVersion", "platform", "vendor", "language", "languages", "hardwareConcurrency", "deviceMemory",
+    "maxTouchPoints", "webdriver", "plugins", "mimeTypes", "userAgentData", "connection", "doNotTrack", "pdfViewerEnabled"]],
+    ["Screen", ["width", "height", "availWidth", "availHeight", "colorDepth", "pixelDepth"]], ["HTMLElement", ["offsetWidth", "offsetHeight"]]];
+  const LIE_FN = [["HTMLCanvasElement", ["toDataURL", "toBlob", "getContext"]], ["CanvasRenderingContext2D", ["getImageData", "measureText", "fillText", "isPointInPath"]],
+    ["WebGLRenderingContext", ["getParameter", "getExtension", "getSupportedExtensions", "readPixels", "getShaderPrecisionFormat"]], ["WebGL2RenderingContext", ["getParameter", "readPixels"]],
+    ["AudioBuffer", ["getChannelData", "copyFromChannel"]], ["AnalyserNode", ["getFloatFrequencyData"]], ["OfflineAudioContext", ["startRendering"]],
+    ["Date", ["getTimezoneOffset", "toString"]], ["Element", ["getBoundingClientRect", "getClientRects"]], ["Range", ["getBoundingClientRect", "getClientRects"]],
+    ["Navigator", ["getBattery", "sendBeacon"]], ["MediaDevices", ["enumerateDevices"]], ["Permissions", ["query"]], ["Function", ["toString"]], ["Math", ["random"]]];
+  function lies() {
+    const fr = document.createElement("iframe");
+    fr.style.cssText = "position:absolute;width:0;height:0;border:0;visibility:hidden"; fr.setAttribute("aria-hidden", "true"); fr.tabIndex = -1;
+    document.body.appendChild(fr);
+    const w = fr.contentWindow, src = (w && w.Function.prototype.toString) || Function.prototype.toString, out = [];
+    const native = f => { try { return /\{\s*\[native code\]\s*\}\s*$/.test(src.call(f)); } catch (e) { return false; } };
+    const check = (name, f, getterOf) => {
+      if (typeof f !== "function") return;
+      let bad = !native(f) || Object.prototype.hasOwnProperty.call(f, "prototype");
+      if (!bad && getterOf) { try { f.call(Object.create(getterOf)); bad = true; } catch (e) { bad = !(e instanceof TypeError) && !(w && e instanceof w.TypeError); } }
+      if (bad) out.push(name);
+    };
+    let n = 0;
+    for (const [c, ks] of LIE_GET) { const p = window[c] && window[c].prototype; if (!p) continue;
+      for (const k of ks) { const d = Object.getOwnPropertyDescriptor(p, k); if (d && d.get) { n++; check(c + "." + k, d.get, p); } } }
+    for (const [c, ks] of LIE_FN) { const o = c === "Math" ? Math : window[c] && window[c].prototype; if (!o) continue;
+      for (const k of ks) { const d = Object.getOwnPropertyDescriptor(o, k); if (d && typeof d.value === "function") { n++; check(c + "." + k, d.value); } } }
+    // (own properties on navigator or screen: written straight onto the object)
+    for (const [o, nm] of [[navigator, "navigator"], [screen, "screen"]]) for (const k of Object.getOwnPropertyNames(o)) out.push(nm + "." + k);
+    // the frame's readings against the page's
+    const frame = [];
+    try {
+      const a = navigator, b = w.navigator, same = (k, x, y) => { if (String(x) !== String(y)) frame.push(k); };
+      same("userAgent", a.userAgent, b.userAgent); same("platform", a.platform, b.platform); same("languages", a.languages, b.languages);
+      same("hardwareConcurrency", a.hardwareConcurrency, b.hardwareConcurrency); same("deviceMemory", a.deviceMemory, b.deviceMemory);
+      same("screen", screen.width + "x" + screen.height, w.screen.width + "x" + w.screen.height);
+      same("timeZone", Intl.DateTimeFormat().resolvedOptions().timeZone, w.Intl.DateTimeFormat().resolvedOptions().timeZone);
+      same("timezoneOffset", new Date().getTimezoneOffset(), new w.Date().getTimezoneOffset());
+    } catch (e) {}
+    fr.remove();
+    R.lies = { n, list: [...new Set(out)], frame };
+    const k = R.lies.list.length + frame.length;
+    txt("lies", k ? t("ls_v", { k, list: [...R.lies.list, ...frame.map(x => "iframe ≠ " + x)].slice(0, 6).join(" · ") }) : t("ls_none", { n }),
+      { why: t("ls_why") + (k ? "\n" + [...R.lies.list, ...frame.map(x => "iframe ≠ " + x)].join("\n") : "") });
+  }
+
   async function storage() {
     if (!navigator.storage || !navigator.storage.estimate) return na("storage");
     const e = await within(navigator.storage.estimate(), 1500, null);
@@ -1546,6 +1595,9 @@ import { TZ_CC } from "./tz.mjs";
     const hl = ((R.srv && R.srv.h && R.srv.h["accept-language"]) || "").split(",")[0].split(";")[0].trim().toLowerCase();
     if (hl && R.langs && R.langs[0] && hl !== R.langs[0].toLowerCase()) out.push("tp_hdr");
     if (R.tzOff != null && -new Date().getTimezoneOffset() !== R.tzOff) out.push("tp_tz");
+    // (the lie check's findings: an API that isn't the browser's own, a frame that reads otherwise)
+    if (R.lies && R.lies.list.length) out.push("tp_lies");
+    if (R.lies && R.lies.frame.length) out.push("tp_frame");
     return out;
   }
   // The round trip from here to this site's edge: the quickest of a few requests to Cloudflare's trace on the open
@@ -1761,7 +1813,7 @@ import { TZ_CC } from "./tz.mjs";
       ["bio", "bio", biometric], ["bt", "bt", bluetooth], ["storage", "storage", storage], ["adblock", "adblock", adblock], ["ext", "ext", extensions],
       ["prints", ["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)], ["trace", ["kex", "warp"], trace],
       ["webgpu", "webgpu", webgpu], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
-      ["traces", "traces", traces], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
+      ["traces", "traces", traces], ["lies", "lies", lies], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
     await Promise.all([
       srv, guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
       ...S.filter(([k]) => on(k) && !(EMBED && k === "traces")).map(([, ids, f]) => guard(ids, f)), ...probes,

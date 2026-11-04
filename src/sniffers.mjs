@@ -101,6 +101,7 @@ export const GROUPS = [
   ["fp", [
     { id: "engine", m: "Error.message" },
     { id: "engver", m: "JS feature probes" },
+    { id: "lies", m: "Function.prototype.toString · iframe" },
     { id: "canvas", m: "canvas.toDataURL" },
     { id: "webgl", m: "WebGL getParameter" },
     { id: "audio", m: "OfflineAudioContext" },
