@@ -1515,7 +1515,7 @@ import { TZ_CC } from "./tz.mjs";
       const summary = [$("#vHead").textContent, t("grade_v", { g: gr.grade }), R.osTxt, R.browser, sc, R.gpuSoft ? R.gpuRaw : R.gpu].filter(Boolean).join(" · ").slice(0, 300);
       const data = { portrait: sharedPortrait(false), raw: { wgpu: R.wgpu ? [R.wgpuLo, R.wgpu] : null,
         gpu: R.gpuRaw || null, screen: [screen.width, screen.height, devicePixelRatio], hints: { platform: hi.platform, platformVersion: hi.platformVersion, model: hi.model, mobile: hi.mobile },
-        engine: R.engine || null, kbd: R.kbd || null, sysFonts: R.sysFonts || [], voices: [...new Set((R.voices || []).map(v => v.split(/[-_]/)[0]))],
+        engine: R.engine || null, lies: R.lies && R.lies.list.length ? R.lies.list.slice(0, 12) : undefined, kbd: R.kbd || null, sysFonts: R.sysFonts || [], voices: [...new Set((R.voices || []).map(v => v.split(/[-_]/)[0]))],
         tz: R.tz, langs: R.langs, rtt: [R.rttB == null ? null : Math.round(R.rttB), c.clientTcpRtt || null], http: c.httpProtocol || null } };
       // what a visitor most often says is wrong, as "label: value" to pick from when they write nothing else: the graphics
       // card, the time zone check, the screen, the language check, the system, the system languages, the browser, then
@@ -1971,7 +1971,9 @@ import { TZ_CC } from "./tz.mjs";
     // (noise in what canvas or audio read back, where the browser adds none of its own: an extension put it there)
     if (want === "V8" && name !== "Brave" && !navigator.brave && (R.pxNoise || R.auNoise)) out.push("tp_noise");
     // (the lie check's findings: an API that isn't the browser's own, a frame that reads otherwise)
-    if (R.lies && R.lies.list.length) out.push("tp_lies");
+    // (not in the iOS browsers other than Safari: Chrome, Edge, Firefox and the rest on iOS are Safari's engine with the
+    // app's own scripts put into every page, which replace some functions; no extension runs there)
+    if (R.lies && R.lies.list.length && !(ios && name !== "Safari")) out.push("tp_lies");
     if (R.lies && R.lies.frame.length) out.push("tp_frame");
     return out;
   }

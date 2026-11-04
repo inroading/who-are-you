@@ -323,10 +323,11 @@ export function checks(x) {
   if (!x.fpb) out.fpb = null;
   else out.fpb = x.fpb.length ? [x.fpb.length > 1 ? "bad" : "warn", "c_fpb_bad", { list: x.fpb.join(",") }] : ["ok", "c_fpb_ok", {}];
   // a language or a system that isn't the IP country's, with the clock and the DNS both local: someone who lives there
-  // (still a warning: passing as a local, it's what gives you away)
+  // (a note, not a finding: it is what an emigrant looks like, and counting it made people living abroad think they
+  // were taken for a VPN; it still says that passing as a local, this is what gives you away)
   if (out.tz && out.tz[0] === "ok" && out.dns && out.dns[0] === "ok") {
-    if (out.lang && out.lang[1] === "c_lang_warn") out.lang = ["warn", "c_lang_abroad", out.lang[2]];
-    if (out.syslang && out.syslang[1] === "c_sys_warn") out.syslang = ["warn", "c_sys_abroad", out.syslang[2]];
+    if (out.lang && out.lang[1] === "c_lang_warn") out.lang = ["info", "c_lang_abroad", out.lang[2]];
+    if (out.syslang && out.syslang[1] === "c_sys_warn") out.syslang = ["info", "c_sys_abroad", out.syslang[2]];
   }
   // an environment something rewrote: properties redefined, functions replaced, parts that should agree but don't
   if (!x.tamper) out.tamper = null;

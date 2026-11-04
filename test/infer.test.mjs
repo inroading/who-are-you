@@ -214,6 +214,7 @@ test("disguise checks", () => {
   // a language or system that isn't the IP country's, with the clock and DNS local: someone living there
   assert.equal(checks({ ...base, ipcc: "GB", tz: "Europe/London", tzOff: "+00:00", ipTzOff: "+00:00", dnsCC: "GB", sys: { cc: ["CN"], from: ["fonts", "voices"] } }).syslang[1], "c_sys_abroad");
   assert.equal(checks({ ...base, ipcc: "GB", tz: "Europe/London", tzOff: "+00:00", ipTzOff: "+00:00", dnsCC: "GB" }).lang[1], "c_lang_abroad");
+  assert.equal(checks({ ...base, ipcc: "GB", tz: "Europe/London", tzOff: "+00:00", ipTzOff: "+00:00", dnsCC: "GB" }).lang[0], "info");   // (not counted: someone living there)
   assert.equal(checks({ ...base, ipcc: "JP", sys: { cc: ["CN"], from: ["fonts", "voices"] } }).syslang[1], "c_sys_warn");   // the clock is China's
   // ECH off is a note
   assert.equal(protocols({ br: { name: "Chrome", v: "156" }, sni: "plaintext" }).ech[0], "info");
