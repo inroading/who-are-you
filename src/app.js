@@ -1815,7 +1815,7 @@ import { TZ_CC } from "./tz.mjs";
     $("#tlOff").textContent = t(optedOut() ? "tl_back" : "tl_off");
     $("#tally").classList.toggle("off", optedOut());
   }
-  $("#tlOff").onclick = () => { store.set(K.optout, optedOut() ? "0" : "1"); paintOptout(); if (optedOut()) { $("#fpUniq").hidden = true; $$(".rar").forEach(e => e.remove()); R.uniq = null; blank("stand", esc(t("st_off"))); } };
+  $("#tlOff").onclick = () => { store.set(K.optout, optedOut() ? "0" : "1"); paintOptout(); document.documentElement.toggleAttribute("data-nouniq", optedOut()); if (optedOut()) { $("#fpUniq").hidden = true; $$(".rar").forEach(e => e.remove()); R.uniq = null; blank("stand", esc(t("st_off"))); } };
   $("#tlMore").onclick = () => { showHelp(STORE_Q); openDlg("help"); };
   paintOptout();
   function traitValues() {
@@ -1826,7 +1826,7 @@ import { TZ_CC } from "./tz.mjs";
   async function seen() {
     if (EMBED || R.webdriver || navigator.globalPrivacyControl || optedOut()) return;
     const tv = traitValues();
-    if (!tv.fpid) return;
+    if (!tv.fpid) { $("#fpUniq").classList.add("gone"); return; }
     const stamp = new Date().toISOString().slice(0, 10) + ":" + tv.fpid, add = store.get(K.seen) !== stamp, dur = durOf(performance.now() - R.t0);
     const ck = Object.fromEntries([...CHECKS, ...PROTO].filter(id => R.ck && R.ck[id]).map(id => [id, R.ck[id][0]]));
     let r;
@@ -1834,7 +1834,7 @@ import { TZ_CC } from "./tz.mjs";
       const res = await within(fetch("/api/seen", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ add, t: tv, ck, dur }) }), 4000, null);
       r = res && res.ok ? await res.json() : null;
     } catch (e) { r = null; }
-    if (!r || typeof r.total !== "number") return;
+    if (!r || typeof r.total !== "number") { $("#fpUniq").classList.add("gone"); return; }
     if (add) store.set(K.seen, stamp);
     R.uniq = { total: r.total, n: r.n || {} };
     paintUniq();
@@ -1849,7 +1849,7 @@ import { TZ_CC } from "./tz.mjs";
     $$(".rar").forEach(e => e.remove());
     if (!u) return;
     const f = $("#fpUniq");
-    f.hidden = false;
+    f.hidden = false; f.classList.remove("wait");
     if (u.total < MIN_TOTAL) { f.textContent = t("tl_wait", { m: u.total.toLocaleString(LANG) }); blank("stand", esc(t("st_wait"))); return; }
     blank("stand", esc(standText(u.total, u.n.fpid || 1, rarest(u.n))));
     const others = Math.max(0, (u.n.fpid || 1) - 1);
@@ -1927,12 +1927,12 @@ import { TZ_CC } from "./tz.mjs";
     let s = null;
     try { const r = await within(fetch("/api/stats"), 6000, null); s = r && r.ok ? await r.json() : null; } catch (e) {}
     const el = $("#live");
-    if (!s || !s.days) { el.hidden = true; return; }
+    if (!s || !s.days) { el.classList.add("none"); return; }
     const since = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10), sum = {};
     for (const [d, per] of Object.entries(s.days)) if (d >= since) for (const [id, lv] of Object.entries(per)) { const o = sum[id] ||= {}; for (const [k, c] of Object.entries(lv)) o[k] = (o[k] || 0) + c; }
     const all = id => Object.values(sum[id] || {}).reduce((a, b) => a + b, 0), bad = id => all(id) ? ((sum[id].warn || 0) + (sum[id].bad || 0)) / all(id) : 0;
     const n = Math.max(0, ...COUNTED.map(all)), top = COUNTED.filter(all).sort((a, b) => bad(b) - bad(a))[0];
-    if (!n || !top) { el.hidden = true; return; }
+    if (!n || !top) { el.classList.add("none"); return; }
     let nf; try { nf = new Intl.NumberFormat(LANG, { notation: "compact", maximumFractionDigits: 1 }).format(n); } catch (e) { nf = n.toLocaleString(LANG); }
     el.querySelector(".live-t").innerHTML = t("lv_bar", { n: `<b>${esc(nf)}</b>`, top: esc(t("c_" + top)), p: `<b>${Math.round(bad(top) * 100)}%</b>` });
     el.title = el.querySelector(".live-t").textContent;

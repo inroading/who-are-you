@@ -39,7 +39,9 @@ html[data-inapp="LINE"] .ia-n::before { content: "LINE"; } html[data-inapp="TikT
 .live { display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--fg);
   background: var(--panel); border: 1px solid var(--line); text-decoration: none; min-width: 16em; }
 .live:hover { border-color: var(--ink); color: var(--ink); }
-.live .skl { width: 13em; height: 9px; } .live[hidden] { display: none; }
+.live .skl { width: 13em; height: 9px; }
+/* (no numbers to show: the pill keeps its room, out of sight, so the title under it doesn't move up on a phone) */
+.live.none { visibility: hidden; }
 .live b { color: var(--ink); font-weight: 700; }
 html.shared .live, html[data-who-embed] .live { display: none; }
 @media (pointer: coarse) { .live { min-height: 32px; } }
@@ -205,6 +207,15 @@ main.topic > .hero, main.topic > .target, main.topic > .probes, main.topic > .vs
 .rar-n { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
 html.shared .rar-d, html[data-who-embed] .rar-d { display: none !important; }
 .idc-u { display: block; font-size: 12.5px; font-weight: 600; color: var(--ink); margin-top: 3px; line-height: 1.5; }
+/* on a phone the line under the ID ("N others share it") comes at the end of the run: its two lines are kept from the
+   first paint, out of sight until filled, so the card doesn't grow then. Where it won't come (counting off, Global
+   Privacy Control, a shared portrait: data-nouniq, set before the paint) it takes no room; if the count fails, it folds */
+@media (max-width: 720px) { .idc-u { min-height: 3em; } .idc-u.wait { visibility: hidden; } }
+.idc-u.gone, html[data-nouniq] .idc-u { display: none; }
+/* the line on the last visit comes at the end of the run; a first visit (most visitors) has it in the markup already,
+   word for word, so the card keeps its height; a visitor who has been here (data-back, set before the paint) starts
+   with the line empty, as before */
+html[data-back] .rv-1 { display: none; }
 .tally { margin: 8px 2px 0; font-size: 12px; line-height: 1.6; color: var(--muted); }
 .tally button { border: 0; background: none; padding: 0; font: inherit; color: var(--ink); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 @media (pointer: coarse) { .tally button { min-height: 32px; } }
