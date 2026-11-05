@@ -430,6 +430,10 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 @media (max-width: 720px) {
   .m-slot { margin: 2px 0 14px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); }
   .m-slot .meter { min-height: 0; }
+  /* (the page is drawn as a phone shows it before the script runs: the verdict's place under the title kept at the
+     meter's height, which stays the same through the run, and the portrait folded to its first paragraph, as the
+     markup has it; the script moves the meter in and unfolds on a wider window) */
+  .m-slot:empty { display: block; min-height: 167.4px; }
   .story.fold p:not(:first-child) { display: none; }
   .story-more:not([hidden]) { display: inline-flex; align-items: center; min-height: 36px; margin-top: 2px; padding: 0; border: 0; background: none; font: 600 13.5px var(--f-ui); color: var(--ink); cursor: pointer; }
   .story-more::after { content: " ▾"; font-size: 10px; margin-left: 4px; }
@@ -509,3 +513,9 @@ html[data-who-embed] .bar { margin: 0 -16px; padding: 10px 16px 12px; }
 /* the connection's protocols, under the checks */
 .proto { margin-top: 14px; }
 .proto[hidden] { display: none; }
+
+/* Until the whole stylesheet has come (the main page sets only its first screen's share inside the page:
+   scripts/critical.mjs), what lies below the portrait stays out of sight: nothing unstyled shows, and nothing in the
+   first screen moves. The file alone defines --css; the scripts wait for the file, so they never see the page without it */
+:where(.story-w ~ *, .who ~ *, .hero-b ~ *, .hero ~ *, main ~ *, .app ~ *) { visibility: var(--css, hidden); }
+:root { --css: visible; }

@@ -20,10 +20,13 @@ test("every language page keeps the shell contract", async () => {
     assert.match(h, /class="logo-light" src="\/assets\/logo-light.svg" width="90" height="36"/);
     assert.ok(!/\{\{\w+\}\}/.test(h), lang + ": unfilled placeholder");
     // (114 sniffers and 14 checks, every row in the HTML from the start, in the longest language)
-    // (the markup alone: the stylesheet is inlined, and has its own size)
-    const markup = h.replace(/<style>[\s\S]*?<\/style>/, "");
-    assert.ok(markup.length < 68000, lang + ": page is " + markup.length + " bytes");
-    assert.match(h, /<style>[\s\S]*@font-face[\s\S]*<\/style>/, lang + ": the stylesheet is inlined");
+    // (the whole page, the first screen's styles set inside it included; those have their own cap: the theme's tokens
+    // in both schemes are 3 KB of it, the faces for the first screen's characters 1 KB)
+    assert.ok(h.length < 80000, lang + ": page is " + h.length + " characters");
+    const st = (h.match(/<style>([\s\S]*?)<\/style>/) || [])[1];
+    assert.ok(st && st.length < 12000, lang + ": the first screen's styles are " + (st || "").length + " characters");
+    assert.ok(!/--css:/.test(st), lang + ": the sign that the whole stylesheet has come stays in the file");
+    assert.match(h, /<link rel="stylesheet" href="\/assets\/app\.\w+\.css">\s*<script type="application\/json" id="data">/, lang + ": the whole stylesheet linked at the end, before the scripts");
     assert.equal((h.match(/<script>/g) || []).length, 1, lang + ": the only inline script is the pre-paint one");
   }
 });

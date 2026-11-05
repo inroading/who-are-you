@@ -10,6 +10,7 @@
 //        node scripts/build.mjs --check  exit 1 if anything in public/ is out of date (CI)
 import { mkdir, readFile, readdir, writeFile, rm } from "node:fs/promises";
 import { createHash } from "node:crypto";
+import { critical } from "./critical.mjs";
 import { fileURLToPath } from "node:url";
 import { build as bundle, transform } from "esbuild";
 import { GROUPS, COLUMNS, SNIFFERS, BLANKS, CHECKS, PROTO, TODO_SK } from "../src/sniffers.mjs";
@@ -84,8 +85,6 @@ export async function build({ check = false } = {}) {
   const cssFull = (await Promise.all(["fonts.css", "base.css", "style.css"].map(f => readFile(new URL(f, src), "utf8")))).join("\n");
   const css = (await transform(cssFull, { loader: "css", minify: true, legalComments: "none" })).code;
   const jsName = `app.${hash(js)}.js`, cssName = `app.${hash(css)}.css`;
-  // The stylesheet is set inside each page (41 KB, 9 KB compressed): a phone far from the edge (most visitors, through a
-  // proxy from China) paints a round trip sooner, about 0.3–0.5 s. The file stays for pages cached before a deploy.
   const files = { ["assets/" + jsName]: js, ["assets/" + cssName]: css };
 
   // a page's URL path: the language folder, then the topic page's folder ("" for the main page)
@@ -177,15 +176,25 @@ export async function build({ check = false } = {}) {
       // base: every language's main page, which other 1ms.dog tools share (links to them use it)
       const data = { lang, paths, base: Object.fromEntries(langs.map(([l, sl]) => [l, path(sl)])), focus: page ? { page, ...P } : null };
 
-      const html = tpl
+      let html = tpl
         .replace(/(<(\w+)\b[^>]*\sdata-i="(\w+)"[^>]*>)([^<]*)(<\/\2>)/g, (m, open, tag, k, inner, close) => open + esc(T(k)) + close)
         .replace(/\{\{a:(\w+)\}\}/g, (m, k) => esc(T(k)))   // translated attribute values (aria-label)
         .replace("{{lang}}", lang).replace("{{pathsAttr}}", esc(JSON.stringify(paths))).replace("{{rootAttr}}", slug ? "" : " data-root")
-        .replace("{{prepaint}}", PREPAINT).replace("{{head}}", head).replace("{{style}}", () => "<style>" + css + "</style>").replace("{{js}}", jsName).replace("{{strings}}", sName)
+        .replace("{{prepaint}}", PREPAINT).replace("{{head}}", head).replace("{{js}}", jsName).replace("{{strings}}", sName)
         .split("{{homeHref}}").join(path(slug)).replace("{{statsHref}}", path(slug, "stats")).replace("{{langOpts}}", langOpts).replace("{{focus}}", focus).replace("{{mainAttr}}", page ? ` class="topic${PAGES[page].stats ? " stats" : ""}"` : "").replace("{{heroTitle}}", heroTitle)
         .replace("{{story}}", storyHtml(T("story"), lang)).replace("{{checks}}", checks).replace("{{todoSk}}", TODO_SK).replace("{{iaTxt}}", esc(T("ia_txt")).replace("{app}", '<b class="ia-n"></b>')).replace("{{segs}}", CHECKS.map(c => `<i data-c="${c}"></i>`).join(""))
         .replace("{{eyebrow}}", esc(T("eyebrow").replace("{n}", SNIFFERS.length))).replace("{{groups}}", groups).replace("{{topics}}", topics)
         .replace("{{helpNav}}", helpNav).replace("{{helpC}}", helpC).replace("{{data}}", JSON.stringify(data).replace(/</g, "\\u003c"));
+      // The main page sets its first screen's share of the stylesheet inside the page (the top bar and the portrait, up to
+      // the labels: scripts/critical.mjs) and links the whole file at its end, where it doesn't hold up the paint and the
+      // scripts after it wait for it. A phone far from the edge (most visitors, through a proxy from China) paints a round
+      // trip sooner. The topic and stats pages, with another first screen, link the file in the head as before.
+      const link = `<link rel="stylesheet" href="/assets/${cssName}">`;
+      if (!page) {
+        const end = html.indexOf('<div class="lbs"');
+        if (end < 0) throw new Error("page.html: the first screen ends at the labels (.lbs), right after .story-w");
+        html = html.replace("{{style}}", () => "<style>" + critical(css, html.slice(html.indexOf("<body>"), end), lang) + "</style>").replace("{{styleLate}}", () => link);
+      } else html = html.replace("{{style}}", () => link).replace("{{styleLate}}", "");
       if (/\{\{\w+\}\}/.test(html)) throw new Error("unfilled placeholder in " + path(slug, page) + ": " + /\{\{\w+\}\}/.exec(html)[0]);
       files[path(slug, page).slice(1) + "index.html"] = html;
     }
