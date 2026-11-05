@@ -180,7 +180,7 @@ export async function build({ check = false } = {}) {
         .replace(/(<(\w+)\b[^>]*\sdata-i="(\w+)"[^>]*>)([^<]*)(<\/\2>)/g, (m, open, tag, k, inner, close) => open + esc(T(k)) + close)
         .replace(/\{\{a:(\w+)\}\}/g, (m, k) => esc(T(k)))   // translated attribute values (aria-label)
         .replace("{{lang}}", lang).replace("{{pathsAttr}}", esc(JSON.stringify(paths))).replace("{{rootAttr}}", slug ? "" : " data-root")
-        .replace("{{prepaint}}", PREPAINT).replace("{{head}}", head).replace("{{js}}", jsName).replace("{{strings}}", sName)
+        .replace("{{prepaint}}", PREPAINT).replace("{{head}}", head).replace("{{ext}}", EXT).replace("{{js}}", jsName).replace("{{strings}}", sName)
         .split("{{homeHref}}").join(path(slug)).replace("{{statsHref}}", path(slug, "stats")).replace("{{langOpts}}", langOpts).replace("{{focus}}", focus).replace("{{mainAttr}}", page ? ` class="topic${PAGES[page].stats ? " stats" : ""}"` : "").replace("{{heroTitle}}", heroTitle)
         .replace("{{story}}", storyHtml(T("story"), lang)).replace("{{checks}}", checks).replace("{{todoSk}}", TODO_SK).replace("{{iaTxt}}", esc(T("ia_txt")).replace("{app}", '<b class="ia-n"></b>')).replace("{{segs}}", CHECKS.map(c => `<i data-c="${c}"></i>`).join(""))
         .replace("{{eyebrow}}", esc(T("eyebrow").replace("{n}", SNIFFERS.length))).replace("{{groups}}", groups).replace("{{topics}}", topics)

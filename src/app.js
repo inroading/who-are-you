@@ -55,7 +55,7 @@ import { TZ_CC } from "./tz.mjs";
   const fail = () => { if (!failed) { failed = true; post({ type: "error", text: t("em_blocked") }); } };
   // the icon that ends a link to another tool (the same as the build's EXT)
   const EXT = '<svg class="ext" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7.5 8.5M12 10v3.5H2.5V4H6"/></svg>';
-  const IPQS = META("ipqs"), EGRESS = META("egress"), DNSTEST = META("dns"), ASN = META("asn"), IPV6 = META("ipv6");
+  const IPQS = META("ipqs"), EGRESS = META("egress"), DNSTEST = META("dns"), ASN = META("asn"), IPV6 = META("ipv6"), UNLOCK = META("unlock");
   // another tool's page in this page's language (every 1ms.dog tool keeps the same language folders)
   const inLang = host => host.replace(/\/$/, "") + ((D.base || D.paths)[LANG] || "/");
   // only public addresses get a link: there is nothing to look up about a private, loopback or link-local one
@@ -64,6 +64,10 @@ import { TZ_CC } from "./tz.mjs";
   // a public address's page on ASN Lookup (who runs the network it belongs to)
   const ipLink = ip => ASN && !PRIVATE.test(ip) ? `<a href="${esc(inLang(ASN) + "ip/" + ip)}" target="_blank" rel="noopener" title="${esc(t("go_asn"))}">${esc(ip)}</a>` : esc(ip);
   if (EGRESS && $("#egLink")) { $("#egLink").href = inLang(EGRESS); $("#egLink").hidden = false; }
+  // whether this exit works for ChatGPT, Netflix and the rest: the next thing a visitor on a proxy or a cloud IP wants
+  // to know (the line is in the markup from the first paint; without the tool, self-hosted, it steps aside)
+  const unlockHref = UNLOCK ? inLang(UNLOCK) + "ai/" : "";
+  if ($("#unGo")) { if (unlockHref) $("#unGo").href = unlockHref; else $("#unGo").hidden = true; }
   // a topic page's link to the tool that looks deeper: DNS Test, or EgressLens for every exit
   const focusHref = D.focus && ({ dns: DNSTEST && inLang(DNSTEST), egress: EGRESS && inLang(EGRESS) })[D.focus.go];
   if (focusHref && $("#focusGo")) { $("#focusGo").href = focusHref; $("#focusGo").hidden = false; }
