@@ -84,6 +84,8 @@ export async function build({ check = false } = {}) {
   const cssFull = (await Promise.all(["fonts.css", "base.css", "style.css"].map(f => readFile(new URL(f, src), "utf8")))).join("\n");
   const css = (await transform(cssFull, { loader: "css", minify: true, legalComments: "none" })).code;
   const jsName = `app.${hash(js)}.js`, cssName = `app.${hash(css)}.css`;
+  // The stylesheet is set inside each page (41 KB, 9 KB compressed): a phone far from the edge (most visitors, through a
+  // proxy from China) paints a round trip sooner, about 0.3–0.5 s. The file stays for pages cached before a deploy.
   const files = { ["assets/" + jsName]: js, ["assets/" + cssName]: css };
 
   // a page's URL path: the language folder, then the topic page's folder ("" for the main page)
@@ -179,7 +181,7 @@ export async function build({ check = false } = {}) {
         .replace(/(<(\w+)\b[^>]*\sdata-i="(\w+)"[^>]*>)([^<]*)(<\/\2>)/g, (m, open, tag, k, inner, close) => open + esc(T(k)) + close)
         .replace(/\{\{a:(\w+)\}\}/g, (m, k) => esc(T(k)))   // translated attribute values (aria-label)
         .replace("{{lang}}", lang).replace("{{pathsAttr}}", esc(JSON.stringify(paths))).replace("{{rootAttr}}", slug ? "" : " data-root")
-        .replace("{{prepaint}}", PREPAINT).replace("{{head}}", head).replace("{{css}}", cssName).replace("{{js}}", jsName).replace("{{strings}}", sName)
+        .replace("{{prepaint}}", PREPAINT).replace("{{head}}", head).replace("{{style}}", () => "<style>" + css + "</style>").replace("{{js}}", jsName).replace("{{strings}}", sName)
         .split("{{homeHref}}").join(path(slug)).replace("{{statsHref}}", path(slug, "stats")).replace("{{langOpts}}", langOpts).replace("{{focus}}", focus).replace("{{mainAttr}}", page ? ` class="topic${PAGES[page].stats ? " stats" : ""}"` : "").replace("{{heroTitle}}", heroTitle)
         .replace("{{story}}", storyHtml(T("story"), lang)).replace("{{checks}}", checks).replace("{{todoSk}}", TODO_SK).replace("{{iaTxt}}", esc(T("ia_txt")).replace("{app}", '<b class="ia-n"></b>')).replace("{{segs}}", CHECKS.map(c => `<i data-c="${c}"></i>`).join(""))
         .replace("{{eyebrow}}", esc(T("eyebrow").replace("{n}", SNIFFERS.length))).replace("{{groups}}", groups).replace("{{topics}}", topics)
