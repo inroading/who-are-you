@@ -47,6 +47,8 @@ test("PC: a battery that runs down or a laptop GPU makes a laptop; a desktop's b
 test("Android: a model code is in the file its bucket names", () => {
   const f = code => JSON.parse(readFileSync(new URL("../public/assets/m/" + bucket(code).toString(16).padStart(2, "0") + ".json", import.meta.url), "utf8"));
   assert.equal(f("SM-S928B")["SM-S928B"], "Samsung Galaxy S24 Ultra");
+  // (a China model without Google's services, from MobileModels)
+  assert.equal(f("ALN-AL00")["ALN-AL00"], "HUAWEI Mate 60 Pro");
   assert.equal(bucket("sm-s928b"), bucket("SM-S928B"));
 });
 

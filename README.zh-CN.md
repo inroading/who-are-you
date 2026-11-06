@@ -60,7 +60,7 @@
   - *出口*：每类目的地看到的地址，以及 IPv4 和 IPv6 出口（Cloudflare Radar）
   - *请求头*：User-Agent、Accept-Language、Sec-CH-UA、平台、压缩方式、DNT/GPC、来源页
   - *语言和地区*：`navigator.languages`、区域设置、时区、12/24 小时制、每周第一天、数字和日期格式、键盘布局、语音朗读
-  - *设备*：系统和版本、浏览器、架构、屏幕、刷新率、显示器数量、显卡（WebGL 和 WebGPU）、CPU 线程、内存、触控、电池、网络连接、摄像头和麦克风（只计数，不打开）、视频解码、DRM、存储配额；新增：窗口和系统栏、WebGL 能力、音频硬件（采样率、声道）、生物识别（Windows Hello / Touch ID 可用与否，只问不用，以及浏览器对通行密钥的支持）、蓝牙适配器；设备型号（iPhone 和 iPad 看屏幕和 iOS 版本，MacBook 看屏幕和芯片，安卓看型号代码在 Google Play 设备表里的名字，`npm run models` 把它更新到 `public/assets/m/`；笔记本看电池和显卡）
+  - *设备*：系统和版本、浏览器、架构、屏幕、刷新率、显示器数量、显卡（WebGL 和 WebGPU）、CPU 线程、内存、触控、电池、网络连接、摄像头和麦克风（只计数，不打开）、视频解码、DRM、存储配额；新增：窗口和系统栏、WebGL 能力、音频硬件（采样率、声道）、生物识别（Windows Hello / Touch ID 可用与否，只问不用，以及浏览器对通行密钥的支持）、蓝牙适配器；设备型号（iPhone 和 iPad 看屏幕和 iOS 版本，MacBook 看屏幕和芯片，安卓看型号代码在 Google Play 设备表和 [MobileModels](https://github.com/KHwang9883/MobileModels)（国行机型；CC BY-NC-SA 4.0 协议，所以 `public/assets/m/` 也用这个协议）里的名字，`npm run models` 负责更新；笔记本看电池和显卡）
   - *浏览器设置*：配色、减少动画、色域和 HDR、DNT/GPC、Cookie、已授予或已拒绝的权限、PDF 阅读器、webdriver、广告拦截、会留下痕迹的扩展（加密钱包、开发者工具、Grammarly、Dark Reader、沉浸式翻译）、标签页历史、已装字体；新增：辅助功能偏好（高对比度、强制颜色、减少透明、反色）、打开方式（标签页、已安装的应用、全屏）、浏览器内置 AI（Gemini Nano 或 Phi 是否已下载、下载过哪些翻译语言）
   - *指纹*：Canvas、WebGL、音频、字体列表、综合指纹，以及浏览器是否会随机化它们；新增：JS 引擎（从报错的措辞看出 V8、SpiderMonkey 还是 JavaScriptCore，改 User-Agent 也改不掉）
 
