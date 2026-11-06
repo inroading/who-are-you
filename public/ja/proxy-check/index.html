@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="間にプロキシがあると見抜かれる？">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"プロキシチェック · 1ms.dog","url":"https://who.1ms.dog/ja/proxy-check/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"無料のプロキシチェック：ブラウザが測った往復時間と、Cloudflare が自分の接続で見た往復時間を比べます。IP がデータセンターのものか、DNS や WebRTC のアドレスも確認。プロキシを通すと測れる区間が 1 つ増えるので、きれいな家庭用回線の IP でも隠しきれません。","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"遅延チェックはどういう仕組みですか？","acceptedAnswer":{"@type":"Answer","text":"ページはこのサイトのいちばん近い Cloudflare のサーバーに小さな応答を何度か求め、リクエストを送ってから最初の 1 バイトが返るまでの最短時間を取ります。Cloudflare は、あなたとの TCP 接続で測った往復時間を返します。プロキシがなければ 2 つは近い値になり、プロキシ経由なら Cloudflare にはプロキシの区間しか見えません。"}},{"@type":"Question","name":"家庭用回線の IP でも見抜かれますか？","acceptedAnswer":{"@type":"Answer","text":"はい。家庭用回線の IP ならデータセンターの判定は通りますが、増えた往復時間、別の国にある DNS サーバー、合わないタイムゾーン、WebRTC のアドレスから、やはり分かってしまいます。"}},{"@type":"Question","name":"「読み取れず」と出るのはなぜですか？","acceptedAnswer":{"@type":"Answer","text":"HTTP/3 では TCP 接続を使わないので、Cloudflare には返す往復時間がありません。また、測定のリクエストを止めるネットワークもあります。"}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.1e49d16a7c.css">
+<link rel="stylesheet" href="/assets/app.f84ccc0e90.css">
 </head>
 <body>
 <div class="app">
