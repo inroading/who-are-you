@@ -8,6 +8,7 @@ import { TW, flagCode } from "./regions.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
 import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
+import { appleModel, pcKind, bucket } from "./models.mjs";
 
 (function () {
   "use strict";
@@ -378,7 +379,103 @@ import { TZ_CC } from "./tz.mjs";
     if (!PK || !PK.isUserVerifyingPlatformAuthenticatorAvailable) return na("bio");
     const ok = await within(PK.isUserVerifyingPlatformAuthenticatorAvailable(), 1500, null);
     if (ok == null) return na("bio");
-    txt("bio", t(ok ? "v_yes" : "v_no"));
+    // what else the browser says it can do with passkeys (Chromium 133, Safari 18): keep them on this device, sign in
+    // with a phone's QR code, offer them in the sign-in box's autofill
+    let caps = null;
+    if (PK.getClientCapabilities) caps = await within(PK.getClientCapabilities().catch(() => null), 2500, null);
+    const more = caps ? [["passkeyPlatformAuthenticator", "bio_pk"], ["hybridTransport", "bio_hy"], ["conditionalGet", "bio_cg"]].filter(([k]) => caps[k]).map(([, s]) => t(s)) : [];
+    txt("bio", [t(ok ? "v_yes" : "v_no"), ...more].join(" · "));
+  }
+  // Which model the device is (src/models.mjs): Apple's from the screen and the chip, Android's from its model code
+  // in Google Play's device list, a PC's laptop or not from the battery and the GPU
+  async function deviceModel() {
+    const d = R.dev;
+    if (!d || !d.os) return na("model");
+    const am = appleModel({ kind: d.kind, os: d.os, ua: navigator.userAgent, w: screen.width, h: screen.height, dpr: devicePixelRatio || 1, gpu: R.gpuRaw || "" });
+    if (am) {
+      R.model = am;
+      if (am.name) { d.model = am.name; return txt("model", am.name); }
+      // ("iPhone 17 Pro / 17 / 16 Pro")
+      const short = l => l.map((n, i) => i ? n.replace(/^(iPhone|iPad) /, "") : n).join(" / ");
+      d.model = am.list.length > 3 ? short(am.list.slice(0, 3)) + " …" : short(am.list);
+      return txt("model", t("md_list", { l: short(am.list) }));
+    }
+    if (d.os === "iOS" || d.os === "iPadOS") return txt("model", t("md_new", { w: screen.width, h: screen.height }));
+    const code = (R.hi && R.hi.model) || d.model;
+    if ((d.os === "Android" || d.os === "HarmonyOS") && code) {
+      const f = "/assets/m/" + bucket(code).toString(16).padStart(2, "0") + ".json";
+      const map = await within(fetch(f).then(r => r.ok ? r.json() : null).catch(() => null), 2500, null);
+      const name = map && map[code.toUpperCase()];
+      R.model = { name: name || null, code };
+      if (name) { d.model = name; return txt("model", name + " · " + code); }
+      return txt("model", t("md_code", { c: code }));
+    }
+    if (d.kind === "pc" && pcKind({ battery: R.battery, gpu: R.gpuRaw || "" }) === "laptop") { R.laptop = true; return txt("model", t("md_laptop")); }
+    if (d.kind === "pc") return txt("model", t("md_pc"));
+    na("model");
+  }
+
+  // How the pointer moves before a click: a hand draws a path (a stream of small mousemoves); an AI agent or a script
+  // that drives the browser jumps the pointer to the spot and presses at once (one move, far from the last, then
+  // pointerdown), and an extension's script clicks with untrusted events (FP-Agent, arXiv 2605.01247). Watched for
+  // as long as the page is open, kept in memory only; the row and the automation check follow it.
+  const ACT = { moves: [], last: null, smooth: 0, human: 0, jump: 0, untrusted: 0, state: null };
+  function actState() {
+    if (ACT.untrusted) return "script";
+    if (ACT.jump >= 2 && !ACT.human) return "agent";
+    if (ACT.human || ACT.smooth >= 30) return "human";
+    return null;
+  }
+  function actPaint() {
+    const s = ACT.state, fine = matchMedia("(any-pointer: fine)").matches;
+    const text = t(({ human: "ag_human", agent: "ag_agent", script: "ag_script" })[s] || (fine ? "ag_wait" : "ag_touch"));
+    if (!done.has("agent")) return txt("agent", text);
+    const r = PR.agent; if (r) r.querySelector(".pa").textContent = text;
+    if (FR.agent) FR.agent.querySelector("b").textContent = text;
+  }
+  function actNote() {
+    const s = actState();
+    if (s === ACT.state) return;
+    ACT.state = s;
+    actPaint();
+    // (a verdict already out takes the agent in)
+    if ((s === "agent" || s === "script") && R && R.ck) judge(!!R.end);
+  }
+  addEventListener("mousemove", e => {
+    if (!e.isTrusted) return;
+    const now = e.timeStamp, d = ACT.last ? Math.hypot(e.clientX - ACT.last[0], e.clientY - ACT.last[1]) : null;
+    ACT.moves.push([now, d]); if (ACT.moves.length > 40) ACT.moves.shift();
+    if (d != null && d < 60) ACT.smooth++;
+    ACT.last = [e.clientX, e.clientY];
+    if (ACT.smooth === 30) actNote();
+  }, { capture: true, passive: true });
+  addEventListener("pointerdown", e => {
+    if (!e.isTrusted || e.pointerType !== "mouse" || e.button !== 0) return;
+    const recent = ACT.moves.filter(([at]) => e.timeStamp - at < 300);
+    if (recent.length >= 4) ACT.human++;
+    else if (recent.length && (recent[0][1] == null || recent[0][1] >= 80)) ACT.jump++;
+    actNote();
+  }, { capture: true, passive: true });
+  // (nothing on this page clicks for the visitor: a click it didn't get from the browser came from someone's script)
+  addEventListener("click", e => { if (!e.isTrusted) { ACT.untrusted++; actNote(); } }, { capture: true, passive: true });
+
+  // The browser's own AI (Chrome's Gemini Nano, Edge's Phi): whether the model is on the disk, and which translation
+  // languages were downloaded, each one someone translated pages into. availability() only asks: nothing downloads.
+  const AI_LANGS = ["zh", "zh-Hant", "ja", "ko", "es", "fr", "de", "pt", "ru", "ar", "hi", "it", "vi", "th", "id", "tr", "pl", "nl", "uk"];
+  async function builtinAI() {
+    const LM = window.LanguageModel || window.Summarizer, TR = window.Translator;
+    if (!LM && !TR) return na("ai");
+    const ask = f => within(Promise.resolve().then(f).catch(() => null), 2000, null);
+    const [m, pairs] = await Promise.all([LM ? ask(() => LM.availability()) : null,
+      TR ? Promise.all(AI_LANGS.map(l => ask(() => TR.availability({ sourceLanguage: "en", targetLanguage: l })).then(a => [l, a]))) : []]);
+    const have = pairs.filter(([, a]) => a === "available").map(([l]) => l);
+    R.aiLangs = have;
+    const name = R.br && R.br.name === "Edge" ? "Phi-4-mini" : "Gemini Nano";
+    const parts = [];
+    if (m) parts.push(t({ available: "ai_ready", downloadable: "ai_can", downloading: "ai_dl" }[m] || "ai_no", { m: name }));
+    if (TR && pairs.some(([, a]) => a)) parts.push(have.length ? t("ai_tr", { l: have.map(language).join(", ") }) : t("ai_tr0"));
+    if (!parts.length) return na("ai");
+    txt("ai", parts.join(" · "));
   }
   // whether there is a Bluetooth adapter (Chromium answers without asking)
   async function bluetooth() {
@@ -1264,7 +1361,7 @@ import { TZ_CC } from "./tz.mjs";
     const nat = nationality({ langs: R.langs, tz: rfp() ? null : R.tz, ipcc: c.country, sys: sysOf() || undefined, ios: !!(R.dev && /^(iOS|iPadOS)/.test(R.dev.os || "")) });
     const ex = allExits(), split = ex && splitOf(ex);
     return { v: 1, nat: nat ? nat.cc : null, natFrom: nat ? nat.from : null, cc: c.country || null, city: c.city || null, langs: R.langs || [],
-      tz: R.tz || null, rf: rfp() || undefined, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, browser: R.browser || null,
+      tz: R.tz || null, rf: rfp() || undefined, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, lt: R.laptop || undefined, browser: R.browser || null,
       screen: R.screen || null, gpu: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) || R.gpu || null, gi: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) ? R.gpu : undefined, gl: /or similar$/.test(R.gpuRaw || "") || undefined, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
       nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
       dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, app: inApp() || undefined, fz: !!R.noise || undefined, tb: (R.traces && R.traces.blocked) || undefined, hz: R.hz || null,
@@ -1355,7 +1452,8 @@ import { TZ_CC } from "./tz.mjs";
     blank("lang", P.langs.length ? esc(language(P.langs[0])) : U, BLANKS.lang, P.langs.map(language).join(", "));
     blank("tz", P.rf ? esc(t("pt_tz_rfp")) : P.tz ? esc(tzLabel(P.tz)) : U, BLANKS.tz, P.tz || "");
     blank("clock", esc(t(P.h12 ? "ck_12" : "ck_24")), BLANKS.clock, t("hour_why"));
-    blank("device", esc(!P.os ? t("dv_unknown") : (P.kind === "phone" || P.kind === "tablet") && P.model ? t("dv_model", { model: P.model, os: P.os }) : t("dv_" + (P.kind || "pc"), { os: P.os })));
+    blank("device", esc(!P.os ? t("dv_unknown") : (P.kind === "phone" || P.kind === "tablet" || P.kind === "mac") && P.model ? t("dv_model", { model: P.model, os: P.os })
+      : t(P.lt ? "dv_laptop" : "dv_" + (P.kind || "pc"), { os: P.os })));
     blank("browser", P.browser ? esc(P.browser) : U);
     blank("screen", P.screen ? esc(P.screen + (P.hz ? " · " + P.hz + " Hz" : "")) : U);
     blank("gpu", esc(P.gs ? t("gpu_soft") : P.rf && !P.gpu ? t("gpu_rfp") : !P.gpu && /^Brave\b/.test(P.browser || "") ? t("gpu_brave") : P.gl && P.gpu ? t("gpu_like", { g: P.gpu }) : P.gi ? t("gpu_dual", { d: P.gpu, i: P.gi }) : P.gpu || t("gpu_unknown")),
@@ -2003,7 +2101,7 @@ import { TZ_CC } from "./tz.mjs";
     const res = checks({
       tz: R.tz, rfp: rfp(), tzOff: R.tzOff == null ? null : offTxt(R.tzOff), ipTzOff: c.timezone ? offTxt(tzOffset(c.timezone)) : null, ipTz: c.timezone || null, ipcc: c.country,
       langs: R.langs, dnsCC: R.dnsCC, exits: allExits(), rtc: R.rtc, ip: R.srv && R.srv.ip, asn: c.asn, org: orgName(c.asOrganization, c.asn),
-      uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, noise: R.noise, webdriver: R.webdriver,
+      uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, noise: R.noise, webdriver: R.webdriver, agent: ACT.state,
       rttB: R.latDone ? R.rttB : null, coarse: R.latDone ? !!R.coarse : false, rttCf: c.clientTcpRtt || null, sys: final || R.voices ? sysOf() : undefined, tamper: R.dev && R.srv ? tampered() : null, fpb: fpbTraces(),
       conn: R.probe === undefined ? undefined : R.probe && (R.probe.tcp || R.probe.http2) ? { os: R.probe.tcp && R.probe.tcp.os, pseudo: R.probe.http2 && R.probe.http2.pseudo, engine: R.engine, mtu: R.probe.tcp && R.probe.tcp.mtu } : null,
       brName: R.br && R.br.name,
@@ -2200,7 +2298,7 @@ import { TZ_CC } from "./tz.mjs";
       ["traces", "traces", traces], ["lies", "lies", lies], ["icu", "icu", icu], ["scrollbar", "scrollbar", scrollbar], ["extwar", "extwar", extFiles],
       ["cssv", "cssv", cssLevel], ["smooth", "smooth", smoothing], ["geoloc", "geoloc", geoloc], ["sensors", "sensors", sensors], ["etag", "etag", etagId], ["trackers", "trackers", trackers],
       ["domrect", "domrect", domRect], ["svgrect", "svgrect", svgRect], ["textm", "textm", textMetrics], ["glimg", "glimg", glImage], ["gpulim", "gpulim", gpuLimits],
-      ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav]];
+      ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav], ["ai", "ai", builtinAI], ["agent", "agent", async () => actPaint()]];
     await Promise.all([
       srv, guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
       ...S.filter(([k]) => on(k) && !(EMBED && (k === "traces" || k === "etag"))).map(([, ids, f]) => guard(ids, f)), ...probes,
@@ -2210,6 +2308,8 @@ import { TZ_CC } from "./tz.mjs";
     if (on("prints") && on("lies")) shield();
     if (on("stack")) v6mac();
     if (on("fonts") && on("gpu")) await hwid();
+    // (once the system, the GPU and the battery are in)
+    if (on("model")) await guard("model", deviceModel);
     judge(false);
     if (!NEED) { paint(portrait(), false); readings(portrait(), R.ck); }
     await rtc; await h3; await lat;

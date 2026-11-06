@@ -59,6 +59,7 @@ export const GROUPS = [
     { id: "os", m: "userAgentData" },
     { id: "browser", m: "userAgentData.brands" },
     { id: "arch", m: "…architecture · bitness" },
+    { id: "model", m: "screen · GPU · Client Hints model" },
     { id: "screen", m: "screen · devicePixelRatio" },
     { id: "hz", m: "requestAnimationFrame" },
     { id: "screens", m: "screen.isExtended · screenX" },
@@ -99,7 +100,9 @@ export const GROUPS = [
     { id: "perms", m: "permissions.query" },
     { id: "apis", m: "usb · serial · hid · IdleDetector …" },
     { id: "pdf", m: "pdfViewerEnabled" },
+    { id: "ai", m: "LanguageModel · Translator.availability" },
     { id: "webdriver", m: "navigator.webdriver" },
+    { id: "agent", m: "mousemove → pointerdown · isTrusted" },
     { id: "worker", m: "Worker · navigator" },
     { id: "adblock", m: "bait element" },
     { id: "trackers", m: "7 tracker scripts (on request)" },
@@ -142,7 +145,7 @@ export const SNIFFERS = GROUPS.flatMap(([, l]) => l);
 // the blanks of the portrait, in the order the sentence template uses them; each names the rows it comes from
 export const BLANKS = {
   nat: ["langs", "tz", "geo"], city: ["geo"], lang: ["langs"], tz: ["tz"], clock: ["hour"],
-  device: ["os", "screen", "touch"], browser: ["browser"], screen: ["screen", "hz"], gpu: ["gpu"], rig: ["gpu", "hz", "cpu"],
+  device: ["os", "model", "screen", "touch"], browser: ["browser"], screen: ["screen", "hz"], gpu: ["gpu"], rig: ["gpu", "hz", "cpu"],
   wow: ["v6mac", "tcpfp", "h2fp", "etag", "lies"], conn: ["tcpfp", "h2fp"], shield: ["shield", "lies"],
   isp: ["isp"], nettype: ["isp", "ex_cn", "ex_intl", "ex_gpt", "ex_claude", "ex_cf"], dns: ["dns"], read: ["geo", "tz", "dns", "langs", "isp"], age: [],
   tier: ["gpu", "screen", "hz", "cpu", "screens"], fresh: ["browser"], when: ["tz"], power: ["battery"], prefs: ["sysui", "motion", "a11y"], stand: ["fpid"], theme: ["scheme"], adblock: ["adblock"], track: ["fpid", "rand"], job: ["fonts", "ext"],

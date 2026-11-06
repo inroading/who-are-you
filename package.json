@@ -12,7 +12,8 @@
     "og": "node scripts/og.mjs",
     "smoke": "node scripts/smoke.mjs",
     "smoke:quick": "node scripts/smoke.mjs quick",
-    "stats": "node scripts/stats.mjs"
+    "stats": "node scripts/stats.mjs",
+    "models": "node scripts/models.mjs"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

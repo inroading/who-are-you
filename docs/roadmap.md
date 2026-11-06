@@ -83,6 +83,13 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
   opened the connection, who protects the fingerprint, how a site recognizes you anyway (cache ID, a surviving store,
   the hardware ID), labels for tunnels, returning visitors and password managers, a softer origin when only the
   language says it.
+- 2026-11-06: the device model (src/models.mjs: iPhone / iPad by screen and iOS version, MacBook by display and
+  chip, Android by Google Play's device list in public/assets/m/, laptops by battery or GPU), an AI agent or a script
+  at the controls (the pointer's path before each click; feeds the automation check), the browser's built-in AI and
+  downloaded translation languages, passkey capabilities. 118 sniffers.
+  Upkeep: a new iPhone or iPad screen size (each September) needs a row in src/models.mjs; `npm run models` monthly.
+  Not worth doing (2026-11-06): private-window detection and disk size from the storage quota (Chrome 156 gives a
+  fixed 10 GB either way), :visited history (partitioned), local port scans (Chrome's local network prompt).
 
 ## Research (2026-11-04)
 - BrowserLeaks: IP, JavaScript, WebRTC, Canvas, WebGL, fonts, Geolocation, feature detection, TLS (JA3 / JA4, ECH),

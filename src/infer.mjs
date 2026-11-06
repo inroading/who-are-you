@@ -88,7 +88,8 @@ export function device(ua = "", hi = {}, touch = 0) {
   } else if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && touch > 1)) {
     const ipad = /iPad/.test(ua) || /Macintosh/.test(ua);
     os = ipad ? "iPadOS" : "iOS"; kind = ipad ? "tablet" : "phone";
-    const m = ua.match(/OS (\d+)[_.](\d+)/) || ua.match(/Version\/(\d+)\.(\d+)/);
+    // (Safari 26 freezes "OS 18_6" in the user agent: the real version is Version/'s)
+    const v = ua.match(/Version\/(\d+)\.(\d+)/), m = v && +v[1] >= 26 ? v : ua.match(/OS (\d+)[_.](\d+)/) || v;
     osv = m ? m[1] + "." + m[2] : "";
     model = ipad ? "iPad" : "iPhone";
   } else if (plat === "macOS" || /Macintosh|Mac OS X/.test(ua)) {
@@ -301,7 +302,8 @@ export function checks(x) {
   // (a browser that adds noise per site, like Brave, draws the same twice on one page, but differently on the next site)
   // (on iOS the canvas is WebKit's in every browser, the same on every iPhone of a model and iOS version: steady, but shared)
   out.fp = x.rand == null ? null : x.rand ? ["ok", "c_fp_rand", {}] : x.noise ? ["ok", "c_fp_site", {}] : /^(iOS|iPadOS)/.test(x.uaOS || "") ? ["info", "c_fp_ios", {}] : ["warn", "c_fp_same", {}];
-  out.bot = x.webdriver == null ? null : x.webdriver ? ["bad", "c_bot_bad", {}] : ["ok", "c_bot_ok", {}];
+  // (and the pointer: one that jumps to each click, or clicks the browser didn't make, is an agent or a script)
+  out.bot = x.webdriver == null ? null : x.webdriver ? ["bad", "c_bot_bad", {}] : x.agent === "agent" ? ["bad", "c_bot_agent", {}] : x.agent === "script" ? ["bad", "c_bot_script", {}] : ["ok", "c_bot_ok", {}];
   // The round trip the browser measures to this site against the one Cloudflare measures on its connection: through a
   // proxy, Cloudflare only sees the proxy's leg, so the browser's is much longer. Over QUIC there is no TCP figure.
   // (a browser that coarsens its timers, as Firefox's resistFingerprinting does, can't measure it)
