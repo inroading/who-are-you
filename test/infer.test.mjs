@@ -374,3 +374,15 @@ test("software renderers and networks registered under an address", () => {
   assert.equal(looksLikeAddress("1&1 Versatel Deutschland GmbH"), false);
   assert.equal(looksLikeAddress("Level 3 Parent, LLC"), false);
 });
+
+// yt1988/1ms-shell#82: GNOME Web on Linux reports WebKit's "Apple GPU" stand-in and a Safari-like user agent
+test("a WebKit browser on Linux is neither Safari nor an Apple device", () => {
+  const EPIPHANY = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/60.5 Safari/605.1.15";
+  assert.deepEqual(browser(EPIPHANY), { name: "WebKit", v: "" });
+  assert.equal(gpuOS("Apple GPU"), null);
+  assert.equal(gpuOS("ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified Version)"), "Apple");
+  assert.equal(checks({ uaOS: "Linux", real: true, gpuOS: gpuOS("Apple GPU") }).ua[0], "ok");
+  const p = protocols({ sni: "plaintext", kex: "X25519", br: browser(EPIPHANY) });
+  assert.equal(p.ech[1], "c_ech_webkit");
+  assert.equal(p.pq[1], "c_pq_old");
+});

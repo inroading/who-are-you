@@ -119,7 +119,14 @@ export function browser(ua = "", brands = []) {
   if (b) return { name: b.brand.replace(/^Microsoft /, "").replace(/^Google /, ""), v: String(b.version).split(".")[0] };
   const tests = [["Edge", /Edg(?:e|A|iOS)?\/(\d+)/], ["Opera", /OPR\/(\d+)/], ["Samsung Internet", /SamsungBrowser\/(\d+)/], ["Firefox", /(?:Firefox|FxiOS)\/(\d+)/],
     ["Chrome", /(?:Chrome|CriOS)\/(\d+)/], ["Safari", /Version\/(\d+).*Safari/]];
-  for (const [name, re] of tests) { const m = ua.match(re); if (m) return { name, v: m[1] }; }
+  for (const [name, re] of tests) {
+    const m = ua.match(re);
+    if (!m) continue;
+    // a Safari user agent off Apple's systems is a WebKitGTK or WPE browser (GNOME Web, Epiphany…): its "Version/"
+    // isn't Safari's, and it shares neither Safari's TLS nor its features
+    if (name === "Safari" && !/Macintosh|iPhone|iPad|iPod/.test(ua)) return { name: "WebKit", v: "" };
+    return { name, v: m[1] };
+  }
   return { name: null, v: "" };
 }
 
@@ -138,7 +145,8 @@ export function gpuName(r) {
 export function gpuOS(r) {
   if (!r) return null;
   if (/Direct3D|D3D1\d/.test(r)) return "Windows";
-  if (/Apple (M\d|GPU)|Metal/.test(r)) return "Apple";
+  // ("Apple GPU" alone is no tell: every WebKit browser reports it, on Linux too, so as not to name the card)
+  if (/Apple M\d|Metal/.test(r)) return "Apple";
   if (/Adreno|Mali|PowerVR|Xclipse|Maleoon/.test(r)) return "Android";
   return null;
 }
@@ -361,7 +369,7 @@ export function protocols(x) {
   if (!x.sni) out.ech = null;
   else if (x.sni === "encrypted") out.ech = ["ok", "c_ech_ok", {}];
   // (most browsers don't use it yet: a note, not a warning)
-  else out.ech = ["info", name === "Safari" ? "c_ech_safari" : name === "Firefox" ? "c_ech_ff" : "c_ech_dns", {}];
+  else out.ech = ["info", name === "Safari" ? "c_ech_safari" : name === "WebKit" ? "c_ech_webkit" : name === "Firefox" ? "c_ech_ff" : "c_ech_dns", {}];
   // post-quantum key exchange: browsers that offer it by default (Chromium 124, Firefox 132, Safari 26) and still
   // end up with a classical one point to something in between that makes its own TLS connections
   if (!x.kex) out.pq = null;

@@ -49,6 +49,7 @@ export default {
   med_v: "카메라 {c} · 마이크 {m} · 스피커 {s}", sto_v: "이 사이트에 {n}",
   sch_dark: "다크", sch_light: "라이트", sch_contrast: "고대비", mo_reduce: "줄이기", mo_no: "설정 없음",
   s_model: "기기 모델", s_agent: "조작 방식", s_ai: "브라우저 내장 AI", md_list: "{l} 중 하나", md_new: "모델을 알 수 없음: {w}×{h} 화면이 목록에 없습니다(새 모델이거나 화면 확대 사용 중)", md_code: "모델 코드 {c}, 기기 목록에 이름이 없습니다", md_laptop: "노트북", md_pc: "컴퓨터(모델은 읽을 수 없음)", dv_laptop: "{os} 노트북", ag_wait: "마우스를 움직이거나 페이지를 클릭하면 판단합니다", ag_touch: "터치스크린이라 마우스 궤적은 보지 않습니다", ag_human: "사람 같음: 클릭 전에 마우스가 이어서 움직입니다", ag_agent: "AI 에이전트 같음: 마우스가 궤적 없이 목표로 바로 이동해 클릭합니다", ag_script: "직접 누르지 않은 클릭이 있습니다. 스크립트가 보낸 것입니다(isTrusted가 false)", c_bot_agent: "매번 마우스가 목표로 바로 이동해 클릭: AI 에이전트(Atlas, Comet 등)가 조작 중일 수 있습니다", c_bot_script: "스크립트가 만든 클릭을 받았습니다: 확장 프로그램이나 AI 에이전트가 대신 조작하고 있을 수 있습니다", ai_ready: "{m} 설치됨(약 4GB 로컬 AI 모델)", ai_can: "{m}을(를) 실행할 수 있지만 아직 다운로드하지 않았습니다", ai_dl: "{m} 다운로드 중", ai_no: "이 기기나 브라우저에서는 {m}을(를) 쓸 수 없습니다", ai_tr: "다운로드한 번역 언어: {l}", ai_tr0: "다운로드한 번역 언어 없음", bio_pk: "패스키 저장 가능", bio_hy: "휴대폰 QR 코드로 로그인 가능", bio_cg: "패스키 자동 완성 가능",
+  gpu_webkit: "WebKit이 지문 추적을 막으려고 모든 기기에서 보고하는 이름이며, 실제 그래픽카드가 아닙니다", c_ech_webkit: "꺼짐: Linux의 WebKit 브라우저는 아직 ECH를 지원하지 않습니다",
   wd_yes: "예: 프로그램이 브라우저를 조종 중", wd_no: "아니요", ab_on: "있음: 미끼 광고가 숨겨짐", ab_off: "감지 안 됨",
   fonts_v: "{of}개 중 {n}개:", rand_yes: "켜짐: 같은 그림이 두 번 다르게 그려짐", rand_no: "꺼짐: 두 번 모두 같음",
   rtc_off: "WebRTC 꺼짐", rtc_none: "공인 주소 없음",

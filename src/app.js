@@ -349,14 +349,16 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
     R.gpuVen = ven;
     // a software renderer means the browser isn't using the card at all (remote desktop, a virtual machine, no driver,
     // hardware acceleration off): say so rather than pass it off as one
-    R.gpuRaw = ren; R.gpuSoft = isSoftGpu(ren); R.gpu = R.gpuSoft ? null : gpuName(ren);
+    // (WebKit says "Apple GPU" whatever the card: off Apple's systems, a WebKitGTK browser on Linux, that is no card)
+    const mask = ren === "Apple GPU" && !/Macintosh|iPhone|iPad|iPod/.test(navigator.userAgent);
+    R.gpuRaw = ren; R.gpuSoft = isSoftGpu(ren); R.gpu = R.gpuSoft || mask ? null : gpuName(ren);
     // pages draw on a laptop's integrated card; asked for high performance, the browser may use the discrete one
     try {
       const hg = document.createElement("canvas").getContext("webgl", { powerPreference: "high-performance" }), he = hg && hg.getExtension("WEBGL_debug_renderer_info");
       R.gpuHiRaw = he ? hg.getParameter(he.UNMASKED_RENDERER_WEBGL) : null; R.gpuHi = gpuName(R.gpuHiRaw);
     } catch (e) { R.gpuHi = null; }
     const dg = discreteGpu(R.gpu, R.gpuHi, null);
-    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : ren === "Mozilla" ? "Mozilla · " + t("gpu_rfp") : ren === "Brave" ? t("gpu_brave") : /or similar$/.test(ren || "") && R.gpu ? t("gpu_like", { g: R.gpu }) : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
+    txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : mask ? ren + " · " + t("gpu_webkit") : ren === "Mozilla" ? "Mozilla · " + t("gpu_rfp") : ren === "Brave" ? t("gpu_brave") : /or similar$/.test(ren || "") && R.gpu ? t("gpu_like", { g: R.gpu }) : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
       { why: (/or similar$/.test(ren || "") ? t("gpu_like_why") + "\n" : "") + [ven, ren, R.gpuHiRaw && R.gpuHiRaw !== ren ? R.gpuHiRaw : ""].filter(Boolean).join(" · ") });
     const gl2 = !!document.createElement("canvas").getContext("webgl2");
     txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }));
@@ -2064,7 +2066,7 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
       Date.prototype.getTimezoneOffset, Intl.DateTimeFormat.prototype.resolvedOptions];
     if (fns.some(f => f && !own(f))) out.push("tp_fn");
     const name = R.br && R.br.name, ios = R.dev && /^iOS|^iPadOS/.test(R.dev.os || "");
-    const want = ios || name === "Safari" ? "JavaScriptCore" : name === "Firefox" ? "SpiderMonkey" : /^(Chrome|Edge|Opera|Brave|Vivaldi|Yandex|Samsung Internet)$/.test(name || "") ? "V8" : null;
+    const want = ios || name === "Safari" || name === "WebKit" ? "JavaScriptCore" : name === "Firefox" ? "SpiderMonkey" : /^(Chrome|Edge|Opera|Brave|Vivaldi|Yandex|Samsung Internet)$/.test(name || "") ? "V8" : null;
     if (want && R.engine && R.engine !== want) out.push("tp_engine");
     const hl = ((R.srv && R.srv.h && R.srv.h["accept-language"]) || "").split(",")[0].split(";")[0].trim().toLowerCase();
     if (hl && R.langs && R.langs[0] && hl !== R.langs[0].toLowerCase()) out.push("tp_hdr");
