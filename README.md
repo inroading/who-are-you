@@ -86,7 +86,7 @@ To find your exits and DNS resolver the page asks a few outside services directl
 git clone https://github.com/yt1988/who-are-you
 cd who-are-you
 npm ci
-npm run dev          # wrangler dev on http://localhost:8865 (geolocation comes from Cloudflare even locally)
+npm run dev          # wrangler dev on http://localhost:8795 (geolocation comes from Cloudflare even locally)
 npm test             # public/ is up to date, and the unit tests
 npm run smoke        # every language page in headless Chrome or Edge: all rows, blanks and checks filled, sharing works
 npm run og           # re-render the link-preview images (public/og/)

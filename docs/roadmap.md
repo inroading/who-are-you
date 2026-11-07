@@ -4,7 +4,7 @@ The goal: of every privacy test on the web, the one that reads the most (by the 
 install, no permission it doesn't ask for), and the one people most enjoy and share. This file is the plan and its
 state, kept up to date as work lands; the research it rests on is at the end.
 
-## Where who stands (88 sniffers, 13 disguise checks, 4 protocol checks)
+## Where who stands (118 sniffers, 14 disguise checks, 4 protocol checks; 2026-11-07)
 
 Ahead of the field: the portrait (one paragraph from all readings), disguise checks that cross-read the readings
 (time zone, language, DNS, split routing, WebRTC, data center, user agent, round trip, system languages, anti-detect
@@ -88,8 +88,29 @@ Decided 2026-11-04: all of 1, all of 2 but "guess first" (not wanted), and 3.
   at the controls (the pointer's path before each click; feeds the automation check), the browser's built-in AI and
   downloaded translation languages, passkey capabilities. 118 sniffers.
   Upkeep: a new iPhone or iPad screen size (each September) needs a row in src/models.mjs; `npm run models` monthly.
-  Not worth doing (2026-11-06): private-window detection and disk size from the storage quota (Chrome 156 gives a
-  fixed 10 GB either way), :visited history (partitioned), local port scans (Chrome's local network prompt).
+  China phones come from MobileModels (CC BY-NC-SA 4.0), used because 1ms.dog is non-commercial (the user's call,
+  2026-11-06): if that ever changes, drop it from scripts/models.mjs and keep Google Play's list only.
+
+## Open
+- Third-party cookies: whether the browser lets a cross-site frame keep a cookie (Chrome still does by default). Needs
+  a second registrable domain to frame from (a 1ms.dog subdomain is the same site); waiting on one.
+- Built-in AI row: in a fresh profile every translation pair reads "downloadable"; still to see, in a Chrome that has
+  translated pages, whether downloaded languages read "available" or Chrome masks them.
+- Layout shifts left (measured 2026-11-05/06): the stats pill wraps to two lines on phones in fr, de, es, pt, ru, ja and
+  pushes the title down 12 px (fr phone CLS about 0.23 in production); the Cyrillic font swapping in on ru; the
+  portrait's last answer rewrapping by one line at the end of a run (0.02); the desktop paragraph filling in (0.08).
+- Probes in more regions, for round-trip triangulation of the exit (part 3, later).
+- 1ms.dog's Cloudflare zone injects Google's tag gateway (/metrics/, gtag) into every page: a zone setting, decided by
+  1ms.dog's operator, not in this repository.
+
+## Decided against
+- "Guess first" (the visitor guesses before the reveal): not wanted (2026-11-04).
+- Private-window detection and disk size from the storage quota: Chrome 156 reports a fixed 10 GB in both (2026-11-06).
+- :visited history sniffing: partitioned per site in Chrome. Local port scans: Chrome's local network access prompt
+  breaks "no prompt on load". Opening apps by URL scheme (scheme flooding): pops dialogs.
+- Detecting logins on other sites: requests other sites on the visitor's behalf, and breaks as they change.
+- A Windows laptop's brand and model: no web API gives it; only laptop or not (battery, GPU).
+- An unlock link in the IP row: it moved the row after the first paint (CLS 0.01); the link sits under the labels.
 
 ## Research (2026-11-04)
 - BrowserLeaks: IP, JavaScript, WebRTC, Canvas, WebGL, fonts, Geolocation, feature detection, TLS (JA3 / JA4, ECH),
