@@ -1,7 +1,7 @@
 # AGENTS.md
 
 For anyone, person or AI agent, who picks up this repository. The user-facing description is in README.md; the plan,
-what is done and what was decided against are in docs/roadmap.md. 1ms.dog's operating notes (accounts, who
+what it reads, how, and what was tested are in docs/design.md. 1ms.dog's operating notes (accounts, who
 maintains what, the shared server) are in its private repository, 1ms-shell.
 
 ## What this is
@@ -19,7 +19,7 @@ Three parts:
 | --- | --- | --- |
 | The page | `src/page.html`, `src/app.js`, `src/style.css`, built into `public/` | Cloudflare Workers static assets |
 | The Worker | `src/worker.js` (`/api/me`: what the server sees; `/r/<code>` share previews), `src/tally.mjs` (anonymous counts, a Durable Object) | Cloudflare Workers |
-| The probe | `probe/` (Go): `probe.1ms.dog`, reads the raw TCP SYN, TLS ClientHello, HTTP/2 and QUIC openings a Worker can't see | A Linux server of its own |
+| The probe | `probe/` (Go), a server of its own: reads the raw TCP SYN, TLS ClientHello, HTTP/2 and QUIC openings a Worker can't see | A Linux server of its own |
 
 Rules the code keeps, and any change must too:
 
@@ -71,31 +71,36 @@ shift. `CHROME_PATH=…` picks the browser for the smoke tests.
 
 `wrangler.toml` defines the Worker `who`: static assets from `public/`, `src/worker.js`, and the Durable Object
 `TALLY` (class `Tally`, SQLite-backed). It needs no secrets. Deploy with `npx wrangler deploy` (a Cloudflare account
-logged in with `npx wrangler login`), then bind a custom domain to the Worker in the Cloudflare dashboard. On
-who.1ms.dog the Worker is connected to this GitHub repository through Cloudflare's Git integration: a push to `main`
-deploys within about a minute. After deploying, open the site and check that the new `assets/app.<hash>.js` is served.
+logged in with `npx wrangler login`), or connect the repository to the Worker with Cloudflare's Git integration so a
+push to `main` deploys. Bind `<your-domain>` to the Worker in the Cloudflare dashboard, and build with
+`SITE_URL=https://<your-domain>`. After deploying, open the site and check that the new `assets/app.<hash>.js` is
+served.
 
 ### The probe, from nothing
 
-Needs: a Linux server (systemd) with a public IPv4 (and IPv6 if possible) that nothing else listens on at 443/tcp and
-443/udp; a DNS name for it with A / AAAA records pointing straight at the server (not through a proxy or CDN: the
-probe has to see the browser's own packets); Go 1.26 to build.
+Needs: a Linux server with systemd and a public IPv4 (IPv6 too if possible), with 443/tcp and 443/udp free; a DNS
+name for it, `<probe-domain>`, whose A / AAAA records point straight at the server (not through a proxy or CDN: the
+probe has to see the browser's own packets); Go 1.26 and libpcap (`libpcap-dev` to build, the libpcap runtime
+library to run: the SYN capture uses it through cgo, so build on Linux or cross-compile with a Linux C toolchain).
 
-1. Build: `cd probe && go build -o probe .` (on the server, or `GOOS=linux GOARCH=amd64 go build` elsewhere).
-2. Upload: the binary to `/opt/1ms/who/probe` (or any directory; the unit file names the path).
-3. Unit: copy `probe/1ms-who.service` to `/etc/systemd/system/`, change `-domain` to your DNS name, then
-   `systemctl daemon-reload && systemctl enable --now 1ms-who`. It runs as a dynamic user with only
-   `CAP_NET_BIND_SERVICE`, `CAP_NET_RAW` and `CAP_NET_ADMIN` (port 443 and the raw socket for the SYN capture).
-4. Certificate: none to bring. The probe gets one from Let's Encrypt itself (autocert, TLS-ALPN-01 on 443) and caches
-   it in the state directory (`/var/lib/1ms-who`). Port 443 must be reachable from the internet for that.
-5. Firewall: open 443/tcp and 443/udp (QUIC).
-6. Verify: `curl https://<your name>/fp` answers JSON with `tcp`, `tls` and `http2` readings; `journalctl -u 1ms-who`
-   shows only startup and errors. To test before DNS is set: `probe -dev -addr :8443` serves a self-signed
-   certificate.
-7. Point the page at it: the probe's host name is in `src/app.js` (search for `probe.1ms.dog`) and in the CSP's
-   `connect-src` in `scripts/build.mjs`; change both for your own name and rebuild.
+1. Build: `cd probe && go build -o probe .`
+2. Upload: the binary to `/opt/<app>/probe`.
+3. Unit: start from `probe/1ms-who.service` (its paths and names are one deployment's): set `ExecStart` to
+   `/opt/<app>/probe -addr :443 -domain <probe-domain> -certs /var/lib/<app>` and `StateDirectory=<app>`, save it as
+   `/etc/systemd/system/<app>.service`, then `systemctl daemon-reload && systemctl enable --now <app>`. It runs as a
+   dynamic user with only `CAP_NET_BIND_SERVICE`, `CAP_NET_RAW` and `CAP_NET_ADMIN` (port 443, and the raw socket
+   for the SYN capture).
+4. Certificate: none to bring. The probe gets one from Let's Encrypt itself (autocert, TLS-ALPN-01 on 443) and keeps
+   it in `/var/lib/<app>`; port 443 must be reachable from the internet. Losing that directory only means a new
+   certificate on the next start.
+5. Firewall: open 443/tcp and 443/udp (QUIC), in the host's firewall and the provider's.
+6. Verify: `curl https://<probe-domain>/fp` answers JSON with `tcp`, `tls` and `http2` readings;
+   `journalctl -u <app>` shows only startup and errors, and no client address (`journalctl -u <app> | grep` for one
+   before calling it done). Before DNS is set: `probe -dev -addr :8443` serves a self-signed certificate.
+7. Point the page at it: the probe's host name is the `PROBE` constant in `src/app.js`, the CSP's `connect-src` in
+   `scripts/build.mjs`, and the four probe rows' labels in `src/sniffers.mjs`; change them and rebuild.
 
-Other 1ms.dog tools read `/fp` and `/conn` too: keep those field names as `probe/README.md` lists them.
+Other tools may read `/fp` and `/conn`: keep their field names as `probe/README.md` lists them.
 
 ## Layout
 
@@ -111,6 +116,6 @@ src/pages.mjs      the topic pages
 src/i18n/          10 languages
 scripts/build.mjs  builds public/; scripts/critical.mjs the first screen's inlined CSS
 scripts/smoke.mjs  browser smoke test
-probe/             probe.1ms.dog (Go)
-docs/roadmap.md    plan, done, decided against, research
+probe/             the probe server (Go)
+docs/design.md     what is read and how, tested conclusions, research
 ```
