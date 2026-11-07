@@ -1,0 +1,54 @@
+name: Probe release
+
+# The probe (probe/) built for linux/amd64 and published as a GitHub Release whenever its code lands on main, so a
+# server can download it instead of installing Go: tag server-<short commit>, marked latest, with SHA256SUMS.
+#   https://github.com/yt1988/who-are-you/releases/latest/download/probe
+#   https://github.com/yt1988/who-are-you/releases/latest/download/SHA256SUMS
+# The SYN capture uses libpcap through cgo, so the binary isn't static: it needs the libpcap runtime library on the
+# server (Debian 13 / Ubuntu 24.04: libpcap0.8t64).
+on:
+  push:
+    branches: [main]
+    paths:
+      - "probe/**"
+      - ".github/workflows/probe-release.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: probe-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: probe/go.mod
+          cache-dependency-path: probe/go.sum
+      - name: libpcap
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libpcap-dev
+      - name: Build
+        working-directory: probe
+        env:
+          CGO_ENABLED: "1"
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          go vet ./...
+          go build -trimpath -ldflags="-s -w" -o ../dist/probe .
+      - name: Checksums
+        working-directory: dist
+        run: sha256sum probe > SHA256SUMS && cat SHA256SUMS
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="server-${GITHUB_SHA::7}"
+          gh release create "$tag" dist/probe dist/SHA256SUMS --target "$GITHUB_SHA" --latest \
+            --title "probe $tag" \
+            --notes "The probe (probe/) at ${GITHUB_SHA}, linux/amd64. Needs the libpcap runtime library (Debian 13 / Ubuntu 24.04: libpcap0.8t64). Install: see AGENTS.md, \"The probe, from nothing\"."

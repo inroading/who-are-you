@@ -80,11 +80,22 @@ served.
 
 Needs: a Linux server with systemd and a public IPv4 (IPv6 too if possible), with 443/tcp and 443/udp free; a DNS
 name for it, `<probe-domain>`, whose A / AAAA records point straight at the server (not through a proxy or CDN: the
-probe has to see the browser's own packets); Go 1.26 and libpcap (`libpcap-dev` to build, the libpcap runtime
-library to run: the SYN capture uses it through cgo, so build on Linux or cross-compile with a Linux C toolchain).
+probe has to see the browser's own packets); the libpcap runtime library (Debian 13 / Ubuntu 24.04:
+`apt install libpcap0.8t64`): the SYN capture uses it through cgo, so the binary isn't static.
 
-1. Build: `cd probe && go build -o probe .`
-2. Upload: the binary to `/opt/<app>/probe`.
+1. Get the binary. Every change to `probe/` on `main` is built for linux/amd64 by GitHub Actions
+   (`.github/workflows/probe-release.yml`) and published as a Release (tag `server-<short commit>`, the newest marked
+   latest), with its checksum:
+   ```sh
+   cd /opt/<app>
+   curl -fsSLO https://github.com/yt1988/who-are-you/releases/latest/download/probe
+   curl -fsSLO https://github.com/yt1988/who-are-you/releases/latest/download/SHA256SUMS
+   sha256sum -c SHA256SUMS && chmod +x probe
+   ```
+   A given version: `releases/download/server-<short commit>/probe`. To build it yourself instead: Go 1.26 and
+   `libpcap-dev`, then `cd probe && go build -trimpath -ldflags="-s -w" -o probe .` (on Linux, or cross-compile with
+   a Linux C toolchain).
+2. Place it at `/opt/<app>/probe` (step 1 already does, run in that directory).
 3. Unit: start from `probe/1ms-who.service` (its paths and names are one deployment's): set `ExecStart` to
    `/opt/<app>/probe -addr :443 -domain <probe-domain> -certs /var/lib/<app>` and `StateDirectory=<app>`, save it as
    `/etc/systemd/system/<app>.service`, then `systemctl daemon-reload && systemctl enable --now <app>`. It runs as a
