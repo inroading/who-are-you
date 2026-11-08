@@ -50,6 +50,7 @@ export default {
   sch_dark: "深色", sch_light: "淺色", sch_contrast: "高對比", mo_reduce: "減少動態效果", mo_no: "預設",
   s_model: "裝置型號", s_agent: "操作方式", s_ai: "瀏覽器內建 AI", md_list: "可能是 {l}", md_new: "認不出確切型號：螢幕 {w}×{h} 不在型號表裡，可能是新機型，或開了「放大顯示」", md_code: "型號代碼 {c}，裝置清單裡查不到名稱", md_laptop: "筆電", md_pc: "電腦，讀不到確切型號", dv_laptop: "{os} 筆電", ag_wait: "動一下滑鼠、點一下頁面再看", ag_touch: "觸控裝置，不看滑鼠軌跡", ag_human: "像真人：點擊前滑鼠有連續的移動軌跡", ag_agent: "像 AI 代理：滑鼠沒有移動軌跡，直接跳到目標上點擊", ag_script: "有點擊不是你按的，是指令碼發出的（isTrusted 為假）", c_bot_agent: "滑鼠每次都直接跳到目標上點擊：像是 AI 代理（Atlas、Comet 之類）在操作", c_bot_script: "頁面收到指令碼偽造的點擊：可能有擴充功能或 AI 代理在替你操作", ai_ready: "已經裝好 {m}（約 4 GB 的本機 AI 模型）", ai_can: "這台裝置跑得動 {m}，但還沒下載", ai_dl: "正在下載 {m}", ai_no: "這台裝置或瀏覽器用不了 {m}", ai_tr: "下載過的翻譯語言：{l}", ai_tr0: "沒下載過翻譯語言包", bio_pk: "能存密碼金鑰", bio_hy: "能用手機掃碼登入", bio_cg: "登入框能自動填入密碼金鑰",
   gpu_webkit: "WebKit 為了防指紋一律回報這個名稱，不是你的顯示卡", c_ech_webkit: "沒開：Linux 上的 WebKit 瀏覽器還不支援 ECH",
+  unsup_n: "{b} 沒給其中 {k} 項，對你的隱私是好事", br_this: "瀏覽器",
   wd_yes: "是：這個瀏覽器正被程式控制", wd_no: "否", ab_on: "有：誘餌廣告被藏起來了", ab_off: "沒偵測到",
   fonts_v: "測了 {of} 種，裝了 {n} 種：", rand_yes: "開：同一張圖畫兩次，結果不一樣", rand_no: "關：畫兩次完全一樣",
   rtc_off: "WebRTC 已關閉", rtc_none: "沒有公開位址",

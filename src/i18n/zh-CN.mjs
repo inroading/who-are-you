@@ -50,6 +50,7 @@ export default {
   sch_dark: "深色", sch_light: "浅色", sch_contrast: "高对比度", mo_reduce: "减少动画", mo_no: "默认",
   s_model: "设备型号", s_agent: "操作方式", s_ai: "浏览器内置 AI", md_list: "可能是 {l}", md_new: "认不出具体型号：屏幕 {w}×{h} 不在型号表里，可能是新机型，或者开了“放大显示”", md_code: "型号代码 {c}，设备表里没查到名字", md_laptop: "笔记本电脑", md_pc: "电脑，具体型号读不到", dv_laptop: "{os} 笔记本", ag_wait: "动一下鼠标、点一下页面再看", ag_touch: "触屏设备，不看鼠标轨迹", ag_human: "像真人：点击前鼠标有连续的移动轨迹", ag_agent: "像 AI 代理：鼠标没有移动轨迹，直接跳到目标上点击", ag_script: "有点击不是你点的，是脚本发出的（isTrusted 为假）", c_bot_agent: "鼠标每次都直接跳到目标上点击：像是 AI 代理（Atlas、Comet 之类）在操作", c_bot_script: "页面收到了脚本伪造的点击：可能有扩展或 AI 代理在替你操作", ai_ready: "已经装好 {m}（约 4 GB 的本地 AI 模型）", ai_can: "这台设备跑得动 {m}，但还没下载", ai_dl: "正在下载 {m}", ai_no: "这台设备或浏览器用不了 {m}", ai_tr: "下载过的翻译语言：{l}", ai_tr0: "没下载过翻译语言包", bio_pk: "能存通行密钥", bio_hy: "能用手机扫码登录", bio_cg: "登录框能自动填充通行密钥",
   gpu_webkit: "WebKit 为防指纹统一报这个名字，不是你的显卡", c_ech_webkit: "没开：Linux 上的 WebKit 浏览器还不支持 ECH",
+  unsup_n: "{b} 没给其中 {k} 项，对你的隐私是好事", br_this: "浏览器",
   wd_yes: "是：这个浏览器正被程序控制", wd_no: "否", ab_on: "有：诱饵广告被藏起来了", ab_off: "没检测到",
   fonts_v: "测了 {of} 种，装了 {n} 种：", rand_yes: "开：同一张图画两次，结果不一样", rand_no: "关：画两次完全一样",
   rtc_off: "WebRTC 已关闭", rtc_none: "没有公网地址",

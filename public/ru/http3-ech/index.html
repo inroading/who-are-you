@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="Насколько современно ваше соединение и что ему мешает?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Проверка HTTP/3, ECH и постквантовой защиты · 1ms.dog","url":"https://who.1ms.dog/ru/http3-ech/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Бесплатная проверка соединения: использует ли ваш браузер HTTP/3, скрывает ли имя сайта с помощью Encrypted Client Hello (ECH) и договаривается ли о постквантовом ключе (X25519MLKEM768) — и что говорит отсутствие одного из них о вашей сети или прокси. IP и исходные данные не сохраняются — только анонимные счётчики.","inLanguage":"ru","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Почему не используется HTTP/3?","acceptedAnswer":{"@type":"Answer","text":"HTTP/3 работает через UDP-порт 443. О том, что сайт его поддерживает, браузер узнаёт из первого ответа по TCP, поэтому при первом визите он может ещё не переключиться. Но если UDP никуда не выходит, его блокирует сеть или прокси — или прокси вообще не передаёт UDP. Многие прокси-конфигурации передают только TCP."}},{"@type":"Question","name":"Что такое ECH и почему он выключен?","acceptedAnswer":{"@type":"Answer","text":"Encrypted Client Hello шифрует имя сайта, которое TLS иначе отправляет открытым текстом, — его может прочитать любой на пути. Для этого браузеру нужны ключи сайта из DNS-записи типа HTTPS: Firefox читает их только через свой DNS over HTTPS; Chrome нужен DNS-сервер, который возвращает записи HTTPS; Safari ECH пока не использует."}},{"@type":"Question","name":"Что значит классический обмен ключами?","acceptedAnswer":{"@type":"Answer","text":"Chrome 124+, Firefox 132+ и Safari 26 по умолчанию предлагают X25519MLKEM768. Если свежий браузер в итоге получает обычный X25519, значит, посередине что-то устанавливает собственное TLS-соединение: антивирус, корпоративный прокси или прокси-клиент, который сам завершает TLS. У старых браузеров дело просто в возрасте."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.f84ccc0e90.css">
+<link rel="stylesheet" href="/assets/app.5343a2df0e.css">
 </head>
 <body>
 <div class="app">
@@ -152,7 +152,7 @@
 
 
 <script type="application/json" id="data">{"lang":"ru","paths":{"en":"/http3-ech/","zh-CN":"/zh-cn/http3-ech/","zh-TW":"/zh-tw/http3-ech/","ja":"/ja/http3-ech/","ko":"/ko/http3-ech/","es":"/es/http3-ech/","fr":"/fr/http3-ech/","de":"/de/http3-ech/","pt":"/pt/http3-ech/","ru":"/ru/http3-ech/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"http3-ech","rows":["proto","kex","tlsfp","edge"],"check":"ech","needs":["server","http3","trace"]}}</script>
-<script defer src="/assets/l.ru.ed31a72c93.js"></script>
-<script defer src="/assets/app.d93d6dedc8.js"></script>
+<script defer src="/assets/l.ru.b82f15d931.js"></script>
+<script defer src="/assets/app.0a4e15c431.js"></script>
 </body>
 </html>

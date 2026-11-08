@@ -41,7 +41,7 @@
 <meta name="twitter:description" content="How modern is your connection, and what's in the way?">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"HTTP/3, ECH and post-quantum test · 1ms.dog","url":"https://who.1ms.dog/http3-ech/","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","description":"Free connection test: whether your browser uses HTTP/3, hides the site's name with Encrypted Client Hello (ECH), and agrees on a post-quantum key (X25519MLKEM768), and what a missing one says about your network or proxy. No IP is kept, only anonymous counts of how common each value is.","inLanguage":"en","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why isn't HTTP/3 used?","acceptedAnswer":{"@type":"Answer","text":"HTTP/3 runs over UDP port 443. A browser learns that a site supports it from a first answer over TCP, so it may not switch on a first visit. But if UDP can't get out at all, a network or proxy is blocking it or doesn't carry UDP. Many proxy setups carry only TCP."}},{"@type":"Question","name":"What is ECH, and why is it off?","acceptedAnswer":{"@type":"Answer","text":"Encrypted Client Hello encrypts the name of the site you connect to, which TLS otherwise sends in the clear for anyone along the way to read. The browser needs the site's keys from a DNS HTTPS record: Firefox reads them only over its own DNS over HTTPS, Chrome needs a resolver that returns HTTPS records, and Safari doesn't use ECH yet."}},{"@type":"Question","name":"What does a classical key exchange mean?","acceptedAnswer":{"@type":"Answer","text":"Chrome 124+, Firefox 132+ and Safari 26 offer X25519MLKEM768 by default. A current browser that ends up with plain X25519 points to something in between making its own TLS connection: an antivirus, a company proxy, or a proxy client that terminates TLS. On older browsers it just means the browser is old."}}]}]}</script>
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/app.f84ccc0e90.css">
+<link rel="stylesheet" href="/assets/app.5343a2df0e.css">
 </head>
 <body>
 <div class="app">
@@ -152,7 +152,7 @@
 
 
 <script type="application/json" id="data">{"lang":"en","paths":{"en":"/http3-ech/","zh-CN":"/zh-cn/http3-ech/","zh-TW":"/zh-tw/http3-ech/","ja":"/ja/http3-ech/","ko":"/ko/http3-ech/","es":"/es/http3-ech/","fr":"/fr/http3-ech/","de":"/de/http3-ech/","pt":"/pt/http3-ech/","ru":"/ru/http3-ech/"},"base":{"en":"/","zh-CN":"/zh-cn/","zh-TW":"/zh-tw/","ja":"/ja/","ko":"/ko/","es":"/es/","fr":"/fr/","de":"/de/","pt":"/pt/","ru":"/ru/"},"focus":{"page":"http3-ech","rows":["proto","kex","tlsfp","edge"],"check":"ech","needs":["server","http3","trace"]}}</script>
-<script defer src="/assets/l.en.ccc3727f72.js"></script>
-<script defer src="/assets/app.d93d6dedc8.js"></script>
+<script defer src="/assets/l.en.16f0760b9f.js"></script>
+<script defer src="/assets/app.0a4e15c431.js"></script>
 </body>
 </html>

@@ -353,7 +353,10 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 .prog { position: absolute; left: 0; right: 0; top: -1px; height: 2px; overflow: hidden; }
 .prog i { display: block; height: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .25s, opacity .4s .3s; }
 .prog.end i { opacity: 0; }
-.prog-t { font: 12.5px var(--f-num); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 12ch; }
+/* (it may end with what the browser withheld: it wraps in its own column, two lines at most, rather than push the
+   buttons onto a row of their own; on a phone, where it has a row to itself, both lines are kept from the start) */
+.prog-t { font: 12.5px/1.35 var(--f-num); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 12ch; flex: 1 1 14ch; }
+@media (max-width: 720px) { .prog-t { min-height: 2.7em; } }
 .acts { margin-left: auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; min-width: 0; }   /* wraps rather than running past the edge (a 430px phone, a long language) */
 
 /* every sniffer: rows keep their size from the first paint; only the text inside changes */

@@ -169,7 +169,7 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
   if (CHECK && !EMBED) { const a = $("#checkGo"); a.href = inLang(CHECK); a.innerHTML = esc(t("go_check")) + EXT; a.hidden = false; }
   // the row under the bar takes its place from the start when it will hold something, so nothing moves later
   if (!EMBED && (store.get("who:prev") || store.get("who:hist"))) $("#vMeta").hidden = false;
-  let gen = 0, done = new Set();
+  let gen = 0, done = new Set(), unsup = new Set();
   // fill a row: html is trusted markup built here, everything read from the browser or the server goes through esc()
   function row(id, html, opt = {}) {
     const r = PR[id]; if (!r || done.has(id)) return;
@@ -182,12 +182,17 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
     progress();
   }
   const txt = (id, s, opt) => row(id, esc(s), opt);
-  const na = (id, key = "v_unsup") => row(id, esc(t(key)), { na: true });
+  // (the rows the browser itself withholds, "this browser doesn't provide": counted for the line under the portrait)
+  const na = (id, key = "v_unsup") => { if (key === "v_unsup" && PR[id] && !done.has(id)) unsup.add(id); row(id, esc(t(key)), { na: true }); };
   function progress() {
     const n = done.size;
     $("#prog i").style.transform = `scaleX(${n / N})`;
     $("#prog").classList.toggle("end", n >= N);
-    $("#progTxt").textContent = n >= N ? t("done_n", { n: N }) : t("progress", { n, of: N });
+    // A browser that withholds many readings (Safari, Firefox, Brave) can look like a test that failed: say whose
+    // choice it is, and that it is a good one
+    const br = (R && R.br && R.br.name) || t("br_this");
+    $("#progTxt").textContent = n >= N ? t("done_n", { n: N }) + (unsup.size >= 5 ? " · " + t("unsup_n", { b: br, k: unsup.size }) : "")
+      : t("progress", { n, of: N });
     post({ type: "progress", done: n, total: N, text: $("#progTxt").textContent });
   }
   // run a sniffer; one that throws marks its rows as unreadable
@@ -2261,7 +2266,7 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
   /* ---------- a run ---------- */
   async function run() {
     const g = ++gen;
-    R = { t0: performance.now() }; done = new Set();
+    R = { t0: performance.now() }; done = new Set(); unsup = new Set();
     // A topic page runs what its own check and rows need (src/pages.mjs "needs") beside the local readings every check
     // rests on; the main page runs every sniffer
     const NEED = D.focus ? new Set(D.focus.needs || []) : null, on = k => !NEED || NEED.has(k);
