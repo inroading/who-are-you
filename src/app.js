@@ -24,6 +24,14 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
   const K = { seen: "who:seen", optout: "who:optout", scene: "who:scene", theme: "who:theme", lang: "who:lang", mask: "who:mask", last: "who:last", prev: "who:prev", target: "who:target", hist: "who:hist" };
   const dn = type => { try { return new Intl.DisplayNames([LANG], { type }); } catch (e) { return null; } };
   const REG = dn("region"), LNG = dn("language");
+  // Cloudflare names cities in English ("Tokyo"): in the languages that write them in another script, the city's own
+  // name in that language (scripts/cities.mjs, public/assets/city/), loaded on those pages only; any other stays as is
+  let CITIES = {};
+  const citiesP = ["ja", "ko", "zh-CN", "zh-TW", "ru"].includes(LANG)
+    ? fetch("/assets/city/" + LANG.toLowerCase() + ".json").then(r => r.ok ? r.json() : {}).then(m => { CITIES = m || {}; }).catch(() => {}) : Promise.resolve();
+  const cityName = s => s ? CITIES[String(s).toLowerCase()] || s : s;
+  // a city and its region, named in the page's language, the region left out when it says the same ("東京, 東京")
+  const place = (...parts) => parts.filter(Boolean).map(cityName).filter((p, i, a) => a.indexOf(p) === i);
   // (Taiwan: "中国台湾 / Taiwan, China" and China's flag, in every language; src/regions.mjs)
   const country = cc => { if (cc === "TW") return TW[LANG]; try { return REG ? REG.of(cc) : cc; } catch (e) { return cc; } };
   // a language's name, Taiwan's part named the same way ("中文（中国台湾）")
@@ -201,7 +209,8 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
     R.srv = j;
     row("ip", flagged(null, j.ip + " · IPv" + j.v, ipqsOf(j.ip)));
     // (the place and the point are an IP database's guess for the address, said so on the row itself)
-    row("geo", c.country ? flagged(c.country, [c.city, c.region, country(c.country)].filter(Boolean).join(", ") + t("ex_geo")) : esc(t("v_empty")), c.country ? { why: t("ex_geo_why") } : { na: true });
+    await within(citiesP, 1500, null);
+    row("geo", c.country ? flagged(c.country, [...place(c.city, c.region), country(c.country)].join(", ") + t("ex_geo")) : esc(t("v_empty")), c.country ? { why: t("ex_geo_why") } : { na: true });
     if (c.latitude != null) txt("coords", [(+c.latitude).toFixed(2) + ", " + (+c.longitude).toFixed(2), c.postalCode].filter(Boolean).join(" · ") + t("ex_geo"), { why: t("ex_geo_why") }); else na("coords", "v_empty");
     if (c.asn) row("isp", asnLink(c.asn) + esc(" · " + (c.asOrganization || ""))); else na("isp", "v_empty");
     if (c.timezone) txt("tzip", c.timezone + " · UTC" + offTxt(tzOffset(c.timezone)) + tzNote(c.timezone)); else na("tzip", "v_empty");
@@ -1401,7 +1410,7 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
   function returnVisit(P) {
     let last = null;
     try { last = JSON.parse(store.get(K.last) || "null"); } catch (e) {}
-    const where = P.city || (P.cc ? country(P.cc) : "");
+    const where = cityName(P.city) || (P.cc ? country(P.cc) : "");
     const parts = R.fpParts || {};
     store.set(K.last, JSON.stringify({ at: Date.now(), fp: P.rand ? null : P.fp, where, br: R.browser || "", parts }));
     $("#forget").hidden = false;
@@ -1448,7 +1457,7 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
     const soft = P.nat && (P.natFrom || []).length === 1 && P.natFrom[0] === "langs";
     blank("nat", P.nat ? t(soft ? "pt_nat_soft" : "pt_nat_sure", { c: flagged(P.nat, country(P.nat)) }) : esc(t("pt_nat_na")), P.natFrom || BLANKS.nat, soft ? t("pt_nat_soft_why") : "");
     // (the city is the address's, from an IP database: said so in the sentence, the reason on hover or tap)
-    blank("city", shared && !P.city ? esc(t("masked")) : P.cc ? flagged(P.cc, [P.city, country(P.cc)].filter(Boolean).join(", ") + t("ex_geo")) : U, BLANKS.city,
+    blank("city", shared && !P.city ? esc(t("masked")) : P.cc ? flagged(P.cc, [...place(P.city), country(P.cc)].join(", ") + t("ex_geo")) : U, BLANKS.city,
       shared && !P.city ? t("masked_why") : P.cc ? t("ex_geo_why") : "");
     BL.city.classList.toggle("hid", shared && !P.city);
     BL.isp.classList.toggle("hid", shared && !P.org);
@@ -2239,6 +2248,8 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
     $("#mine").onclick = mine;
     $("#progTxt").textContent = " "; $("#todo").hidden = true;
     paint(P, true);
+    // (the city again in the page's language, once its names are in: the same width or close, the blank keeps its place)
+    if (P.city) citiesP.then(() => { if (cityName(P.city) !== P.city) paint(P, true); });
     for (const id of CHECKS) if (!(P.ck || {})[id]) { CK[id].hidden = true; const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.hidden = true; }
     paintChecks(P.ck || {}, P.cc, true);
     readings(P, P.ck || {});

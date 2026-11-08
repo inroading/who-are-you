@@ -62,6 +62,8 @@ shift. `CHROME_PATH=…` picks the browser for the smoke tests.
 - `npm run tz`: time zone → country, from the tz database (writes `src/tz.mjs`). When the tz database changes.
 - `npm run models`: Android model codes → names, from Google Play's device list and MobileModels (writes
   `public/assets/m/`, licensed CC BY-NC-SA 4.0 as MobileModels is). Monthly.
+- `node scripts/cities.mjs`: city names in ja, ko, zh-CN, zh-TW and ru for the English names Cloudflare gives, from
+  Wikidata (CC0; writes `public/assets/city/`). Rarely.
 - iPhone and iPad screens in `src/models.mjs`: by hand, when Apple ships a new screen size (usually September).
 - `npm run og`: the link-preview images (`public/og/`), after the hero's wording changes.
 
