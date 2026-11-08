@@ -9,7 +9,7 @@ import { TW, flagCode } from "./regions.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
 import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
-import { appleModel, pcKind, bucket } from "./models.mjs";
+import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
 
 (function () {
   "use strict";
@@ -427,7 +427,10 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
       if (name) { d.model = name; return txt("model", name + " · " + code); }
       return txt("model", t("md_code", { c: code }));
     }
-    if (d.kind === "pc" && pcKind({ battery: R.battery, gpu: R.gpuRaw || "" }) === "laptop") { R.laptop = true; return txt("model", t("md_laptop")); }
+    // (a battery is only evidence if the lie check didn't already find navigator.getBattery rewritten: the API it
+    // calls fake can't be the one that decides the model)
+    const batteryTrusted = !(R.lies && R.lies.list.some(x => /getBattery/i.test(x)));
+    if (d.kind === "pc" && pcKind({ battery: R.battery, gpu: R.gpuRaw || "", batteryTrusted }) === "laptop") { R.laptop = true; return txt("model", t("md_laptop")); }
     if (d.kind === "pc") return txt("model", t("md_pc"));
     na("model");
   }
@@ -513,11 +516,14 @@ import { appleModel, pcKind, bucket } from "./models.mjs";
   async function battery() {
     if (!navigator.getBattery) return na("battery");
     const b = await within(navigator.getBattery(), 1500, null);
-    if (!b) return na("battery");
-    R.battery = b;
+    // a reading that isn't one (a NaN level from a rewritten or a broken API) is a failed read, not a battery: it
+    // says nothing about the device (1ms-shell#88)
+    const r = b && batteryReading(b);
+    if (!r) return na("battery", "v_fail");
+    R.battery = r;
     // a desktop reports a full battery that is always charging and never needs to
-    if (b.level === 1 && b.charging && b.chargingTime === 0) txt("battery", t("bat_ac"));
-    else txt("battery", t("bat_v", { p: Math.round(b.level * 100), s: t(b.charging ? "bat_chg" : "bat_dis") }));
+    if (r.level === 1 && r.charging && r.chargingTime === 0) txt("battery", t("bat_ac"));
+    else txt("battery", t("bat_v", { p: Math.round(r.level * 100), s: t(r.charging ? "bat_chg" : "bat_dis") }));
   }
 
   async function media() {

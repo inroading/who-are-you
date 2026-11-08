@@ -6,7 +6,8 @@
 //   Mac: Chromium names the chip (WebGL "Apple M3 Pro"); a built-in display's default size names the MacBook.
 //   Android: Client Hints' model code, looked up in Google Play's device list (scripts/models.mjs writes it to
 //     public/assets/m/, one small file per bucket()).
-//   PC: a battery that runs down, or a "Laptop GPU", makes it a laptop.
+//   PC: a battery that runs down, or a "Laptop GPU", makes it a laptop; a battery reading that isn't one (a NaN
+//     level, a missing field) is no evidence at all.
 
 // the file of public/assets/m/ an Android model code is in
 export const bucket = code => { let h = 0; for (const ch of String(code).toUpperCase()) h = (h * 31 + ch.codePointAt(0)) >>> 0; return h & 255; };
@@ -73,10 +74,25 @@ export function appleModel({ kind, os, ua = "", w, h, dpr = 1, gpu = "" }) {
   return null;
 }
 
+// A battery reading worth believing: level a real fraction of a full charge (0–1), charging a boolean, chargingTime a
+// number (Chrome says Infinity while the battery isn't charging). A rewritten or a broken API gives NaN, a missing
+// field or an out-of-range level; that is no reading at all, never a laptop's battery (1ms-shell#88: navigator.
+// getBattery replaced, its NaN level turned a desktop into a laptop).
+export function batteryReading(b) {
+  if (!b || typeof b !== "object") return null;
+  const { level, charging, chargingTime } = b;
+  if (typeof level !== "number" || !Number.isFinite(level) || level < 0 || level > 1) return null;
+  if (typeof charging !== "boolean") return null;
+  if (typeof chargingTime !== "number" || Number.isNaN(chargingTime) || chargingTime < 0) return null;
+  return { level, charging, chargingTime };
+}
+
 // a laptop or a desktop, when something tells: a battery that isn't full and charging forever (a desktop's), a GPU
-// sold as a laptop part, a Windows on Arm chip (only in laptops and tablets so far)
-export function pcKind({ battery, gpu = "" }) {
+// sold as a laptop part, a Windows on Arm chip (only in laptops and tablets so far). batteryTrusted is false when the
+// lie check already found navigator.getBattery rewritten: an API it calls fake decides nothing.
+export function pcKind({ battery, gpu = "", batteryTrusted = true }) {
   if (/Laptop GPU|Mobile|Max-Q|Adreno|Snapdragon/i.test(gpu)) return "laptop";
-  if (battery && !(battery.level === 1 && battery.charging && battery.chargingTime === 0)) return "laptop";
+  const b = batteryTrusted ? batteryReading(battery) : null;
+  if (b && !(b.level === 1 && b.charging && b.chargingTime === 0)) return "laptop";
   return null;
 }

@@ -66,11 +66,13 @@ const quick = process.argv.includes("quick");
 // a few at a time: each page spends most of its run waiting
 // (each runner on its own server: fn gets the item and that server's address)
 async function pool(items, n, fn) { const q = [...items]; await Promise.all(Array.from({ length: n }, async (_, i) => { while (q.length) await fn(q.shift(), bases[i]); })); }
-async function open(url) {
+// before: a function run in the page before any of its own scripts (a stand-in for a reading a report is about)
+async function open(url, before, arg) {
   const page = await browser.newPage(), errors = [];
   page.on("pageerror", e => errors.push(String(e.message || e)));
   page.on("console", m => { if (m.type() === "error" && !/Failed to load resource|ERR_NAME_NOT_RESOLVED/.test(m.text())) errors.push("console: " + m.text()); });
   await page.setViewport({ width: 1280, height: 900 });
+  if (before) await page.evaluateOnNewDocument(before, arg);
   await page.goto(url, { waitUntil: "load" });
   return { page, errors };
 }
@@ -126,6 +128,30 @@ await pool(LANGS, N, async ([lang, slug], base) => {
   }
   await page.close();
 });
+
+// The visitor's report (1ms-shell#88): navigator.getBattery replaced with a stub, so a desktop read like a laptop.
+// The lie check sees the swap, so the battery cannot name the device; and a NaN level is no reading at all, so no
+// NaN may reach the page. A laptop-shaped stub (0.62, charging) would decide "laptop" if either defence failed.
+for (const broken of [false, true]) {
+  console.log(broken ? "battery: NaN" : "battery: replaced");
+  const { page, errors } = await open(`${base}/`, nan => {
+    navigator.getBattery = async () => nan ? { level: NaN, charging: true, chargingTime: 0 } : { level: 0.62, charging: true, chargingTime: 5400 };
+  }, broken);
+  await page.waitForFunction(() => !document.querySelector("#rerun").disabled, { timeout: 30000 }).catch(() => fail("battery", "the run never finished"));
+  const r = await page.evaluate(() => ({
+    model: (document.querySelector('.pr[data-s="model"] .pa') || {}).textContent || "",
+    gpu: (document.querySelector('.pr[data-s="gpu"] .pa') || {}).textContent || "",
+    battery: (document.querySelector('.pr[data-s="battery"] .pa') || {}).textContent || "",
+    pc: (window.L1MS || {}).md_pc || "",
+    story: document.querySelector("#story").textContent,
+  }));
+  for (const e of errors) fail("battery", "script error: " + e);
+  // (a card sold as a laptop's names the laptop by itself, with or without a battery: only other machines are judged)
+  if (!/Laptop GPU|Mobile|Max-Q|Adreno|Snapdragon/i.test(r.gpu) && r.model !== r.pc) fail("battery", `a replaced getBattery named the device "${r.model}", not "${r.pc}"`);
+  if (broken) { if (/NaN/.test(r.battery + r.story)) fail("battery", "a NaN reading reached the page: " + r.battery); }
+  else if (!/62/.test(r.battery)) fail("battery", `the stand-in never reached the page (battery reads "${r.battery}")`);
+  await page.close();
+}
 
 // the topic pages: their focus panel fills with the verdict and every row it repeats
 // (a sample: every topic in Chinese and English, and one topic in every language; their texts in every language are the

@@ -3,7 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { appleModel, pcKind, bucket, iosMajor } from "../src/models.mjs";
+import { appleModel, pcKind, batteryReading, bucket, iosMajor } from "../src/models.mjs";
 import { checks } from "../src/infer.mjs";
 
 const IOS18 = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1";
@@ -39,9 +39,33 @@ test("Mac: the built-in display names the MacBook, Chromium's WebGL the chip", (
 
 test("PC: a battery that runs down or a laptop GPU makes a laptop; a desktop's battery says nothing", () => {
   assert.equal(pcKind({ battery: { level: 0.63, charging: false, chargingTime: Infinity } }), "laptop");
+  assert.equal(pcKind({ battery: { level: 0.62, charging: true, chargingTime: 5400 } }), "laptop");
   assert.equal(pcKind({ battery: { level: 1, charging: true, chargingTime: 0 }, gpu: "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028E0) Direct3D11 vs_5_0 ps_5_0, D3D11)" }), "laptop");
   assert.equal(pcKind({ battery: { level: 1, charging: true, chargingTime: 0 }, gpu: "ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 (0x00002786) Direct3D11 vs_5_0 ps_5_0, D3D11)" }), null);
   assert.equal(pcKind({}), null);
+});
+
+// 1ms-shell#88: navigator.getBattery was replaced and read a NaN level; a desktop with a desktop card was called a
+// laptop. A reading that isn't one is no battery, so the page says "a computer", not "a laptop".
+test("PC: a battery reading that isn't one is no battery at all", () => {
+  const desktop = "ANGLE (AMD, AMD Radeon RX 9070 XT Direct3D11 vs_5_0 ps_5_0, D3D11)";
+  for (const battery of [{ level: NaN, charging: true, chargingTime: 0 }, { level: -1, charging: true, chargingTime: 0 },
+    { level: 1.5, charging: true, chargingTime: 0 }, { level: "0.5", charging: true, chargingTime: 0 },
+    { level: 0.62, charging: "yes", chargingTime: 5400 }, { level: 0.62, charging: true, chargingTime: NaN }, { level: 0.62 }, {}])
+    assert.equal(pcKind({ battery, gpu: desktop }), null);
+  assert.equal(pcKind({ battery: { level: NaN, charging: true, chargingTime: 0 } }), null);
+  // the API the lie check calls fake can't decide the model, however plausible its reading
+  assert.equal(pcKind({ battery: { level: 0.62, charging: true, chargingTime: 5400 }, batteryTrusted: false }), null);
+  // a laptop GPU still says laptop on its own
+  assert.equal(pcKind({ battery: null, gpu: "ANGLE (NVIDIA, NVIDIA GeForce RTX 4060 Laptop GPU (0x000028E0) Direct3D11 vs_5_0 ps_5_0, D3D11)" }), "laptop");
+});
+
+test("battery: a reading is believed only when it is one", () => {
+  assert.deepEqual(batteryReading({ level: 0, charging: false, chargingTime: Infinity }), { level: 0, charging: false, chargingTime: Infinity });
+  assert.deepEqual(batteryReading({ level: 1, charging: true, chargingTime: 0, dischargingTime: 10 }), { level: 1, charging: true, chargingTime: 0 });
+  for (const b of [null, undefined, {}, { level: NaN, charging: true, chargingTime: 0 }, { level: 2, charging: false, chargingTime: Infinity },
+    { level: 0.5, charging: 1, chargingTime: 0 }, { level: 0.5, charging: true, chargingTime: null }])
+    assert.equal(batteryReading(b), null);
 });
 
 test("Android: a model code is in the file its bucket names", () => {
