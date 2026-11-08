@@ -80,8 +80,8 @@ export async function build({ check = false } = {}) {
 
   const root = fileURLToPath(new URL("..", import.meta.url));
   const js = (await bundle({ entryPoints: [fileURLToPath(new URL("app.js", src))], bundle: true, minify: true, format: "iife",
-    // (old in-app browsers, Chrome 70 and Safari 12 era, can't parse ?? or ?.: one unparsable token and the page reads nothing)
-    target: ["es2019", "chrome70", "safari12", "firefox68", "edge79"],
+    // (old in-app browsers, Chrome 70 and Safari 13 era, can't parse ?? or ?.: one unparsable token and the page reads nothing)
+    target: ["es2019", "chrome70", "safari13", "firefox68", "edge79"],
     // 1ms.dog's share dialog stays out: it is copied verbatim to public/assets/share/ and loaded when someone shares
     legalComments: "none", write: false, absWorkingDir: root, external: ["/assets/share/*"] })).outputFiles[0].text;
   const cssFull = (await Promise.all(["fonts.css", "base.css", "style.css"].map(f => readFile(new URL(f, src), "utf8")))).join("\n");
