@@ -2101,6 +2101,286 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/http3-ech/"/>
   </url>
   <url>
+    <loc>https://who.1ms.dog/ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/ai-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-cn/ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/ai-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-tw/ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/ai-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ja/ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/ai-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ko/ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/ai-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/es/ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/ai-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/fr/ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/ai-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/de/ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/ai-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/pt/ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/ai-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ru/ai-agent/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/ai-agent/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/ai-agent/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/client-hints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/client-hints/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-cn/client-hints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/client-hints/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/zh-tw/client-hints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/client-hints/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ja/client-hints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/client-hints/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ko/client-hints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/client-hints/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/es/client-hints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/client-hints/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/fr/client-hints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/client-hints/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/de/client-hints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/client-hints/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/pt/client-hints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/client-hints/"/>
+  </url>
+  <url>
+    <loc>https://who.1ms.dog/ru/client-hints/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://who.1ms.dog/zh-tw/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://who.1ms.dog/ja/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://who.1ms.dog/ko/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://who.1ms.dog/es/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://who.1ms.dog/fr/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://who.1ms.dog/de/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://who.1ms.dog/pt/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://who.1ms.dog/ru/client-hints/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://who.1ms.dog/client-hints/"/>
+  </url>
+  <url>
     <loc>https://who.1ms.dog/stats/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://who.1ms.dog/stats/"/>
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://who.1ms.dog/zh-cn/stats/"/>

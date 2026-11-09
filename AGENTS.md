@@ -7,7 +7,7 @@ maintains what, the shared server) are in its private repository, 1ms-shell.
 ## What this is
 
 **Who Are You** (who.1ms.dog): a web privacy test. On opening, the page reads everything a website can read without
-asking (118 readings, called sniffers in the code) and writes one paragraph about the visitor from them: likely
+asking (124 readings, called sniffers in the code) and writes one paragraph about the visitor from them: likely
 nationality, city, language, device, network, interests, fingerprint. It then cross-checks the readings the way a
 site would to unmask a VPN, proxy or spoofed browser (14 checks, plus 4 connection protocol checks), and lists every
 reading with how it was made. 10 languages, a topic page per check, a stats page, shareable results that carry no

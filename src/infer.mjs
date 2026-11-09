@@ -311,7 +311,8 @@ export function checks(x) {
   // (on iOS the canvas is WebKit's in every browser, the same on every iPhone of a model and iOS version: steady, but shared)
   out.fp = x.rand == null ? null : x.rand ? ["ok", "c_fp_rand", {}] : x.noise ? ["ok", "c_fp_site", {}] : /^(iOS|iPadOS)/.test(x.uaOS || "") ? ["info", "c_fp_ios", {}] : ["warn", "c_fp_same", {}];
   // (and the pointer: one that jumps to each click, or clicks the browser didn't make, is an agent or a script)
-  out.bot = x.webdriver == null ? null : x.webdriver ? ["bad", "c_bot_bad", {}] : x.agent === "agent" ? ["bad", "c_bot_agent", {}] : x.agent === "script" ? ["bad", "c_bot_script", {}] : ["ok", "c_bot_ok", {}];
+  out.bot = x.webdriver == null ? null : x.webdriver ? ["bad", "c_bot_bad", {}] : x.agent === "agent" ? ["bad", "c_bot_agent", {}] : x.agent === "script" ? ["bad", "c_bot_script", {}]
+    : x.auto && x.auto.includes("headless") ? ["bad", "c_bot_headless", {}] : x.auto && x.auto.includes("cdp") ? ["bad", "c_bot_cdp", {}] : ["ok", "c_bot_ok", {}];
   // The round trip the browser measures to this site against the one Cloudflare measures on its connection: through a
   // proxy, Cloudflare only sees the proxy's leg, so the browser's is much longer. Over QUIC there is no TCP figure.
   // (a browser that coarsens its timers, as Firefox's resistFingerprinting does, can't measure it)

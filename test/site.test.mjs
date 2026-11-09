@@ -22,7 +22,10 @@ test("every language page keeps the shell contract", async () => {
     // (114 sniffers and 14 checks, every row in the HTML from the start, in the longest language)
     // (the whole page, the first screen's styles set inside it included; those have their own cap: the theme's tokens
     // in both schemes are 3 KB of it, the faces for the first screen's characters 1 KB)
-    assert.ok(h.length < 80000, lang + ": page is " + h.length + " characters");
+    // (120,000 since 2026-11-09: the Client Hints and automation rows plus two more topic pages; gzip is still around
+    // 22 KB, well inside the contract's 300 KB. The help itself no longer sits in the HTML: it ships in h.<lang>.js,
+    // fetched when help is opened, which is what let the French FAQ be written out in full again)
+    assert.ok(h.length < 100000, lang + ": page is " + h.length + " characters");
     const st = (h.match(/<style>([\s\S]*?)<\/style>/) || [])[1];
     assert.ok(st && st.length < 12000, lang + ": the first screen's styles are " + (st || "").length + " characters");
     assert.ok(!/--css:/.test(st), lang + ": the sign that the whole stylesheet has come stays in the file");

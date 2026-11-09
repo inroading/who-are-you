@@ -118,10 +118,18 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   $$("[data-close]").forEach(b => { b.onclick = closeDlg; });
   $$(".scrim").forEach(s => s.addEventListener("click", e => { if (e.target === s) closeDlg(); }));
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeDlg(); });
-  // help: one answer at a time; a picker with previous / next on phones
-  let helpIdx = 0;
-  const helpN = $$("#helpNav [data-hq]").length, STORE_Q = Math.max(0, $$("#helpNav [data-hq]").findIndex(b => b.dataset.store != null));
-  $("#helpSel").innerHTML = $$("#helpNav [data-hq]").map((b, i) => `<option value="${i}">${i + 1} / ${helpN} · ${esc(b.textContent)}</option>`).join("");
+  // help: one answer at a time; a picker with previous / next on phones. The questions ship in one file per language
+  // (fetched when help is first opened), not in every page's HTML: the same four to eight answers in 18 folders
+  let HELP = null, helpIdx = 0, helpN = 0, STORE_Q = 0;
+  const HELP_PAGE = (D.focus && D.focus.page) || "";
+  function helpRender() {
+    const docs = HELP || [];
+    helpN = docs.length; STORE_Q = typeof D.store === "number" ? D.store : 0;
+    $("#helpNav").innerHTML = docs.map(([q], i) => `<button type="button" role="tab" data-hq="${i}"${i === D.store ? " data-store" : ""} aria-selected="${i === 0}">${esc(q)}</button>`).join("");
+    $("#helpC").innerHTML = docs.map(([q, a], i) => `<article data-hqb="${i}"${i ? " hidden" : ""}><h3>${esc(q)}</h3>${a.split(/\n+/).map(p => `<p>${esc(p)}</p>`).join("")}</article>`).join("");
+    $("#helpSel").innerHTML = docs.map(([q], i) => `<option value="${i}">${i + 1} / ${helpN} · ${esc(q)}</option>`).join("");
+    $$("#helpNav [data-hq]").forEach(b => { b.onclick = () => showHelp(+b.dataset.hq); });
+  }
   function showHelp(i) {
     helpIdx = Math.max(0, Math.min(helpN - 1, i));
     $$("#helpNav [data-hq]").forEach(b => b.setAttribute("aria-selected", +b.dataset.hq === helpIdx));
@@ -130,8 +138,16 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     $$("[data-hstep]").forEach(b => { b.disabled = helpIdx + +b.dataset.hstep < 0 || helpIdx + +b.dataset.hstep >= helpN; });
     $("#helpC").scrollTop = 0;
   }
-  $("#helpBtn").onclick = () => { showHelp(helpIdx); openDlg("help"); };
-  $$("#helpNav [data-hq]").forEach(b => { b.onclick = () => showHelp(+b.dataset.hq); });
+  async function openHelp(i) {
+    if (!HELP) {
+      HELP = [];
+      try { const m = await import(D.help); HELP = (m.default && (m.default[HELP_PAGE] || m.default[""])) || []; } catch (e) {}
+      helpRender();
+    }
+    showHelp(typeof i === "number" ? i : helpIdx);
+    openDlg("help");
+  }
+  $("#helpBtn").onclick = () => openHelp(helpIdx);
   $("#helpSel").onchange = e => showHelp(+e.target.value);
   $$("[data-hstep]").forEach(b => { b.onclick = () => showHelp(helpIdx + +b.dataset.hstep); });
 
@@ -334,7 +350,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     let hi = {};
     if (uad) {
       hi = { platform: uad.platform, mobile: uad.mobile, brands: uad.brands };
-      try { Object.assign(hi, await within(uad.getHighEntropyValues(["platformVersion", "architecture", "bitness", "model", "fullVersionList"]), 1500, {})); } catch (e) {}
+      try { Object.assign(hi, await within(uad.getHighEntropyValues(["platformVersion", "architecture", "bitness", "model", "fullVersionList", "formFactors", "wow64"]), 1500, {})); } catch (e) {}
     }
     R.hi = hi;
     const dv = device(ua, hi, navigator.maxTouchPoints || 0);
@@ -350,9 +366,11 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     R.br = b;
     R.browser = [b.name, b.v].filter(Boolean).join(" ");
     txt("browser", R.browser || "–");
-    if (hi.architecture) txt("arch", t("arch_v", { a: hi.architecture, b: hi.bitness || "?" }) + (dv.model ? " · " + dv.model : ""));
+    if (hi.architecture) txt("arch", t("arch_v", { a: hi.architecture, b: hi.bitness || "?" }) + (dv.model ? " · " + dv.model : "") + (hi.wow64 ? " · " + t("arch_32") : ""));
     else if (navigator.platform) txt("arch", navigator.platform);
     else na("arch");
+    // what the browser calls the device's form: Desktop, Mobile, Tablet, XR, Watch, EInk, Automotive (Chromium says)
+    if (hi.formFactors && hi.formFactors.length) txt("form", hi.formFactors.join(" · ")); else na("form");
     // a page loaded out of sight (a background pane, a prerender) can read a 0-wide screen for a moment
     if (!screen.width) await within(new Promise(r => { const f = () => screen.width ? r() : setTimeout(f, 200); f(); }), 3000, null);
     const s = screen, dpr = Math.round((devicePixelRatio || 1) * 100) / 100;
@@ -363,7 +381,8 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     else txt("screen", t("scr_v", { w: pw, h: ph, dpr, d: s.colorDepth }), { why: t("scr_which") + "\n" + t("scr_css", { w: s.width, h: s.height }) + "\n" + t("scr_avail", { w: s.availWidth, h: s.availHeight, iw: innerWidth, ih: innerHeight }) });
     if (navigator.hardwareConcurrency) txt("cpu", tn("cores", navigator.hardwareConcurrency, { n: navigator.hardwareConcurrency })); else na("cpu");
     if (navigator.deviceMemory) txt("mem", t("mem_v", { n: navigator.deviceMemory })); else na("mem");
-    txt("touch", [t("touch_v", { n: navigator.maxTouchPoints || 0 }), t(mq("(pointer: coarse)") ? "ptr_coarse" : "ptr_fine")].join(" · "));
+    txt("touch", [t("touch_v", { n: navigator.maxTouchPoints || 0 }), t(mq("(pointer: coarse)") ? "ptr_coarse" : "ptr_fine"),
+      navigator.maxTouchPoints > 0 && mq("(any-hover: hover)") ? t("touch_hybrid") : ""].filter(Boolean).join(" · "));
     const c = navigator.connection;
     if (c && (c.effectiveType || c.type)) txt("conn", [c.type, c.effectiveType, c.rtt != null ? c.rtt + " ms" : "", c.downlink ? c.downlink + " Mbps" : "", c.saveData ? "save-data" : ""].filter(Boolean).join(" · "));
     else na("conn");
@@ -408,8 +427,56 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return na("audiohw");
     const ac = new AC();
-    try { txt("audiohw", t("aud_v", { r: +(ac.sampleRate / 1000).toFixed(1), c: ac.destination.maxChannelCount })); } finally { ac.close().catch(() => {}); }
+    try {
+      // the output buffer the system's audio stack adds: another draw of the machine, and Bluetooth headphones show
+      const lat = typeof ac.baseLatency === "number" && ac.baseLatency > 0 ? Math.round(ac.baseLatency * 1000) : null;
+      txt("audiohw", t("aud_v", { r: +(ac.sampleRate / 1000).toFixed(1), c: ac.destination.maxChannelCount }) + (lat ? " · " + t("aud_lat", { l: lat }) : ""));
+    } finally { ac.close().catch(() => {}); }
   }
+  // The high-entropy Client Hints the request itself carried. The Worker asks for them with Accept-CH on /api/me's
+  // answer; the browser then adds them to a later request, which a script that rewrites navigator cannot do
+  const CH = [["sec-ch-ua-arch", "arch"], ["sec-ch-ua-bitness", "bitness"], ["sec-ch-ua-model", "model"], ["sec-ch-ua-platform-version", "platform"],
+    ["sec-ch-ua-wow64", "wow64"], ["sec-ch-ua-form-factors", "forms"], ["sec-ch-ua-full-version-list", "full"]];
+  const unq = v => String(v == null ? "" : v).replace(/"/g, "").trim();
+  async function chHints() {
+    // the hints only come after the browser has read Accept-CH on /api/me's answer, so wait for that answer
+    for (let i = 0; i < 30 && !R.srv; i++) await new Promise(r => setTimeout(r, 50));
+    let j = null;
+    try { const r = await within(fetch("/api/hints", { cache: "no-store" }), 2500, null); j = r && r.ok ? await r.json() : null; } catch (e) {}
+    if (!j || !j.h) return na("ch", "v_fail");
+    R.chHdr = j.h;
+    const got = CH.filter(([k]) => j.h[k] != null);
+    if (!got.length) return na("ch");
+    txt("ch", got.map(([k, n]) => n + " " + unq(j.h[k])).join(" · "), { why: got.map(([k]) => k + ": " + j.h[k]).join("\n") });
+  }
+
+  // A game controller the page can see, with no permission: the browser names the pad and its mapping once a button
+  // has been pressed (Firefox waits for that interaction on purpose, so this needs a button of our own)
+  function gamepad() {
+    if (!navigator.getGamepads) return na("gamepad");
+    row("gamepad", `<button type="button" class="pa-go gp-go">${esc(t("gp_btn"))}</button>`, { why: t("gp_why") });
+    $('.pr[data-s="gamepad"] .gp-go').onclick = async e => {
+      e.target.disabled = true; e.target.textContent = t("gp_wait");
+      const pads = () => [...(navigator.getGamepads() || [])].filter(Boolean);
+      let found = pads()[0] || null;
+      for (let i = 0; i < 50 && !found; i++) { await new Promise(r => setTimeout(r, 200)); found = pads()[0] || null; }
+      const a = $('.pr[data-s="gamepad"] .pa');
+      if (!found) { a.textContent = t("gp_none"); return; }
+      a.textContent = t("gp_v", { id: found.id || "–", b: (found.buttons || []).length, a: (found.axes || []).length }) + (found.mapping ? " · " + found.mapping : "");
+    };
+  }
+
+  // Whether the browser could present VR or AR here, no headset asked and no permission: an XR device a site can see
+  async function xr() {
+    const X = navigator.xr;
+    if (!X || !X.isSessionSupported) return na("xr");
+    const modes = [];
+    for (const [m, n] of [["immersive-vr", "VR"], ["immersive-ar", "AR"]]) {
+      if (await within(X.isSessionSupported(m), 1200, false)) modes.push(n);
+    }
+    txt("xr", modes.length ? modes.join(" · ") : t("xr_none"), { why: t("xr_why") });
+  }
+
   // Windows Hello, Touch ID or a fingerprint reader the browser can use for passkeys: asked, never used
   async function biometric() {
     const PK = window.PublicKeyCredential;
@@ -498,6 +565,13 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   }, { capture: true, passive: true });
   // (nothing on this page clicks for the visitor: a click it didn't get from the browser came from someone's script)
   addEventListener("click", e => { if (!e.isTrusted) { ACT.untrusted++; actNote(); } }, { capture: true, passive: true });
+  // (a pen or stylus is its own pointer type: a touchscreen with an active pen, or an Apple Pencil, says so)
+  addEventListener("pointerdown", e => {
+    if (!e.isTrusted || e.pointerType !== "pen" || R.pen) return;
+    R.pen = true;
+    const a = PR.touch && PR.touch.querySelector(".pa");
+    if (a && done.has("touch")) a.textContent += " · " + t("ptr_pen");
+  }, { capture: true, passive: true });
 
   // The browser's own AI (Chrome's Gemini Nano, Edge's Phi): whether the model is on the disk, and which translation
   // languages were downloaded, each one someone translated pages into. availability() only asks: nothing downloads.
@@ -611,7 +685,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     else na("tcpfp", j ? "v_empty" : "v_fail");
     if (tl) txt("ja4", tl.ja4, { why: t("ja4_why") + "\nJA3 " + tl.ja3 });
     else na("ja4", j ? "v_empty" : "v_fail");
-    if (h2) txt("h2fp", t("h2_v", { e: t("h2e_" + h2Engine(h2.pseudo)), p: h2.pseudo || "?" }), { why: t("h2_why") + "\n" + h2.akamai });
+    if (h2) txt("h2fp", t("h2_v", { e: t("h2e_" + h2Engine(h2.pseudo)), p: h2.pseudo || "?" }), { why: t("h2_why") + "\n" + h2.akamai + (Array.isArray(h2.settings) && h2.settings.length ? "\nSETTINGS " + h2.settings.join(" · ") : "") + (h2.window_update ? "\nWINDOW_UPDATE " + h2.window_update : "") });
     else na("h2fp", j ? (j.proto === "HTTP/2.0" ? "v_empty" : "v_unsup") : "v_fail");
     // HTTP/3: the probe offers it with its answer; asked again a little later, a browser that takes the offer
     // comes back over QUIC (a firewall that drops UDP keeps it on TCP)
@@ -946,6 +1020,25 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     txt("storage", t("sto_v", { n: e.quota >= 1e9 ? Math.round(e.quota / 1e9) + " GB" : Math.round(e.quota / 1e6) + " MB" }));
   }
 
+  // What gives an automation tool away in the page itself, read without a permission: a headless browser's traces, a
+  // driver's injected globals (Selenium, Puppeteer, Playwright, PhantomJS, Nightmare), or an Electron app's process.
+  // One weak headless sign alone proves nothing; two, or the user agent's own "HeadlessChrome", do
+  function autoTraces() {
+    const w = window, ua = navigator.userAgent, says = [];
+    const chromeUA = /Chrome\/|Chromium\/|Edg\//.test(ua) && !/Android/.test(ua);
+    if (/HeadlessChrome/i.test(ua)) says.push("HeadlessChrome in the user agent");
+    if (w.outerWidth === 0) says.push("outerWidth 0");
+    if (w.outerHeight === 0) says.push("outerHeight 0");
+    if (innerWidth === 0) says.push("innerWidth 0");
+    if (!(navigator.languages || []).length) says.push("navigator.languages empty");
+    if (chromeUA && !w.chrome) says.push("no window.chrome");
+    const headless = /HeadlessChrome/i.test(ua) || says.length >= 2;
+    const globals = Object.keys(w).filter(k => /^(cdc_|__playwright|__puppeteer|__nightmare|callPhantom|_phantom|domAutomation|_selenium)/.test(k));
+    const electron = !!(w.process && w.process.versions && w.process.versions.electron);
+    const list = [...(headless ? ["headless"] : []), ...(globals.length ? ["cdp"] : []), ...(electron ? ["electron"] : [])];
+    return { list, why: [...says, ...(globals.length ? ["driver globals: " + globals.join(", ")] : []), ...(electron ? ["process.versions.electron " + w.process.versions.electron] : [])].join("\n") };
+  }
+
   // settings and preferences the browser shares
   function prefs() {
     R.dark = mq("(prefers-color-scheme: dark)");
@@ -953,20 +1046,28 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     R.rm = mq("(prefers-reduced-motion: reduce)"); R.hc = mq("(prefers-contrast: more)") || mq("(forced-colors: active)");
     txt("motion", t(R.rm ? "mo_reduce" : "mo_no"));
     const g = mq("(color-gamut: rec2020)") ? "Rec.2020" : mq("(color-gamut: p3)") ? "Display P3" : mq("(color-gamut: srgb)") ? "sRGB" : "–";
-    txt("gamut", g + " · " + (mq("(dynamic-range: high)") ? "HDR" : "SDR"));
+    txt("gamut", g + " · " + (mq("(dynamic-range: high)") ? "HDR" : "SDR") + (mq("(video-dynamic-range: high)") ? " · " + t("gamut_hdrv") : ""));
     const dnt = navigator.doNotTrack === "1" || window.doNotTrack === "1";
     txt("dnt", "DNT " + t(dnt ? "v_on" : "v_off") + " · GPC " + t(navigator.globalPrivacyControl ? "v_on" : "v_off"));
     txt("cookies", t(navigator.cookieEnabled ? "v_on" : "v_off"));
     if (navigator.pdfViewerEnabled != null) txt("pdf", t(navigator.pdfViewerEnabled ? "v_yes" : "v_no")); else na("pdf");
     R.webdriver = !!navigator.webdriver;
     txt("webdriver", t(R.webdriver ? "wd_yes" : "wd_no"));
+    // (a headless browser, a driver's injected globals, or an Electron app: the page itself says so, no permission)
+    const at = autoTraces();
+    R.auto = at.list;
+    txt("auto", R.auto.length ? R.auto.map(k => t("auto_" + k)).join(" · ") : t("auto_none"), { why: at.why });
+    // (the identity strings a user-agent switcher forgets: they say Chromium, Firefox or WebKit on their own)
+    R.vendor = navigator.vendor; R.productSub = navigator.productSub;
+    const plugins = navigator.plugins ? [...navigator.plugins].map(x => x.name) : [];
+    txt("idstr", [navigator.vendor || "–", navigator.productSub || "–", t("id_plugins", { n: plugins.length })].join(" · "), { why: plugins.join("\n") });
     // the window, and what the system's bar (taskbar, Dock) takes off the screen
     txt("win", t("win_v", { w: innerWidth, h: innerHeight, tb: Math.max(0, screen.height - screen.availHeight) }));
-    const a11y = [["(prefers-contrast: more)", "a11y_contrast"], ["(forced-colors: active)", "a11y_forced"], ["(prefers-reduced-transparency: reduce)", "a11y_transp"], ["(inverted-colors: inverted)", "a11y_invert"], ["(prefers-reduced-data: reduce)", "a11y_data"]]
+    const a11y = [["(prefers-contrast: more)", "a11y_contrast"], ["(forced-colors: active)", "a11y_forced"], ["(prefers-reduced-transparency: reduce)", "a11y_transp"], ["(inverted-colors: inverted)", "a11y_invert"], ["(prefers-reduced-data: reduce)", "a11y_data"], ["(update: slow)", "a11y_slow"]]
       .filter(([q]) => mq(q)).map(([, k]) => t(k));
     txt("a11y", a11y.length ? list(a11y) : t("a11y_none"));
     const dm = ["fullscreen", "standalone", "minimal-ui"].find(m => mq(`(display-mode: ${m})`));
-    txt("display", t(dm === "fullscreen" ? "dm_full" : dm ? "dm_app" : "dm_tab"));
+    txt("display", t(dm === "fullscreen" ? "dm_full" : dm ? "dm_app" : "dm_tab") + (mq("(device-posture: folded)") ? " · " + t("dm_folded") : ""));
   }
 
   // an element with the class names ad blockers hide: if it has no height, something hid it
@@ -1961,7 +2062,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     $("#tally").classList.toggle("off", optedOut());
   }
   $("#tlOff").onclick = () => { store.set(K.optout, optedOut() ? "0" : "1"); paintOptout(); document.documentElement.toggleAttribute("data-nouniq", optedOut()); if (optedOut()) { $("#fpUniq").hidden = true; $$(".rar").forEach(e => e.remove()); R.uniq = null; blank("stand", esc(t("st_off"))); } };
-  $("#tlMore").onclick = () => { showHelp(STORE_Q); openDlg("help"); };
+  $("#tlMore").onclick = () => openHelp(typeof D.store === "number" ? D.store : 0);
   paintOptout();
   function traitValues() {
     const p = R.fpParts || {}, v = { os: R.osTxt, browser: R.browser, screen: /×/.test(R.screen || "") ? R.screen : null, gpu: R.gpu, langs: (R.langs || [])[0], tz: R.tz,
@@ -2120,6 +2221,25 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     // app's own scripts put into every page, which replace some functions; no extension runs there)
     if (R.lies && R.lies.list.length && !(ios && name !== "Safari")) out.push("tp_lies");
     if (R.lies && R.lies.frame.length) out.push("tp_frame");
+    // (the identity strings a user-agent switcher forgets: vendor and productSub name the engine family on their own)
+    const nm = R.br && R.br.name;
+    if (nm && R.vendor != null && R.productSub != null) {
+      const chrom = /^(Chrome|Edge|Opera|Brave|Vivaldi|Yandex|Samsung Internet)$/.test(nm), ff = nm === "Firefox", wk = nm === "Safari";
+      if ((chrom && (R.vendor !== "Google Inc." || R.productSub !== "20030107")) || (ff && (R.vendor !== "" || R.productSub !== "20100101")) ||
+        (wk && (R.vendor !== "Apple Computer, Inc." || R.productSub !== "20030107"))) out.push("tp_id");
+    }
+    // (the request's high-entropy Client Hints against the page's own: a script can rewrite navigator, not the headers)
+    if (R.chHdr && R.hi && R.hi.architecture && R.hi.bitness) {
+      const h = R.chHdr, hf = k => h[k] == null ? null : unq(h[k]);
+      const forms = v => String(v || "").split(",").map(s => unq(s)).filter(Boolean).sort().join(",");
+      const bad = (hf("sec-ch-ua-arch") != null && hf("sec-ch-ua-arch") !== R.hi.architecture) ||
+        (hf("sec-ch-ua-bitness") != null && hf("sec-ch-ua-bitness") !== R.hi.bitness) ||
+        (hf("sec-ch-ua-model") != null && hf("sec-ch-ua-model") !== (R.hi.model || "")) ||
+        (hf("sec-ch-ua-platform-version") != null && hf("sec-ch-ua-platform-version") !== (R.hi.platformVersion || "")) ||
+        (hf("sec-ch-ua-wow64") != null && (hf("sec-ch-ua-wow64") === "?1") !== !!R.hi.wow64) ||
+        (hf("sec-ch-ua-form-factors") != null && R.hi.formFactors && forms(hf("sec-ch-ua-form-factors")) !== forms(R.hi.formFactors.join(",")));
+      if (bad) out.push("tp_ch");
+    }
     return out;
   }
   // The round trip from here to this site's edge: the quickest of a few requests to Cloudflare's trace on the open
@@ -2144,7 +2264,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const res = checks({
       tz: R.tz, rfp: rfp(), tzOff: R.tzOff == null ? null : offTxt(R.tzOff), ipTzOff: c.timezone ? offTxt(tzOffset(c.timezone)) : null, ipTz: c.timezone || null, ipcc: c.country,
       langs: R.langs, dnsCC: R.dnsCC, exits: allExits(), rtc: R.rtc, ip: R.srv && R.srv.ip, asn: c.asn, org: orgName(c.asOrganization, c.asn),
-      uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, noise: R.noise, webdriver: R.webdriver, agent: ACT.state,
+      uaOS: R.dev && R.dev.os, real: !!R.dev, hintOS: R.hi && R.hi.platform, gpuOS: gpuOS(R.gpuRaw), rand: R.rand, noise: R.noise, webdriver: R.webdriver, agent: ACT.state, auto: R.auto,
       rttB: R.latDone ? R.rttB : null, coarse: R.latDone ? !!R.coarse : false, rttCf: c.clientTcpRtt || null, sys: final || R.voices ? sysOf() : undefined, tamper: R.dev && R.srv ? tampered() : null, fpb: fpbTraces(),
       conn: R.probe === undefined ? undefined : R.probe && (R.probe.tcp || R.probe.http2) ? { os: R.probe.tcp && R.probe.tcp.os, pseudo: R.probe.http2 && R.probe.http2.pseudo, engine: R.engine, mtu: R.probe.tcp && R.probe.tcp.mtu } : null,
       brName: R.br && R.br.name,
@@ -2344,7 +2464,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
       ["traces", "traces", traces], ["lies", "lies", lies], ["icu", "icu", icu], ["scrollbar", "scrollbar", scrollbar], ["extwar", "extwar", extFiles],
       ["cssv", "cssv", cssLevel], ["smooth", "smooth", smoothing], ["geoloc", "geoloc", geoloc], ["sensors", "sensors", sensors], ["etag", "etag", etagId], ["trackers", "trackers", trackers],
       ["domrect", "domrect", domRect], ["svgrect", "svgrect", svgRect], ["textm", "textm", textMetrics], ["glimg", "glimg", glImage], ["gpulim", "gpulim", gpuLimits],
-      ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav], ["ai", "ai", builtinAI], ["agent", "agent", async () => actPaint()]];
+      ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav], ["ai", "ai", builtinAI], ["xr", "xr", xr], ["gamepad", "gamepad", gamepad], ["ch", "ch", chHints], ["agent", "agent", async () => actPaint()]];
     await Promise.all([
       srv, guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
       ...S.filter(([k]) => on(k) && !(EMBED && (k === "traces" || k === "etag"))).map(([, ids, f]) => guard(ids, f)), ...probes,

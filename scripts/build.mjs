@@ -100,6 +100,12 @@ export async function build({ check = false } = {}) {
     const sjs = `window.L1MS=${JSON.stringify(strings).replace(/</g, "\\u003c")};\n`;
     const sName = `l.${lang.toLowerCase()}.${hash(sjs)}.js`;
     files["assets/" + sName] = sjs;
+    // The help's questions and answers: one file per language, fetched when help is first opened. They used to be in
+    // every page's HTML, the same four to eight questions in 18 folders, about a tenth of each page
+    const pageDocs = Object.fromEntries(Object.keys(TEXT).map(p => [p, TEXT[p][lang].docs]));
+    const hjs = `export default ${JSON.stringify({ "": base.docs, ...pageDocs }).replace(/</g, "\\u003c")};\n`;
+    const hName = `h.${lang.toLowerCase()}.${hash(hjs)}.js`;
+    files["assets/" + hName] = hjs;
 
     for (const page of pageList) {
       // a topic page has its own title, description, H1, body text and questions; everything else is the main page's
@@ -111,7 +117,9 @@ export async function build({ check = false } = {}) {
         { "@type": "WebApplication", name: (page ? T("h1") : T("app_name")) + " · 1ms.dog", url, applicationCategory: "UtilitiesApplication", operatingSystem: "Any",
           browserRequirements: "Requires JavaScript", description: T("seo_desc"), inLanguage: lang, isAccessibleForFree: true,
           offers: { "@type": "Offer", price: "0", priceCurrency: "USD" } },
-        { "@type": "FAQPage", mainEntity: docs.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a.replace(/\n+/g, " ") } })) },
+        // (the questions and answers are the page's own; a topic page repeats the same set on every folder, so only
+        // the main language page carries them as structured data: the help itself is fetched when it is opened)
+        ...(page ? [] : [{ "@type": "FAQPage", mainEntity: docs.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a.replace(/\n+/g, " ") } })) }]),
       ];
       const head = [
         `<title>${esc(T("seo_title"))}</title>`,
@@ -172,12 +180,12 @@ export async function build({ check = false } = {}) {
       const heroTitle = page ? `<h2 class="h1">${esc(base.h1)}</h2>` : `<h1>${esc(T("h1"))}</h1>`;
       // the other pages of this tool, in this language: the topic pages, and the main page from a topic page
       const topics = pageList.filter(p => p !== page).map(p => `<a href="${path(slug, p)}">${esc(p ? TEXT[p][lang].h1 : base.h1)}</a>`).join("");
-      const helpNav = docs.map(([q], i) => `<button type="button" role="tab" data-hq="${i}"${i === STORE_DOC ? " data-store" : ""} aria-selected="${i === 0}">${esc(q)}</button>`).join("");
-      const helpC = docs.map(([q, a], i) => `<article data-hqb="${i}"${i ? " hidden" : ""}><h3>${esc(q)}</h3>${a.split(/\n+/).map(p => `<p>${esc(p)}</p>`).join("")}</article>`).join("");
+      // (the help's own markup is built in the page from the language's help file: nothing of it in the HTML)
+      const helpNav = "", helpC = "";
       const langOpts = langs.map(([l]) => `<option value="${l}"${l === lang ? " selected" : ""}>${esc(I[l].name)}</option>`).join("");
       const paths = Object.fromEntries(langs.map(([l, sl]) => [l, path(sl, page)]));
       // base: every language's main page, which other 1ms.dog tools share (links to them use it)
-      const data = { lang, paths, base: Object.fromEntries(langs.map(([l, sl]) => [l, path(sl)])), focus: page ? { page, ...P } : null };
+      const data = { lang, paths, base: Object.fromEntries(langs.map(([l, sl]) => [l, path(sl)])), focus: page ? { page, ...P } : null, help: "/assets/" + hName, store: STORE_DOC };
 
       let html = tpl
         .replace(/(<(\w+)\b[^>]*\sdata-i="(\w+)"[^>]*>)([^<]*)(<\/\2>)/g, (m, open, tag, k, inner, close) => open + esc(T(k)) + close)
@@ -247,6 +255,9 @@ export async function build({ check = false } = {}) {
 /assets/l.*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
+/assets/h.*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
 /assets/fonts/*
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
@@ -263,7 +274,7 @@ export async function build({ check = false } = {}) {
 `;
 
   // generated files that are no longer produced (old hashes) are stale too
-  const gen = async () => (await readdir(new URL("assets/", pub))).filter(f => /^(app|l)\..+\.(js|css)$/.test(f)).map(f => "assets/" + f);
+  const gen = async () => (await readdir(new URL("assets/", pub))).filter(f => /^(app|l|h)\..+\.(js|css)$/.test(f)).map(f => "assets/" + f);
   const stale = [];
   for (const [f, body] of Object.entries(files)) {
     let cur = null; try { cur = await readFile(new URL(f, pub), "utf8"); } catch (e) {}

@@ -4,7 +4,7 @@ The technical side of the project: how it compares with the other privacy tests 
 and how it works, what was tested and turned out not to work, and the data that needs upkeep. How to build, test and
 deploy is in AGENTS.md.
 
-## Against the other tests (118 readings, 14 disguise checks, 4 protocol checks; 2026-11-07)
+## Against the other tests (124 readings, 14 disguise checks, 4 protocol checks; 2026-11-07)
 
 Ahead of the field: the portrait (one paragraph from all readings), disguise checks that cross-read the readings
 (time zone, language, DNS, split routing, WebRTC, data center, user agent, round trip, system languages, anti-detect
@@ -61,6 +61,16 @@ What the others had that a page needed work for, and how who covers it now:
   downloaded translation languages; passkey capabilities (getClientCapabilities).
 - 2026-11-07: a WebKit browser off Apple's systems (GNOME Web on Linux) reads as "WebKit", not Safari: WebKit reports
   "Apple GPU" on every platform, so that name alone is no Apple tell.
+- 2026-11-09: Client Hints the request itself carries (the Worker asks with Accept-CH, the page reads them back and
+  compares them with navigator, which a script can rewrite but a header cannot); device form (`formFactors`) and 32-bit
+  Windows (`wow64`); automation traces (headless browser, driver globals, Electron) feeding the automation check; the
+  identity strings a user-agent switcher forgets (`vendor`, `productSub`, plugins); a game controller behind a button;
+  VR/AR availability; audio output latency; folded-posture, slow-update, HDR-video and hybrid touchscreen-pointer
+  readings; the full HTTP/2 SETTINGS in the tooltip; two topic pages (`/ai-agent/`, `/client-hints/`).
+- 2026-11-09: the help's questions and answers moved out of every page's HTML into one `h.<lang>.js` per language,
+  fetched when help is opened (topic pages keep their own set), the FAQ structured data only on the main language
+  pages, and the page-size test ceiling raised to 100,000 characters so the French, German and Russian FAQ answers
+  could be written out in full again (gzip of the page stayed around 19 KB).
 
 ## Tested, and why not
 

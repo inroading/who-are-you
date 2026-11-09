@@ -24,9 +24,14 @@ import de from "./i18n/de.mjs";
 import pt from "./i18n/pt.mjs";
 import ru from "./i18n/ru.mjs";
 
-const json = body => new Response(JSON.stringify(body), {
-  headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" },
+const json = (body, more) => new Response(JSON.stringify(body), {
+  headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", ...more },
 });
+
+// The high-entropy Client Hints the page asks the browser to send on its next request (a script can rewrite what
+// navigator says, not what the request carries): asked for on /api/me, read on /api/hints
+const HINTS = ["Sec-CH-UA-Full-Version-List", "Sec-CH-UA-Arch", "Sec-CH-UA-Bitness", "Sec-CH-UA-Model", "Sec-CH-UA-Platform-Version",
+  "Sec-CH-UA-WoW64", "Sec-CH-UA-Form-Factors"].join(", ");
 
 // request.cf fields worth showing (all of them are on every Cloudflare plan)
 const CF = ["country", "city", "region", "regionCode", "postalCode", "latitude", "longitude", "timezone", "continent", "isEUCountry",
@@ -128,6 +133,13 @@ export default {
     if (r && request.method === "GET") return result(request, env, r, url);
     if (url.pathname === "/api/seen" || url.pathname === "/api/stats") return tally(request, env, url);
     if (url.pathname === "/api/etag") return etag(request);
+    // the high-entropy Client Hints of a request the browser made after reading Accept-CH on /api/me's answer
+    if (url.pathname === "/api/hints") {
+      if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET" } });
+      const hints = {};
+      for (const [k, v] of request.headers) if (!SKIP.test(k)) hints[k] = v;
+      return json({ h: hints }, { "Accept-CH": HINTS });
+    }
     if (url.pathname !== "/api/me") return new Response(null, { status: 404 });
     if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET" } });
     const at = Date.now();
@@ -136,6 +148,6 @@ export default {
     for (const k of CF) if (request.cf && request.cf[k] != null && request.cf[k] !== "") cf[k] = request.cf[k];
     const h = {};
     for (const [k, v] of request.headers) if (!SKIP.test(k)) h[k] = v;
-    return json({ ip, v: ip.includes(":") ? 6 : 4, cf, h, ptr: ip ? await ptr(ip) : null, at });
+    return json({ ip, v: ip.includes(":") ? 6 : 4, cf, h, ptr: ip ? await ptr(ip) : null, at }, { "Accept-CH": HINTS });
   },
 };
