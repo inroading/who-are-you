@@ -65,7 +65,7 @@ export const GROUPS = [
     { id: "model", m: "screen · GPU · Client Hints model" },
     { id: "screen", m: "screen · devicePixelRatio" },
     { id: "hz", m: "requestAnimationFrame" },
-    { id: "screens", m: "screen.isExtended · screenX" },
+    { id: "screens", m: "screen.isExtended · screenX", note: 1 },
     { id: "win", m: "innerWidth · availHeight" },
     { id: "scrollbar", m: "offsetWidth − clientWidth" },
     // (note: a small line of its own under the value, for a value that needs a phrase to be read right)

@@ -477,7 +477,7 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
   /* (the graphics card's note: on a phone it follows the value as a short phrase, so a long card name's row stays two
      lines instead of three; the full line under the value is a wide screen's) */
   .pnote { display: none; }
-  .pnote-s { display: inline; font: 12px var(--f-ui); color: var(--muted); }
+  .pnote-s { display: inline; font: 12px var(--f-ui); color: var(--muted); overflow-wrap: normal; word-break: keep-all; }
   .pnote-s::before { content: " · "; }
   .pnote-s.lie { color: var(--warn); }
   .pr { height: auto; min-height: 34px; padding-top: 7px; padding-bottom: 7px; line-height: 1.45; }   /* a wrapped value makes its row taller instead of running into the next */

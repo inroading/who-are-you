@@ -1417,6 +1417,8 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const ext = screen.isExtended;
     R.multi = ext;
     txt("screens", (ext == null ? t("v_unsup") : t(ext ? "scr_multi" : "scr_single")) + " · " + t("win_at", { x: screenX, y: screenY }));
+    // (the browser counts every display it is told about, virtual ones included: say so, like the graphics card row)
+    if (ext != null) note("screens", t("screens_note"), t("screens_note_short"));
   }
 
   function codecs() {
