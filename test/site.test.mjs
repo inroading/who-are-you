@@ -37,6 +37,8 @@ test("every sniffer, blank and check has its place before any reading", async ()
     assert.equal((h.match(/<div class="pr wait" data-s="/g) || []).length, SNIFFERS.length, lang);
     assert.equal((h.match(/<span class="bl wait" data-b="/g) || []).length, Object.keys(BLANKS).length, lang);
     assert.equal((h.match(/<li class="ckr" data-c="/g) || []).length, CHECKS.length + PROTO.length, lang);   // the checks, then the protocols
+    // one row keeps a small line under its value (the graphics card), in the HTML from the start so nothing moves
+    assert.equal((h.match(/<span class="pnote"><\/span>/g) || []).length, 1, lang + ": the graphics card's note line");
   }
   assert.equal(new Set(SNIFFERS.map(s => s.id)).size, SNIFFERS.length, "sniffer ids are unique");
   for (const ids of Object.values(BLANKS)) for (const id of ids) assert.ok(SNIFFERS.some(s => s.id === id), "blank source " + id);

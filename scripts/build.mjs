@@ -144,7 +144,8 @@ export async function build({ check = false } = {}) {
       const G = Object.fromEntries(GROUPS);
       const group = g => `<div class="pg" data-g="${g}"><h3>${esc(T("g_" + g))}<span class="pg-n">${G[g].length}</span>` +
         (g === "exit" ? `<a class="pg-a" id="egLink" target="_blank" rel="noopener" hidden>${esc(T("ex_more"))}${EXT}</a>` : "") + "</h3>" +
-        G[g].map(s => `<div class="pr wait" data-s="${s.id}"${s.s ? " data-sens" : ""}><span class="pn">${esc(T("s_" + s.id))}</span><span class="pa">…</span><code class="pm">${esc(s.m)}</code></div>`).join("") + "</div>";
+        G[g].map(s => `<div class="pr wait" data-s="${s.id}"${s.s ? " data-sens" : ""}${s.note ? " data-note" : ""}><span class="pn">${esc(T("s_" + s.id))}</span><span class="pa">…</span><code class="pm">${esc(s.m)}</code>` +
+          (s.note ? `<span class="pnote"></span>` : "") + `</div>`).join("") + "</div>";
       const groups = COLUMNS.map(col => `<div class="pcol">${col.map(group).join("")}</div>`).join("");
       // A topic page opens with its own H1, body text and the one result it is about; the portrait follows under
       // its own heading. The main page has no focus panel.

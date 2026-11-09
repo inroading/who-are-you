@@ -184,6 +184,21 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   const txt = (id, s, opt) => row(id, esc(s), opt);
   // (the rows the browser itself withholds, "this browser doesn't provide": counted for the line under the portrait)
   const na = (id, key = "v_unsup") => { if (key === "v_unsup" && PR[id] && !done.has(id)) unsup.add(id); row(id, esc(t(key)), { na: true }); };
+  // a row can keep one small line under its value (its place is in the HTML from the start: nothing moves when it is
+  // filled). For a value that needs a phrase to be read right, such as the graphics card's (1ms-shell#92): the line
+  // under the value on a wide screen, a short phrase after the value on a phone, where a long name's row would
+  // otherwise be three lines
+  function note(id, full, short, lie) {
+    const r = PR[id]; if (!r) return;
+    const el = r.querySelector(".pnote");
+    if (el) { el.textContent = full || ""; el.classList.toggle("lie", !!lie); }
+    const a = r.querySelector(".pa"); if (!a) return;
+    let s = a.querySelector(".pnote-s");
+    if (!full) { if (s) s.remove(); return; }
+    if (!s) { s = document.createElement("span"); s.className = "pnote-s"; a.appendChild(s); }
+    s.textContent = short || "";
+    s.classList.toggle("lie", !!lie);
+  }
   function progress() {
     const n = done.size;
     $("#prog i").style.transform = `scaleX(${n / N})`;
@@ -367,6 +382,9 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     // (WebKit says "Apple GPU" whatever the card: off Apple's systems, a WebKitGTK browser on Linux, that is no card)
     const mask = ren === "Apple GPU" && !/Macintosh|iPhone|iPad|iPod/.test(navigator.userAgent);
     R.gpuRaw = ren; R.gpuSoft = isSoftGpu(ren); R.gpu = R.gpuSoft || mask ? null : gpuName(ren);
+    // a stand-in for the card's name, or a software renderer: the value says so itself, so it gets no note
+    const standIn = ren === "Mozilla" || ren === "Brave" || mask || R.gpuSoft;
+    R.gpuStandIn = standIn;
     // pages draw on a laptop's integrated card; asked for high performance, the browser may use the discrete one
     try {
       const hg = document.createElement("canvas").getContext("webgl", { powerPreference: "high-performance" }), he = hg && hg.getExtension("WEBGL_debug_renderer_info");
@@ -375,6 +393,8 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const dg = discreteGpu(R.gpu, R.gpuHi, null);
     txt("gpu", R.gpuSoft ? (ren || "–") + " · " + t("gpu_soft") : mask ? ren + " · " + t("gpu_webkit") : ren === "Mozilla" ? "Mozilla · " + t("gpu_rfp") : ren === "Brave" ? t("gpu_brave") : /or similar$/.test(ren || "") && R.gpu ? t("gpu_like", { g: R.gpu }) : (R.gpu || ren || "–") + (dg ? " · " + t("gpu_d", { d: dg }) : ""),
       { why: (/or similar$/.test(ren || "") ? t("gpu_like_why") + "\n" : "") + [ven, ren, R.gpuHiRaw && R.gpuHiRaw !== ren ? R.gpuHiRaw : ""].filter(Boolean).join(" · ") });
+    // the name is only the one string the browser chose to hand over: say so under it
+    if (!standIn) note("gpu", t("gpu_note"), t("gpu_note_short"));
     const gl2 = !!document.createElement("canvas").getContext("webgl2");
     txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }));
     // everything WebGL reports about the card and driver, for the WebGL fingerprint
@@ -2277,7 +2297,8 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     // rests on; the main page runs every sniffer
     const NEED = D.focus ? new Set(D.focus.needs || []) : null, on = k => !NEED || NEED.has(k);
     if (!NEED) setTimeout(() => { if (g === gen && !R.end) stuck(); }, STUCK_MS);
-    for (const r of Object.values(PR)) { r.classList.add("wait"); r.classList.remove("na"); r.querySelector(".pa").textContent = "…"; delete r.dataset.why; }
+    for (const r of Object.values(PR)) { r.classList.add("wait"); r.classList.remove("na"); r.querySelector(".pa").textContent = "…"; delete r.dataset.why;
+      const n = r.querySelector(".pnote"); if (n) { n.textContent = ""; n.classList.remove("lie"); } }
     for (const r of Object.values(FR)) { r.classList.remove("na"); r.querySelector("b").textContent = "…"; }
     if ($("#focusV")) { $("#focusV").className = "focus-v"; $("#focusV b").innerHTML = '<i class="skl"></i>'; $("#focusV .st").textContent = ""; }
     // the paragraph shows at once, its blanks as placeholders that fill in place
@@ -2331,6 +2352,12 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     if (g !== gen) return;
     // (once the drawings and the lie check are in)
     if (on("prints") && on("lies")) shield();
+    // The graphics card's note follows the lie check: when browser APIs were found rewritten, the card's name is only
+    // what the browser chose to say, and the line says so instead of passing it off as the machine's own card
+    if (typeof R.gpuRaw === "string" && !R.gpuStandIn) {
+      if (R.lies && (R.lies.list.length || R.lies.frame.length)) note("gpu", t("gpu_note_lie"), t("gpu_note_lie_short"), true);
+      else note("gpu", t("gpu_note"), t("gpu_note_short"));
+    }
     if (on("stack")) v6mac();
     if (on("fonts") && on("gpu")) await hwid();
     // (once the system, the GPU and the battery are in)

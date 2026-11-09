@@ -3,6 +3,7 @@
 //   id  the row (its name is the string "s_<id>")
 //   m   how it is read, shown as is in every language
 //   s   sensitive: blurred when the visitor hides their address for a screenshot
+//   note  the row keeps a small line of its own under the value, empty in the HTML until the page fills it
 export const GROUPS = [
   ["net", [
     { id: "ip", m: "CF-Connecting-IP", s: 1 },
@@ -65,7 +66,8 @@ export const GROUPS = [
     { id: "screens", m: "screen.isExtended · screenX" },
     { id: "win", m: "innerWidth · availHeight" },
     { id: "scrollbar", m: "offsetWidth − clientWidth" },
-    { id: "gpu", m: "WebGL RENDERER" },
+    // (note: a small line of its own under the value, for a value that needs a phrase to be read right)
+    { id: "gpu", m: "WebGL RENDERER", note: 1 },
     { id: "webgpu", m: "navigator.gpu adapter.info" },
     { id: "gpulim", m: "GPUAdapter limits · features" },
     { id: "glx", m: "WebGL2 · MAX_TEXTURE_SIZE" },

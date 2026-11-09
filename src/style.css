@@ -394,6 +394,13 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 .pr.wait .pa { color: var(--muted); animation: blink 1.2s ease-in-out infinite; }
 .pr.na .pa { color: var(--muted); font-family: var(--f-ui); }
 .pr[data-why] { cursor: help; outline: none; }
+/* the small line under a value that needs a phrase to be read right (the graphics card: which card the browser is
+   drawing with, and whether its word for it can be believed). Its line is kept from the first paint, so filling it
+   never moves the rows below; a rewritten reading takes the warning color */
+.pnote { grid-column: 1 / -1; min-width: 0; min-height: 1.45em; font: 12px/1.45 var(--f-ui); color: var(--muted); overflow-wrap: anywhere; }
+.pnote:empty { visibility: hidden; }
+.pnote.lie { color: var(--warn); }
+.pnote-s { display: none; }
 .pr.lit { margin: 0 -8px; padding-left: 8px; padding-right: 8px; border-radius: 6px; background: var(--ink-soft); }
 .pr.lit + .pr, .pr.lit { border-top-color: transparent; }
 .masked .pr[data-sens] .pa, .masked .bl[data-b="city"], .masked .ckr[data-c="webrtc"] .ck-v { filter: blur(6px); }
@@ -467,6 +474,12 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
   .pg h3 .pg-a + .pg-n, .pg h3 .pg-a { order: 0; }
   .pg.fold .pr { display: none; }
   .pa, .pa .nw { white-space: normal; overflow-wrap: anywhere; text-overflow: clip; }
+  /* (the graphics card's note: on a phone it follows the value as a short phrase, so a long card name's row stays two
+     lines instead of three; the full line under the value is a wide screen's) */
+  .pnote { display: none; }
+  .pnote-s { display: inline; font: 12px var(--f-ui); color: var(--muted); }
+  .pnote-s::before { content: " · "; }
+  .pnote-s.lie { color: var(--warn); }
   .pr { height: auto; min-height: 34px; padding-top: 7px; padding-bottom: 7px; line-height: 1.45; }   /* a wrapped value makes its row taller instead of running into the next */
 }
 /* touch: links and small buttons on their own get a finger-sized target, looking the same */
