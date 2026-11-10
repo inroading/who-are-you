@@ -1586,18 +1586,27 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   function tzLabel(tz) {
     try { return new Intl.DateTimeFormat(LANG, { timeZone: tz, timeZoneName: "longGeneric" }).formatToParts(new Date()).find(x => x.type === "timeZoneName").value; } catch (e) { return tz; }
   }
+  // Paint only settled intro fields. This has no verdict, storage or sharing side effects.
+  function paintIntro(P, keys = ["nat", "city", "lang", "tz", "clock"], shared = false) {
+    const U = esc(t("v_unknown"));
+    if (keys.includes("nat")) {
+      const soft = P.nat && (P.natFrom || []).length === 1 && P.natFrom[0] === "langs";
+      blank("nat", P.nat ? t(soft ? "pt_nat_soft" : "pt_nat_sure", { c: flagged(P.nat, country(P.nat)) }) : esc(t("pt_nat_na")), P.natFrom || BLANKS.nat, soft ? t("pt_nat_soft_why") : "");
+    }
+    // (the city is the address's, from an IP database: said so in the sentence, the reason on hover or tap)
+    if (keys.includes("city")) {
+      blank("city", shared && !P.city ? esc(t("masked")) : P.cc ? flagged(P.cc, [...place(P.city), country(P.cc)].join(", ") + t("ex_geo")) : U, BLANKS.city,
+        shared && !P.city ? t("masked_why") : P.cc ? t("ex_geo_why") : "");
+      BL.city.classList.toggle("hid", shared && !P.city);
+    }
+    if (keys.includes("lang")) blank("lang", P.langs.length ? esc(language(P.langs[0])) : U, BLANKS.lang, P.langs.map(language).join(", "));
+    if (keys.includes("tz")) blank("tz", P.rf ? esc(t("pt_tz_rfp")) : P.tz ? esc(tzLabel(P.tz)) : U, BLANKS.tz, P.tz || "");
+    if (keys.includes("clock")) blank("clock", esc(t(P.h12 ? "ck_12" : "ck_24")), BLANKS.clock, t("hour_why"));
+  }
   function paint(P, shared) {
     const X = P.x || {}, U = esc(t("v_unknown"));
-    const soft = P.nat && (P.natFrom || []).length === 1 && P.natFrom[0] === "langs";
-    blank("nat", P.nat ? t(soft ? "pt_nat_soft" : "pt_nat_sure", { c: flagged(P.nat, country(P.nat)) }) : esc(t("pt_nat_na")), P.natFrom || BLANKS.nat, soft ? t("pt_nat_soft_why") : "");
-    // (the city is the address's, from an IP database: said so in the sentence, the reason on hover or tap)
-    blank("city", shared && !P.city ? esc(t("masked")) : P.cc ? flagged(P.cc, [...place(P.city), country(P.cc)].join(", ") + t("ex_geo")) : U, BLANKS.city,
-      shared && !P.city ? t("masked_why") : P.cc ? t("ex_geo_why") : "");
-    BL.city.classList.toggle("hid", shared && !P.city);
+    paintIntro(P, undefined, shared);
     BL.isp.classList.toggle("hid", shared && !P.org);
-    blank("lang", P.langs.length ? esc(language(P.langs[0])) : U, BLANKS.lang, P.langs.map(language).join(", "));
-    blank("tz", P.rf ? esc(t("pt_tz_rfp")) : P.tz ? esc(tzLabel(P.tz)) : U, BLANKS.tz, P.tz || "");
-    blank("clock", esc(t(P.h12 ? "ck_12" : "ck_24")), BLANKS.clock, t("hour_why"));
     blank("device", esc(!P.os ? t("dv_unknown") : (P.kind === "phone" || P.kind === "tablet" || P.kind === "mac") && P.model ? t("dv_model", { model: P.model, os: P.os })
       : t(P.lt ? "dv_laptop" : "dv_" + (P.kind || "pc"), { os: P.os })));
     blank("browser", P.browser ? esc(P.browser) : U);
@@ -1750,11 +1759,17 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
 
   /* ---------- reporting a problem (the host's dialog) ---------- */
   // When the host provides the dialog (msOpenReport), two entries sit beside the results, each starting the text
-  // box. The dialog asks this page for what the visitor saw: the portrait as a shared link carries it (no address,
-  // no fingerprint, city and network masked), with the raw readings people most often say were read wrong: the
-  // graphics card's renderer, the screen in CSS pixels and its ratio, the client hints, the engine, the keyboard.
+  // box, only once this run has a result (R.end) and never on a shared, topic or embedded view. The dialog asks this
+  // page for what the visitor saw: the portrait as a shared link carries it (no address, no fingerprint, city and
+  // network masked), with the raw readings people most often say were read wrong, e.g. the graphics card's renderer,
+  // the screen in CSS pixels and its ratio, the client hints, the engine, the keyboard, the voices and system fonts.
+  const RP_ENTRIES = [["#rpRead", "rp_read_pre"], ["#rpCheck", "rp_check_pre"]];
+  function syncReportEntries() {
+    const show = typeof window.msOpenReport === "function" && !EMBED && !D.focus && !!(R && R.end);
+    for (const [id, k] of RP_ENTRIES) { const b = $(id); if (!b) continue; b.setAttribute("data-ms-report", t(k)); b.hidden = !show; }
+  }
   if (typeof window.msOpenReport === "function" && !EMBED) {
-    for (const [id, k] of [["#rpRead", "rp_read_pre"], ["#rpCheck", "rp_check_pre"]]) { $(id).setAttribute("data-ms-report", t(k)); $(id).hidden = false; }
+    for (const [id, k] of RP_ENTRIES) $(id).setAttribute("data-ms-report", t(k));
     window.msReport = () => {
       if (!R || !R.ck || $("#rerun").disabled) return null;
       const c = (R.srv && R.srv.cf) || {}, gr = grade(R.ck, COUNTED.filter(id => R.ck[id])), hi = R.hi || {};
@@ -2415,6 +2430,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   async function run() {
     const g = ++gen;
     R = { t0: performance.now() }; done = new Set(); unsup = new Set();
+    syncReportEntries();
     // A topic page runs what its own check and rows need (src/pages.mjs "needs") beside the local readings every check
     // rests on; the main page runs every sniffer
     const NEED = D.focus ? new Set(D.focus.needs || []) : null, on = k => !NEED || NEED.has(k);
@@ -2444,6 +2460,8 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     locale(); prefs(); engine();
     const glInfo = on("gpu") ? gpu() : null;
     if (on("fonts")) fonts();
+    const intro = keys => { if (!NEED && g === gen) paintIntro(portrait(), keys); };
+    intro(["lang", "tz", "clock"]);
     const rtc = on("webrtc") ? webrtc().then(() => g === gen && judge(false)) : null;
     const h3 = on("http3") ? http3().then(() => { R.h3done = true; }) : null;
     // the page's own request, and the probes that ask other sites who you are
@@ -2467,10 +2485,15 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
       ["cssv", "cssv", cssLevel], ["smooth", "smooth", smoothing], ["geoloc", "geoloc", geoloc], ["sensors", "sensors", sensors], ["etag", "etag", etagId], ["trackers", "trackers", trackers],
       ["domrect", "domrect", domRect], ["svgrect", "svgrect", svgRect], ["textm", "textm", textMetrics], ["glimg", "glimg", glImage], ["gpulim", "gpulim", gpuLimits],
       ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav], ["ai", "ai", builtinAI], ["xr", "xr", xr], ["gamepad", "gamepad", gamepad], ["ch", "ch", chHints], ["agent", "agent", async () => actPaint()]];
-    await Promise.all([
-      srv, guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware),
-      ...S.filter(([k]) => on(k) && !(EMBED && (k === "traces" || k === "etag"))).map(([, ids, f]) => guard(ids, f)), ...probes,
-    ]);
+    const hw = guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware);
+    const tasks = new Map(S.filter(([k]) => on(k) && !(EMBED && (k === "traces" || k === "etag")))
+      .map(([k, ids, f]) => [k, guard(ids, f)]));
+    // City waits for localized city names; nationality also needs system languages and the device OS.
+    // Reuse each measurement promise: progressive rendering must never launch a second measurement.
+    const introCity = !NEED ? srv.then(() => intro(["city"])) : null;
+    const introNat = !NEED ? Promise.all([srv, hw, tasks.get("kbd"), tasks.get("voices")])
+      .then(() => intro(["nat"])) : null;
+    await Promise.all([srv, hw, ...tasks.values(), ...probes, introCity, introNat]);
     if (g !== gen) return;
     // (once the drawings and the lie check are in)
     if (on("prints") && on("lies")) shield();
@@ -2498,6 +2521,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     if (!PHONE.matches) $$("#story p").forEach(p => { p.style.minHeight = ""; });
     paintTarget(); osTips(); todo(); focusFix();
     R.end = true;
+    syncReportEntries();
     if (!EMBED) { compare(); history(); seen(); versus(); }
     $("#rerun").disabled = false; $("#share").disabled = false; $("#copyTxt").disabled = false;
     if (EMBED && !failed) post(embedResult());

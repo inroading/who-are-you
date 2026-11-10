@@ -111,12 +111,13 @@ await pool(LANGS, N, async ([lang, slug], base) => {
       if (/203\.0\.113\.7|Tokyo|KDDI/.test(JSON.stringify(P))) fail("share", "the link carries the address, city or network");
       if ("fp" in P || "x" in P) fail("share", "the link carries the fingerprint");
     }
-    const s = await open(link);
+    const s = await open(link, () => { window.msOpenReport = () => {}; });
     await s.page.waitForSelector("html.shared", { timeout: 5000 }).catch(() => fail("share", "shared view not shown"));
     await s.page.waitForSelector(".ms-recv", { timeout: 5000 }).catch(() => {});   // the banner comes with the component
     const v = await s.page.evaluate(() => ({ waiting: document.querySelectorAll(".bl.wait").length, city: document.querySelector('.bl[data-b="city"]').textContent, fp: document.querySelector("#fpId").textContent,
-      story: document.querySelector("#story").textContent, mine: !document.querySelector("#mine").hidden,
+      story: document.querySelector("#story").textContent, mine: !document.querySelector("#mine").hidden, reportHidden: document.querySelector("#rpRead").hidden,
       banner: !!document.querySelector(".ms-recv .ms-recv-b") }));
+    if (!v.reportHidden) fail("share", "the report entry showed on a shared portrait, where there is no result of the viewer's own");
     for (const e of s.errors) fail("share", "script error: " + e);
     if (v.waiting) fail("share", `${v.waiting} blanks still waiting`);
     if (v.city !== "•••") fail("share", `city shows "${v.city}"`);
@@ -128,6 +129,50 @@ await pool(LANGS, N, async ([lang, slug], base) => {
   }
   await page.close();
 });
+
+// Intro fields settle independently of a deliberately slow, unrelated sniffer.
+// Voices must still block nationality; returnVisit must run only once per completed measurement.
+console.log("progressive intro");
+{
+  const { page, errors } = await open(`${base}/?lang=en`, () => {
+    const store = Storage.prototype.setItem;
+    window.__lastWrites = 0;
+    Storage.prototype.setItem = function (key, value) { if (key === "who:last") window.__lastWrites++; return store.call(this, key, value); };
+    navigator.getBattery = () => new Promise(resolve => { window.__releaseBattery = () => resolve(null); });
+    let ready = false, changed;
+    Object.defineProperty(window, "speechSynthesis", { configurable: true, value: {
+      getVoices: () => ready ? [{ localService: true, lang: "ja-JP" }] : [],
+      addEventListener: (event, fn) => { if (event === "voiceschanged") changed = fn; },
+    } });
+    window.__releaseVoices = () => { ready = true; if (changed) changed(); };
+    window.msOpenReport = () => {};   // a stand-in for the shell's dialog: the entries must still wait for a result
+  });
+  await page.waitForFunction(() => window.__releaseBattery && !document.querySelector('.bl[data-b="lang"]').classList.contains("wait"), { timeout: 5000 });
+  const early = await page.evaluate(() => ({ natWait: document.querySelector('.bl[data-b="nat"]').classList.contains("wait"),
+    shareDisabled: document.querySelector("#share").disabled, writes: window.__lastWrites,
+    reportHidden: document.querySelector("#rpRead").hidden && document.querySelector("#rpCheck").hidden }));
+  if (!early.natWait || !early.shareDisabled || early.writes || !early.reportHidden) fail("intro", "nationality, finalization or the report entry happened before its dependencies");
+  await page.evaluate(() => window.__releaseVoices());
+  await page.waitForFunction(() => !document.querySelector('.bl[data-b="nat"]').classList.contains("wait") && !document.querySelector('.bl[data-b="city"]').classList.contains("wait"), { timeout: 5000 });
+  const partial = await page.evaluate(() => ({ intro: [...document.querySelectorAll('#story p:first-child .bl')].map(x => x.textContent),
+    batteryWait: document.querySelector('.pr[data-s="battery"]').classList.contains("wait"), shareDisabled: document.querySelector("#share").disabled, writes: window.__lastWrites }));
+  if (!partial.batteryWait || !partial.shareDisabled || partial.writes) fail("intro", "a slow unrelated sniffer did not keep the final result pending");
+  await page.evaluate(() => window.__releaseBattery());
+  await page.waitForFunction(() => !document.querySelector("#rerun").disabled, { timeout: 30000 });
+  const final = await page.evaluate(() => ({ intro: [...document.querySelectorAll('#story p:first-child .bl')].map(x => x.textContent),
+    waiting: document.querySelectorAll(".bl.wait").length, writes: window.__lastWrites }));
+  if (JSON.stringify(partial.intro) !== JSON.stringify(final.intro)) fail("intro", "a settled intro changed at finalization");
+  if (final.waiting || final.writes !== 1) fail("intro", `finalization: ${final.waiting} blanks waiting, ${final.writes} last-visit writes`);
+  if (await page.evaluate(() => document.querySelector("#rpRead").hidden || document.querySelector("#rpCheck").hidden)) fail("intro", "the report entries did not appear once the result was ready");
+  await page.click("#rerun");
+  await page.waitForFunction(() => document.querySelector("#rerun").disabled);
+  await page.waitForFunction(() => window.__releaseBattery && !document.querySelector('.bl[data-b="lang"]').classList.contains("wait"));
+  await page.evaluate(() => window.__releaseBattery());
+  await page.waitForFunction(() => !document.querySelector("#rerun").disabled, { timeout: 30000 });
+  if (await page.evaluate(() => window.__lastWrites) !== 2) fail("intro", "rerun wrote last-visit more or less than once");
+  for (const e of errors) fail("intro", "script error: " + e);
+  await page.close();
+}
 
 // The visitor's report (1ms-shell#88): navigator.getBattery replaced with a stub, so a desktop read like a laptop.
 // The lie check sees the swap, so the battery cannot name the device; and a NaN level is no reading at all, so no
