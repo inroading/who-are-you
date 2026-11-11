@@ -99,6 +99,22 @@ What the others had that a page needed work for, and how who covers it now:
   in the tooltip; never "you are in a VM".
 - 2026-11-11: two topic pages, `/vpn-leak/` (DNS, WebRTC, exits and Tor, headed by the DNS check) and `/webgpu/` (the
   adapter, its limits and the fingerprint they add), in all 10 languages.
+- 2026-11-11: every check's verdict carries its own report entry once the run ends: the button hands the host shell a
+  prefilled sentence (the check's name, what it concluded, and a blank for the truth), so a wrong verdict takes one
+  click to report. Only for the shell's own dialog, never in an embed, a shared portrait or a focus view.
+- 2026-11-11: the returning visitor's card compares this visit's seven fingerprint parts with the last one stored
+  (`who:last`), marking each the same or changed and counting them; it explains that a site needs all of them equal
+  to recognize a visitor without a cookie, and one changed part breaks the ID. It shows whenever parts were stored,
+  even when the fingerprint as a whole is unchanged.
+- 2026-11-11: an ad-profile card builds the OpenRTB bid request this page's readings would fill (site, device, IP,
+  languages, time zone, screen, OS, geo from the edge, consent absent), says which parts a real exchange adds and
+  that the interests come from a profile rather than these readings, and never sends it. It is built only when the
+  card is opened. The JSON is available whether or not the host dialog is.
+- 2026-11-11: the readings export as a JSON file (site, page, time, portrait, grade, fingerprint, every row and every
+  check's verdict, from the page as it stands) and the page prints through the browser's own dialog.
+- 2026-11-11: the font row offers the full local list behind the browser's Local Font Access permission, listing the
+  families it returns in place of the guessed one; a refusal leaves the denied note. Staged loading stays as it was:
+  rows paint as they finish, the help arrives when opened, and a topic page runs only its own subset.
 
 ## Wording
 
@@ -153,6 +169,10 @@ The sentences beside the readings follow these rules (the reports in `1ms-shell`
   feature worth probing is copied from that package's release, modules only, and the count in the row follows.
 - MobileModels is CC BY-NC-SA 4.0 (non-commercial, share-alike): public/assets/m/ carries that license; a commercial
   deployment has to drop it from scripts/models.mjs and keep Google Play's list only.
+- `/api/tor` reads the Tor Project's bulk exit list (IPv4 only) and holds it an hour; if that URL moves, the row says
+  it couldn't check rather than answering, and the list stays on the Worker.
+- The ad-profile card follows OpenRTB's bid-request names (`src/app.js`, `adProfile`); a field added upstream is a
+  change there and a sentence in its note, nothing else.
 
 ## Research (2026-11-04, 2026-11-06)
 

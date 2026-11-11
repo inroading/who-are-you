@@ -1121,7 +1121,22 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const b = base.map(w);
     R.fonts = FONTS.filter(f => base.some((g, i) => w(`"${f}", ${g}`) !== b[i]));
     R.sysFonts = SYS_FONT_LIST.filter(f => base.some((g, i) => w(`"${f}", ${g}`) !== b[i]));
-    txt("fonts", t("fonts_v", { n: R.fonts.length, of: FONTS.length }) + " " + R.fonts.join(", "), { why: R.fonts.join(", ") });
+    const val = t("fonts_v", { n: R.fonts.length, of: FONTS.length }) + " " + R.fonts.join(", ");
+    // the browser's own list of every installed font, behind its permission prompt, for the browsers that have the
+    // Local Font Access API (Chromium): asked only when the visitor clicks
+    const lf = window.queryLocalFonts ? `<button type="button" class="pa-go lf-go">${esc(t("lf_btn"))}</button>` : "";
+    row("fonts", esc(val) + lf, { why: R.fonts.join(", ") });
+    const btn = $(".pr[data-s=\"fonts\"] .lf-go");
+    if (btn) btn.onclick = async () => {
+      btn.disabled = true; btn.textContent = t("lf_wait");
+      const back = v => { done.delete("fonts"); row("fonts", esc(val + " · " + v), { why: R.fonts.join(", ") }); };
+      try {
+        const all = await window.queryLocalFonts();
+        const fam = [...new Set(all.map(f => f.family))].sort((a, b) => a.localeCompare(b));
+        R.localFonts = fam;
+        back(t("lf_n", { n: fam.length }) + (fam.length ? " " + fam.slice(0, 24).join(", ") + (fam.length > 24 ? " …" : "") : ""));
+      } catch (e) { back(t("lf_no")); }
+    };
   }
 
   // fingerprints: the same drawing, sound or setup comes out slightly differently on every system
@@ -1605,6 +1620,13 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     if ((!last || !last.at) && other.length) return t("rv_revived", { list: list(other.map(k => t("tr_" + k))) });
     if (!last || !last.at) return t("rv_first");
     const said = t(last.fp === P.fp ? "rv_same" : "rv_diff", { ago: ago(last.at), where: last.where || "?" });
+    // the fingerprint's parts, one by one, against the last visit: a site needs every one to stay the same
+    if (last.parts && Object.keys(parts).length) {
+      const keys = Object.keys(parts), same = keys.filter(k => last.parts[k] === parts[k]);
+      $("#stabL").innerHTML = keys.map(k => `<li><span>${esc(rowName(k))}</span><b class="${last.parts[k] === parts[k] ? "ok" : "bad"}">${last.parts[k] === parts[k] ? "=" : "≠"}</b></li>`).join("");
+      $("#stabD summary").textContent = t("stab_h") + " · " + t("stab_same", { a: same.length, b: keys.length });
+      $("#stabD").hidden = false;
+    }
     if (last.fp === P.fp || !last.parts) return said;
     // a browser update changes the drawing and the version at once; otherwise name the parts that moved
     const moved = Object.keys(parts).filter(k => last.parts[k] !== parts[k]);
@@ -1820,8 +1842,20 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const show = typeof window.msOpenReport === "function" && !EMBED && !D.focus && !!(R && R.end);
     for (const [id, k] of RP_ENTRIES) { const b = $(id); if (!b) continue; b.setAttribute("data-ms-report", t(k)); b.hidden = !show; }
   }
+  // each check that gives a verdict gets its own "this looks wrong" entry, carrying that check's verdict into the
+  // dialog so the report starts with the sentence it is about (the whole check is named, not only the grade)
+  function syncCheckReports() {
+    const show = typeof window.msOpenReport === "function" && !EMBED && !D.focus && !!(R && R.end && R.ck);
+    $$(".ckr").forEach(r => {
+      const b = r.querySelector(".ck-rp"); if (!b) return;
+      const id = r.dataset.c, ck = R && R.ck && R.ck[id];
+      b.hidden = !(show && ck);
+      if (show && ck) b.setAttribute("data-ms-report", t("rp_one", { c: t("c_" + id), v: ((r.querySelector(".ck-v") || {}).textContent || "").trim() }));
+    });
+  }
   if (typeof window.msOpenReport === "function" && !EMBED) {
     for (const [id, k] of RP_ENTRIES) $(id).setAttribute("data-ms-report", t(k));
+    syncCheckReports();
     window.msReport = () => {
       if (!R || !R.ck || $("#rerun").disabled) return null;
       const c = (R.srv && R.srv.cf) || {}, gr = grade(R.ck, COUNTED.filter(id => R.ck[id])), hi = R.hi || {};
@@ -1907,6 +1941,51 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     $("#copyT").textContent = t(ok ? "copied_txt" : "copy_fail");
     setTimeout(() => { $("#copyT").textContent = t("copy_txt"); }, 2000);
   };
+
+  // Everything the run read, as a file the visitor keeps: the portrait, every sniffer row, every check. Built here and
+  // downloaded from this browser; nothing is sent anywhere.
+  function exportData() {
+    const rows = $$(".pr[data-s]").map(r => ({ id: r.dataset.s, name: t("s_" + r.dataset.s), method: ((r.querySelector(".pm") || {}).textContent || "").trim(), value: ((r.querySelector(".pa") || {}).textContent || "").trim() }));
+    const checks = $$(".ckr").map(r => ({ id: r.dataset.c, name: t("c_" + r.dataset.c), verdict: ((r.querySelector(".ck-v") || {}).textContent || "").trim() }));
+    return {
+      site: location.origin, page: location.href, when: new Date().toISOString(),
+      portrait: $$("#story p").map(p => p.textContent.trim()).filter(Boolean).join("\n\n"),
+      grade: ($("#mGrade").textContent || "").trim(), fingerprint: ($("#fpId").textContent || "").trim(),
+      readings: rows, checks,
+    };
+  }
+  $("#dlJson").onclick = () => {
+    const blob = new Blob([JSON.stringify(exportData(), null, 2)], { type: "application/json" }), a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "who-are-you-" + new Date().toISOString().slice(0, 10) + ".json";
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+  $("#printPg").onclick = () => window.print();
+
+  // The bid request an ad exchange builds from readings like these: the fields OpenRTB names, filled from what this
+  // page read, shown so the visitor sees what is already known before any profile is attached. Built only when the
+  // card is opened, and nothing is sent anywhere.
+  function adProfile() {
+    if (EMBED || D.focus || document.documentElement.classList.contains("shared") || !R || !R.end) return;
+    const box = $("#adpD");
+    box.hidden = false;
+    const fill = () => {
+      if (R.adpFilled) return; R.adpFilled = true;
+      const c = (R.srv && R.srv.cf) || {}, d = R.dev || {};
+      const req = {
+        site: { domain: location.hostname, page: location.origin + location.pathname },
+        device: {
+          ua: navigator.userAgent, ip: R.srv && R.srv.ip, lang: (R.langs || [])[0], languages: R.langs || [],
+          tz: R.tz, w: screen.width, h: screen.height, dpr: devicePixelRatio || 1, devicetype: { phone: 4, tablet: 5, pc: 2 }[d.kind] || 2,
+          os: d.os, osv: d.osv, js: 1, dnt: navigator.doNotTrack === "1" ? 1 : 0,
+          geo: c.country ? { country: c.country, city: c.city, lat: c.latitude != null ? +c.latitude : undefined, lon: c.longitude != null ? +c.longitude : undefined, type: 2 } : undefined,
+        },
+        user: { ext: { consent: "none" } },
+      };
+      $("#adpJ").textContent = JSON.stringify(req, (k, v) => v === undefined ? undefined : v, 2);
+    };
+    box.addEventListener("toggle", () => { if (box.open) fill(); });
+    if (box.open) fill();
+  }
 
   // in an app's own browser: the page's address, to open it in the visitor's usual browser
   $("#iaCopy").onclick = async () => {
@@ -2462,7 +2541,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     if (!P) return false;
     P.langs = P.langs || []; P.jobs = P.jobs || []; P.x = {};
     document.documentElement.classList.add("shared");
-    $("#mine").hidden = false; $("#share").hidden = true; $("#rerun").hidden = true; $("#copyTxt").hidden = true;
+    $("#mine").hidden = false; $("#share").hidden = true; $("#rerun").hidden = true; $("#copyTxt").hidden = true; $("#dlJson").hidden = true; $("#printPg").hidden = true;
     // (testing oneself from a friend's portrait brings it along, for the comparison after the run)
     const mine = () => { location.href = (D.paths[LANG] || "/") + "?vs=" + encodeURIComponent(code); };
     $("#mine").onclick = mine;
@@ -2482,7 +2561,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   async function run() {
     const g = ++gen;
     R = { t0: performance.now() }; done = new Set(); unsup = new Set();
-    syncReportEntries();
+    syncReportEntries(); syncCheckReports();
     // A topic page runs what its own check and rows need (src/pages.mjs "needs") beside the local readings every check
     // rests on; the main page runs every sniffer
     const NEED = D.focus ? new Set(D.focus.needs || []) : null, on = k => !NEED || NEED.has(k);
@@ -2503,7 +2582,8 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     $("#vHead").textContent = t("checking"); $("#vHead").className = "v-h";
     $("#mNum").textContent = "–"; $("#mNum").className = "m-num"; $$("#segs i").forEach(i => { i.className = ""; });
     $("#fpId").innerHTML = '<i class="skl"></i>'; $("#fpArt").innerHTML = ""; $("#fpNote").textContent = t("id_note"); $("#vText").innerHTML = "&nbsp;";
-    $("#rerun").disabled = true; $("#share").disabled = true; $("#copyTxt").disabled = true; progress();
+    $("#rerun").disabled = true; $("#share").disabled = true; $("#copyTxt").disabled = true; $("#dlJson").disabled = true; $("#printPg").disabled = true; progress();
+    $("#adpD").hidden = true; $("#stabD").hidden = true;
 
     // on a wide screen each paragraph keeps the height it first had: its blanks wait a little long, so filling them
     // only shortens lines, and the page below doesn't move (on a phone the first paragraph has its own, from the stylesheet)
@@ -2574,9 +2654,10 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     if (!PHONE.matches) $$("#story p").forEach(p => { p.style.minHeight = ""; });
     paintTarget(); osTips(); todo(); focusFix();
     R.end = true;
-    syncReportEntries();
+    syncReportEntries(); syncCheckReports();
+    adProfile();
     if (!EMBED) { compare(); history(); seen(); versus(); }
-    $("#rerun").disabled = false; $("#share").disabled = false; $("#copyTxt").disabled = false;
+    $("#rerun").disabled = false; $("#share").disabled = false; $("#copyTxt").disabled = false; $("#dlJson").disabled = false; $("#printPg").disabled = false;
     if (EMBED && !failed) post(embedResult());
   }
 

@@ -299,6 +299,16 @@ html.shared #share, html[data-who-embed] #share { display: none; }
 .ck-re { border: 0; background: none; padding: 0; font: 500 12px var(--f-ui); color: var(--muted); cursor: pointer; }
 .ck-re:hover { color: var(--ink); text-decoration: underline; }
 .ck-re:disabled { cursor: default; text-decoration: none; opacity: .7; }
+.ck-rp { border: 0; background: none; padding: 0; font: 500 12px var(--f-ui); color: var(--muted); cursor: pointer; }
+.ck-rp:hover { color: var(--ink); text-decoration: underline; }
+/* the fingerprint's parts, this visit against the last: the same, or moved */
+.stab-l { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 5px; font-size: 12px; }
+.stab-l li { display: flex; justify-content: space-between; gap: 10px; }
+.stab-l b { font: 600 12px var(--f-num); }
+.stab-l b.ok { color: var(--ok); } .stab-l b.bad { color: var(--bad, #c33); }
+/* what a bid request would carry, built from the readings and sent nowhere */
+.adp-j { margin: 8px 0 0; padding: 10px 12px; max-height: 340px; overflow: auto; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--soft); font: 11px/1.55 var(--f-num); white-space: pre; tab-size: 2; }
 .ckr.re-done { animation: reDone 1.2s ease-out; }
 @keyframes reDone { from { background: var(--ink-soft); } to { background: transparent; } }
 /* the scene: pass as someone elsewhere (every check) or only privacy; the checks it leaves out are dimmed */
@@ -484,7 +494,7 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 }
 /* touch: links and small buttons on their own get a finger-sized target, looking the same */
 @media (pointer: coarse) {
-  .ck-fix, .ck-go, .ck-re, .rp-btn, .v-go, .pg-a, .focus-go { min-height: 32px; display: inline-flex; align-items: center; }
+  .ck-fix, .ck-go, .ck-re, .ck-rp, .rp-btn, .v-go, .pg-a, .focus-go { min-height: 32px; display: inline-flex; align-items: center; }
   .ck-acts { gap: 0 16px; }
   .topics a { min-height: 32px; display: inline-flex; align-items: center; }
 }
