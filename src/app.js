@@ -187,6 +187,9 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   // the row under the bar takes its place from the start when it will hold something, so nothing moves later
   if (!EMBED && (store.get("who:prev") || store.get("who:hist"))) $("#vMeta").hidden = false;
   let gen = 0, done = new Set(), unsup = new Set();
+  // (the paragraph is filled blank by blank as each reading lands, instead of all at once after the slowest probe:
+  // PARTIAL marks such a pass, which leaves a blank that isn't ready and never rewrites one already filled)
+  let PARTIAL = false, ppQueued = false, introReady = false;
   // fill a row: html is trusted markup built here, everything read from the browser or the server goes through esc()
   function row(id, html, opt = {}) {
     const r = PR[id]; if (!r || done.has(id)) return;
@@ -197,6 +200,20 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const why = opt.why || (a.scrollWidth > a.clientWidth + 1 ? a.textContent : "");
     if (why) { r.dataset.why = why; r.tabIndex = 0; } else { delete r.dataset.why; r.removeAttribute("tabindex"); }
     progress();
+    schedulePortrait();
+  }
+  // The paragraph fills as the readings do: a frame after a row lands, the blanks whose sources are all in take
+  // their answer. Not on a topic page (no portrait there), never inside a partial pass, and not before the first
+  // paragraph's own readings (its nationality rests on the system languages, so it would be a guess rewritten later)
+  function schedulePortrait() {
+    if (!introReady || D.focus || PARTIAL || ppQueued || R.end) return;
+    const myGen = gen; ppQueued = true;
+    requestAnimationFrame(() => {
+      ppQueued = false;
+      if (gen !== myGen || R.end || D.focus) return;
+      PARTIAL = true;
+      try { paint(portrait(), false); readings(portrait(), R.ck); } finally { PARTIAL = false; }
+    });
   }
   const txt = (id, s, opt) => row(id, esc(s), opt);
   // (the rows the browser itself withholds, "this browser doesn't provide": counted for the line under the portrait)
@@ -1576,7 +1593,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     return { v: 1, nat: nat ? nat.cc : null, natFrom: nat ? nat.from : null, cc: c.country || null, city: c.city || null, langs: R.langs || [],
       tz: R.tz || null, rf: rfp() || undefined, h12: !!R.h12, os: R.osTxt || null, kind: d.kind || null, model: d.model || null, lt: R.laptop || undefined, browser: R.browser || null,
       screen: R.screen || null, gpu: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) || R.gpu || null, gi: discreteGpu(R.gpu, R.gpuHi, R.wgpu, R.wgpuLo) ? R.gpu : undefined, gl: /or similar$/.test(R.gpuRaw || "") || undefined, gs: R.gpuSoft || undefined, org: orgName(c.asOrganization, c.asn), asn: c.asn ?? null,
-      nt: split ? "split" : c.asn == null ? null : isDataCenter(c.asn, c.asOrganization) ? "dc" : "home", nx: split ? split.n : 0,
+      nt: split ? "split" : R.tor === true ? "tor" : c.asn == null ? null : netKind(c.asn, c.asOrganization), nx: split ? split.n : 0,
       dns: R.dnsCC || null, dark: !!R.dark, ab: !!R.adblock, jobs: jobsOf(), fp: R.fp || null, rand: !!R.rand, app: inApp() || undefined, fz: !!R.noise || undefined, tb: (R.traces && R.traces.blocked) || undefined, hz: R.hz || null,
       ...connOf(), sh: R.shield || undefined, ln: R.lies ? (R.lies.list.length + R.lies.frame.length) || undefined : undefined,
       et: (R.etag && R.etag.seen) || undefined, lost: R.traces && R.traces.lost.length ? R.traces.lost : undefined, kept: R.traces && !R.traces.first ? R.traces.kept : undefined,
@@ -1650,6 +1667,8 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   const exitName = id => id === "ip" ? t("ex_self") : rowName(id);
   function blank(k, html, from = BLANKS[k], why) {
     const b = BL[k]; if (!b) return;
+    // a partial pass fills only a blank whose readings are all in, and only while it still waits
+    if (PARTIAL && from.length && (!from.every(id => done.has(id)) || !b.classList.contains("wait"))) return;
     b.innerHTML = html; b.classList.remove("wait");
     b.dataset.from = from.join(" ");
     b.dataset.why = why || (from.length ? t("from", { list: list(from.map(rowName)) }) : "");
@@ -1705,33 +1724,39 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
       : P.tun && P.tun !== "pppoe" ? (P.tun === "other" ? t("cn_tun2", { m: P.mtu }) : t("cn_tun", { t: { wireguard: "WireGuard", openvpn: "OpenVPN", ipsec: "IPsec" }[P.tun], m: P.mtu }))
       : P.tos || P.mtu ? t("cn_self", { ua }) : t("cn_na")));
     // the worst of it, in a sentence of its own (good news when there is none)
-    blank("wow", esc(P.mc ? t("pt_wow_mac", { mac: P.mc }) : P.mitm ? t("pt_wow_mitm") : P.cos ? t("pt_wow_os", { os: t("tos_" + P.tos), ua })
+    blank("wow", esc(P.nt === "tor" ? t("pt_wow_tor") : P.mc ? t("pt_wow_mac", { mac: P.mc }) : P.mitm ? t("pt_wow_mitm") : P.cos ? t("pt_wow_os", { os: t("tos_" + P.tos), ua })
       : P.et && (P.lost || []).includes("ls") ? t("pt_wow_etag") : P.ln >= 3 ? tn("pt_wow_lies", P.ln, { n: P.ln }) : t("pt_wow_none")), BLANKS.wow);
     blank("job", esc(P.jobs.length ? list(P.jobs.map(([k]) => t("jb_" + k))) : t("jb_none")), BLANKS.job, P.jobs.length ? t("from", { list: P.jobs.map(([, f]) => f).join(", ") }) : "");
-    $("#story").classList.remove("wait"); $("#storySk").hidden = true;
-    idCard(P, shared);
+    if (!PARTIAL) {
+      $("#story").classList.remove("wait"); $("#storySk").hidden = true;
+      idCard(P, shared);
+    }
   }
 
   /* ---------- the portrait's conclusions ---------- */
   // Three blanks are what a site makes of the readings rather than readings: what the machine is for, whether the
   // place adds up (or a site will guess a proxy), and whether clearing cookies would shake a site off.
   function readings(P, ck) {
-    const { away, spots, at, strong, one } = giveaways(ck, P);
-    const ipc = P.cc && country(P.cc);
-    // (giveaways that point to different countries each say their own: the clock's country is not the DNS's)
-    const each = strong && ipc && spots.length && !one ? list(spots.map(([k, c]) => t("gs_p_" + k, { c: country(c) }))) : null;
-    const home = one ? country(one) : !spots.length && P.nat && P.nat !== P.cc ? country(P.nat) : !spots.length && P.dns && P.dns !== P.cc ? country(P.dns) : null;
-    // (the network's blank already says "a proxy" for a data center or a split: then just the mismatch)
-    blank("read", esc(each ? t(P.nt === "dc" || P.nt === "split" ? "rd_off_each" : "rd_proxy_each", { ipc, list: each })
-      : strong && ipc && home ? t(P.nt === "dc" || P.nt === "split" ? "rd_off" : "rd_proxy", { ipc, home, list: list(away.map(k => t("gs_i_" + k))) })
-      : P.nt === "split" ? t("rd_split") : P.nt === "dc" ? t("rd_dc") : away.length && ipc && home ? t("rd_abroad", { ipc, home }) : ipc ? t("rd_home", { ipc }) : t("rd_none")));
+    // (before the checks are judged there is no verdict to state: the read blank and the labels wait for it)
+    if (ck) {
+      const { away, spots, at, strong, one } = giveaways(ck, P);
+      const ipc = P.cc && country(P.cc);
+      // (giveaways that point to different countries each say their own: the clock's country is not the DNS's)
+      const each = strong && ipc && spots.length && !one ? list(spots.map(([k, c]) => t("gs_p_" + k, { c: country(c) }))) : null;
+      const home = one ? country(one) : !spots.length && P.nat && P.nat !== P.cc ? country(P.nat) : !spots.length && P.dns && P.dns !== P.cc ? country(P.dns) : null;
+      // (the network's blank already says "a proxy" for a data center or a split: then just the mismatch)
+      blank("read", esc(P.nt === "tor" ? t("rd_tor") : each ? t(P.nt === "dc" || P.nt === "split" ? "rd_off_each" : "rd_proxy_each", { ipc, list: each })
+        : strong && ipc && home ? t(P.nt === "dc" || P.nt === "split" ? "rd_off" : "rd_proxy", { ipc, home, list: list(away.map(k => t("gs_i_" + k))) })
+        : P.nt === "split" ? t("rd_split") : P.nt === "dc" ? t("rd_dc") : P.nt === "vpn" ? t("rd_vpn") : away.length && ipc && home ? t("rd_abroad", { ipc, home }) : ipc ? t("rd_home", { ipc }) : t("rd_none")));
+    }
     // (a discrete card beside the integrated one counts as a high-end machine)
     const g = P.gpu || "", hi = !!P.gi || /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);
     const low = /UHD|HD Graphics|Iris|Radeon\(TM\) Graphics|Radeon Graphics|Vega \d+ Graphics/i.test(g), pc = P.kind === "pc" || P.kind === "mac";
     blank("rig", esc(t(P.gs ? "rg_soft" : pc && hi && P.hz >= 120 ? "rg_game" : pc && hi ? "rg_power" : pc && low ? "rg_basic" : "rg_none")));
     // how a site recognizes you anyway: scrambled (it can't), the cache's ID, a store that survived, the hardware ID
     const kept = (P.kept || []).filter(k => k !== "ls");
-    blank("track", esc(P.rand ? t("tk_rand") : P.fz ? t("tk_site") : P.et ? t("tk_etag") : (P.lost || []).includes("ls") && kept.length ? t("tk_revive", { list: list(kept.map(k => t("tr_" + k))) })
+    // (the store probes answer this, not the fingerprint alone: in a partial pass it waits for them, not for "same")
+    if (!PARTIAL || R.traces) blank("track", esc(P.rand ? t("tk_rand") : P.fz ? t("tk_site") : P.et ? t("tk_etag") : (P.lost || []).includes("ls") && kept.length ? t("tk_revive", { list: list(kept.map(k => t("tr_" + k))) })
       : P.hw ? t("tk_hw", { id: P.hw.slice(0, 4) + "·" + P.hw.slice(4, 8) }) : t("tk_same")), BLANKS.track);
     // the paragraphs after: what the machine is worth, updates, when, power, settings; then the labels and standing out
     const tier = tierOf(P);
@@ -1739,12 +1764,12 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const b = behind(P);
     blank("fresh", esc(b == null ? t("fr_na") : b <= 2 ? t("fr_new") : tn("fr_old", b, { n: b })), BLANKS.fresh, P.browser || "");
     blank("when", esc(whenOf(P)));
-    blank("power", esc(!P.bat ? t("pw_na") : P.bat === "ac" ? t("pw_ac") : t(P.bat[0] === "c" ? "pw_chg" : "pw_bat", { p: P.bat.slice(1) })));
+    blank("power", esc(!P.bat ? t("pw_na") : P.bat === "ac" ? t("pw_ac") : t(P.bat[0] === "c" ? t("pw_chg") : t("pw_bat", { p: P.bat.slice(1) }))));
     const pf = [P.fs && P.fs !== 16 && t("pf_font", { n: P.fs }), P.rm && t("pf_motion"), P.hc && t("pf_contrast")].filter(Boolean);
     blank("prefs", esc(P.fs == null && P.rm == null ? t("pf_na") : pf.length ? list(pf) : t("pf_none")));
-    labels(P, ck, tier);
+    if (ck) labels(P, ck, tier);
     if (P.u) blank("stand", esc(standText(P.u.m, P.u.k, P.u.top)));
-    else if (!(R && R.uniq)) blank("stand", esc(t(!shownShared && (optedOut() || navigator.globalPrivacyControl) ? "st_off" : "st_wait")));
+    else if (!PARTIAL && !(R && R.uniq)) blank("stand", esc(t(!shownShared && (optedOut() || navigator.globalPrivacyControl) ? "st_off" : "st_wait")));
   }
   // what a site makes of the machine: high-end, mainstream or entry-level, from the card, the screen and the processor
   function tierOf(P) {
@@ -2560,7 +2585,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   /* ---------- a run ---------- */
   async function run() {
     const g = ++gen;
-    R = { t0: performance.now() }; done = new Set(); unsup = new Set();
+    R = { t0: performance.now() }; done = new Set(); unsup = new Set(); introReady = false; ppQueued = false; PARTIAL = false;
     syncReportEntries(); syncCheckReports();
     // A topic page runs what its own check and rows need (src/pages.mjs "needs") beside the local readings every check
     // rests on; the main page runs every sniffer
@@ -2626,6 +2651,9 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const introCity = !NEED ? srv.then(() => intro(["city"])) : null;
     const introNat = !NEED ? Promise.all([srv, hw, tasks.get("kbd"), tasks.get("voices")])
       .then(() => intro(["nat"])) : null;
+    // The rest of the paragraph may start filling once the first one is in: its nationality rests on the system
+    // languages, and a partial pass before them would be a guess that changes under the reader
+    if (introNat) introNat.finally(() => { if (g === gen) { introReady = true; schedulePortrait(); } });
     await Promise.all([srv, hw, ...tasks.values(), ...probes, introCity, introNat]);
     if (g !== gen) return;
     // (once the drawings and the lie check are in)

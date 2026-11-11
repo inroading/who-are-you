@@ -60,7 +60,7 @@ test("nationality waits for all four reused dependencies and ignores stale gener
     const srv = deferred(), hw = deferred(), kbd = deferred(), voices = deferred(), calls = [];
     const context = { NEED: topic ? new Set() : null, g: 1, gen: 1, srv: srv.promise, hw: hw.promise,
       tasks: new Map([["kbd", kbd.promise], ["voices", voices.promise]]),
-      portrait: () => ({}), paintIntro: (p, keys) => calls.push([...keys]), Promise };
+      portrait: () => ({}), paintIntro: (p, keys) => calls.push([...keys]), schedulePortrait: () => calls.push(["fill"]), Promise };
     vm.createContext(context);
     vm.runInContext(line + "\n" + app.slice(start, end) + "\nglobalThis.ready = Promise.all([introCity, introNat]);", context);
     srv.resolve(); hw.resolve(); kbd.resolve();
@@ -73,9 +73,10 @@ test("nationality waits for all four reused dependencies and ignores stale gener
   const srv = deferred(), hw = deferred(), kbd = deferred(), voices = deferred(), calls = [];
   const context = { NEED: null, g: 1, gen: 1, srv: srv.promise, hw: hw.promise,
     tasks: new Map([["kbd", kbd.promise], ["voices", voices.promise]]), portrait: () => ({}),
-    paintIntro: (p, keys) => calls.push([...keys]), Promise };
+    paintIntro: (p, keys) => calls.push([...keys]), schedulePortrait: () => calls.push(["fill"]), Promise };
   vm.createContext(context);
   vm.runInContext(line + "\n" + app.slice(start, end) + "\nglobalThis.ready = Promise.all([introCity, introNat]);", context);
   srv.resolve(); hw.resolve(); kbd.resolve(); voices.resolve(); await context.ready;
-  assert.deepEqual(calls, [["city"], ["nat"]]);
+  // once the first paragraph is in, the rest of the paragraph may fill as its readings land
+  assert.deepEqual(calls, [["city"], ["nat"], ["fill"]]);
 });

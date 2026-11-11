@@ -115,6 +115,20 @@ What the others had that a page needed work for, and how who covers it now:
 - 2026-11-11: the font row offers the full local list behind the browser's Local Font Access permission, listing the
   families it returns in place of the guessed one; a refusal leaves the denied note. Staged loading stays as it was:
   rows paint as they finish, the help arrives when opened, and a topic page runs only its own subset.
+- 2026-11-11: the paragraph fills a blank at a time as its readings land (`schedulePortrait` and a partial pass in
+  `blank`), instead of six paragraphs appearing together after the slowest probe. A partial pass fills only a blank
+  whose listed sources are all in and only while it waits; the checks' verdict, the labels and the store sentence
+  keep their own timing.
+- 2026-11-11: the fingerprint card follows the paragraph instead of sitting at the foot of the column
+  (`margin-top: auto`): opening the two cards under it used to move it up by their height. It now sits 14px under
+  the labels and stays put; the blank left at the column's foot is the layout's, not a shift.
+- 2026-11-11: the portrait's network sentence names a VPN provider's own network or a Tor exit (`nt_vpn`,
+  `nt_tor`), the read sentence says what a site makes of it (`rd_vpn`, `rd_tor`, and Tor first), and Tor leads the
+  worst-of line. Before, a VPN provider's exit read as "an ordinary home or mobile network" in the prose while the
+  check named the provider.
+- 2026-11-11: printing is its own layout: light colors even in dark mode (the browser drops backgrounds but keeps
+  light text, which made the Print button put pale text on white paper), one column, no controls or dialogs, the
+  cards and rows kept from breaking across pages. No URLs or theme chrome on paper.
 
 ## Wording
 
