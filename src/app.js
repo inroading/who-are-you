@@ -1595,9 +1595,9 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
       blank("nat", P.nat ? t(own === "tz" ? "pt_nat_clock" : own === "langs" ? "pt_nat_soft" : "pt_nat_sure", { c: flagged(P.nat, country(P.nat)) })
         : esc(t("pt_nat_na")), P.natFrom || BLANKS.nat, own === "tz" ? t("pt_nat_clock_why") : own === "langs" ? t("pt_nat_soft_why") : "");
     }
-    // (the city is the address's, from an IP database: said so in the sentence, the reason on hover or tap)
+    // (the city is the address's, from an IP database: said so on hover or tap, not in the sentence, which reads as prose)
     if (keys.includes("city")) {
-      blank("city", shared && !P.city ? esc(t("masked")) : P.cc ? flagged(P.cc, [...place(P.city), country(P.cc)].join(", ") + t("ex_geo")) : U, BLANKS.city,
+      blank("city", shared && !P.city ? esc(t("masked")) : P.cc ? flagged(P.cc, [...place(P.city), country(P.cc)].join(", ")) : U, BLANKS.city,
         shared && !P.city ? t("masked_why") : P.cc ? t("ex_geo_why") : "");
       BL.city.classList.toggle("hid", shared && !P.city);
     }
