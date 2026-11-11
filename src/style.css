@@ -153,7 +153,12 @@ main.topic > .hero, main.topic > .target, main.topic > .probes, main.topic > .vs
 .focus-rows { list-style: none; margin: 0; padding: 0; }
 .focus-rows li { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 10px; align-items: center; min-height: 36px; border-top: 1px solid var(--line); font-size: 13px; }
 .focus-rows li > span { color: var(--muted); }
-.focus-rows b { font: 500 12.5px var(--f-num); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* A topic page's values are the page: they wrap instead of ending in an ellipsis, and a link at the end of one (the
+   IPv6 test after the two addresses) takes the next line rather than sitting over the address */
+.focus-rows b { font: 500 12.5px var(--f-num); min-width: 0; white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.focus-rows b .nw { white-space: normal; }
+.focus-rows b:has(.pa-go) { flex-wrap: wrap; align-items: baseline; }
+.focus-rows .pa-t { min-width: 0; overflow-wrap: anywhere; }
 .focus-rows li.na b { color: var(--muted); font-family: var(--f-ui); }
 .focus-rows a { color: inherit; }
 .focus-go { display: inline-block; margin-top: 10px; font-size: 13px; font-weight: 600; color: var(--ink); text-decoration: none; }
@@ -393,7 +398,9 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 /* a value with a link after it: the value gives way, the link stays */
 .pa:has(.pa-go), .focus-rows b:has(.pa-go) { display: flex; gap: 8px; }
 .pa-t { min-width: 0; }
-.pa .pa-go, .focus-rows .pa-go { flex: none; font: 500 12px var(--f-ui); color: var(--ink); text-decoration: none; }
+/* the link never shrinks, but a long label (the local-fonts button in Russian) wraps inside the column instead of
+   running past it on a phone */
+.pa .pa-go, .focus-rows .pa-go { flex: none; max-width: 100%; font: 500 12px var(--f-ui); color: var(--ink); text-decoration: none; }
 .pa .pa-go:hover { text-decoration: underline; }
 .bl a { color: inherit; text-decoration: underline dotted color-mix(in srgb, var(--fg) 40%, transparent); text-underline-offset: 3px; }
 /* links to other tools: a few words, then the external-link icon at about the text's size; an address or AS

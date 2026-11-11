@@ -126,6 +126,10 @@ What the others had that a page needed work for, and how who covers it now:
   `nt_tor`), the read sentence says what a site makes of it (`rd_vpn`, `rd_tor`, and Tor first), and Tor leads the
   worst-of line. Before, a VPN provider's exit read as "an ordinary home or mobile network" in the prose while the
   check named the provider.
+- 2026-11-11: a topic page's values are shown whole: a long one (the DNS server, both addresses, the font list) wraps
+  inside its column instead of ending in an ellipsis, and a link at the end of a value (the IPv6 test after the two
+  addresses) takes the next line rather than sitting over the text. The local-fonts button's label wraps inside the
+  column too, instead of running past it on a phone.
 - 2026-11-11: printing is its own layout: light colors even in dark mode (the browser drops backgrounds but keeps
   light text, which made the Print button put pale text on white paper), one column, no controls or dialogs, the
   cards and rows kept from breaking across pages. No URLs or theme chrome on paper.
