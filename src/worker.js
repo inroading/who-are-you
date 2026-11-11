@@ -54,6 +54,25 @@ async function ptr(ip) {
   } catch (e) { return null; }
 }
 
+// Tor's public exit list (check.torproject.org), kept an hour in the isolate and at the edge: the address is matched
+// here, so a visitor's address never goes to the Tor Project. The bulk list has IPv4 addresses only.
+let TOR = { at: 0, set: null };
+async function torExits(request) {
+  if (TOR.set && Date.now() - TOR.at < 3600e3) return TOR.set;
+  const cache = caches.default, key = new Request(new URL("/api/tor-list", request.url));
+  let text = null;
+  const hit = await cache.match(key);
+  if (hit) text = await hit.text();
+  if (!text) {
+    const r = await fetch("https://check.torproject.org/torbulkexitlist", { signal: AbortSignal.timeout(8000) });
+    if (!r.ok) throw new Error("tor list " + r.status);
+    text = await r.text();
+    await cache.put(key, new Response(text, { headers: { "Cache-Control": "public, max-age=3600" } }));
+  }
+  TOR = { at: Date.now(), set: new Set(text.split("\n").map(s => s.trim()).filter(Boolean)) };
+  return TOR.set;
+}
+
 // A shared portrait, [/<lang>]/r/<code>[?lang=xx]: the language's page with its own title, description and preview
 // image, so a link pasted into a chat previews the result. The page script reads the portrait from the path and draws
 // it. The language: ?lang, else the path's folder, else the sharer's (older links have no folder).
@@ -139,6 +158,14 @@ export default {
       const hints = {};
       for (const [k, v] of request.headers) if (!SKIP.test(k)) hints[k] = v;
       return json({ h: hints }, { "Accept-CH": HINTS });
+    }
+    // whether this request's address is a public Tor exit node (the list is IPv4 only)
+    if (url.pathname === "/api/tor") {
+      if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET" } });
+      const ip = request.headers.get("CF-Connecting-IP") || "";
+      if (!/^\d+\.\d+\.\d+\.\d+$/.test(ip)) return json({ ok: false, v6: ip.includes(":") });
+      try { return json({ ok: true, tor: (await torExits(request)).has(ip) }); }
+      catch (e) { return json({ ok: false }); }
     }
     if (url.pathname !== "/api/me") return new Response(null, { status: 404 });
     if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET" } });

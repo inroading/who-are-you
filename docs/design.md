@@ -4,7 +4,7 @@ The technical side of the project: how it compares with the other privacy tests 
 and how it works, what was tested and turned out not to work, and the data that needs upkeep. How to build, test and
 deploy is in AGENTS.md.
 
-## Against the other tests (125 readings, 14 disguise checks, 4 protocol checks; 2026-11-11)
+## Against the other tests (127 readings, 14 disguise checks, 4 protocol checks; 2026-11-11)
 
 Ahead of the field: the portrait (one paragraph from all readings), disguise checks that cross-read the readings
 (time zone, language, DNS, split routing, WebRTC, data center, user agent, round trip, system languages, anti-detect
@@ -87,6 +87,18 @@ What the others had that a page needed work for, and how who covers it now:
   the sender's fixtures unchanged, attributed in `src/wasm.mjs`): the count and the missing ones tell an engine's
   version apart the way the JS feature probes do. The WebGL row adds the shader precision each driver reports, and
   the IPv6 row names a 6to4 or Teredo tunnel or an interface ID that changes between destinations, not only the MAC.
+- 2026-11-11: the exit's kind from its network's registered name (`netKind`): a VPN provider's own network is named as
+  that, not lumped in as "a data center"; hosting and cloud networks keep the data-center wording, and a home line, a
+  mobile carrier and an office all read as ordinary. The check says a VPN provider's network is visible, never that
+  the visitor uses it.
+- 2026-11-11: the Tor check: the Worker keeps Tor Project's public exit list an hour (isolate memory and the edge
+  cache) and answers `/api/tor` with whether the request's IPv4 address is on it. The list never reaches the browser,
+  and the visitor's address never goes to the Tor Project. IPv6 says it cannot be checked: the bulk list is IPv4 only.
+- 2026-11-11: a virtual-machine row from the renderer string (`vmOf`): VMware, VirtualBox, QEMU, Parallels, Hyper-V and
+  Citrix name themselves, and no card at all is reported as that, with its other causes (a server, acceleration off)
+  in the tooltip; never "you are in a VM".
+- 2026-11-11: two topic pages, `/vpn-leak/` (DNS, WebRTC, exits and Tor, headed by the DNS check) and `/webgpu/` (the
+  adapter, its limits and the fingerprint they add), in all 10 languages.
 
 ## Wording
 

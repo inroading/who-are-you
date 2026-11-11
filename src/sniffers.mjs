@@ -10,6 +10,7 @@ export const GROUPS = [
     { id: "geo", m: "request.cf.city", s: 1 },
     { id: "coords", m: "request.cf.latitude", s: 1 },
     { id: "isp", m: "request.cf.asOrganization" },
+    { id: "tor", m: "check.torproject.org exit list" },
     { id: "dns", m: "edns.ip-api.com", s: 1 },
     { id: "tzip", m: "request.cf.timezone" },
     { id: "ptr", m: "DNS PTR", s: 1 },
@@ -70,6 +71,7 @@ export const GROUPS = [
     { id: "scrollbar", m: "offsetWidth − clientWidth" },
     // (note: a small line of its own under the value, for a value that needs a phrase to be read right)
     { id: "gpu", m: "WebGL RENDERER", note: 1 },
+    { id: "vm", m: "WebGL renderer · hypervisor names" },
     { id: "webgpu", m: "navigator.gpu adapter.info" },
     { id: "gpulim", m: "GPUAdapter limits · features" },
     { id: "glx", m: "WebGL2 · MAX_TEXTURE_SIZE" },

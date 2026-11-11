@@ -7,7 +7,7 @@ import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO, COUNTED, TODO_SK } from "./sni
 import { TRAITS, rarity, MIN_TOTAL, durOf, STUCK_MS } from "./traits.mjs";
 import { TW, flagCode } from "./regions.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, giveaways, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf, v6Type } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, netKind, fontHints, checks, giveaways, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, vmOf, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf, v6Type } from "./infer.mjs";
 import { wasmProbe, WASM_FEATURES } from "./wasm.mjs";
 import { TZ_CC } from "./tz.mjs";
 import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
@@ -249,7 +249,10 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     await within(citiesP, 1500, null);
     row("geo", c.country ? flagged(c.country, [...place(c.city, c.region), country(c.country)].join(", ") + t("ex_geo")) : esc(t("v_empty")), c.country ? { why: t("ex_geo_why") } : { na: true });
     if (c.latitude != null) txt("coords", [(+c.latitude).toFixed(2) + ", " + (+c.longitude).toFixed(2), c.postalCode].filter(Boolean).join(" · ") + t("ex_geo"), { why: t("ex_geo_why") }); else na("coords", "v_empty");
-    if (c.asn) row("isp", asnLink(c.asn) + esc(" · " + (c.asOrganization || ""))); else na("isp", "v_empty");
+    if (c.asn) {
+      const kind = netKind(c.asn, c.asOrganization);
+      row("isp", asnLink(c.asn) + esc(" · " + (c.asOrganization || "") + (kind === "vpn" ? " · " + t("nk_vpn") : kind === "dc" ? " · " + t("nk_dc") : "")), { why: t("nk_why") });
+    } else na("isp", "v_empty");
     if (c.timezone) txt("tzip", c.timezone + " · UTC" + offTxt(tzOffset(c.timezone)) + tzNote(c.timezone)); else na("tzip", "v_empty");
     if (j.ptr) txt("ptr", j.ptr); else na("ptr", "v_empty");
     if (c.colo) txt("edge", c.colo + (c.clientTcpRtt ? " · RTT " + c.clientTcpRtt + " ms" : "")); else na("edge", "v_empty");
@@ -427,6 +430,14 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const P = ["MAX_TEXTURE_SIZE", "MAX_RENDERBUFFER_SIZE", "MAX_VIEWPORT_DIMS", "MAX_VERTEX_ATTRIBS", "MAX_VERTEX_UNIFORM_VECTORS", "MAX_FRAGMENT_UNIFORM_VECTORS",
       "MAX_VARYING_VECTORS", "MAX_COMBINED_TEXTURE_IMAGE_UNITS", "ALIASED_LINE_WIDTH_RANGE", "ALIASED_POINT_SIZE_RANGE", "SHADING_LANGUAGE_VERSION", "VERSION"];
     return [ven, ren, ...P.map(p => String(gl.getParameter(gl[p]))), pa, pb, (gl.getSupportedExtensions() || []).join(",")].join("|");
+  }
+
+  // A virtual machine or a remote desktop, from the renderer string alone: a hint, with other causes (acceleration
+  // off, a server without a card), so the value says what it saw rather than declaring a VM
+  function virt() {
+    const k = R.vm = vmOf(R.gpuRaw);
+    const name = { vmware: "VMware", virtualbox: "VirtualBox", qemu: "QEMU / KVM", parallels: "Parallels", hyperv: "Hyper-V", citrix: "Citrix" }[k];
+    txt("vm", k === "soft" ? t("vm_soft") : k ? t("vm_yes", { name }) : t("vm_no"), { why: t("vm_why") });
   }
 
   // the sound card's rate and channels (an AudioContext that never plays, closed at once)
@@ -1285,6 +1296,18 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     R.dnsCC = ccOfName(cname); R.dnsOrg = parts.slice(1).join(" - ").trim();
     const ecs = j.edns && j.edns.ip ? "ECS " + j.edns.ip : "";
     row("dns", flagged(R.dnsCC, [d.ip, R.dnsOrg || cname, ecs].filter(Boolean).join(" · ")), { why: [d.ip, geo, ecs].filter(Boolean).join("\n") });
+  }
+
+  // Whether this address is a public Tor exit node. The Worker keeps Tor's exit list and matches the address there,
+  // so the visitor's address never goes to the Tor Project; the bulk list has IPv4 only
+  async function torCheck() {
+    let j;
+    try { const r = await within(fetch("/api/tor", { cache: "no-store" }), 6000, null); j = r && r.ok ? await r.json() : null; } catch (e) {}
+    if (!j) return na("tor", "v_fail");
+    if (j.v6) return na("tor", "tor_v6");
+    if (!j.ok) return na("tor", "v_fail");
+    R.tor = !!j.tor;
+    txt("tor", t(R.tor ? "tor_yes" : "tor_no"), { why: t("tor_why") });
   }
 
   // Cloudflare's own trace on this domain: the key exchange (post-quantum or not), encrypted ClientHello, WARP
@@ -2488,6 +2511,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     if (on("referrer")) referrer();
     locale(); prefs(); engine();
     const glInfo = on("gpu") ? gpu() : null;
+    if (on("gpu") && on("vm")) virt();
     if (on("fonts")) fonts();
     const intro = keys => { if (!NEED && g === gen) paintIntro(portrait(), keys); };
     intro(["lang", "tz", "clock"]);
@@ -2509,7 +2533,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const S = [["kbd", "kbd", keyboard], ["voices", "voices", voices], ["battery", "battery", battery], ["media", "media", media], ["audiohw", "audiohw", audioHw],
       ["bio", "bio", biometric], ["bt", "bt", bluetooth], ["storage", "storage", storage], ["adblock", "adblock", adblock], ["ext", "ext", extensions],
       ["prints", ["canvas", "audio", "fontfp", "rand", "fpid"], () => prints(glInfo)], ["trace", ["kex", "warp"], trace],
-      ["webgpu", "webgpu", webgpu], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
+      ["webgpu", "webgpu", webgpu], ["tor", "tor", torCheck], ["hz", "hz", refresh], ["screens", "screens", screens], ["codecs", "codecs", codecs], ["drm", "drm", drm], ["perms", "perms", perms],
       ["traces", "traces", traces], ["lies", "lies", lies], ["icu", "icu", icu], ["scrollbar", "scrollbar", scrollbar], ["extwar", "extwar", extFiles],
       ["cssv", "cssv", cssLevel], ["smooth", "smooth", smoothing], ["geoloc", "geoloc", geoloc], ["sensors", "sensors", sensors], ["etag", "etag", etagId], ["trackers", "trackers", trackers],
       ["domrect", "domrect", domRect], ["svgrect", "svgrect", svgRect], ["textm", "textm", textMetrics], ["glimg", "glimg", glImage], ["gpulim", "gpulim", gpuLimits],

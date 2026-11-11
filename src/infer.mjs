@@ -173,6 +173,12 @@ const DC_ASN = new Set([13335, 209242, 16509, 14618, 15169, 396982, 19527, 8075,
   202422, 12876, 197540, 47583, 141995, 35913, 32613, 26496, 46606, 398101, 30633, 64267, 201814, 22612, 7979, 10439, 400328, 49981, 61317]);
 const DC_NAME = /amazon|\baws\b|google cloud|google llc|microsoft|azure|digitalocean|linode|akamai|vultr|choopa|\bovh|hetzner|oracle|alibaba|aliyun|tencent|huawei cloud|contabo|leaseweb|m247|datacamp|cdn77|g-?core|hostinger|hosting|\bhost|server|cloud|data ?cent|colo|\bvps\b|dedicated|ionos|scaleway|kamatera|racknerd|frantech|psychz|quadranet|zenlayer|dmit|cloudflare|fastly|packet|equinix|terrahost|hostwinds|interserver|liquid web|ponynet|clouvider|tzulo|cogent|mullvad|proton|nordvpn|expressvpn|surfshark|private internet/i;
 export const isDataCenter = (asn, org) => DC_ASN.has(+asn) || DC_NAME.test(org || "");
+// The exit's kind, as its network's name tells it: a VPN provider's own network, a hosting or cloud network, or a
+// network that names neither (a home line, a mobile carrier, an office: nothing here can tell those apart, so the
+// value says "ordinary"). Naming a VPN provider is a reading of the AS organization, not proof the visitor uses it
+// (the office VPN's exit sits on the same kind of network).
+const VPN_NAME = /mullvad|proton ?vpn|proton ag|\bnordvpn\b|expressvpn|surfshark|private internet access|\bpia\b|windscribe|ipvanish|cyberghost|purevpn|vyprvpn|tunnelbear|hide\.?me|azirevpn|perfect privacy|\bivpn\b|\bovpn\b|airvpn|torguard|hotspot shield|zenmate|privatevpn|ivacy|atlas vpn|mozilla vpn|hide my ass|\bhma\b/i;
+export const netKind = (asn, org) => VPN_NAME.test(org || "") ? "vpn" : isDataCenter(asn, org) ? "dc" : "home";
 
 // hints about what the visitor does, from the fonts only certain software installs
 export const FONT_HINTS = [
@@ -309,8 +315,13 @@ export function checks(x) {
     const other = x.rtc.filter(ip => !site.includes(ip)), known = f => site.some(ip => fam(ip) === f), leak = other.filter(ip => known(fam(ip)));
     out.webrtc = leak.length ? ["bad", "c_rtc_bad", { ip: leak[0] }] : other.length ? ["warn", "c_rtc_warn", { ip: other[0] }] : ["ok", x.rtc.length ? "c_rtc_ok" : "c_rtc_none", {}];
   }
-  // the network
-  out.dc = x.asn == null ? null : isRelayIp(x.ip) ? ["warn", "c_dc_relay", {}] : isDataCenter(x.asn, x.org) ? ["warn", "c_dc_warn", { org: x.org || "AS" + x.asn }] : ["ok", "c_dc_ok", { org: x.org || "AS" + x.asn }];
+  // the network: an Apple relay, a VPN provider's own network (named as such, since "data center" would be vague),
+  // a hosting or cloud network, or an ordinary one
+  if (x.asn == null) out.dc = null;
+  else {
+    const org = x.org || "AS" + x.asn, kind = isRelayIp(x.ip) ? "relay" : netKind(x.asn, x.org);
+    out.dc = kind === "relay" ? ["warn", "c_dc_relay", {}] : kind === "vpn" ? ["warn", "c_dc_vpn", { org }] : kind === "dc" ? ["warn", "c_dc_warn", { org }] : ["ok", "c_dc_ok", { org }];
+  }
   // the system the user agent claims against the one the browser's other parts give away
   if (!x.uaOS) out.ua = x.real ? ["info", "c_ua_info", {}] : null;
   else {
@@ -466,6 +477,16 @@ export function physicalScreen(w, h, dpr = 1) {
 // What WebGL reports when the browser isn't drawing on the graphics card: Windows' fallback (remote desktop, virtual
 // machines, no driver), Chrome's own, Mesa's. None of them names the card.
 export const isSoftGpu = r => /Basic Render Driver|SwiftShader|llvmpipe|softpipe|Software Rasterizer/i.test(r || "");
+// A virtual machine or a remote desktop session, from the renderer string WebGL hands over: the hypervisor's own
+// adapter names itself. "soft" is no card at all, which can be a VM, a remote desktop, a server or acceleration
+// switched off: a hint with several causes, never a verdict.
+const VM_NAME = [["vmware", /vmware|svga3d/i], ["virtualbox", /virtualbox|vbox/i], ["qemu", /qemu|\bkvm\b|virtio|virgl/i],
+  ["parallels", /parallels/i], ["hyperv", /hyper-?v/i], ["citrix", /citrix|winframe|xenapp/i]];
+export function vmOf(renderer) {
+  if (!renderer) return null;
+  for (const [k, re] of VM_NAME) if (re.test(renderer)) return k;
+  return isSoftGpu(renderer) ? "soft" : null;
+}
 // Some networks are registered under a street address rather than a name ("7F, World Peace Centre, 55 Wo Tong Tsui St")
 // (a number with an address word, or a number in a list of three or more parts; "Level 3 Parent, LLC" is a name)
 export const looksLikeAddress = o => { const s = String(o || ""); return /\d/.test(s) && ((s.match(/,/g) || []).length >= 2 || /\b\d+\s*\/?\s*F\b|\b(floor|street|st|road|rd|avenue|ave|building|bldg|suite|room)\b/i.test(s)); };

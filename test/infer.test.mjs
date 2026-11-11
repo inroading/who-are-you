@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { macOf, v6Type, tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, giveaways, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
+import { macOf, v6Type, tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, netKind, fontHints, checks, giveaways, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, vmOf, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
 import { cleanSeen, rarity, durOf } from "../src/traits.mjs";
 import { regionName, flagCode } from "../src/regions.mjs";
 
@@ -410,4 +410,17 @@ test("a WebKit browser on Linux is neither Safari nor an Apple device", () => {
   const p = protocols({ sni: "plaintext", kex: "X25519", br: browser(EPIPHANY) });
   assert.equal(p.ech[1], "c_ech_webkit");
   assert.equal(p.pq[1], "c_pq_old");
+});
+
+test("the exit's kind, and a virtual machine's, from the names they report", () => {
+  assert.equal(netKind(9009, "Mullvad VPN AB"), "vpn");
+  assert.equal(netKind(13335, "Cloudflare, Inc."), "dc");
+  assert.equal(netKind(2516, "KDDI Corporation"), "home");
+  assert.equal(netKind(null, ""), "home");
+  assert.deepEqual(checks({ ip: "1.2.3.4", asn: 9009, org: "Mullvad VPN AB" }).dc, ["warn", "c_dc_vpn", { org: "Mullvad VPN AB" }]);
+  assert.equal(vmOf("ANGLE (VMware, Inc., VMware SVGA 3D Direct3D11 vs_5_0 ps_5_0, D3D11)"), "vmware");
+  assert.equal(vmOf("VirtualBox Graphics Adapter"), "virtualbox");
+  assert.equal(vmOf("Microsoft Basic Render Driver"), "soft");
+  assert.equal(vmOf("ANGLE (NVIDIA, NVIDIA GeForce RTX 4070 Direct3D11 vs_5_0 ps_5_0, D3D11)"), null);
+  assert.equal(vmOf(null), null);
 });
