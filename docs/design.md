@@ -4,7 +4,7 @@ The technical side of the project: how it compares with the other privacy tests 
 and how it works, what was tested and turned out not to work, and the data that needs upkeep. How to build, test and
 deploy is in AGENTS.md.
 
-## Against the other tests (124 readings, 14 disguise checks, 4 protocol checks; 2026-11-07)
+## Against the other tests (125 readings, 14 disguise checks, 4 protocol checks; 2026-11-11)
 
 Ahead of the field: the portrait (one paragraph from all readings), disguise checks that cross-read the readings
 (time zone, language, DNS, split routing, WebRTC, data center, user agent, round trip, system languages, anti-detect
@@ -79,6 +79,29 @@ What the others had that a page needed work for, and how who covers it now:
   splitting) given as one of several: a proxy, the network (a mobile carrier, a company line) or security software can
   all do it, and the help says it is not proof that the visitor set up a proxy. The check's tips separate the proxy
   case from the network's.
+- 2026-11-11: the permissions reading asks all 21 names the Permissions API knows here (clipboard, push, persistent
+  and third-party storage, local fonts, window management, wake lock, Bluetooth, idle, the three sensors, the local
+  network, screen capture, speaker selection, beside the first four). Only granted and blocked ones are printed; a
+  browser that doesn't know a name rejects it and the rest stand. The query never prompts, and the tooltip says so.
+- 2026-11-11: a WebAssembly row (17 features, each its own tiny module from wasm-feature-detect 1.10.0, Apache-2.0;
+  the sender's fixtures unchanged, attributed in `src/wasm.mjs`): the count and the missing ones tell an engine's
+  version apart the way the JS feature probes do. The WebGL row adds the shader precision each driver reports, and
+  the IPv6 row names a 6to4 or Teredo tunnel or an interface ID that changes between destinations, not only the MAC.
+
+## Wording
+
+The sentences beside the readings follow these rules (the reports in `1ms-shell` #102, #103 each broke one):
+
+- A measurement is reported as measured; a meaning drawn from it names what it rests on. "The clock is set to
+  Bangkok's time" is a reading; "you are in Thailand" is not.
+- Two sources that disagree are never merged into one place. The clock's country, the resolver's and the browser
+  language's are named separately; they become one name only when they agree.
+- A check with more than one possible cause says so in the help (a proxy, the network, security software), and the
+  label keeps the neutral name of the measurement ("rule-based splitting", not "a proxy").
+- One weak signal is a hint, not a finding: a nationality from the clock alone says it is a guess; system-language
+  fonts alone may have come with Office.
+- The portrait's prose carries no inline basis annotations ("(by IP)"): the source lives on hover or tap and in the
+  reading's own row, where a reader who wants it looks.
 
 ## Tested, and why not
 
@@ -114,6 +137,8 @@ What the others had that a page needed work for, and how who covers it now:
 - A new iPhone or iPad screen size (usually each September) needs a row in src/models.mjs; until then the page says
   it can't name the model, never a wrong one.
 - `npm run models` monthly (Android model names); `npm run tz` when the tz database changes.
+- `src/wasm.mjs` is wasm-feature-detect 1.10.0's fixtures (Apache-2.0; the notice is in the file). A new WebAssembly
+  feature worth probing is copied from that package's release, modules only, and the count in the row follows.
 - MobileModels is CC BY-NC-SA 4.0 (non-commercial, share-alike): public/assets/m/ carries that license; a commercial
   deployment has to drop it from scripts/models.mjs and keep Google Play's list only.
 

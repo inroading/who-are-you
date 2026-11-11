@@ -7,7 +7,8 @@ import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO, COUNTED, TODO_SK } from "./sni
 import { TRAITS, rarity, MIN_TOTAL, durOf, STUCK_MS } from "./traits.mjs";
 import { TW, flagCode } from "./regions.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, giveaways, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, giveaways, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf, v6Type } from "./infer.mjs";
+import { wasmProbe, WASM_FEATURES } from "./wasm.mjs";
 import { TZ_CC } from "./tz.mjs";
 import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
 
@@ -415,11 +416,17 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     // the name is only the one string the browser chose to hand over: say so under it
     if (!standIn) note("gpu", t("gpu_note"), t("gpu_note_short"));
     const gl2 = !!document.createElement("canvas").getContext("webgl2");
-    txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }));
+    // the shader precision each stage reports: a value of the driver's own, and one a stand-in renderer usually gets
+    // wrong (high float: 23 bits and a range of 127 on nearly every desktop card; 0 where a stage has no high float)
+    const prec = sh => { try { const p = gl.getShaderPrecisionFormat(sh, gl.HIGH_FLOAT); return p && p.precision ? p : null; } catch (e) { return null; } };
+    const pv = prec(gl.VERTEX_SHADER), pf = prec(gl.FRAGMENT_SHADER), pa = pv ? pv.precision : "–", pb = pf ? pf.precision : "–";
+    txt("glx", t("glx_v", { v: gl2 ? "WebGL 2" : "WebGL 1", tex: gl.getParameter(gl.MAX_TEXTURE_SIZE), n: (gl.getSupportedExtensions() || []).length }) +
+      (pv || pf ? " · " + t("glx_shader", { a: pa, b: pb }) : ""),
+      pv || pf ? { why: t("glx_shader_why", { a: pa, b: pb, r: Math.max(pv ? pv.rangeMax : 0, pf ? pf.rangeMax : 0) }) } : undefined);
     // everything WebGL reports about the card and driver, for the WebGL fingerprint
     const P = ["MAX_TEXTURE_SIZE", "MAX_RENDERBUFFER_SIZE", "MAX_VIEWPORT_DIMS", "MAX_VERTEX_ATTRIBS", "MAX_VERTEX_UNIFORM_VECTORS", "MAX_FRAGMENT_UNIFORM_VECTORS",
       "MAX_VARYING_VECTORS", "MAX_COMBINED_TEXTURE_IMAGE_UNITS", "ALIASED_LINE_WIDTH_RANGE", "ALIASED_POINT_SIZE_RANGE", "SHADING_LANGUAGE_VERSION", "VERSION"];
-    return [ven, ren, ...P.map(p => String(gl.getParameter(gl[p]))), (gl.getSupportedExtensions() || []).join(",")].join("|");
+    return [ven, ren, ...P.map(p => String(gl.getParameter(gl[p]))), pa, pb, (gl.getSupportedExtensions() || []).join(",")].join("|");
   }
 
   // the sound card's rate and channels (an AudioContext that never plays, closed at once)
@@ -942,13 +949,17 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   }
 
   // An IPv6 address of this browser's (the page's, Radar's, WebRTC's) built from the network card's MAC: then the
-  // address carries the card's hardware ID, the same on every network it joins
+  // address carries the card's hardware ID, the same on every network it joins. Otherwise its type still says
+  // something: a 6to4 or Teredo tunnel (an old way through IPv4), or interface IDs that change between destinations
+  // (the temporary addresses browsers use on purpose)
   function v6mac() {
     const ips = [R.srv && R.srv.ip, ...(R.stack || []), ...(Array.isArray(R.rtc) ? R.rtc : [])].filter(ip => ip && String(ip).includes(":"));
     if (!ips.length) return na("v6mac", "v_empty");
-    const mac = ips.map(macOf).find(Boolean);
+    const mac = ips.map(macOf).find(Boolean), type = R.v6type = v6Type(ips);
     R.v6mac = mac || null;
-    txt("v6mac", mac ? t("mac_v", { mac }) : t("mac_none"), { why: t("mac_why") });
+    const val = mac ? t("mac_v", { mac }) : type === "6to4" ? t("v6_6to4") : type === "teredo" ? t("v6_teredo")
+      : type === "temporary" ? t("mac_none") + " · " + t("v6_tmp") : t("mac_none");
+    txt("v6mac", val, { why: t("mac_why") });
   }
   // The ICU data the browser carries: how many time zones, currencies, units and calendars Intl knows. Each version
   // of each engine has its own counts; a browser that trims them (to be smaller) shows it
@@ -1329,6 +1340,15 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     txt("hz", t("hz_v", { n: R.hz }));
   }
 
+  // WebAssembly's features, each probed with its own tiny module (src/wasm.mjs): the count is the face of it, the
+  // hover shows which. Newer engines compile more of them, so the list tells an engine's real version apart too
+  function wasmFeatures() {
+    const r = R.wasm = wasmProbe();
+    if (!r) return na("wasm");
+    const yes = r.filter(([, ok]) => ok);
+    txt("wasm", t("wasm_v", { n: yes.length, of: r.length }), { why: r.map(([k, ok]) => k + (ok ? " ✓" : " ✗")).join(" · ") });
+  }
+
   // the engine's version from the JavaScript it supports (a rewritten user agent leaves the engine as it was)
   function engineVer() {
     const probe = { findLast: () => [].findLast, structuredClone: () => window.structuredClone, groupBy: () => Object.groupBy, withResolvers: () => Promise.withResolvers,
@@ -1440,13 +1460,22 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     if (yes.length) txt("drm", yes.join(" · ")); else na("drm", "v_empty");
   }
 
-  // what this site may already use: granted, blocked or still to be asked (a query never asks)
+  // what this site may already use: granted or blocked. A query never asks; browsers that don't know a permission
+  // reject it, so the list is the same everywhere and each name stands or falls on its own. The ones still asking
+  // are left out (a fresh browser would otherwise print two dozen "ask"), unless nothing has been decided yet
   async function perms() {
     if (!navigator.permissions) return na("perms");
-    const L = [["geolocation", "perm_geo"], ["notifications", "perm_notif"], ["camera", "perm_cam"], ["microphone", "perm_mic"]];
-    const r = await Promise.all(L.map(([p, k]) => navigator.permissions.query({ name: p }).then(s => t(k) + " " + t("ps_" + s.state), () => null)));
-    const s = r.filter(Boolean);
-    if (s.length) txt("perms", s.join(" · ")); else na("perms");
+    const L = [["geolocation", "perm_geo"], ["notifications", "perm_notif"], ["camera", "perm_cam"], ["microphone", "perm_mic"],
+      ["clipboard-read", "perm_clip_r"], ["clipboard-write", "perm_clip_w"], ["midi", "perm_midi"], ["push", "perm_push"],
+      ["persistent-storage", "perm_store"], ["storage-access", "perm_sa"], ["local-fonts", "perm_fonts"], ["window-management", "perm_win"],
+      ["screen-wake-lock", "perm_wake"], ["bluetooth", "perm_bt"], ["idle-detection", "perm_idle"], ["accelerometer", "perm_acc"],
+      ["gyroscope", "perm_gyro"], ["magnetometer", "perm_mag"], ["local-network-access", "perm_lan"], ["display-capture", "perm_capture"],
+      ["speaker-selection", "perm_speaker"]];
+    const r = (await Promise.all(L.map(([p, k]) => navigator.permissions.query({ name: p }).then(s => [k, s.state], () => null)))).filter(Boolean);
+    if (!r.length) return na("perms");
+    R.perms = r;
+    const yes = r.filter(([, s]) => s !== "prompt");
+    txt("perms", yes.length ? yes.map(([k, s]) => t(k) + " " + t("ps_" + s)).join(" · ") : t("perm_ask_all"), { why: t("perm_why") });
   }
 
   // Extensions that leave a mark any page can see: crypto wallets announce themselves to the page, developer tools
@@ -2484,7 +2513,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
       ["traces", "traces", traces], ["lies", "lies", lies], ["icu", "icu", icu], ["scrollbar", "scrollbar", scrollbar], ["extwar", "extwar", extFiles],
       ["cssv", "cssv", cssLevel], ["smooth", "smooth", smoothing], ["geoloc", "geoloc", geoloc], ["sensors", "sensors", sensors], ["etag", "etag", etagId], ["trackers", "trackers", trackers],
       ["domrect", "domrect", domRect], ["svgrect", "svgrect", svgRect], ["textm", "textm", textMetrics], ["glimg", "glimg", glImage], ["gpulim", "gpulim", gpuLimits],
-      ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav], ["ai", "ai", builtinAI], ["xr", "xr", xr], ["gamepad", "gamepad", gamepad], ["ch", "ch", chHints], ["agent", "agent", async () => actPaint()]];
+      ["rtccodecs", "rtccodecs", rtcCodecs], ["recmime", "recmime", recMime], ["keys", "keys", engineKeys], ["timer", "timer", timerRes], ["callstack", "callstack", stackDepth], ["probe", ["tcpfp", "ja4", "h2fp"], probe], ["apis", "apis", apis], ["engver", "engver", engineVer], ["wasm", "wasm", wasmFeatures], ["mathfp", "mathfp", mathPrint], ["emoji", "emoji", emoji], ["hwdec", "hwdec", hwdec], ["heap", "heap", heap], ["sysui", "sysui", sysui], ["worker", "worker", workerNav], ["ai", "ai", builtinAI], ["xr", "xr", xr], ["gamepad", "gamepad", gamepad], ["ch", "ch", chHints], ["agent", "agent", async () => actPaint()]];
     const hw = guard(["os", "browser", "arch", "screen", "cpu", "mem", "touch", "conn"], hardware);
     const tasks = new Map(S.filter(([k]) => on(k) && !(EMBED && (k === "traces" || k === "etag")))
       .map(([k, ids, f]) => [k, guard(ids, f)]));

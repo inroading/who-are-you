@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { macOf, tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, giveaways, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
+import { macOf, v6Type, tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, giveaways, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
 import { cleanSeen, rarity, durOf } from "../src/traits.mjs";
 import { regionName, flagCode } from "../src/regions.mjs";
 
@@ -306,6 +306,14 @@ test("split routing: different networks over the same IP version", () => {
   assert.equal(macOf("2001:db8::211:22ff:fe33:4455"), "00:11:22:33:44:55");
   assert.equal(macOf("2408:8207:2653:1af0:3c8e:ae84:162f:b0dc"), null);
   assert.equal(macOf("1.2.3.4"), null);
+  // what kind of IPv6 address: the card's, a tunnel, one that rotates between destinations, or a random one
+  assert.equal(v6Type(["2001:db8::211:22ff:fe33:4455"]), "eui64");
+  assert.equal(v6Type(["2002:c000:0204::1", "2001:db8::1"]), "6to4");
+  assert.equal(v6Type(["2001:0:53aa:64c:1c2b:3a4d:3e8e:9f5a"]), "teredo");
+  assert.equal(v6Type(["2001:db8:1:2:aaaa::1", "2001:db8:1:2:bbbb::2"]), "temporary");
+  assert.equal(v6Type(["2001:db8:1:2:aaaa::1"]), "other");
+  assert.equal(v6Type(["1.2.3.4"]), null);
+  assert.equal(v6Type([]), null);
   // the tunnel an MSS points to
   assert.equal(tunnelOf(1460), false); assert.equal(tunnelOf(1452), "pppoe"); assert.equal(tunnelOf(1380), "wireguard"); assert.equal(tunnelOf(1220, true), "wireguard");
   assert.equal(tunnelOf(1410), "openvpn"); assert.equal(tunnelOf(1360), "ipsec"); assert.equal(tunnelOf(1300), "other"); assert.equal(tunnelOf(null), null);

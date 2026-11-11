@@ -108,8 +108,8 @@ export const GROUPS = [
     { id: "pdf", m: "pdfViewerEnabled" },
     { id: "ai", m: "LanguageModel · Translator.availability" },
     { id: "webdriver", m: "navigator.webdriver" },
-    { id: "auto", m: "headless 路 CDP 路 Electron traces" },
-    { id: "idstr", m: "navigator.vendor 路 productSub 路 plugins" },
+    { id: "auto", m: "headless · CDP · Electron traces" },
+    { id: "idstr", m: "navigator.vendor · productSub · plugins" },
     { id: "agent", m: "mousemove → pointerdown · isTrusted" },
     { id: "worker", m: "Worker · navigator" },
     { id: "adblock", m: "bait element" },
@@ -123,6 +123,7 @@ export const GROUPS = [
   ["fp", [
     { id: "engine", m: "Error.message" },
     { id: "engver", m: "JS feature probes" },
+    { id: "wasm", m: "WebAssembly.validate" },
     { id: "lies", m: "Function.prototype.toString · iframe" },
     { id: "cssv", m: "CSS.supports" },
     { id: "smooth", m: "canvas text antialiasing" },

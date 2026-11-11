@@ -201,6 +201,21 @@ export function macOf(ip) {
   const b = [(g[4] >> 8) ^ 0x02, g[4] & 0xff, g[5] >> 8, g[6] & 0xff, g[7] >> 8, g[7] & 0xff];
   return b.map(x => x.toString(16).padStart(2, "0")).join(":");
 }
+// What kind of IPv6 address a set of them is: the card's MAC ("eui64"), a 6to4 or Teredo tunnel (an IPv4 address
+// wrapped in IPv6: a tunnel older than the VPNs of today), "temporary" when two destinations got different interface
+// IDs in one /64 (the address the browser rotates), or null where none of them is IPv6. A single random interface ID
+// says only "not the MAC": a stable-privacy address looks the same and stays.
+export function v6Type(ips) {
+  const list = [...new Set((ips || []).filter(ip => ip && String(ip).includes(":")).map(String))];
+  if (!list.length) return null;
+  if (list.some(macOf)) return "eui64";
+  const g = list.map(ip => v6g(ip));
+  if (g.some(x => x[0] === "2002")) return "6to4";
+  if (g.some(x => x[0] === "2001" && x[1] === "0000")) return "teredo";
+  const byNet = new Map();
+  for (const x of g) { const k = x.slice(0, 4).join(":"); if (!byNet.has(k)) byNet.set(k, new Set()); byNet.get(k).add(x.slice(4).join(":")); }
+  return [...byNet.values()].some(s => s.size > 1) ? "temporary" : "other";
+}
 export const netOf = ip => ip.includes(":") ? v6g(ip).slice(0, 4).join(":") : ip.split(".").slice(0, 2).join(".");
 // Split routing: two destinations that saw different networks over the same IP version. IPv4 next to IPv6 is just a
 // dual-stack connection. exits: [[row id, address]] in the order the rows are drawn; the first pair that differs.
