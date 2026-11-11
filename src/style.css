@@ -124,10 +124,14 @@ main.topic > .hero, main.topic > .target, main.topic > .probes, main.topic > .vs
 .cp-grid > .card { padding: 18px 20px; }
 .cp-grid h2 { display: flex; align-items: center; gap: 10px; font-size: 15px; margin: 0 0 14px; }
 .cp-bars ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
-.cp-bars li { display: grid; grid-template-columns: minmax(0, 8.5em) minmax(0, 1fr) 3em; gap: 10px; align-items: center; font-size: 13px; }
+/* the value column takes its width from the widest row: a fixed 3em could not hold "48% ↑7.7", so the change marker
+   wrapped under the percentage (or ran past it) and the values neither lined up nor kept clear of the card's edge */
+.cp-bars li { display: grid; grid-template-columns: minmax(0, 8.5em) minmax(0, 1fr) max-content; gap: 10px; align-items: center; font-size: 13px; }
 .cp-bars li > i { display: block; height: 8px; border-radius: 4px; background: var(--soft); overflow: hidden; }
 .cp-bars li > i span { display: block; height: 100%; border-radius: 4px; background: var(--t3); } .cp-bars li.bad > i span { background: var(--bad); } .cp-bars li.low > i span { background: var(--ok); }
-.cp-bars em { font-style: normal; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+/* the percentage and its change marker each keep a column, so every row's numbers sit on one line and line up */
+.cp-bars em { display: grid; grid-template-columns: 2.9em 2.8em; justify-content: end; column-gap: 4px; align-items: baseline; font-style: normal; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cp-bars em .wk { margin-left: 0; text-align: left; }
 .cp-top[hidden] { display: none; }
 #crTop { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px; }
 #crTop h3 { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 600; margin: 0 0 6px; }

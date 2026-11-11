@@ -126,6 +126,9 @@ What the others had that a page needed work for, and how who covers it now:
   `nt_tor`), the read sentence says what a site makes of it (`rd_vpn`, `rd_tor`, and Tor first), and Tor leads the
   worst-of line. Before, a VPN provider's exit read as "an ordinary home or mobile network" in the prose while the
   check named the provider.
+- 2026-11-11: the stats page's "what gives people away" list gives its value column the width of its widest row and
+  keeps the percentage and its week-over-week change on one line in two columns; a fixed 3em could not hold
+  "48% ↑7.7", so the change wrapped under the percentage or ran into the card's edge.
 - 2026-11-11: a topic page's values are shown whole: a long one (the DNS server, both addresses, the font list) wraps
   inside its column instead of ending in an ellipsis, and a link at the end of a value (the IPv6 test after the two
   addresses) takes the next line rather than sitting over the text. The local-fonts button's label wraps inside the
