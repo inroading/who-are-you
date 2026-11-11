@@ -7,7 +7,7 @@ import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO, COUNTED, TODO_SK } from "./sni
 import { TRAITS, rarity, MIN_TOTAL, durOf, STUCK_MS } from "./traits.mjs";
 import { TW, flagCode } from "./regions.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, giveaways, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf } from "./infer.mjs";
 import { TZ_CC } from "./tz.mjs";
 import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
 
@@ -1590,8 +1590,10 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   function paintIntro(P, keys = ["nat", "city", "lang", "tz", "clock"], shared = false) {
     const U = esc(t("v_unknown"));
     if (keys.includes("nat")) {
-      const soft = P.nat && (P.natFrom || []).length === 1 && P.natFrom[0] === "langs";
-      blank("nat", P.nat ? t(soft ? "pt_nat_soft" : "pt_nat_sure", { c: flagged(P.nat, country(P.nat)) }) : esc(t("pt_nat_na")), P.natFrom || BLANKS.nat, soft ? t("pt_nat_soft_why") : "");
+      // (one source alone is a guess: the language points to habits, the clock to where the device was set up)
+      const nf = P.natFrom || [], own = P.nat && nf.length === 1 ? nf[0] : null;
+      blank("nat", P.nat ? t(own === "tz" ? "pt_nat_clock" : own === "langs" ? "pt_nat_soft" : "pt_nat_sure", { c: flagged(P.nat, country(P.nat)) })
+        : esc(t("pt_nat_na")), P.natFrom || BLANKS.nat, own === "tz" ? t("pt_nat_clock_why") : own === "langs" ? t("pt_nat_soft_why") : "");
     }
     // (the city is the address's, from an IP database: said so in the sentence, the reason on hover or tap)
     if (keys.includes("city")) {
@@ -1640,16 +1642,14 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   // Three blanks are what a site makes of the readings rather than readings: what the machine is for, whether the
   // place adds up (or a site will guess a proxy), and whether clearing cookies would shake a site off.
   function readings(P, ck) {
-    const lv = id => ck[id] && ck[id][0];
-    const away = [lv("tz") === "bad" && "tz", lv("dns") === "bad" && "dns", lv("lang") === "warn" && "lang"].filter(Boolean);
-    // (only the time zone or the DNS says a proxy; a language that isn't the country's is someone who lives there)
-    const strong = away.some(k => k !== "lang");
-    // (the country the giveaways point to, when they agree: the clock's, not the guessed nationality's)
-    const at = [...new Set(away.map(k => k === "tz" ? tzCC(P.tz) : k === "dns" ? P.dns : langCC((P.langs || [])[0])))];
-    const ipc = P.cc && country(P.cc), home = strong && at.length === 1 && at[0] && at[0] !== P.cc ? country(at[0])
-      : P.nat && P.nat !== P.cc ? country(P.nat) : P.dns && P.dns !== P.cc ? country(P.dns) : null;
+    const { away, spots, at, strong, one } = giveaways(ck, P);
+    const ipc = P.cc && country(P.cc);
+    // (giveaways that point to different countries each say their own: the clock's country is not the DNS's)
+    const each = strong && ipc && spots.length && !one ? list(spots.map(([k, c]) => t("gs_p_" + k, { c: country(c) }))) : null;
+    const home = one ? country(one) : !spots.length && P.nat && P.nat !== P.cc ? country(P.nat) : !spots.length && P.dns && P.dns !== P.cc ? country(P.dns) : null;
     // (the network's blank already says "a proxy" for a data center or a split: then just the mismatch)
-    blank("read", esc(strong && ipc && home ? t(P.nt === "dc" || P.nt === "split" ? "rd_off" : "rd_proxy", { ipc, home, list: list(away.map(k => t("gs_i_" + k))) })
+    blank("read", esc(each ? t(P.nt === "dc" || P.nt === "split" ? "rd_off_each" : "rd_proxy_each", { ipc, list: each })
+      : strong && ipc && home ? t(P.nt === "dc" || P.nt === "split" ? "rd_off" : "rd_proxy", { ipc, home, list: list(away.map(k => t("gs_i_" + k))) })
       : P.nt === "split" ? t("rd_split") : P.nt === "dc" ? t("rd_dc") : away.length && ipc && home ? t("rd_abroad", { ipc, home }) : ipc ? t("rd_home", { ipc }) : t("rd_none")));
     // (a discrete card beside the integrated one counts as a high-end machine)
     const g = P.gpu || "", hi = !!P.gi || /RTX\s?(20|30|40|50)\d0|RX\s?[679]\d{3}|Arc A7|Apple M\d+ (Pro|Max|Ultra)/i.test(g);

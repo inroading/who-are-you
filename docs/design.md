@@ -71,6 +71,10 @@ What the others had that a page needed work for, and how who covers it now:
   fetched when help is opened (topic pages keep their own set), the FAQ structured data only on the main language
   pages, and the page-size test ceiling raised to 100,000 characters so the French, German and Russian FAQ answers
   could be written out in full again (gzip of the page stayed around 19 KB).
+- 2026-11-11: the proxy conclusion names each giveaway's own country: the clock's and the DNS resolver's can be
+  different places (a visitor in Vietnam on Bangkok's clock was told both pointed to Thailand). `giveaways()` in
+  `src/infer.mjs`, unit tested; they are merged into one name only when they agree. A nationality resting on the
+  clock alone now says where the device is set, not where the visitor is from.
 
 ## Tested, and why not
 

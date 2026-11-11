@@ -346,6 +346,18 @@ export function checks(x) {
   return out;
 }
 
+// The giveaways: the time zone and the DNS resolver that contradict the address's country, and the browser language
+// that doesn't fit it. Each names a country of its own — a clock set up elsewhere and a resolver left at home are two
+// different places — so they are never merged into one. `one` is that country when all of them agree.
+export function giveaways(ck, { tz, dns, langs = [] }) {
+  const lv = id => ck[id] && ck[id][0];
+  const away = [lv("tz") === "bad" && "tz", lv("dns") === "bad" && "dns", lv("lang") === "warn" && "lang"].filter(Boolean);
+  const spot = k => k === "tz" ? tzCC(tz) : k === "dns" ? dns : langCC(langs[0]);
+  const spots = away.map(k => [k, spot(k)]).filter(([, c]) => c);
+  const at = [...new Set(spots.map(([, c]) => c))];
+  return { away, spots, at, strong: away.some(k => k !== "lang"), one: at.length === 1 && spots.length === away.length ? at[0] : null };
+}
+
 // "+08:00" from a UTC offset in minutes
 export const offTxt = m => (m < 0 ? "−" : "+") + String(Math.floor(Math.abs(m) / 60)).padStart(2, "0") + ":" + String(Math.abs(m) % 60).padStart(2, "0");
 

@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { macOf, tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
+import { macOf, tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, fontHints, checks, giveaways, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
 import { cleanSeen, rarity, durOf } from "../src/traits.mjs";
 import { regionName, flagCode } from "../src/regions.mjs";
 
@@ -107,6 +107,23 @@ test("data center networks", () => {
   assert.ok(isDataCenter(45102, "Alibaba Cloud (Singapore) Private Limited"));
   assert.ok(!isDataCenter(4134, "Chinanet"));
   assert.ok(!isDataCenter(7922, "Comcast Cable Communications, LLC"));
+});
+
+test("giveaways: a clock in one country and a DNS in another stay apart", () => {
+  // #102: an English page, the IP in Japan, the clock on Bangkok's time, the DNS in Vietnam
+  const x = { tz: "Asia/Bangkok", tzOff: "+07:00", ipTzOff: "+09:00", ipcc: "JP", langs: ["en-US", "en"], dnsCC: "VN", sys: false };
+  const ck = checks(x);
+  assert.equal(ck.tz[0], "bad");
+  assert.equal(ck.dns[0], "bad");
+  const g = giveaways(ck, { tz: x.tz, dns: "VN", langs: x.langs });
+  assert.deepEqual(g.away, ["tz", "dns"]);
+  assert.deepEqual(g.spots, [["tz", "TH"], ["dns", "VN"]]);
+  assert.equal(g.one, null);   // no single country to name for both
+  // they agree: one country for all of them
+  assert.equal(giveaways(checks({ ...x, dnsCC: "TH" }), { ...x, dns: "TH" }).one, "TH");
+  // a language that doesn't fit the IP, with the clock and the DNS local, is someone living abroad: no giveaway
+  const i = { tz: "Asia/Bangkok", tzOff: "+07:00", ipTzOff: "+07:00", ipcc: "TH", langs: ["zh-CN"], dnsCC: "TH", sys: false };
+  assert.deepEqual(giveaways(checks(i), i).away, []);
 });
 
 test("fonts: only ones the system doesn't bring say something", () => {
