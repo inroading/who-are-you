@@ -193,7 +193,9 @@ anti-detect card). Smoke at 1280×900: en 0.11, zh 0.08, ru 0.07.
 What is left is text filling inside boxes that already have their size: a paragraph's own words rewrapping as it
 fills, the checks' verdicts, the values in the readings list. Removing that would mean not filling after the first
 paint at all — the whole story filled once at the end of a run measured 0.07–0.08 — which gives up the "fills in as
-you are read" the page is built on.
+you are read" the page is built on. Keeping the progressive fill was the owner's call on 2026-11-12 (the other
+option measured under the 0.1 gate but left the story a skeleton until the run ended; fixed-width slots were tried
+and rejected: long answers wrap into a column inside the prose).
 
 - The stats pill wraps to two lines on phones in fr, de, es, pt, ru, ja and pushes the title down 12 px (fr phone CLS
   about 0.23 in production).
