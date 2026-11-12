@@ -153,6 +153,14 @@ What the others had that a page needed work for, and how who covers it now:
   Chinese font beside Russian voices used to count as two witnesses for China and read "Installed fonts, Speech
   voices look like a system from China" for a visitor in Britain (1ms-shell#107). The nationality guess already
   required a single country.
+- 2026-11-12: a DNS resolver in another country is a hint, not a contradiction. It costs 8 points (`warn`) and
+  stays `bad` only when another check already says the route is inconsistent: another system opened the connection
+  (`c_conn_os`, a proxy in front) or WebRTC gave away an address the page's exit does not have. Reason: there are a
+  few hundred public resolvers in the world, so a small country's ordinary visitor resolves through a neighbour's,
+  and a visitor in Hungary with the resolver in Germany was told they looked like a proxy and dropped from A+ to B
+  (1ms-shell#108). The story's giveaway list (`giveaways`) counts the resolver only with the clock already off, so a
+  lone resolver claims nothing and a clock plus a resolver still names both places. The check row and its hints now
+  say 解析器 in Chinese, as the glossary asks for a public resolver.
 
 ## Wording
 
