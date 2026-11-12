@@ -214,7 +214,9 @@ html.shared .un-go, html[data-who-embed] .un-go { display: none; }
 .wk { margin-left: 4px; font: 600 11px var(--f-num); color: var(--muted); } .wk.up { color: var(--bad); } .wk.down { color: var(--t1); }
 /* how common each reading is: a bar per reading, as many bits as it tells a site, the whole fingerprint last */
 .rar-d { margin: 10px 0 0; font-size: 13px; }
-.rar-d summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+/* the line that opens the card is its only control, and on a phone it has to be a 24px tap target: the padding makes
+   the box 24px, the negative margins take the extra back so the line sits where it did */
+.rar-d summary { cursor: pointer; font-weight: 600; color: var(--ink); min-height: 24px; padding: 2px 0; margin: -2px 0; }
 .rar-l { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
 .rar-l li { display: grid; grid-template-columns: minmax(0, 7.5em) minmax(0, 1fr) auto; gap: 8px; align-items: center; }
 .rar-l li > span:first-child { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
