@@ -390,7 +390,10 @@ export function checks(x) {
 // different places — so they are never merged into one. `one` is that country when all of them agree.
 export function giveaways(ck, { tz, dns, langs = [] }) {
   const lv = id => ck[id] && ck[id][0];
-  const away = [lv("tz") === "bad" && "tz", lv("dns") === "bad" && "dns", lv("lang") === "warn" && "lang"].filter(Boolean);
+  // a resolver elsewhere is only a hint on its own (#108), so it doesn't start a claim that you pass for another
+  // country; with the clock already off it is a second place, and the sentence names both
+  const dnsAway = lv("dns") === "bad" || (lv("dns") === "warn" && lv("tz") === "bad");
+  const away = [lv("tz") === "bad" && "tz", dnsAway && "dns", lv("lang") === "warn" && "lang"].filter(Boolean);
   const spot = k => k === "tz" ? tzCC(tz) : k === "dns" ? dns : langCC(langs[0]);
   const spots = away.map(k => [k, spot(k)]).filter(([, c]) => c);
   const at = [...new Set(spots.map(([, c]) => c))];

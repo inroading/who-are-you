@@ -114,11 +114,15 @@ test("giveaways: a clock in one country and a DNS in another stay apart", () => 
   const x = { tz: "Asia/Bangkok", tzOff: "+07:00", ipTzOff: "+09:00", ipcc: "JP", langs: ["en-US", "en"], dnsCC: "VN", sys: false };
   const ck = checks(x);
   assert.equal(ck.tz[0], "bad");
-  assert.equal(ck.dns[0], "bad");
+  // (the resolver alone is only a hint since #108; with the clock already off it is a second place)
+  assert.equal(ck.dns[0], "warn");
   const g = giveaways(ck, { tz: x.tz, dns: "VN", langs: x.langs });
   assert.deepEqual(g.away, ["tz", "dns"]);
   assert.deepEqual(g.spots, [["tz", "TH"], ["dns", "VN"]]);
   assert.equal(g.one, null);   // no single country to name for both
+  // the resolver alone claims nothing: HU, the clock local, the resolver in DE
+  const hu = { tz: "Europe/Budapest", tzOff: "+01:00", ipTzOff: "+01:00", ipcc: "HU", langs: ["hu-HU"], dnsCC: "DE", sys: false };
+  assert.deepEqual(giveaways(checks(hu), { tz: hu.tz, dns: "DE", langs: hu.langs }).away, []);
   // they agree: one country for all of them
   assert.equal(giveaways(checks({ ...x, dnsCC: "TH" }), { ...x, dns: "TH" }).one, "TH");
   // a language that doesn't fit the IP, with the clock and the DNS local, is someone living abroad: no giveaway
@@ -328,10 +332,21 @@ test("split routing: different networks over the same IP version", () => {
 });
 
 test("DNS leak: the resolver's country against the address's", () => {
-  assert.equal(checks({ ipcc: "JP", dnsCC: "CN" }).dns[0], "bad");
+  // #108: a resolver in another country is a hint, not a contradiction: small countries resolve through a
+  // neighbour's, so an ordinary visitor there would be told they look like a proxy (HU here, the resolver in DE)
+  assert.equal(checks({ ipcc: "HU", dnsCC: "DE" }).dns[0], "warn");
+  assert.equal(checks({ ipcc: "JP", dnsCC: "CN" }).dns[0], "warn");
   assert.equal(checks({ ipcc: "JP", dnsCC: "JP" }).dns[0], "ok");
   assert.equal(checks({ ipcc: "JP", dnsCC: null }).dns[0], "info");
   assert.equal(checks({ ipcc: "JP" }).dns, null);
+  // it is a contradiction only with another check saying the route is inconsistent: another system opened the
+  // connection, or WebRTC gave away an address the page's exit does not have
+  assert.equal(checks({ ipcc: "HU", dnsCC: "DE", uaOS: "Windows", conn: { os: "linux", pseudo: "m,a,s,p", engine: "V8" } }).dns[0], "bad");
+  assert.equal(checks({ ipcc: "HU", dnsCC: "DE", ip: "1.2.3.4", rtc: ["5.6.7.8"] }).dns[0], "bad");
+  // (a cloud's wide MTU says a server opened the connection, which is what a tunnel is: not a contradiction on its own)
+  assert.equal(checks({ ipcc: "HU", dnsCC: "DE", conn: { mtu: 9001 } }).dns[0], "warn");
+  // and one hint keeps the grade at A, where a contradiction cost it B
+  assert.equal(grade(checks({ ipcc: "HU", dnsCC: "DE" }), ["dns"]).grade, "A");
 });
 
 test("protocols", () => {
