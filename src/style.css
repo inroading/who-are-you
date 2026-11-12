@@ -367,7 +367,9 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 @media (max-width: 720px) { .ck-v { display: block; -webkit-line-clamp: unset; overflow: visible; } }
 .ckr[data-why] { cursor: help; }
 .ck-v .skl { width: 70%; }
-.st { width: 18px; height: 18px; border-radius: 50%; display: inline-grid; place-items: center; font: 700 10px/1 var(--f-ui); font-style: normal; flex: none; color: #fff; background: transparent; box-shadow: inset 0 0 0 1.5px var(--line); }
+/* the check's status dot: 18px square, so a circle. Scoped and padding reset because the shared base.css has a status
+   pill of its own under the same class name (inline-flex, 22px, 9px of side padding), which turned this into an ellipse */
+.ckr .st { width: 18px; height: 18px; padding: 0; border-radius: 50%; display: inline-grid; place-items: center; font: 700 10px/1 var(--f-ui); font-style: normal; flex: none; color: #fff; background: transparent; box-shadow: inset 0 0 0 1.5px var(--line); }
 .st-ok .st { background: var(--ok); box-shadow: none; } .st-bad .st { background: var(--bad); box-shadow: none; } .st-warn .st { background: var(--t3); box-shadow: none; }
 .st-info .st { color: var(--muted); }
 .st-bad .ck-v { color: var(--bad); } .st-warn .ck-v { color: var(--t3); }
