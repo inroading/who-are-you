@@ -136,6 +136,17 @@ What the others had that a page needed work for, and how who covers it now:
 - 2026-11-11: printing is its own layout: light colors even in dark mode (the browser drops backgrounds but keeps
   light text, which made the Print button put pale text on white paper), one column, no controls or dialogs, the
   cards and rows kept from breaking across pages. No URLs or theme chrome on paper.
+- 2026-11-12: the page no longer jumps while it runs (the shell repo's rule: tool-contract.md §4, blocks drawn at the
+  start and filled in place). The fonts load `font-display: optional`, and the three faces the first screen draws
+  with are preloaded, so a font that lands late is never swapped in (0.15 of the live page's shift; the Cyrillic face
+  alone took 1.2 s here). A paragraph keeps the height it had while it waited — releasing it at the end of the run
+  moved the labels, the ID card and everything below them by a paragraph's worth (126 px). A paragraph now fills in
+  one frame, when its last reading lands, instead of at every answer: each rewrap moved the words after it, and
+  filling a line at a time took the story's share of the shift from about 0.2 to under 0.1. The checks' action strip
+  (32 px), the verdict's two lines, the headline's two-line row and the anti-detect card (drawn when the run starts,
+  not when it ends: it pushed the tally down 60 px) keep their space from the first paint, so the right column does
+  not move when the verdicts land. Measured at 1280×900 against a mocked Worker: en 0.11, zh 0.08, ru 0.07 CLS
+  (0.24/0.24/0.16 with the story filling a blank at a time; 0.4–1.0 before any of this).
 
 ## Wording
 
@@ -173,13 +184,19 @@ The sentences beside the readings follow these rules (the reports in `1ms-shell`
 - Built-in AI: in a fresh Chrome profile every translation pair reads "downloadable"; whether a Chrome that has
   downloaded languages reads them "available", or Chrome masks them, is still to see.
 
-## Layout shifts measured and left (2026-11-05/06)
+## Layout shifts measured and left (2026-11-05/06, measured again 2026-11-12)
+
+Fixed on 2026-11-12: the Cyrillic font swapping in on ru (optional + preload), the portrait filling in (heights kept,
+one frame a paragraph), and the blocks that appeared when a run ended (the checks' buttons, the verdict, the
+anti-detect card). Smoke at 1280×900: en 0.11, zh 0.08, ru 0.07.
+
+What is left is text filling inside boxes that already have their size: a paragraph's own words rewrapping as it
+fills, the checks' verdicts, the values in the readings list. Removing that would mean not filling after the first
+paint at all — the whole story filled once at the end of a run measured 0.07–0.08 — which gives up the "fills in as
+you are read" the page is built on.
 
 - The stats pill wraps to two lines on phones in fr, de, es, pt, ru, ja and pushes the title down 12 px (fr phone CLS
   about 0.23 in production).
-- The Cyrillic font swapping in on ru.
-- The portrait's last answer rewrapping by one line at the end of a run (0.02).
-- The desktop paragraph filling in (0.08).
 
 ## Upkeep
 

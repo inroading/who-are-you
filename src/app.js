@@ -1669,6 +1669,10 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     const b = BL[k]; if (!b) return;
     // a partial pass fills only a blank whose readings are all in, and only while it still waits
     if (PARTIAL && from.length && (!from.every(id => done.has(id)) || !b.classList.contains("wait"))) return;
+    // and only once the rest of its line is ready too: a paragraph that filled blank by blank rewrapped itself at every
+    // answer, and each rewrap moved the words after it (the largest layout shift on the page); filled in one frame, it
+    // moves once. The paragraph still fills the moment its last reading lands
+    if (PARTIAL) { const p = b.closest("p"); if (p && [...p.querySelectorAll(".bl.wait[data-b]")].some(x => { const f = BLANKS[x.dataset.b] || []; return f.length && !f.every(id => done.has(id)); })) return; }
     b.innerHTML = html; b.classList.remove("wait");
     b.dataset.from = from.join(" ");
     b.dataset.why = why || (from.length ? t("from", { list: list(from.map(rowName)) }) : "");
@@ -1990,11 +1994,14 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   // page read, shown so the visitor sees what is already known before any profile is attached. Built only when the
   // card is opened, and nothing is sent anywhere.
   function adProfile() {
-    if (EMBED || D.focus || document.documentElement.classList.contains("shared") || !R || !R.end) return;
+    if (EMBED || D.focus || document.documentElement.classList.contains("shared") || !R) return;
+    // (the card is drawn when the run starts, not when it ends: its collapsed row takes its line from the first
+    // paint, so the tally under it does not move down at the end of every run. Its body is built when it is opened,
+    // and only once the run is in — opened early, it fills at the end)
     const box = $("#adpD");
     box.hidden = false;
     const fill = () => {
-      if (R.adpFilled) return; R.adpFilled = true;
+      if (R.adpFilled || !R.end) return; R.adpFilled = true;
       const c = (R.srv && R.srv.cf) || {}, d = R.dev || {};
       const req = {
         site: { domain: location.hostname, page: location.origin + location.pathname },
@@ -2008,7 +2015,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
       };
       $("#adpJ").textContent = JSON.stringify(req, (k, v) => v === undefined ? undefined : v, 2);
     };
-    box.addEventListener("toggle", () => { if (box.open) fill(); });
+    if (!box.dataset.wired) { box.dataset.wired = "1"; box.addEventListener("toggle", () => { if (box.open) fill(); }); }
     if (box.open) fill();
   }
 
@@ -2608,7 +2615,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     $("#mNum").textContent = "–"; $("#mNum").className = "m-num"; $$("#segs i").forEach(i => { i.className = ""; });
     $("#fpId").innerHTML = '<i class="skl"></i>'; $("#fpArt").innerHTML = ""; $("#fpNote").textContent = t("id_note"); $("#vText").innerHTML = "&nbsp;";
     $("#rerun").disabled = true; $("#share").disabled = true; $("#copyTxt").disabled = true; $("#dlJson").disabled = true; $("#printPg").disabled = true; progress();
-    $("#adpD").hidden = true; $("#stabD").hidden = true;
+    $("#stabD").hidden = true; adProfile();
 
     // on a wide screen each paragraph keeps the height it first had: its blanks wait a little long, so filling them
     // only shortens lines, and the page below doesn't move (on a phone the first paragraph has its own, from the stylesheet)
@@ -2678,8 +2685,8 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     // a topic page ends at its verdict: no portrait, no comparison with the last visit, nothing counted
     if (NEED) { focusFix(); R.end = true; $("#rerun").disabled = false; return; }
     readings(portrait(), R.ck);
-    // (every blank is in: a paragraph kept taller than its words for the wait lets go, so no gap stays between them)
-    if (!PHONE.matches) $$("#story p").forEach(p => { p.style.minHeight = ""; });
+    // (each paragraph keeps the height it had while it waited: letting it shrink to its words here moved the labels,
+    // the ID card and everything beside them a whole paragraph's worth at the end of every run)
     paintTarget(); osTips(); todo(); focusFix();
     R.end = true;
     syncReportEntries(); syncCheckReports();

@@ -253,7 +253,10 @@ html.shared .tally, html.shared .idc-u, html[data-who-embed] .tally, html[data-w
 .m-num { margin-top: -3px; font: 800 46px/1 var(--f-num); letter-spacing: -.04em; color: var(--line); min-width: 1.2ch; text-align: center; font-variant-numeric: tabular-nums; }
 .m-num.ok { color: var(--t1); } .m-num.warn { color: var(--t3); } .m-num.bad { color: var(--t5); }
 .m-t { min-width: 0; flex: 1; }
-.v-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+/* the verdict's headline takes two lines in some languages (German, French) and one in others, and the count in it
+   lengthens it too: its row keeps two lines from the first paint, so the meter and the checks under it do not move
+   down when the headline arrives */
+.v-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; min-height: 2.6em; }
 .segs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; margin: 12px 0 8px; }
 .segs i { height: 6px; border-radius: 3px; background: var(--line); transition: background-color .3s; }
 .segs i.st-ok { background: var(--t1); } .segs i.st-warn { background: var(--t3); } .segs i.st-bad { background: var(--t5); }
@@ -297,8 +300,9 @@ html.shared #share, html[data-who-embed] #share { display: none; }
 .ckr { display: grid; grid-template-columns: 18px minmax(0, 9fr) minmax(0, 13fr); gap: 0 10px; align-items: center; min-height: 44px; padding: 4px 0; border-top: 1px solid var(--line); font-size: 13px; }
 .ck-l { font-weight: 600; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
 /* "how to fix" under a check that gives you away, and the tip it opens across the whole row */
-.ck-acts { display: flex; flex-wrap: wrap; gap: 0 10px; }
-.ck-acts:empty, .ck-acts:not(:has(:not([hidden]))) { display: none; }
+/* the buttons under a check's name are there before the verdict is: their two lines are kept from the first paint, so
+   the row does not grow (and push the rows below it) when the run ends and they appear */
+.ck-acts { display: flex; flex-wrap: wrap; gap: 0 10px; min-height: 32px; align-content: flex-start; }
 .ck-go { font: 500 12px var(--f-ui); color: var(--muted); text-decoration: none; }
 .ck-go:hover { color: var(--ink); text-decoration: underline; }
 .ck-fix { border: 0; background: none; padding: 0; font: 500 12px var(--f-ui); color: var(--ink); cursor: pointer; }
@@ -355,7 +359,9 @@ html.shared .todo, html[data-who-embed] .todo, html.shared .ck-re { display: non
 .ck-tip { grid-column: 1 / -1; margin: 6px 0 4px 28px; padding: 8px 12px 8px 26px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); font-size: 12.5px; line-height: 1.6; color: var(--fg); }
 .ck-tip li::marker { color: var(--ink); }
 /* two lines at most, so a long network name doesn't make the row taller; the whole text is on hover */
-.ck-v { color: var(--muted); font-size: 12.5px; line-height: 1.4; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* two lines are what the verdict may take: the height is kept while it waits, so the row is the same height before
+   and after the verdict arrives */
+.ck-v { color: var(--muted); font-size: 12.5px; line-height: 1.4; min-height: 2.8em; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 /* (a phone has no hover: the whole text, the row as tall as it needs; the checks are below the first screen there) */
 @media (max-width: 720px) { .ck-v { display: block; -webkit-line-clamp: unset; overflow: visible; } }
 .ckr[data-why] { cursor: help; }

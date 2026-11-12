@@ -130,6 +130,10 @@ export async function build({ check = false } = {}) {
         `<meta name="application-name" content="${esc(T("app_name"))}">`,
         `<meta name="theme-color" content="#f6f6f7" media="(prefers-color-scheme: light)">`,
         `<meta name="theme-color" content="#1c1c1c" media="(prefers-color-scheme: dark)">`,
+        // the faces the first screen draws with, fetched before the stylesheet asks for them: with font-display:
+        // optional a font that is late is never swapped in, and a font that arrives in time is used from the start —
+        // either way the text does not reflow when it lands
+        ...["geist-latin", ...(lang === "ru" ? ["geist-cyrillic"] : []), "geist-mono-latin"].map(f => `<link rel="preload" href="/assets/fonts/${f}.woff2" as="font" type="font/woff2" crossorigin>`),
         `<link rel="canonical" href="${url}">`, alts,
         `<link rel="icon" href="/favicon.ico" sizes="any">`, `<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">`, `<link rel="apple-touch-icon" href="/apple-touch-icon.png">`,
         `<meta property="og:type" content="website">`, `<meta property="og:site_name" content="1ms.dog">`,
