@@ -354,8 +354,17 @@ export function checks(x) {
   else if (!x.sys.cc.length) out.syslang = ["ok", "c_sys_none", {}];
   // (a language's fonts and voices fit every country that writes it: Simplified Chinese ones in Singapore too)
   else if (x.sys.cc.some(c => sameLanguage(c).includes(x.ipcc))) out.syslang = ["ok", "c_sys_ok", { cc: x.ipcc }];
-  // (one source alone says little: Office and Windows' optional features bring East Asian fonts, a voice is one download)
-  else out.syslang = [x.sys.from.length > 1 ? "warn" : "info", x.sys.from.length > 1 ? "c_sys_warn" : "c_sys_one", { cc: x.sys.cc[0], from: x.sys.from.join(",") }];
+  // (one source alone says little: Office and Windows' optional features bring East Asian fonts, a voice is one
+  // download. Two confirm each other only when both name the same country — a Chinese font beside Russian voices
+  // names two, is not a second witness for either, and reads as one hint (#107). Then only the rows naming the
+  // country are named, so the line does not say the voices came from the font's country)
+  else {
+    const parts = x.sys.parts && x.sys.parts.length ? x.sys.parts : (x.sys.from.length ? x.sys.from.map(row => ({ row, cc: x.sys.cc })) : [{ row: "", cc: x.sys.cc }]);
+    const shared = parts.reduce((a, p) => a.filter(c => p.cc.includes(c)), parts[0].cc.slice());
+    const cc = shared.length ? shared[0] : parts[0].cc[0];
+    const rows = parts.filter(p => p.cc.includes(cc)).map(p => p.row), sure = shared.length > 0 && rows.length > 1;
+    out.syslang = [sure ? "warn" : "info", sure ? "c_sys_warn" : "c_sys_one", { cc, from: rows.join(",") }];
+  }
   // an anti-detect browser's traces: parts that each look right but don't agree (one is a hint, two are a giveaway)
   if (!x.fpb) out.fpb = null;
   else out.fpb = x.fpb.length ? [x.fpb.length > 1 ? "bad" : "warn", "c_fpb_bad", { list: x.fpb.join(",") }] : ["ok", "c_fpb_ok", {}];
@@ -426,20 +435,29 @@ export function protocols(x) {
 
 // The signs of the languages a Windows system installed: the supplemental fonts Windows adds with a language (and
 // the ones Chinese Office installs), the voices that come with a language pack, a keyboard layout tied to a region.
-// Returns { cc: [countries], from: [rows] }, or false where it can't tell (other systems ship every font and voice).
+// Returns { cc: [countries], from: [rows], parts: [{ row, cc }] } — the union, the rows that told, and each row's own
+// countries, since rows naming different countries do not confirm each other — or false where it can't tell (other
+// systems ship every font and voice).
 const SYS_FONTS = [["CN", ["DengXian", "FangSong", "KaiTi", "SimHei", "STKaiti", "STSong", "STXihei"]], ["TW", ["DFKai-SB", "MingLiU", "PMingLiU"]],
   ["JP", ["BIZ UDGothic", "BIZ UDMincho", "UD Digi Kyokasho N-R", "Yu Mincho"]], ["KR", ["Batang", "Gulim", "Dotum", "Gungsuh"]]];
 export const SYS_FONT_LIST = SYS_FONTS.flatMap(([, l]) => l);
 const KBD_CC = { AZERTY: ["FR", "BE"], QWERTZ: ["DE", "AT", "CH", "CZ", "SK", "HU"], "ЙЦУКЕН": ["RU", "UA", "BY", "KZ"], Hebrew: ["IL"], Greek: ["GR", "CY"] };
 export function sysLangs({ os, fonts = [], voices = [], kbd }) {
   if (os !== "Windows") return false;
-  const cc = [], from = [], add = (l, row) => { for (const c of l) if (!cc.includes(c)) cc.push(c); if (l.length && !from.includes(row)) from.push(row); };
+  const parts = [], add = (l, row) => {
+    if (!l.length) return;
+    const p = parts.find(p => p.row === row);
+    if (!p) parts.push({ row, cc: l.slice() });
+    else for (const c of l) if (!p.cc.includes(c)) p.cc.push(c);
+  };
   for (const [c, l] of SYS_FONTS) if (l.some(n => fonts.includes(n))) add([c], "fonts");
   // a local voice in a language other than English came with that language's pack; a dozen of them says nothing
   const local = [...new Set(voices.map(langCC).filter(c => c && !/^(US|GB|AU|CA|IE|IN|NZ|ZA)$/.test(c)))];
   if (local.length && local.length <= 3) add(local, "voices");
   if (KBD_CC[kbd]) add(KBD_CC[kbd], "kbd");
-  return { cc, from };
+  const cc = [];
+  for (const p of parts) for (const c of p.cc) if (!cc.includes(c)) cc.push(c);
+  return { cc, from: parts.map(p => p.row), parts };
 }
 
 // The environment's grade: every check that gives you away costs points, a clear contradiction more than a hint

@@ -360,9 +360,15 @@ test("protocols", () => {
 
 test("the system's languages and the grade", () => {
   // Windows: the fonts a language adds, the voices of its pack, a keyboard tied to a region
-  assert.deepEqual(sysLangs({ os: "Windows", fonts: ["Segoe UI", "KaiTi", "DengXian"], voices: ["en-US", "zh-CN"] }), { cc: ["CN"], from: ["fonts", "voices"] });
-  assert.deepEqual(sysLangs({ os: "Windows", fonts: ["Segoe UI"], voices: ["en-US"], kbd: "AZERTY" }), { cc: ["FR", "BE"], from: ["kbd"] });
-  assert.deepEqual(sysLangs({ os: "Windows", fonts: [], voices: ["en-US", "en-GB"] }), { cc: [], from: [] });
+  assert.deepEqual(sysLangs({ os: "Windows", fonts: ["Segoe UI", "KaiTi", "DengXian"], voices: ["en-US", "zh-CN"] }), { cc: ["CN"], from: ["fonts", "voices"], parts: [{ row: "fonts", cc: ["CN"] }, { row: "voices", cc: ["CN"] }] });
+  assert.deepEqual(sysLangs({ os: "Windows", fonts: ["Segoe UI"], voices: ["en-US"], kbd: "AZERTY" }), { cc: ["FR", "BE"], from: ["kbd"], parts: [{ row: "kbd", cc: ["FR", "BE"] }] });
+  assert.deepEqual(sysLangs({ os: "Windows", fonts: [], voices: ["en-US", "en-GB"] }), { cc: [], from: [], parts: [] });
+  // (#107: a Chinese font and Russian voices are two countries, not two witnesses for China: one hint, the font's)
+  const two = sysLangs({ os: "Windows", fonts: ["SimHei"], voices: ["en-US", "en-GB", "ru-RU"], kbd: "QWERTY" });
+  assert.deepEqual(two, { cc: ["CN", "RU"], from: ["fonts", "voices"], parts: [{ row: "fonts", cc: ["CN"] }, { row: "voices", cc: ["RU"] }] });
+  assert.deepEqual(checks({ tz: "Europe/London", tzOff: "+00:00", ipTzOff: "+00:00", ipcc: "GB", langs: ["en-GB"], dnsCC: "GB", sys: two }).syslang, ["info", "c_sys_one", { cc: "CN", from: "fonts" }]);
+  // voices naming the font's country too do confirm it
+  assert.deepEqual(checks({ ipcc: "GB", sys: sysLangs({ os: "Windows", fonts: ["SimHei"], voices: ["en-US", "zh-CN"] }) }).syslang, ["warn", "c_sys_warn", { cc: "CN", from: "fonts,voices" }]);
   // other systems bring every language's fonts and voices
   assert.equal(sysLangs({ os: "macOS", fonts: ["PingFang SC", "Hiragino Sans"] }), false);
   // plain English in the browser, Chinese in the system

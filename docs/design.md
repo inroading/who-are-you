@@ -147,6 +147,12 @@ What the others had that a page needed work for, and how who covers it now:
   not when it ends: it pushed the tally down 60 px) keep their space from the first paint, so the right column does
   not move when the verdicts land. Measured at 1280×900 against a mocked Worker: en 0.11, zh 0.08, ru 0.07 CLS
   (0.24/0.24/0.16 with the story filling a blank at a time; 0.4–1.0 before any of this).
+- 2026-11-12: the system-language check lets two sources confirm each other only when they name the same country.
+  `sysLangs` now returns each row's own countries (`parts`), and `checks` warns only when the rows share one; rows
+  naming different countries are one hint, and the line names only the rows pointing at the country it reports. A
+  Chinese font beside Russian voices used to count as two witnesses for China and read "Installed fonts, Speech
+  voices look like a system from China" for a visitor in Britain (1ms-shell#107). The nationality guess already
+  required a single country.
 
 ## Wording
 
