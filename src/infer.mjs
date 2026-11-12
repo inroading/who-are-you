@@ -274,12 +274,6 @@ export function checks(x) {
   else if (x.langs.some(l => langCC(l) === x.ipcc || (!/^en\b/i.test(l) && spokenIn(l).includes(x.ipcc)))) out.lang = ["ok", "c_lang_ok", {}];
   else if (!lcc || /^en\b/i.test(x.langs[0])) out.lang = ["info", "c_lang_info", {}];
   else out.lang = ["warn", "c_lang_warn", { cc: lcc }];
-  // the DNS resolver that looked the page's test name up, against the address's country: a VPN that leaves DNS
-  // outside the tunnel shows the visitor's own provider here
-  if (x.dnsCC === undefined || !x.ipcc) out.dns = null;
-  else if (!x.dnsCC) out.dns = ["info", "c_dns_info", {}];
-  else if (x.dnsCC === x.ipcc) out.dns = ["ok", "c_dns_ok", {}];
-  else out.dns = ["bad", "c_dns_bad", { cc: x.dnsCC }];
   // split routing: the exits seen by different kinds of destination (x.exits, set once they are all in)
   if (!x.exits) out.split = null;
   else if (x.exits.filter(([, ip]) => ip).length < 2) out.split = ["info", "c_na", {}];
@@ -315,6 +309,16 @@ export function checks(x) {
     const other = x.rtc.filter(ip => !site.includes(ip)), known = f => site.some(ip => fam(ip) === f), leak = other.filter(ip => known(fam(ip)));
     out.webrtc = leak.length ? ["bad", "c_rtc_bad", { ip: leak[0] }] : other.length ? ["warn", "c_rtc_warn", { ip: other[0] }] : ["ok", x.rtc.length ? "c_rtc_ok" : "c_rtc_none", {}];
   }
+  // the DNS resolver that looked the page's test name up, against the address's country. A mismatch is weak on its
+  // own: the world has a few hundred public resolvers, so a small country's ordinary visitor resolves through a
+  // neighbour's, and a tunnel that keeps DNS outside shows the visitor's own provider. It costs like a hint. It is a
+  // contradiction only when another check already says the route is inconsistent: another system opened the
+  // connection (a proxy in front), or WebRTC gave away an address the page's exit doesn't have (#108)
+  if (x.dnsCC === undefined || !x.ipcc) out.dns = null;
+  else if (!x.dnsCC) out.dns = ["info", "c_dns_info", {}];
+  else if (x.dnsCC === x.ipcc) out.dns = ["ok", "c_dns_ok", {}];
+  else if ((out.conn && out.conn[1] === "c_conn_os") || (out.webrtc && out.webrtc[0] === "bad")) out.dns = ["bad", "c_dns_bad", { cc: x.dnsCC }];
+  else out.dns = ["warn", "c_dns_warn", { cc: x.dnsCC }];
   // the network: an Apple relay, a VPN provider's own network (named as such, since "data center" would be vague),
   // a hosting or cloud network, or an ordinary one
   if (x.asn == null) out.dc = null;

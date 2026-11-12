@@ -90,6 +90,7 @@ export default {
   c_dns: "DNS 유출",
   c_dns_ok: "DNS 서버도 {ipc}에 있어요",
   c_dns_bad: "DNS 서버는 {cc}, IP는 {ipc}",
+  c_dns_warn: "DNS 서버는 {cc}, IP는 {ipc}",
   c_dns_info: "DNS 서버 위치를 알 수 없어요",
   c_split: "분할 라우팅",
   c_split_ok: "어느 사이트에서나 같은 출구가 보여요",

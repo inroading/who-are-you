@@ -90,6 +90,7 @@ export default {
   c_dns: "Утечка DNS",
   c_dns_ok: "DNS-сервер там же: {ipc}",
   c_dns_bad: "DNS-сервер: {cc}; IP: {ipc}",
+  c_dns_warn: "DNS-сервер: {cc}; IP: {ipc}",
   c_dns_info: "Не удалось определить, где DNS-сервер",
   c_split: "Раздельная маршрутизация",
   c_split_ok: "Все сайты видят один и тот же выход",
