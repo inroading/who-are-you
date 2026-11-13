@@ -108,7 +108,9 @@ async function result(request, env, { code, lang: dir }, url) {
     .on('meta[name="twitter:image"]', attr("content", img))
     .transform(page);
   const h = new Headers(res.headers);
-  h.set("Cache-Control", "public, max-age=300");
+  // the page names its stylesheet and scripts by content hash, and the next deploy deletes them: a cached share page
+  // would then ask for a file that is gone (1ms.dog#112), so it revalidates like every other page
+  h.set("Cache-Control", "no-cache");
   h.delete("ETag");
   return new Response(res.body, { status: 200, headers: h });
 }
