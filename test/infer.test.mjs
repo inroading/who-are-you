@@ -1,7 +1,7 @@
 // What the readings are taken to mean: system and browser, graphics card, keyboard, network, nationality, checks.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { macOf, v6Type, tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, netKind, fontHints, checks, giveaways, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, vmOf, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff } from "../src/infer.mjs";
+import { macOf, v6Type, tunnelOf, langCC, nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, netKind, fontHints, checks, giveaways, protocols, offTxt, splitOf, netOf, sysLangs, grade, physicalScreen, isSoftGpu, vmOf, looksLikeAddress, discreteGpu, isRelayIp, rfpClock, isIntegratedGpu, FEATURES, engineRange, engineOff, platformOff, glVendorOff, idLies } from "../src/infer.mjs";
 import { cleanSeen, rarity, durOf } from "../src/traits.mjs";
 import { regionName, flagCode } from "../src/regions.mjs";
 
@@ -347,6 +347,26 @@ test("DNS leak: the resolver's country against the address's", () => {
   assert.equal(checks({ ipcc: "HU", dnsCC: "DE", conn: { mtu: 9001 } }).dns[0], "warn");
   // and one hint keeps the grade at A, where a contradiction cost it B
   assert.equal(grade(checks({ ipcc: "HU", dnsCC: "DE" }), ["dns"]).grade, "A");
+});
+
+test("identity strings: on iOS every browser reads Apple's, whatever it calls itself", () => {
+  // #109: Chrome on iOS (CriOS) is WebKit with Apple's vendor and productSub; expecting Google's flagged every
+  // iOS visitor who changed nothing
+  for (const name of ["Chrome", "Edge", "Firefox", "Safari", "Opera"]) {
+    assert.equal(idLies({ name, ios: "iOS", vendor: "Apple Computer, Inc.", productSub: "20030107" }), false, name);
+  }
+  // a desktop Chrome, Edge or Firefox with someone else's strings is still a lie
+  assert.equal(idLies({ name: "Chrome", ios: "", vendor: "Apple Computer, Inc.", productSub: "20030107" }), true);
+  assert.equal(idLies({ name: "Edge", ios: "", vendor: "", productSub: "20100101" }), true);
+  assert.equal(idLies({ name: "Firefox", ios: "", vendor: "Google Inc.", productSub: "20030107" }), true);
+  assert.equal(idLies({ name: "Safari", ios: "", vendor: "Google Inc.", productSub: "20030107" }), true);
+  // the honest ones, on both
+  assert.equal(idLies({ name: "Chrome", ios: "", vendor: "Google Inc.", productSub: "20030107" }), false);
+  assert.equal(idLies({ name: "Firefox", ios: "", vendor: "", productSub: "20100101" }), false);
+  assert.equal(idLies({ name: "Safari", ios: "", vendor: "Apple Computer, Inc.", productSub: "20030107" }), false);
+  // nothing read yet says nothing
+  assert.equal(idLies({ name: "", ios: "", vendor: "Google Inc.", productSub: "20030107" }), false);
+  assert.equal(idLies({ name: "Chrome", ios: "", vendor: null, productSub: null }), false);
 });
 
 test("protocols", () => {

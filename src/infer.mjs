@@ -400,6 +400,19 @@ export function giveaways(ck, { tz, dns, langs = [] }) {
   return { away, spots, at, strong: away.some(k => k !== "lang"), one: at.length === 1 && spots.length === away.length ? at[0] : null };
 }
 
+// The identity strings a user-agent switcher forgets: navigator.vendor and navigator.productSub name the engine
+// family on their own (V8: Google Inc. / 20030107, SpiderMonkey: none / 20100101, WebKit: Apple Computer, Inc. /
+// 20030107). On iOS every browser is WebKit with the app's own name in place of Safari's, so Chrome, Edge and
+// Firefox there read Apple's strings too; expecting Google's flagged every one of them (#109)
+export function idLies({ name, ios, vendor, productSub }) {
+  if (!name || vendor == null || productSub == null) return false;
+  const chrom = !ios && /^(Chrome|Edge|Opera|Brave|Vivaldi|Yandex|Samsung Internet)$/.test(name);
+  const ff = !ios && name === "Firefox", wk = !!ios || name === "Safari";
+  return !!((chrom && (vendor !== "Google Inc." || productSub !== "20030107")) ||
+    (ff && (vendor !== "" || productSub !== "20100101")) ||
+    (wk && (vendor !== "Apple Computer, Inc." || productSub !== "20030107")));
+}
+
 // "+08:00" from a UTC offset in minutes
 export const offTxt = m => (m < 0 ? "−" : "+") + String(Math.floor(Math.abs(m) / 60)).padStart(2, "0") + ":" + String(Math.abs(m) % 60).padStart(2, "0");
 

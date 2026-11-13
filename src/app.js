@@ -7,7 +7,7 @@ import { GROUPS, SNIFFERS, BLANKS, CHECKS, PROTO, COUNTED, TODO_SK } from "./sni
 import { TRAITS, rarity, MIN_TOTAL, durOf, STUCK_MS } from "./traits.mjs";
 import { TW, flagCode } from "./regions.mjs";
 import { encode, decode, linkPath, parsePath } from "./share.mjs";
-import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, netKind, fontHints, checks, giveaways, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, vmOf, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf, v6Type } from "./infer.mjs";
+import { nationality, device, browser, gpuName, gpuOS, kbdLayout, isDataCenter, netKind, fontHints, checks, giveaways, protocols, offTxt, splitOf, tzCC, langCC, sysLangs, SYS_FONT_LIST, grade, physicalScreen, isSoftGpu, vmOf, looksLikeAddress, isIntegratedGpu, discreteGpu, isRelayIp, rfpClock, idLies, FEATURES, engineRange, engineOff, platformOff, glVendorOff, tunnelOf, macOf, v6Type } from "./infer.mjs";
 import { wasmProbe, WASM_FEATURES } from "./wasm.mjs";
 import { TZ_CC } from "./tz.mjs";
 import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
@@ -2401,13 +2401,9 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     // app's own scripts put into every page, which replace some functions; no extension runs there)
     if (R.lies && R.lies.list.length && !(ios && name !== "Safari")) out.push("tp_lies");
     if (R.lies && R.lies.frame.length) out.push("tp_frame");
-    // (the identity strings a user-agent switcher forgets: vendor and productSub name the engine family on their own)
-    const nm = R.br && R.br.name;
-    if (nm && R.vendor != null && R.productSub != null) {
-      const chrom = /^(Chrome|Edge|Opera|Brave|Vivaldi|Yandex|Samsung Internet)$/.test(nm), ff = nm === "Firefox", wk = nm === "Safari";
-      if ((chrom && (R.vendor !== "Google Inc." || R.productSub !== "20030107")) || (ff && (R.vendor !== "" || R.productSub !== "20100101")) ||
-        (wk && (R.vendor !== "Apple Computer, Inc." || R.productSub !== "20030107"))) out.push("tp_id");
-    }
+    // (the identity strings a user-agent switcher forgets: vendor and productSub name the engine family on their own.
+    // On iOS every browser is WebKit, so they read Apple's strings whatever the app calls itself — see idLies)
+    if (idLies({ name: R.br && R.br.name, ios, vendor: R.vendor, productSub: R.productSub })) out.push("tp_id");
     // (the request's high-entropy Client Hints against the page's own: a script can rewrite navigator, not the headers)
     if (R.chHdr && R.hi && R.hi.architecture && R.hi.bitness) {
       const h = R.chHdr, hf = k => h[k] == null ? null : unq(h[k]);
