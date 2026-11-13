@@ -2550,7 +2550,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
   }
 
   $("#share").onclick = async () => {
-    const { share } = await import("/assets/share/share.js?v=9");
+    const { share } = await import("/assets/share/share.js?v=10");
     const link = show => location.origin + linkPath(LANG, encode(sharedPortrait(show)));
     share({
       lang: LANG, name: t("app_name"), file: "who-1ms-dog", show: ["city", "isp"], never: ["ip"], ts: Date.now(),
@@ -2580,7 +2580,7 @@ import { appleModel, pcKind, bucket, batteryReading } from "./models.mjs";
     for (const id of CHECKS) if (!(P.ck || {})[id]) { CK[id].hidden = true; const sg = $(`#segs [data-c="${id}"]`); if (sg) sg.hidden = true; }
     paintChecks(P.ck || {}, P.cc, true);
     readings(P, P.ck || {});
-    import("/assets/share/share.js?v=9").then(({ received }) => received({ lang: LANG, ts: P.t || undefined, at: $(".hero"), test: mine })).catch(() => {});
+    import("/assets/share/share.js?v=10").then(({ received }) => received({ lang: LANG, ts: P.t || undefined, at: $(".hero"), test: mine })).catch(() => {});
     return true;
   }
   const sharedCode = (parsePath(location.pathname) || {}).code || (/^#p=/.test(location.hash) ? location.hash.slice(3) : null);
